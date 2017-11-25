@@ -1,6 +1,6 @@
 {
-  "name": "generator-feathers-plus",
-  "description": "A yeoman generator to (re)generate a FeathersJS application.",
+  "name": "@feathers-x/generator-feathers-plus",
+  "description": "A Yeoman generator to (re)generate a FeathersJS application.",
   "version": "0.0.0",
   "homepage": "https://github.com/feathers-x/generator-feathers-plus",
   "main": "lib/",
@@ -46,7 +46,11 @@
   "directories": {
     "lib": "lib"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@feathers-plus/common": "0.1.0",
+    "glob": "7.1.2",
+    "yeoman-generator": "2.0.1"
+  },
   "devDependencies": {
     "chai": "3.5.0",
     "istanbul": "1.1.0-alpha.1",
