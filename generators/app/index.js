@@ -37,8 +37,6 @@ module.exports = class AppGenerator extends Generator {
       'request',
       'request-promise'
     ];
-
-
   }
 
   prompting () {
