@@ -4,6 +4,7 @@ const path = require('path');
 const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
 
+const combineFeathersDeclarations = require('../../lib/combine-feathers-declarations');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
 
@@ -15,6 +16,17 @@ module.exports = class ServiceGenerator extends Generator {
     this.fragments = await refreshCodeFragments();
     inspector('this.specs', this.specs);
     initSpecs(this.specs, 'graphql');
+
+    const { schemas, resolvers, addResolvers, mapping } = combineFeathersDeclarations(this.specs);
+    this.graphqlSchemas = schemas;
+    this.graphqlResolvers = resolvers;
+    this.graphqlAddResolvers = addResolvers;
+    this.graphqlMapping = mapping;
+
+    console.log(`...schemas:\n${this.graphqlSchemas}`);
+    console.log(`...resolvers:\n${this.graphqlResolvers}`);
+    console.log('...mapping:\n', this.graphqlMapping);
+    console.log('...addResolvers:\n', this.graphqlAddResolvers);
 
     /*
     this.props = {
@@ -125,7 +137,11 @@ module.exports = class ServiceGenerator extends Generator {
       libDirectory: this.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
-      serviceModule
+      serviceModule,
+      graphqlSchemas: this.graphqlSchemas,
+      graphqlResolvers: this.graphqlResolvers,
+      graphqlAddResolvers: this.graphqlAddResolvers,
+      graphqlMapping: this.graphqlMapping,
     });
 
     // Do not run code transformations if the service file already exists
@@ -144,6 +160,20 @@ module.exports = class ServiceGenerator extends Generator {
       this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath)})
+    );
+
+    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'graphql.schemas.js');
+    this.fs.copyTpl(
+      this.templatePath('schemas.js'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
+    );
+
+    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'graphql.resolvers.js');
+    this.fs.copyTpl(
+      this.templatePath('resolvers.js'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
     this.fs.copyTpl(
