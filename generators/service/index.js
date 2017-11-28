@@ -4,6 +4,7 @@ const path = require('path');
 const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
 
+const { EOL } = require('os');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
 
@@ -103,7 +104,15 @@ module.exports = class ServiceGenerator extends Generator {
         default() {
           return serviceSpecs.requiresAuth || false;
         },
-        when: !!(this.defaultConfig.authentication && !props.authentication)
+        when: !this.defaultConfig.authentication && !props.authentication
+      }, {
+        name: 'graphql',
+        message: 'Should this be served by GraphQL?',
+        type: 'confirm',
+        default() {
+          return serviceSpecs.graphql || true;
+        },
+        //when: !!(this.defaultConfig.graphql && !props.graphql)
       }
     ];
 
@@ -191,7 +200,7 @@ module.exports = class ServiceGenerator extends Generator {
       this.fs.copyTpl(
         this.templatePath(this.hasAsync ? 'class-async.js' : 'class.js'),
         destinationPath,
-        Object.assign({}, context, { insertFragment: insertFragment(destinationPath)})
+        Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
       );
     }
 
@@ -201,7 +210,7 @@ module.exports = class ServiceGenerator extends Generator {
       this.fs.copyTpl(
         this.templatePath('model', modelTpl),
         destinationPath,
-        Object.assign({}, context, { insertFragment: insertFragment(destinationPath)})
+        Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
       );
     }
 
@@ -209,7 +218,14 @@ module.exports = class ServiceGenerator extends Generator {
     this.fs.copyTpl(
       this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
       destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath)})
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
+    );
+
+    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.schema.js`);
+    this.fs.copyTpl(
+      this.templatePath('schema.js'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
     if (fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`))) {
@@ -230,7 +246,7 @@ module.exports = class ServiceGenerator extends Generator {
     this.fs.copyTpl(
       this.templatePath('test.js'),
       destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath)})
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
     if (serviceModule.charAt(0) !== '.') {

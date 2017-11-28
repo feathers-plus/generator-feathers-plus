@@ -1,6 +1,6 @@
 <% if (requiresAuth) { %>const { authenticate } = require('@feathersjs/authentication').hooks;<% } %>
-//!code: imports //!end
-//!code: init //!end
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 let moduleExports = {
   before: {
@@ -74,11 +74,11 @@ let moduleExports = {
       <%- insertFragment('error_remove') %>
     ]
   },
-  //!code: moduleExports //!end
+  <%- insertFragment('moduleExports') %>
 };
 
-//!code: exports //!end
+<%- insertFragment('exports') %>
 module.exports = moduleExports;
 
-//!code: funcs //!end
-//!code: end //!end
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

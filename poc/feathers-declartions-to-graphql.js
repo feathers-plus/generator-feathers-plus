@@ -59,7 +59,6 @@ module.exports = function (feathersSchemas, feathersExtensions, specsServices) {
     const moreParams = defaultSort ? `, { query: { $sort: ${JSON.stringify(defaultSort)} } }` : '';
 
     if (addedFields.length) {
-      console.log('xxx');
       addResolvers[graphqlName] = addedFields;
     }
 

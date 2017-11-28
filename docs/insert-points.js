@@ -7,6 +7,9 @@ import fs from 'fs';
 // todo: Allow initialization to be added.
 //!code: init //!end
 
+// todo: All extra code before exports.
+//!code: more //!end
+
 // todo: Allow exports to be added. Last prop must end with a comma.
 let moduleExports = {
   foo: 'bar',

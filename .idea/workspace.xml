@@ -14,42 +14,30 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generators/service/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="115" column="37" lean-forward="false" selection-start-line="115" selection-start-column="37" selection-end-line="115" selection-end-column="37" />
+            <state relative-caret-position="175">
+              <caret line="220" column="62" lean-forward="false" selection-start-line="220" selection-start-column="62" selection-end-line="220" selection-end-column="62" />
               <folding>
-                <element signature="e#3460#4232#0" expanded="false" />
+                <element signature="e#3746#4518#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="service.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/service/templates/service.js">
+      <file leaf-file-name="schema.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generators/service/templates/schema.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+            <state relative-caret-position="153">
+              <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="class.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/service/templates/class.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="class-async.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/service/templates/class-async.js">
+      <file leaf-file-name="schemas.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generators/graphql/templates/schemas.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -58,34 +46,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="code-fragments.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="code-fragments.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2125">
-              <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
+            <state relative-caret-position="509">
+              <caret line="114" column="0" lean-forward="false" selection-start-line="114" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="hooks.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/service/templates/hooks.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="25" column="6" lean-forward="false" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/app/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1462">
-              <caret line="86" column="20" lean-forward="false" selection-start-line="86" selection-start-column="20" selection-end-line="86" selection-end-column="20" />
-              <folding>
-                <marker date="1511662060131" expanded="true" signature="5556:5884" ph="{...}" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -121,6 +87,9 @@
       <find>serviceModule</find>
       <find>inspector</find>
       <find>graphqlSpecs</find>
+      <find>defaultConfig</find>
+      <find>destinationPath)})</find>
+      <find>EOL</find>
     </findStrings>
     <replaceStrings>
       <replace>cwd</replace>
@@ -134,6 +103,7 @@
       <replace>this.specs.app</replace>
       <replace>error</replace>
       <replace>graphqlSpecs</replace>
+      <replace>destinationPath) })</replace>
     </replaceStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -149,13 +119,14 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/generators/app/index.js" />
         <option value="$PROJECT_DIR$/lib/generator.js" />
-        <option value="$PROJECT_DIR$/docs/insert-points.js" />
-        <option value="$PROJECT_DIR$/generators/service/templates/hooks.js" />
-        <option value="$PROJECT_DIR$/lib/code-fragments.js" />
-        <option value="$PROJECT_DIR$/generators/service/index.js" />
-        <option value="$PROJECT_DIR$/lib/specs.js" />
         <option value="$PROJECT_DIR$/generators/graphql/templates/service.js" />
         <option value="$PROJECT_DIR$/generators/graphql/index.js" />
+        <option value="$PROJECT_DIR$/lib/specs.js" />
+        <option value="$PROJECT_DIR$/generators/service/templates/hooks.js" />
+        <option value="$PROJECT_DIR$/generators/service/index.js" />
+        <option value="$PROJECT_DIR$/docs/insert-points.js" />
+        <option value="$PROJECT_DIR$/generators/service/templates/schema.js" />
+        <option value="$PROJECT_DIR$/lib/code-fragments.js" />
       </list>
     </option>
   </component>
@@ -204,6 +175,48 @@
               <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
               <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
               <item name="docs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
+              <item name="generators" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
+              <item name="generators" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
+              <item name="generators" type="462c0819:PsiDirectoryNode" />
+              <item name="graphql" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
+              <item name="generators" type="462c0819:PsiDirectoryNode" />
+              <item name="graphql" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
+              <item name="generators" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
+              <item name="generators" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
+              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -260,12 +273,12 @@
       <workItem from="1511537924686" duration="14547000" />
       <workItem from="1511573215210" duration="31167000" />
       <workItem from="1511786723703" duration="1369000" />
-      <workItem from="1511872340900" duration="1948000" />
+      <workItem from="1511872340900" duration="9323000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49031000" />
+    <option name="totallyTimeSpent" value="56406000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1203" y="-1074" width="1202" height="1033" extended-state="0" />
@@ -314,7 +327,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#3460#4232#0" expanded="false" />
+            <element signature="e#3746#4518#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -376,7 +389,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#3460#4232#0" expanded="false" />
+            <element signature="e#3746#4518#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -540,32 +553,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/generator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding>
-            <element signature="e#708#1219#0" expanded="false" />
-            <element signature="e#1238#1487#0" expanded="false" />
-            <element signature="e#1510#1576#0" expanded="false" />
-            <element signature="e#1600#1679#0" expanded="false" />
-            <element signature="e#1715#2209#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-103">
           <caret line="10" column="19" lean-forward="false" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/insert-points.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="8" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -584,22 +576,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generators/service/templates/hooks.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="6" lean-forward="false" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2125">
-          <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/generators/service/templates/types/mongodb.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -614,21 +590,48 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/generators/graphql/templates/service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="27" lean-forward="false" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/graphql/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="163" column="28" lean-forward="false" selection-start-line="163" selection-start-column="28" selection-end-line="163" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/specs.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="29" column="42" lean-forward="false" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/generator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding>
+            <element signature="e#708#1219#0" expanded="false" />
+            <element signature="e#1238#1487#0" expanded="false" />
+            <element signature="e#1510#1576#0" expanded="false" />
+            <element signature="e#1600#1679#0" expanded="false" />
+            <element signature="e#1715#2209#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/generators/service/templates/service.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generators/service/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="115" column="37" lean-forward="false" selection-start-line="115" selection-start-column="37" selection-end-line="115" selection-end-column="37" />
-          <folding>
-            <element signature="e#3460#4232#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -650,34 +653,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/generators/service/templates/hooks.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="397">
+          <caret line="63" column="13" lean-forward="true" selection-start-line="63" selection-start-column="13" selection-end-line="63" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/generators/app/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1462">
-          <caret line="86" column="20" lean-forward="false" selection-start-line="86" selection-start-column="20" selection-end-line="86" selection-end-column="20" />
+        <state relative-caret-position="339">
+          <caret line="130" column="7" lean-forward="true" selection-start-line="130" selection-start-column="7" selection-end-line="130" selection-end-column="7" />
           <folding>
             <marker date="1511662060131" expanded="true" signature="5556:5884" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/specs.js">
+    <entry file="file://$PROJECT_DIR$/generators/service/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="42" column="48" lean-forward="false" selection-start-line="42" selection-start-column="48" selection-end-line="42" selection-end-column="48" />
+        <state relative-caret-position="175">
+          <caret line="220" column="62" lean-forward="false" selection-start-line="220" selection-start-column="62" selection-end-line="220" selection-end-column="62" />
+          <folding>
+            <element signature="e#3746#4518#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generators/graphql/templates/service.js">
+    <entry file="file://$PROJECT_DIR$/docs/insert-points.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="27" lean-forward="false" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+        <state relative-caret-position="85">
+          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generators/graphql/index.js">
+    <entry file="file://$PROJECT_DIR$/generators/graphql/templates/schemas.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="588">
-          <caret line="163" column="28" lean-forward="false" selection-start-line="163" selection-start-column="28" selection-end-line="163" selection-end-column="28" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/service/templates/schema.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="509">
+          <caret line="114" column="0" lean-forward="false" selection-start-line="114" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
           <folding />
         </state>
       </provider>
