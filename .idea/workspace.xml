@@ -17,8 +17,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/generators/service/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="148" column="32" lean-forward="false" selection-start-line="148" selection-start-column="32" selection-end-line="148" selection-end-column="32" />
+            <state relative-caret-position="206">
+              <caret line="115" column="37" lean-forward="false" selection-start-line="115" selection-start-column="37" selection-end-line="115" selection-end-column="37" />
               <folding>
                 <element signature="e#3460#4232#0" expanded="false" />
               </folding>
@@ -61,7 +61,7 @@
       <file leaf-file-name="code-fragments.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1870">
+            <state relative-caret-position="2125">
               <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
               <folding />
             </state>
@@ -85,10 +85,6 @@
               <caret line="86" column="20" lean-forward="false" selection-start-line="86" selection-start-column="20" selection-end-line="86" selection-end-column="20" />
               <folding>
                 <marker date="1511662060131" expanded="true" signature="5556:5884" ph="{...}" />
-                <marker date="1511662060131" expanded="true" signature="5556:5886" ph="{...}" />
-                <marker date="1511662060131" expanded="true" signature="5602:5726" ph="{...}" />
-                <marker date="1511662060131" expanded="true" signature="5775:5799" ph="{...}" />
-                <marker date="1511662060131" expanded="true" signature="5851:5878" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -209,35 +205,6 @@
               <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
               <item name="docs" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
-              <item name="generators" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
-              <item name="generators" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
-              <item name="generators" type="462c0819:PsiDirectoryNode" />
-              <item name="graphql" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
-              <item name="generators" type="462c0819:PsiDirectoryNode" />
-              <item name="graphql" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="generator-feathers-plus" type="b2602c69:ProjectViewProjectNode" />
-              <item name="generator-feathers-plus" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -250,7 +217,7 @@
     <property name="JavaScriptPreferStrict" value="false" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="Z:/poc/newgen" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../graphql" />
     <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="jsx.switch.disabled" value="true" />
@@ -261,11 +228,11 @@
       <recent name="X:\repos\feathers-plus\generator-feathers-plus\generators" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="Z:\repos\feathers-plus\generator-feathers-plus" />
       <recent name="X:\repos\feathers-plus\generator-feathers-plus\generators" />
       <recent name="X:\repos\feathers-plus\generator-feathers-plus\generators\app" />
       <recent name="X:\repos\feathers-plus\generator-feathers-plus\orig\generators\app" />
       <recent name="X:\repos\feathers-plus\generator-feathers-plus\orig\lib" />
-      <recent name="Z:\repos\feathers-plus\generator-feathers-plus\generators" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -292,27 +259,27 @@
       <updated>1511537922620</updated>
       <workItem from="1511537924686" duration="14547000" />
       <workItem from="1511573215210" duration="31167000" />
-      <workItem from="1511786723703" duration="623000" />
+      <workItem from="1511786723703" duration="1369000" />
+      <workItem from="1511872340900" duration="1948000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46337000" />
+    <option name="totallyTimeSpent" value="49031000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1203" y="-1074" width="1202" height="1033" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -380,6 +347,68 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2125">
+          <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/service/templates/hooks.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="6" lean-forward="false" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/app/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1462">
+          <caret line="86" column="20" lean-forward="false" selection-start-line="86" selection-start-column="20" selection-end-line="86" selection-end-column="20" />
+          <folding>
+            <marker date="1511662060131" expanded="true" signature="5556:5884" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/service/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#3460#4232#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/service/templates/service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/service/templates/class.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/service/templates/class-async.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1870">
           <caret line="110" column="0" lean-forward="false" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
           <folding />
@@ -400,10 +429,6 @@
           <caret line="87" column="20" lean-forward="true" selection-start-line="87" selection-start-column="20" selection-end-line="87" selection-end-column="20" />
           <folding>
             <marker date="1511662060131" expanded="true" signature="5556:5884" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5556:5886" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5602:5726" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5775:5799" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5851:5878" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -458,10 +483,6 @@
           <caret line="126" column="47" lean-forward="false" selection-start-line="126" selection-start-column="47" selection-end-line="126" selection-end-column="47" />
           <folding>
             <marker date="1511662060131" expanded="true" signature="5556:5884" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5556:5886" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5602:5726" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5775:5799" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5851:5878" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -573,7 +594,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1870">
+        <state relative-caret-position="2125">
           <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
           <folding />
         </state>
@@ -603,8 +624,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/generators/service/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="148" column="32" lean-forward="false" selection-start-line="148" selection-start-column="32" selection-end-line="148" selection-end-column="32" />
+        <state relative-caret-position="206">
+          <caret line="115" column="37" lean-forward="false" selection-start-line="115" selection-start-column="37" selection-end-line="115" selection-end-column="37" />
           <folding>
             <element signature="e#3460#4232#0" expanded="false" />
           </folding>
@@ -635,10 +656,6 @@
           <caret line="86" column="20" lean-forward="false" selection-start-line="86" selection-start-column="20" selection-end-line="86" selection-end-column="20" />
           <folding>
             <marker date="1511662060131" expanded="true" signature="5556:5884" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5556:5886" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5602:5726" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5775:5799" ph="{...}" />
-            <marker date="1511662060131" expanded="true" signature="5851:5878" ph="{...}" />
           </folding>
         </state>
       </provider>
