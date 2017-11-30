@@ -10,7 +10,8 @@ module.exports = function (app) {
   const options = {
     name: '<%= kebabName %>',<% if (modelName) { %>
     Model,<% } %>
-    paginate
+    paginate,
+    <%- insertFragment('options_more') %>
   };
 
   // Initialize our service with any options it requires

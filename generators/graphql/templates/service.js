@@ -10,7 +10,7 @@ const metadata = {
   Relationship: { service: 'relationship' },
   User: { service: 'user' }
 };
-
+/*
 const schemas = mergeTypes([
   // todo require('.../users.schema.js'),
 ]);
@@ -19,6 +19,10 @@ const resolvers = Object.assign({},
   // todo require('.../users.resolvers.js')
   // todo require('.../users.query.js')
 );
+*/
+const schemas = require('./graphql.schemas');
+
+const resolvers = require('./graphql.resolvers');
 
 module.exports = function(){
   const app = this;

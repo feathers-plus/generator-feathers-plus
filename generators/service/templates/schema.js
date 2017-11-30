@@ -31,7 +31,17 @@ let extension = {
     ],
     add: {
       <%- insertFragment('extension_add', [
-      '      // comments: \'[Comment!]\',',
+      '      // ???: {',
+      '      //   type: \'User!\',',
+      '      //   args: false,',
+      '      //   resolver: (parent, args, content, ast) => {',
+      '      //     const feathersParams = convertArgsToFeathers(args, {',
+      '      //       query: { ???: ???, $sort: { ???: 1 } }',
+      '      //     });',
+      '      //     return options.services.???.find(feathersParams).then(extractFirstItem);',
+      '      //     return options.services.???.find(feathersParams).then(extractAllItems);',
+      '      //   },',
+      '      // },',
       ])
       %>
     },

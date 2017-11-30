@@ -6,10 +6,14 @@ let moduleExports = function serviceResolvers(app, options) {
   const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options;
 
   return {
-    <% Object.keys(graphqlAddResolvers).forEach(type => { -%>
-    <%- type %>: {<% graphqlAddResolvers[type].forEach(field => { %>
-      <%- field %>: (parent, args, info, ast) => null,<% }); -%>
-    },<% }); %>
+<% Object.keys(graphqlAddResolvers).forEach(type => { -%>
+    <%- type %>: {
+<% Object.keys(graphqlAddResolvers[type]).forEach(field => { -%>
+      // <%- field %><%- graphqlAddResolvers[type][field].args %>: <%- graphqlAddResolvers[type][field].type %>
+      <%- field %>: <%- graphqlAddResolvers[type][field].resolver.toString() %>,
+<% }); -%>
+    },
+<% }); -%>
 
     <%- insertFragment('resolver_type_more') %>
 
