@@ -12,34 +12,44 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file leaf-file-name="stringify-plus.js" pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/lib/stringify-plus.js">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="721">
+                    <caret line="99" column="0" lean-forward="true" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+                    <folding />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/service/index.js">
+      <file leaf-file-name="feathers-declarations-to-graphql.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/feathers-declarations-to-graphql.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="546">
-              <caret line="241" column="8" lean-forward="false" selection-start-line="241" selection-start-column="8" selection-end-line="241" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="resolvers.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/graphql/templates/resolvers.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="schema.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/service/templates/schema.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="9" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="44" />
-              <folding />
+            <state relative-caret-position="34">
+              <caret line="2" column="30" lean-forward="false" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+              <folding>
+                <element signature="e#2167#2456#0" expanded="false" />
+                <element signature="e#2511#2677#0" expanded="false" />
+                <element signature="e#2726#2792#0" expanded="false" />
+                <element signature="e#2830#2896#0" expanded="false" />
+                <element signature="e#2952#3368#0" expanded="false" />
+                <element signature="e#3551#4265#0" expanded="false" />
+                <element signature="n#!!block;n#feathersSchemaToGraphqlSchema#0" expanded="false" />
+                <element signature="n#!!block;n#convertToGraphQLSchemaName#0" expanded="false" />
+                <element signature="n#!!block;n#convertArgs#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -47,53 +57,58 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generators/graphql/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2686">
-              <caret line="158" column="20" lean-forward="false" selection-start-line="158" selection-start-column="20" selection-end-line="158" selection-end-column="20" />
+            <state relative-caret-position="407">
+              <caret line="219" column="28" lean-forward="true" selection-start-line="219" selection-start-column="28" selection-end-line="219" selection-end-column="28" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="service.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/graphql/templates/service.js">
+      <file leaf-file-name="service.resolvers.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generators/graphql/templates/service.resolvers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
+            <state relative-caret-position="510">
+              <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="service.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generators/service/templates/service.js">
+      <file leaf-file-name="sql.metadata.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/generators/graphql/templates/sql.metadata.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+            <state relative-caret-position="68">
+              <caret line="4" column="56" lean-forward="true" selection-start-line="4" selection-start-column="56" selection-end-line="4" selection-end-column="56" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TODO.md" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TODO.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="FIRST">
-              <first_editor relative-caret-position="187">
-                <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-                <folding />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="code-fragments.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
+      <file leaf-file-name="generator.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/generator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="424">
-              <caret line="83" column="42" lean-forward="true" selection-start-line="83" selection-start-column="42" selection-end-line="83" selection-end-column="42" />
+            <state relative-caret-position="374">
+              <caret line="38" column="3" lean-forward="false" selection-start-line="38" selection-start-column="3" selection-end-line="38" selection-end-column="3" />
               <folding>
-                <marker date="1512050209731" expanded="true" signature="3066:3084" ph="{...}" />
+                <element signature="e#708#1219#0" expanded="false" />
+                <element signature="e#1238#1487#0" expanded="false" />
+                <element signature="e#1510#1576#0" expanded="false" />
+                <element signature="e#1600#1679#0" expanded="false" />
+                <element signature="e#1715#2209#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="schema.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/generators/service/templates/schema.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="21" column="17" lean-forward="false" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
+              <folding>
+                <marker date="1512064634468" expanded="true" signature="506:550" ph="[...]" />
+                <marker date="1512064634468" expanded="true" signature="1330:1384" ph="[...]" />
+                <marker date="1512064634468" expanded="true" signature="1330:1400" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -103,36 +118,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>this.specs</find>
-      <find>app</find>
-      <find>props</find>
-      <find>before</find>
-      <find>src/app.js-</find>
-      <find>adapter</find>
-      <find>cwd</find>
-      <find>after</find>
-      <find>console</find>
-      <find>j</find>
-      <find>_transform</find>
-      <find>mainFile</find>
-      <find>serviceSpecs</find>
-      <find>serviceModule</find>
-      <find>inspector</find>
-      <find>graphqlSpecs</find>
-      <find>defaultConfig</find>
-      <find>destinationPath)})</find>
-      <find>EOL</find>
-      <find>BadRequest</find>
       <find>context</find>
-      <find>queryResolvers</find>
       <find>specs.services</find>
-      <find>typeSchemas</find>
       <find>name</find>
       <find>added[field]</find>
       <find>Id</find>
       <find>querySchemas</find>
       <find>typeConvert</find>
       <find>args$</find>
+      <find>addResolvers</find>
+      <find>graphqlResolvers</find>
+      <find>queryResolvers</find>
+      <find>typeSchemas</find>
+      <find>qqq</find>
+      <find>&gt;&gt;&gt;</find>
+      <find>graphqlAddResolvers</find>
+      <find>www</find>
+      <find>resolvers</find>
+      <find>serviceQueryResolvers</find>
+      <find>fields</find>
+      <find>sort</find>
+      <find>defaultSort</find>
+      <find>moreParams</find>
+      <find>graphql</find>
+      <find>this.specs</find>
+      <find>sqlQueryResolvers</find>
+      <find>sqlColumnFields</find>
+      <find>sqlFieldMetadata</find>
+      <find>obj</find>
+      <find>service.re</find>
+      <find>propEndsAt</find>
     </findStrings>
     <replaceStrings>
       <replace>cwd</replace>
@@ -150,11 +165,23 @@
       <replace>destinationPath) })</replace>
       <replace>field</replace>
       <replace>addedField</replace>
+      <replace>serviceResolvers</replace>
+      <replace>serviceQueryResolvers</replace>
+      <replace>fieldSchemas</replace>
+      <replace>graphqlExt</replace>
+      <replace>serviceFieldResolvers</replace>
+      <replace>metadata</replace>
+      <replace>metadataFields</replace>
+      <replace>sqlMetadata</replace>
+      <replace>propEndsAt</replace>
+      <replace>propNameEndsAt</replace>
     </replaceStrings>
     <dirStrings>
       <dir>Z:\repos\feathers-plus\generator-feathers-plus\generators\service</dir>
-      <dir>Z:\repos\feathers-plus\generator-feathers-plus\generators\graphql</dir>
       <dir>Z:\repos\feathers-plus\generator-feathers-plus\lib</dir>
+      <dir>Z:\repos\feathers-plus\generator-feathers-plus\generators</dir>
+      <dir>Z:\repos\feathers-plus\generator-feathers-plus</dir>
+      <dir>Z:\repos\feathers-plus\generator-feathers-plus\generators\graphql</dir>
     </dirStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -172,17 +199,21 @@
         <option value="$PROJECT_DIR$/generators/service/templates/hooks.js" />
         <option value="$PROJECT_DIR$/docs/insert-points.js" />
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/generators/graphql/index.js" />
         <option value="$PROJECT_DIR$/generators/graphql/templates/schemas.js" />
         <option value="$PROJECT_DIR$/TODO.md" />
-        <option value="$PROJECT_DIR$/generators/graphql/templates/resolvers.js" />
-        <option value="$PROJECT_DIR$/lib/feathers-declarations-to-graphql.js" />
         <option value="$PROJECT_DIR$/lib/combine-feathers-declarations.js" />
         <option value="$PROJECT_DIR$/generators/service/index.js" />
-        <option value="$PROJECT_DIR$/generators/service/templates/schema.js" />
-        <option value="$PROJECT_DIR$/generators/graphql/templates/service.js" />
         <option value="$PROJECT_DIR$/generators/service/templates/service.js" />
+        <option value="$PROJECT_DIR$/generators/graphql/templates/service.js" />
         <option value="$PROJECT_DIR$/lib/code-fragments.js" />
+        <option value="$PROJECT_DIR$/generators/graphql/templates/resolvers.js" />
+        <option value="$PROJECT_DIR$/generators/graphql/templates/sql.resolvers.js" />
+        <option value="$PROJECT_DIR$/generators/graphql/templates/service.resolvers.js" />
+        <option value="$PROJECT_DIR$/generators/service/templates/schema.js" />
+        <option value="$PROJECT_DIR$/lib/feathers-declarations-to-graphql.js" />
+        <option value="$PROJECT_DIR$/generators/graphql/templates/sql.metadata.js" />
+        <option value="$PROJECT_DIR$/generators/graphql/index.js" />
+        <option value="$PROJECT_DIR$/lib/stringify-plus.js" />
       </list>
     </option>
   </component>
@@ -218,7 +249,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -278,6 +308,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -286,7 +317,7 @@
     <property name="JavaScriptPreferStrict" value="false" />
     <property name="JavaScriptWeakerCompletionTypeGuess" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../cli-generator-example" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../feathers-docs-models" />
     <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="jsx.switch.disabled" value="true" />
@@ -297,11 +328,11 @@
       <recent name="X:\repos\feathers-plus\generator-feathers-plus\generators" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="X:\repos\feathers-plus\generator-feathers-plus\lib" />
+      <recent name="X:\repos\feathers-plus\generator-feathers-plus\generators\graphql\templates" />
+      <recent name="Z:\repos\feathers-plus\generator-feathers-plus\generators\graphql\templates" />
       <recent name="Z:\repos\feathers-plus\generator-feathers-plus\lib" />
       <recent name="Z:\repos\feathers-plus\generator-feathers-plus" />
-      <recent name="X:\repos\feathers-plus\generator-feathers-plus\generators" />
-      <recent name="X:\repos\feathers-plus\generator-feathers-plus\generators\app" />
-      <recent name="X:\repos\feathers-plus\generator-feathers-plus\orig\generators\app" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -332,26 +363,27 @@
       <workItem from="1511872340900" duration="26242000" />
       <workItem from="1511978436949" duration="4776000" />
       <workItem from="1511993341798" duration="577000" />
-      <workItem from="1512046140183" duration="2527000" />
+      <workItem from="1512046140183" duration="13036000" />
+      <workItem from="1512085802047" duration="11034000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="81205000" />
+    <option name="totallyTimeSpent" value="102748000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1213" y="-1069" width="1202" height="1033" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -377,46 +409,17 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/generators/service/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generators/service/templates/service.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generators/service/templates/class.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generators/service/templates/class-async.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2125">
           <caret line="125" column="0" lean-forward="false" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
           <folding>
-            <marker date="1512050209731" expanded="true" signature="3066:3084" ph="{...}" />
+            <marker date="1512054185567" expanded="true" signature="3068:3086" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -472,7 +475,7 @@
         <state relative-caret-position="1870">
           <caret line="110" column="0" lean-forward="false" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
           <folding>
-            <marker date="1512050209731" expanded="true" signature="3066:3084" ph="{...}" />
+            <marker date="1512054185567" expanded="true" signature="3068:3086" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -520,7 +523,7 @@
         <state relative-caret-position="255">
           <caret line="15" column="17" lean-forward="false" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
           <folding>
-            <marker date="1512050209731" expanded="true" signature="3066:3084" ph="{...}" />
+            <marker date="1512054185567" expanded="true" signature="3068:3086" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -629,20 +632,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/generator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding>
-            <element signature="e#708#1219#0" expanded="false" />
-            <element signature="e#1238#1487#0" expanded="false" />
-            <element signature="e#1510#1576#0" expanded="false" />
-            <element signature="e#1600#1679#0" expanded="false" />
-            <element signature="e#1715#2209#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/generators/service/templates/class.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -688,20 +677,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generators/graphql/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2686">
-          <caret line="158" column="20" lean-forward="false" selection-start-line="158" selection-start-column="20" selection-end-line="158" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/TODO.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="FIRST">
           <first_editor relative-caret-position="187">
             <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-            <folding />
           </first_editor>
           <second_editor />
         </state>
@@ -717,8 +697,84 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/feathers-declarations-to-graphql.js" />
-    <entry file="file://$PROJECT_DIR$/generators/graphql/templates/resolvers.js">
+    <entry file="file://$PROJECT_DIR$/generators/service/templates/service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/graphql/templates/service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="13" column="28" lean-forward="false" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1887">
+          <caret line="111" column="5" lean-forward="true" selection-start-line="111" selection-start-column="5" selection-end-line="111" selection-end-column="5" />
+          <folding>
+            <marker date="1512054185567" expanded="true" signature="3068:3086" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/graphql/templates/sql.resolvers.js" />
+    <entry file="file://$PROJECT_DIR$/lib/generator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="38" column="3" lean-forward="false" selection-start-line="38" selection-start-column="3" selection-end-line="38" selection-end-column="3" />
+          <folding>
+            <element signature="e#708#1219#0" expanded="false" />
+            <element signature="e#1238#1487#0" expanded="false" />
+            <element signature="e#1510#1576#0" expanded="false" />
+            <element signature="e#1600#1679#0" expanded="false" />
+            <element signature="e#1715#2209#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/service/templates/schema.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="17" lean-forward="false" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
+          <folding>
+            <marker date="1512064634468" expanded="true" signature="506:550" ph="[...]" />
+            <marker date="1512064634468" expanded="true" signature="1330:1384" ph="[...]" />
+            <marker date="1512064634468" expanded="true" signature="1330:1400" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/generators/graphql/templates/service.resolvers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/feathers-declarations-to-graphql.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="30" lean-forward="false" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+          <folding>
+            <element signature="e#2167#2456#0" expanded="false" />
+            <element signature="e#2511#2677#0" expanded="false" />
+            <element signature="e#2726#2792#0" expanded="false" />
+            <element signature="e#2830#2896#0" expanded="false" />
+            <element signature="e#2952#3368#0" expanded="false" />
+            <element signature="e#3551#4265#0" expanded="false" />
+            <element signature="n#!!block;n#feathersSchemaToGraphqlSchema#0" expanded="false" />
+            <element signature="n#!!block;n#convertToGraphQLSchemaName#0" expanded="false" />
+            <element signature="n#!!block;n#convertArgs#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/is-native.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -726,37 +782,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generators/graphql/templates/service.js">
+    <entry file="file://$PROJECT_DIR$/generators/graphql/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="2" />
+        <state relative-caret-position="407">
+          <caret line="219" column="28" lean-forward="true" selection-start-line="219" selection-start-column="28" selection-end-line="219" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generators/service/templates/schema.js">
+    <entry file="file://$PROJECT_DIR$/generators/graphql/templates/sql.metadata.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="9" lean-forward="false" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="44" />
+        <state relative-caret-position="68">
+          <caret line="4" column="56" lean-forward="true" selection-start-line="4" selection-start-column="56" selection-end-line="4" selection-end-column="56" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generators/service/templates/service.js">
+    <entry file="file://$PROJECT_DIR$/lib/stringify-plus.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        <state relative-caret-position="721">
+          <caret line="99" column="0" lean-forward="true" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/code-fragments.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="83" column="42" lean-forward="true" selection-start-line="83" selection-start-column="42" selection-end-line="83" selection-end-column="42" />
-          <folding>
-            <marker date="1512050209731" expanded="true" signature="3066:3084" ph="{...}" />
-          </folding>
         </state>
       </provider>
     </entry>

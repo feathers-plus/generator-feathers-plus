@@ -22,7 +22,7 @@ const resolvers = Object.assign({},
 */
 const schemas = require('./graphql.schemas');
 
-const resolvers = require('./graphql.resolvers');
+const resolvers = require('./service.resolvers');
 
 module.exports = function(){
   const app = this;

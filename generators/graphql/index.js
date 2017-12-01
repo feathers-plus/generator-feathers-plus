@@ -7,6 +7,7 @@ const Generator = require('../../lib/generator');
 const combineFeathersDeclarations = require('../../lib/combine-feathers-declarations');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
+const stringifyPlus = require('../../lib/stringify-plus');
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -14,19 +15,27 @@ const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
 module.exports = class ServiceGenerator extends Generator {
   async initializing() {
     this.fragments = await refreshCodeFragments();
-    inspector('this.specs', this.specs);
     initSpecs(this.specs, 'graphql');
 
-    const { schemas, resolvers, addResolvers, mapping } = combineFeathersDeclarations(this.specs);
+    const {
+      schemas, mapping,
+      serviceQueryResolvers, serviceFieldResolvers,
+      sqlQueryResolvers, sqlMetadata
+    } = combineFeathersDeclarations(this.specs);
+
     this.graphqlSchemas = schemas;
-    this.graphqlResolvers = resolvers;
-    this.graphqlAddResolvers = addResolvers;
     this.graphqlMapping = mapping;
+    this.serviceQueryResolvers = serviceQueryResolvers;
+    this.serviceFieldResolvers = serviceFieldResolvers;
+    this.sqlQueryResolvers = sqlQueryResolvers;
+    this.sqlMetadata = sqlMetadata;
 
     console.log(`...schemas:\n${this.graphqlSchemas}`);
-    console.log(`...resolvers:\n${this.graphqlResolvers}`);
     console.log('...mapping:\n', this.graphqlMapping);
-    console.log('...addResolvers:\n', this.graphqlAddResolvers);
+    console.log(`...service Query resolvers:\n${this.serviceQueryResolvers}`);
+    console.log('...service field resolvers:\n', this.serviceFieldResolvers);
+    console.log(`...sql Query resolvers: ${this.sqlQueryResolvers}`);
+    inspector('...sql metadata:', this.sqlMetadata);
 
     /*
     this.props = {
@@ -138,10 +147,13 @@ module.exports = class ServiceGenerator extends Generator {
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
       serviceModule,
+      stringifyPlus,
       graphqlSchemas: this.graphqlSchemas,
-      graphqlResolvers: this.graphqlResolvers,
-      graphqlAddResolvers: this.graphqlAddResolvers,
       graphqlMapping: this.graphqlMapping,
+      serviceQueryResolvers: this.serviceQueryResolvers,
+      serviceFieldResolvers: this.serviceFieldResolvers,
+      sqlQueryResolvers: this.sqlQueryResolvers,
+      sqlMetadata: this.sqlMetadata,
     });
 
     // Do not run code transformations if the service file already exists
@@ -169,9 +181,23 @@ module.exports = class ServiceGenerator extends Generator {
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'graphql.resolvers.js');
+    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'service.resolvers.js');
     this.fs.copyTpl(
-      this.templatePath('resolvers.js'),
+      this.templatePath('service.resolvers.js'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
+    );
+
+    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'sql.resolvers.js');
+    this.fs.copyTpl(
+      this.templatePath('sql.resolvers.js'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
+    );
+
+    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'sql.metadata.js');
+    this.fs.copyTpl(
+      this.templatePath('sql.metadata.js'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
@@ -205,6 +231,6 @@ module.exports = class ServiceGenerator extends Generator {
 
 const { inspect } = require('util');
 function inspector(desc, obj, depth = 5) {
-  console.log(`\n${desc}`);
+  console.log(desc);
   console.log(inspect(obj, { depth, colors: true }));
 }

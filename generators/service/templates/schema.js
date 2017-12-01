@@ -23,7 +23,9 @@ let extension = {
   graphql: {
     <%- insertFragment('extension_header', [
     '    // name: \'...\',',
-    '    // sort: { id: 1 },',
+    '    // service : {',
+    '    //   sort: { id: 1 },',
+    '    // },',
     ])
     %>
     discard: [
@@ -34,12 +36,14 @@ let extension = {
       '      // ???: {',
       '      //   type: \'User!\',',
       '      //   args: false,',
-      '      //   resolver: (parent, args, content, ast) => {',
-      '      //     const feathersParams = convertArgsToFeathers(args, {',
-      '      //       query: { ???: ???, $sort: { ???: 1 } }',
-      '      //     });',
-      '      //     return options.services.???.find(feathersParams).then(extractFirstItem);',
-      '      //     return options.services.???.find(feathersParams).then(extractAllItems);',
+      '      //   service: {',
+      '      //     resolver: (parent, args, content, ast) => {',
+      '      //       const feathersParams = convertArgsToFeathers(args, {',
+      '      //         query: { ???: ???, $sort: { ???: 1 } }',
+      '      //       });',
+      '      //       return options.services.???.find(feathersParams).then(extractFirstItem);',
+      '      //       return options.services.???.find(feathersParams).then(extractAllItems);',
+      '      //     },',
       '      //   },',
       '      // },',
       ])

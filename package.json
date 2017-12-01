@@ -50,6 +50,7 @@
     "@feathers-plus/common": "0.1.0",
     "@feathersjs/tools": "0.1.5",
     "glob": "7.1.2",
+    "traverse": "0.6.6",
     "yeoman-generator": "2.0.1"
   },
   "devDependencies": {
