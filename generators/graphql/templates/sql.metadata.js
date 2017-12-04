@@ -6,11 +6,12 @@ let moduleExports = function sqlMetadata(app, options) {
   let { convertArgsToFeathers, convertArgsToOrderBy, convertArgsToWhere } = options;
   let makeOrderBy = convertArgsToOrderBy(options);
   let makeWhere = convertArgsToWhere(options);
+  <%- insertFragment('func_init') %>
 
-  let metadata = <%- stringifyPlus(sqlMetadata) %>;
+  let returns = <%- stringifyPlus(sqlMetadata) %>;
 
-  <%- insertFragment('return') %>
-  return metadata;
+  <%- insertFragment('func_return') %>
+  return returns;
 };
 
 <%- insertFragment('more') %>

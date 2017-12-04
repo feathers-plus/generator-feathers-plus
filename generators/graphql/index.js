@@ -24,14 +24,14 @@ module.exports = class ServiceGenerator extends Generator {
     } = combineFeathersDeclarations(this.specs);
 
     this.graphqlSchemas = schemas;
-    this.graphqlMapping = mapping;
+    this.mapping = mapping;
     this.serviceQueryResolvers = serviceQueryResolvers;
     this.serviceFieldResolvers = serviceFieldResolvers;
     this.sqlQueryResolvers = sqlQueryResolvers;
     this.sqlMetadata = sqlMetadata;
 
     console.log(`...schemas:\n${this.graphqlSchemas}`);
-    console.log('...mapping:\n', this.graphqlMapping);
+    console.log('...mapping:\n', this.mapping);
     console.log(`...service Query resolvers:\n${this.serviceQueryResolvers}`);
     console.log('...service field resolvers:\n', this.serviceFieldResolvers);
     console.log(`...sql Query resolvers: ${this.sqlQueryResolvers}`);
@@ -149,7 +149,7 @@ module.exports = class ServiceGenerator extends Generator {
       serviceModule,
       stringifyPlus,
       graphqlSchemas: this.graphqlSchemas,
-      graphqlMapping: this.graphqlMapping,
+      mapping: this.mapping,
       serviceQueryResolvers: this.serviceQueryResolvers,
       serviceFieldResolvers: this.serviceFieldResolvers,
       sqlQueryResolvers: this.sqlQueryResolvers,
@@ -169,14 +169,21 @@ module.exports = class ServiceGenerator extends Generator {
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`);
     this.fs.copyTpl(
-      this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
+      this.templatePath(`graphql.hooks${this.props.authentication ? '.user' : ''}.js`),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath)})
     );
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'graphql.schemas.js');
     this.fs.copyTpl(
-      this.templatePath('schemas.js'),
+      this.templatePath('graphql.schemas.js'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
+    );
+
+    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'graphql.metadata.js');
+    this.fs.copyTpl(
+      this.templatePath('graphql.metadata.js'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
@@ -203,7 +210,7 @@ module.exports = class ServiceGenerator extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath('service.js'),
+      this.templatePath('graphql.service.js'),
       mainFile,
       Object.assign({}, context, { insertFragment: insertFragment(mainFile)})
     );
