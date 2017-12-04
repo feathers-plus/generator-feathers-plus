@@ -21,35 +21,50 @@ let schema = {
 
 let extension = {
   graphql: {
-    <%- insertFragment('extension_header', [
+    <%- insertFragment('graphql_header', [
     '    // name: \'...\',',
     '    // service : {',
     '    //   sort: { id: 1 },',
     '    // },',
+    '    // sql: {',
+    '    // sqlTable: \'Accounts\',',
+    '    //   uniqueKey: \'uuid\',',
+    '    //   sqlColumn: {',
+    '    //   email: { sqlColumn: \'email_address\' },',
+    '    //   firstName: { sqlColumn: \'first_name\' },',
+    '    //   lastName: { sqlColumn: \'last_name\' },',
+    '    // },',
+},
     ])
-    %>
+    %>,
+
     discard: [
-      <%- insertFragment('extension_discard') %>
+      <%- insertFragment('graphql_discard') %>
     ],
     add: {
-      <%- insertFragment('extension_add', [
-      '      // ???: {',
-      '      //   type: \'User!\',',
-      '      //   args: false,',
-      '      //   service: {',
-      '      //     resolver: (parent, args, content, ast) => {',
-      '      //       const feathersParams = convertArgsToFeathers(args, {',
-      '      //         query: { ???: ???, $sort: { ???: 1 } }',
-      '      //       });',
-      '      //       return options.services.???.find(feathersParams).then(extractFirstItem);',
-      '      //       return options.services.???.find(feathersParams).then(extractAllItems);',
-      '      //     },',
-      '      //   },',
-      '      // },',
+    <%- insertFragment('graphql_add', [
+        '      // ???: {',
+        '      //   type: \'User!\',',
+        '      //   args: false,',
+        '      //   service: {',
+        '      //     resolver: (parent, args, content, ast) => {',
+        '      //       const feathersParams = convertArgsToFeathers(args, {',
+        '      //         query: { ???: ???, $sort: { ???: 1 } }',
+        '      //       });',
+        '      //       return options.services.???.find(feathersParams).then(extractFirstItem);',
+        '      //       return options.services.???.find(feathersParams).then(extractAllItems);',
+        '      //     },',
+        '      //   },',
+        '      //   sql: {',
+        '      //     sqlJoin(ourTable, otherTable) { return ourTable + \'.??? = \' + otherTable + \'.???\'; },',
+        '      //     orderBy(args, content) { return makeOrderBy(args, { ???: 1 }); },',
+        '      //     where(table, args) { return makeWhere(table, args, \'uuid\', {); },',
+        '      //   },',
+        '      // },',
       ])
       %>
     },
-    <%- insertFragment('extension_more') %>
+    <%- insertFragment('graphql_more') %>
   },
 };
 
