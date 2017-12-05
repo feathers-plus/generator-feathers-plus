@@ -5,69 +5,53 @@ const { mergeTypes } = require('merge-graphql-schemas');
 const hooks = require('./graphql.hooks');
 <%- insertFragment('imports') %>
 
-<%- insertFragment('schemas', [
-  'const schemas = require(\'./graphql.schemas\');',
-  '// const schemas = mergeTypes([',
-  '//   require(\'./graphql.schemas\'),',
-  '//   // other schemas',
-  '// ]);',
-]) %>
+const schemas = mergeTypes([
+  require('./graphql.schemas'),
+  <%- insertFragment('schemas') %>
+]);
 
 <% if (resolvers[0] === 'resolvers' || resolvers.length === 2) { -%>
 // Setup for using Feathers service resolvers.
 
-<%- insertFragment('service_resolvers', [
-    'const serviceResolvers = require(\'./service.resolvers\');',
-    '// const serviceResolvers = (app, options) => Object.assign({},',
-    '//   require(\'./service.resolvers\')(app, options),',
-    '//   // other service resolvers',
-    '// );',
-]) %>
+const serviceResolvers = (app, options) => Object.assign({},
+  require('./service.resolvers')(app, options),
+  <%- insertFragment('service_resolvers') %>
+);
 
-<%- insertFragment('service_metadata', [
-  'const metadata = require(\'./graphql.metadata\').graphql;',
-  '// const metadata = Object.assign({},',
-  '//   require(\'./graphql.metadata\').graphql,',
-  '//   // other service metadata',
-  '// );',
-]) %>
+const metadata = Object.assign({},
+  require('./service.metadata').graphql,
+  <%- insertFragment('service_metadata') %>
+);
 <% } -%>
 
 <% if (resolvers[0] === 'sql' || resolvers.length === 2) { -%>
 // Setup for using SQL statement resolvers.
 
 const { dialect, executeSql, openDb } = require('./sql.execute');
-<%- insertFragment('sql_resolvers', [
-  'const sqlResolvers = require(\'./sql.resolvers\');',
-  '// const sqlResolvers = Object.assign({},',
-  '//   require(\'./sql.resolvers\'),',
-  '//   // other sql resolvers',
-  '// );',
-]) %>
-
-<%- insertFragment('service_metadata', [
-  'const sqlJoins = require(\'./sql.metadata\');',
-  '// const sqlJoins = Object.assign({},',
-  '//   require(\'./sql.metadata\'),',
-  '//   // other sql metadata',
-  '// );',
-]) %>
-
 if (!dialect) {
   throw new Error('services/graphql/sql.execute.js has not been configured.');
 }
 
-<% } -%>
-<% if (resolvers.length === 2) { -%>
-// Setup for using both Feathers service and SQL statement resolvers.
+const sqlResolvers = (app, options) => Object.assign({},
+  require('./sql.resolvers')(app, options),
+  <%- insertFragment('sql_resolvers') %>
+);
 
-<%- insertFragment('service_either', [
-  'const usingSql = true;',
-]) %>
+const sqlJoins = (app, options) => Object.assign({},
+  require('./sql.metadata')(app, options),
+  <%- insertFragment('sql_metadata') %>
+);
 <% } -%>
 
 let moduleExports = function(){
   const app = this;
+<% if (resolvers.length === 2) { -%>
+
+  // Setup for using both Feathers service and SQL statement resolvers.
+  <%- insertFragment('use_either', [
+    'const usingSql = true;',
+  ]) %>
+<% } -%>
   //!code: func_init //!end
 
   console.log('\n===== configuring graphql service for custom Feathers services resolvers.\n'); // eslint-disable-line
