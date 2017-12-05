@@ -7,8 +7,7 @@ let schema = {
   <%- insertFragment('schema_header', [
     '  title: \'...\',',
     '  description: \'...\',',
-  ])
-  %>
+  ]) %>
   type: 'object',
   required: [
     <%- insertFragment('schema_required') %>
@@ -34,10 +33,8 @@ let extension = {
     '    //   firstName: { sqlColumn: \'first_name\' },',
     '    //   lastName: { sqlColumn: \'last_name\' },',
     '    // },',
-},
     ])
     %>,
-
     discard: [
       <%- insertFragment('graphql_discard') %>
     ],

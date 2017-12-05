@@ -7,6 +7,8 @@ const Generator = require('../../lib/generator');
 const { EOL } = require('os');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
+const feathersDeclarationToService = require('../../lib/feathers-declaration-to-service');
+const mongoose = require('mongoose');
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -43,9 +45,16 @@ module.exports = class ServiceGenerator extends Generator {
           }
 
           initSpecs(specs, 'service', { name: input });
-          // todo inspector('name - specs', specs)
           serviceSpecs = specs.services[input];
-          // todo inspector(`name - serviceSpecs - ${input}`, serviceSpecs)
+
+          const { mongooseSchema, mongooseSchemaStr } = feathersDeclarationToService(input, specs);
+
+          props.mongooseSchema = mongooseSchema;
+          props.mongooseSchemaStr = mongooseSchemaStr;
+
+          inspector('...mongooseSchema:\n', mongooseSchema);
+          console.log('...mongooseSchemaStr:\n', mongooseSchemaStr);
+
           return true;
         },
         when: !props.name
@@ -171,7 +180,7 @@ module.exports = class ServiceGenerator extends Generator {
       libDirectory: this.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
-      serviceModule
+      serviceModule,
     });
 
     // Do not run code transformations if the service file already exists
@@ -245,6 +254,13 @@ module.exports = class ServiceGenerator extends Generator {
     destinationPath = this.destinationPath(this.testDirectory, 'services', `${kebabName}.test.js`);
     this.fs.copyTpl(
       this.templatePath('test.js'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
+    );
+
+    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.mongoose.js`);
+    this.fs.copyTpl(
+      this.templatePath('name.mongoose.js'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );

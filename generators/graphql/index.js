@@ -30,12 +30,14 @@ module.exports = class ServiceGenerator extends Generator {
     this.sqlQueryResolvers = sqlQueryResolvers;
     this.sqlMetadata = sqlMetadata;
 
+    /*
     console.log(`...schemas:\n${this.graphqlSchemas}`);
     console.log('...mapping:\n', this.mapping);
     console.log(`...service Query resolvers:\n${this.serviceQueryResolvers}`);
     console.log('...service field resolvers:\n', this.serviceFieldResolvers);
     console.log(`...sql Query resolvers: ${this.sqlQueryResolvers}`);
     inspector('...sql metadata:', this.sqlMetadata);
+    */
 
     /*
     this.props = {

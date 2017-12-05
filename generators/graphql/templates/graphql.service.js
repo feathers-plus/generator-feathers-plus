@@ -49,7 +49,7 @@ let moduleExports = function(){
 
   // Setup for using both Feathers service and SQL statement resolvers.
   <%- insertFragment('use_either', [
-    'const usingSql = true;',
+    '  const usingSql = true;',
   ]) %>
 <% } -%>
   //!code: func_init //!end
