@@ -145,6 +145,12 @@ module.exports = class AppGenerator extends Generator {
     );
 
     this.fs.copyTpl(
+      this.templatePath('index.js'),
+      this.destinationPath(props.src, 'index.js'),
+      Object.assign({}, context, { insertFragment: insertFragment(`${props.src}/index.js`)})
+    );
+
+    this.fs.copyTpl(
       this.templatePath('app.js'),
       this.destinationPath(props.src, 'app.js'),
       Object.assign({}, context, { insertFragment: insertFragment(`${props.src}/app.js`)})

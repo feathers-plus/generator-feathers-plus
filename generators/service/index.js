@@ -4,11 +4,11 @@ const path = require('path');
 const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
 
-const { EOL } = require('os');
+const feathersDeclarationToService = require('../../lib/feathers-declaration-to-service');
+const stringifyPlus = require('../../lib/stringify-plus');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
-const feathersDeclarationToService = require('../../lib/feathers-declaration-to-service');
-const mongoose = require('mongoose');
+
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -31,6 +31,8 @@ module.exports = class ServiceGenerator extends Generator {
     this.checkPackage();
 
     const { props, specs } = this;
+    props.stringifyPlus = stringifyPlus;
+
     const prompts = [
       {
         name: 'name',
@@ -44,16 +46,21 @@ module.exports = class ServiceGenerator extends Generator {
             return '`authentication` is a reserved service name.';
           }
 
-          initSpecs(specs, 'service', { name: input });
-          serviceSpecs = specs.services[input];
+          try {
+            initSpecs(specs, 'service', { name: input });
+            serviceSpecs = specs.services[input];
 
-          const { mongooseSchema, mongooseSchemaStr } = feathersDeclarationToService(input, specs);
+            const { schema, extension, nedbSchemaStr, mongooseSchema, mongooseSchemaStr } =
+              feathersDeclarationToService(input, specs);
 
-          props.mongooseSchema = mongooseSchema;
-          props.mongooseSchemaStr = mongooseSchemaStr;
-
-          inspector('...mongooseSchema:\n', mongooseSchema);
-          console.log('...mongooseSchemaStr:\n', mongooseSchemaStr);
+            props.schema = schema;
+            props.extension = extension;
+            props.nedbSchemaStr = nedbSchemaStr;
+            props.mongooseSchema = mongooseSchema;
+            props.mongooseSchemaStr = mongooseSchemaStr;
+          } catch (err) {
+            console.log(err);
+          }
 
           return true;
         },
@@ -111,7 +118,7 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'Does the service require authentication?',
         type: 'confirm',
         default() {
-          return serviceSpecs.requiresAuth || false;
+          return !!serviceSpecs.requiresAuth;
         },
         when: !this.defaultConfig.authentication && !props.authentication
       }, {
@@ -119,7 +126,7 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'Should this be served by GraphQL?',
         type: 'confirm',
         default() {
-          return serviceSpecs.graphql || true;
+          return !!serviceSpecs.graphql;
         },
         //when: !!(this.defaultConfig.graphql && !props.graphql)
       }
@@ -232,7 +239,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.schema.js`);
     this.fs.copyTpl(
-      this.templatePath('schema.js'),
+      this.templatePath('name.schema.js'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
@@ -261,6 +268,22 @@ module.exports = class ServiceGenerator extends Generator {
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.mongoose.js`);
     this.fs.copyTpl(
       this.templatePath('name.mongoose.js'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
+    );
+
+    /* NeDB does not use a model
+    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.nedb.js`);
+    this.fs.copyTpl(
+      this.templatePath('name.nedb.js'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
+    );
+    */
+
+    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.validate.js`);
+    this.fs.copyTpl(
+      this.templatePath('name.validate.js'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );

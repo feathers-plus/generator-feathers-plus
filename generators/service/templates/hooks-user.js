@@ -1,8 +1,14 @@
+
+const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
 <% if (authentication.strategies.indexOf('local') !== -1) { %>const {
  hashPassword, protect
 } = require('@feathersjs/authentication-local').hooks;<% } %>
+
+<%- insertFragment('used', [
+  'const { iff } = commonHooks;'
+]) %>
 
 module.exports = {
   before: {

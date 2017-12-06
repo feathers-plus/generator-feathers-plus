@@ -1,5 +1,11 @@
+
+const commonHooks = require('feathers-hooks-common');
 <% if (requiresAuth) { %>const { authenticate } = require('@feathersjs/authentication').hooks;<% } %>
 <%- insertFragment('imports') %>
+
+<%- insertFragment('used', [
+  'const { iff } = commonHooks;'
+]) %>
 <%- insertFragment('init') %>
 
 let moduleExports = {

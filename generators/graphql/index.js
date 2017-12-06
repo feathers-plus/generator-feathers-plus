@@ -218,7 +218,6 @@ module.exports = class ServiceGenerator extends Generator {
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
-    console.log('this.props.resolver', this.props.resolvers);
     this.fs.copyTpl(
       this.templatePath('graphql.service.js'),
       mainFile,
