@@ -18,10 +18,6 @@ const serviceResolvers = (app, options) => Object.assign({},
   <%- insertFragment('service_resolvers') %>
 );
 
-const metadata = Object.assign({},
-  require('./service.metadata').graphql,
-  <%- insertFragment('service_metadata') %>
-);
 <% } -%>
 
 <% if (resolvers[0] === 'sql' || resolvers.length === 2) { -%>
@@ -59,7 +55,6 @@ let moduleExports = function(){
   const options = {
 <% if (resolvers.length === 1 && resolvers[0] === 'resolvers') { -%>
     schemas,
-    metadata,
     resolvers: serviceResolvers,
 <% } -%>
 <% if (resolvers.length === 1 && resolvers[0] === 'sql') { -%>
@@ -73,7 +68,6 @@ let moduleExports = function(){
 <% } -%>
 <% if (resolvers.length === 2) { -%>
     schemas,
-    metadata,
     resolvers: usingSql ? sqlResolvers : serviceResolvers,
     sqlJoins,
     dialect,

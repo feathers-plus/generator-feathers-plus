@@ -183,13 +183,6 @@ module.exports = class ServiceGenerator extends Generator {
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'service.metadata.js');
-    this.fs.copyTpl(
-      this.templatePath('service.metadata.js'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'service.resolvers.js');
     this.fs.copyTpl(
       this.templatePath('service.resolvers.js'),

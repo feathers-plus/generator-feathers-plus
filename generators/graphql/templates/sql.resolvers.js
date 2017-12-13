@@ -10,7 +10,19 @@ let moduleExports = function sqlResolvers(app, options) {
     <%- insertFragment('resolver_field_more') %>
 
     Query: {
-<%- sqlQueryResolvers %>
+<% Object.keys(serviceQueryResolvers).forEach(graphqlName => {
+  __temp = [
+    `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
+    `      get${graphqlName}: (parent, args, content, info) => genRunSql(content, info),`,
+    '',
+    `      // find${graphqlName}(query: JSON, params: JSON, key: JSON): [${graphqlName}!]`,
+    `      find${graphqlName}: (parent, args, content, info) => genRunSql(content, info),`,
+  ];
+-%>
+
+      <%- insertFragment(`query-${graphqlName}`, __temp) %>
+<% }); -%>
+
       <%- insertFragment('resolver_query_more') %>
     },
   };
