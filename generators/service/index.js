@@ -50,12 +50,11 @@ module.exports = class ServiceGenerator extends Generator {
             initSpecs(specs, 'service', { name: input });
             serviceSpecs = specs.services[input];
 
-            const { schema, extension, nedbSchemaStr, mongooseSchema, mongooseSchemaStr } =
+            const { schema, extension, mongooseSchema, mongooseSchemaStr } =
               feathersDeclarationToService(input, specs);
 
             props.schema = schema;
             props.extension = extension;
-            props.nedbSchemaStr = nedbSchemaStr;
             props.mongooseSchema = mongooseSchema;
             props.mongooseSchemaStr = mongooseSchemaStr;
           } catch (err) {
