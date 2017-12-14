@@ -17,25 +17,20 @@ module.exports = class ServiceGenerator extends Generator {
     this.fragments = await refreshCodeFragments();
     initSpecs(this.specs, 'graphql');
 
-    const {
-      schemas, mapping,
-      serviceQueryResolvers, serviceFieldResolvers,
-      sqlQueryResolvers, sqlMetadata
-    } = combineFeathersDeclarations(this.specs);
+    const { schemas, mapping, queryResolvers, serviceFieldResolvers, sqlMetadata } =
+      combineFeathersDeclarations(this.specs);
 
     this.graphqlSchemas = schemas;
     this.mapping = mapping;
-    this.serviceQueryResolvers = serviceQueryResolvers;
+    this.queryResolvers = queryResolvers;
     this.serviceFieldResolvers = serviceFieldResolvers;
-    this.sqlQueryResolvers = sqlQueryResolvers;
     this.sqlMetadata = sqlMetadata;
 
     /*
     console.log(`...schemas:\n${this.graphqlSchemas}`);
     console.log('...mapping:\n', this.mapping);
-    console.log(`...service Query resolvers:\n${this.serviceQueryResolvers}`);
+    console.log(`...query resolvers:\n${this.queryResolvers}`);
     console.log('...service field resolvers:\n', this.serviceFieldResolvers);
-    console.log(`...sql Query resolvers: ${this.sqlQueryResolvers}`);
     inspector('...sql metadata:', this.sqlMetadata);
     */
 
@@ -152,9 +147,8 @@ module.exports = class ServiceGenerator extends Generator {
       stringifyPlus,
       graphqlSchemas: this.graphqlSchemas,
       mapping: this.mapping,
-      serviceQueryResolvers: this.serviceQueryResolvers,
+      queryResolvers: this.queryResolvers,
       serviceFieldResolvers: this.serviceFieldResolvers,
-      sqlQueryResolvers: this.sqlQueryResolvers,
       sqlMetadata: this.sqlMetadata,
     });
 

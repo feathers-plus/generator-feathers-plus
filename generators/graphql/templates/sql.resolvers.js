@@ -6,11 +6,11 @@ let moduleExports = function sqlResolvers(app, options) {
   let { dialect, executeSql, genAndRunSql } = options;
   let genRunSql = genAndRunSql(executeSql, { dialect }, options);
 
-  return {
+  const returns = {
     <%- insertFragment('resolver_field_more') %>
 
     Query: {
-<% Object.keys(serviceQueryResolvers).forEach(graphqlName => {
+<% Object.keys(queryResolvers).forEach(graphqlName => {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
     `      get${graphqlName}: (parent, args, content, info) => genRunSql(content, info),`,
@@ -26,6 +26,9 @@ let moduleExports = function sqlResolvers(app, options) {
       <%- insertFragment('resolver_query_more') %>
     },
   };
+
+  //!code: func_return //!end
+  return returns;
 };
 
 <%- insertFragment('more') %>

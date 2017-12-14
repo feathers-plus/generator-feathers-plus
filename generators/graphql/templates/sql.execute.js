@@ -16,7 +16,7 @@ const { join } = require('path');
   '',
   '// let executeSql = sql => sqlite.all(sql)',
   '//   .catch(err => {',
-  '//     console.log(\'config/default/executeSql error=\', err.message);',
+  '//     console.log(\'executeSql error=\', err.message);',
   '//     throw err;',
   '//   });',
 ]) %>
