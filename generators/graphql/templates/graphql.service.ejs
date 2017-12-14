@@ -59,7 +59,7 @@ let moduleExports = function(){
 <%# --- if-3 ends above. -%>
   //!code: func_init //!end
 
-  console.log('\n===== configuring graphql service for custom Feathers services resolvers.\n'); // eslint-disable-line
+  console.log(`\n===== configuring graphql service for ${usingSql ? 'SQL statements' : 'Feathers services'}.\n`); // eslint-disable-line
 
   const options = {
 <%# -%>

@@ -17,21 +17,18 @@ module.exports = class ServiceGenerator extends Generator {
     this.fragments = await refreshCodeFragments();
     initSpecs(this.specs, 'graphql');
 
-    const { schemas, mapping, queryResolvers, serviceFieldResolvers, sqlMetadata } =
-      combineFeathersDeclarations(this.specs);
+    const { schemas, mapping, fieldInfo, queryInfo } = combineFeathersDeclarations(this.specs);
 
     this.graphqlSchemas = schemas;
     this.mapping = mapping;
-    this.queryResolvers = queryResolvers;
-    this.serviceFieldResolvers = serviceFieldResolvers;
-    this.sqlMetadata = sqlMetadata;
+    this.fieldInfo = fieldInfo;
+    this.queryInfo = queryInfo;
 
     /*
     console.log(`...schemas:\n${this.graphqlSchemas}`);
     console.log('...mapping:\n', this.mapping);
-    console.log(`...query resolvers:\n${this.queryResolvers}`);
-    console.log('...service field resolvers:\n', this.serviceFieldResolvers);
-    inspector('...sql metadata:', this.sqlMetadata);
+    console.log('...fieldInfo:\n', this.fieldInfo);
+    console.log(`...queryInfo:\n${this.queryInfo}`);
     */
 
     /*
@@ -147,9 +144,8 @@ module.exports = class ServiceGenerator extends Generator {
       stringifyPlus,
       graphqlSchemas: this.graphqlSchemas,
       mapping: this.mapping,
-      queryResolvers: this.queryResolvers,
-      serviceFieldResolvers: this.serviceFieldResolvers,
-      sqlMetadata: this.sqlMetadata,
+      fieldInfo: this.fieldInfo,
+      queryInfo: this.queryInfo,
     });
 
     // Do not run code transformations if the service file already exists
