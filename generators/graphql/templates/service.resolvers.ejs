@@ -11,13 +11,19 @@ let moduleExports = function serviceResolvers(app, options) {
   <%- insertFragment('services', __temp) %>
 
   let returns = {
+<%# -%>
+<%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(serviceFieldResolvers).forEach(type => { -%>
 
     <%- type %>: {
+<%# -%>
+<%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
 <% Object.keys(serviceFieldResolvers[type].fields).forEach(field => { -%>
 
       // <%- field %><%- serviceFieldResolvers[type].fields[field].args %>: <%- serviceFieldResolvers[type].fields[field].type %>
       <%- field %>:
+<%# -%>
+<%# --- if/else-1 starts below. -%>
 <% if (serviceFieldResolvers[type].fields[field].serviceName) {
   __temp = [
       '        // (parent, args, content, ast) => {',
@@ -34,13 +40,18 @@ let moduleExports = function serviceResolvers(app, options) {
           '        (parent, args, content, ast) => {},',
         ]) %>
 <% } -%>
+<%# --- if/else-1 ends above. -%>
 <% }); -%>
+<%# --- forEach-2 ends above. -%>
     },
 <% }); -%>
+<%# --- forEach-1 ends above. -%>
 
     <%- insertFragment('resolver_field_more') %>
 
     Query: {
+<%# -%>
+<%# --- forEach-3 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(queryResolvers).forEach(graphqlName => {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
@@ -59,6 +70,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       <%- insertFragment(`query-${graphqlName}`, __temp) %>
 <% }); -%>
+<%# --- forEach-3 ends above. -%>
       <%- insertFragment('resolver_query_more') %>
     },
   };

@@ -10,6 +10,8 @@ const schemas = mergeTypes([
   <%- insertFragment('schemas') %>
 ]);
 
+<%# -%>
+<%# --- if-1 starts below. -%>
 <% if (resolvers[0] === 'resolvers' || resolvers.length === 2) { -%>
 // Setup for using Feathers service resolvers.
 
@@ -19,7 +21,10 @@ const serviceResolvers = (app, options) => Object.assign({},
 );
 
 <% } -%>
+<%# --- if-1 ends above. -%>
 
+<%# -%>
+<%# --- if-2 starts below. -%>
 <% if (resolvers[0] === 'sql' || resolvers.length === 2) { -%>
 // Setup for using SQL statement resolvers.
 
@@ -38,9 +43,12 @@ const sqlJoins = (app, options) => Object.assign({},
   <%- insertFragment('sql_metadata') %>
 );
 <% } -%>
+<%# --- if-2 ends above. -%>
 
 let moduleExports = function(){
   const app = this;
+<%# -%>
+<%# --- if-3 starts below. -%>
 <% if (resolvers.length === 2) { -%>
 
   // Setup for using both Feathers service and SQL statement resolvers.
@@ -48,15 +56,21 @@ let moduleExports = function(){
     '  const usingSql = true;',
   ]) %>
 <% } -%>
+<%# --- if-3 ends above. -%>
   //!code: func_init //!end
 
   console.log('\n===== configuring graphql service for custom Feathers services resolvers.\n'); // eslint-disable-line
 
   const options = {
+<%# -%>
+<%# --- if-4 starts below. -%>
 <% if (resolvers.length === 1 && resolvers[0] === 'resolvers') { -%>
     schemas,
     resolvers: serviceResolvers,
 <% } -%>
+<%# --- if-4 ends above. -%>
+<%# -%>
+<%# --- if-5 starts below. -%>
 <% if (resolvers.length === 1 && resolvers[0] === 'sql') { -%>
     schemas,
     resolvers: sqlResolvers,
@@ -66,6 +80,9 @@ let moduleExports = function(){
     openDb,
     logSql: false,
 <% } -%>
+<%# --- if-5 ends above. -%>
+<%# -%>
+<%# --- if-6 starts below. -%>
 <% if (resolvers.length === 2) { -%>
     schemas,
     resolvers: usingSql ? sqlResolvers : serviceResolvers,
@@ -75,6 +92,7 @@ let moduleExports = function(){
     openDb: usingSql ? openDb : undefined,
     logSql: false,
 <% } -%>
+<%# --- if-6 ends above. -%>
     //!code: func_options //!end
   };
 

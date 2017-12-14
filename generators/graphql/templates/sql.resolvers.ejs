@@ -10,6 +10,8 @@ let moduleExports = function sqlResolvers(app, options) {
     <%- insertFragment('resolver_field_more') %>
 
     Query: {
+<%# -%>
+<%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(queryResolvers).forEach(graphqlName => {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
@@ -22,6 +24,7 @@ let moduleExports = function sqlResolvers(app, options) {
 
       <%- insertFragment(`query-${graphqlName}`, __temp) %>
 <% }); -%>
+<%# --- forEach-1 ends above. -%>
 
       <%- insertFragment('resolver_query_more') %>
     },

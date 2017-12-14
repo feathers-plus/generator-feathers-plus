@@ -9,22 +9,31 @@ let moduleExports = function sqlMetadata(app, options) {
   <%- insertFragment('func_init') %>
 
   let returns = {
+<%# -%>
+<%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(serviceFieldResolvers).forEach(type => { -%>
 
     <%- type %>: {
       sqlTable: '<%- serviceFieldResolvers[type].sqlTable %>',
       uniqueKey: '<%- serviceFieldResolvers[type].uniqueKey %>',
       fields: {
+<%# -%>
+<%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
 <% Object.keys(serviceFieldResolvers[type].sqlColumn).forEach(field => { -%>
         <%- field %>: {
           sqlColumn: '<%- serviceFieldResolvers[type].sqlColumn[field] %>',
           <%- insertFragment(`fields-${type}-${field}`) %>
         },
 <% }); -%>
+<%# --- forEach-2 ends above. -%>
+<%# -%>
+<%# --- forEach-3 starts below. Loop thru the added fields. -%>
 <% Object.keys(serviceFieldResolvers[type].fields).forEach(field => { -%>
 
         // <%- field %><%- serviceFieldResolvers[type].fields[field].args %>: <%- serviceFieldResolvers[type].fields[field].type %>
         <%- field %>: {
+<%# -%>
+<%# --- if/else-1 starts below. -%>
 <% if (serviceFieldResolvers[type].fields[field].serviceName) {
           __temp = [
             '          sqlJoin(ourTable, otherTable) { return \'ourTable.__XXX__ = otherTable.BAR\'; },',
@@ -37,9 +46,12 @@ let moduleExports = function sqlMetadata(app, options) {
           <%- insertFragment(`fields-${type}-${field}-non`, [
             '          sqlExpr: (tableName, args) => `${tableName}.__XXX__ || \' \' || ${tableName}.__YYY__`',
 ]) %>
+<%# --- if/else-1 ends above. -%>
 <% } -%>
+<%# --- forEach-3 ends above. -%>
         },
 <% }); -%>
+<%# --- forEach-1 ends above. -%>
         <%- insertFragment(`fields-${type}`) %>
       },
       <%- insertFragment(`type-${type}`) %>
@@ -48,6 +60,8 @@ let moduleExports = function sqlMetadata(app, options) {
 
     Query: {
       fields: {
+<%# -%>
+<%# --- forEach-4 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(queryResolvers).forEach(graphqlName => {
       __temp = [
         `        // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
@@ -66,6 +80,7 @@ let moduleExports = function sqlMetadata(app, options) {
 
         <%- insertFragment(`query-${graphqlName}`, __temp) %>
 <% }); -%>
+<%# --- forEach-4 ends above. -%>
         <%- insertFragment('metadata_query_fields') %>
       },
       <%- insertFragment('metadata_query_more') %>

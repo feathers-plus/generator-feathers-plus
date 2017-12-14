@@ -172,41 +172,41 @@ module.exports = class ServiceGenerator extends Generator {
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'graphql.schemas.js');
     this.fs.copyTpl(
-      this.templatePath('graphql.schemas.js'),
+      this.templatePath('graphql.schemas.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'service.resolvers.js');
     this.fs.copyTpl(
-      this.templatePath('service.resolvers.js'),
+      this.templatePath('service.resolvers.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'sql.resolvers.js');
     this.fs.copyTpl(
-      this.templatePath('sql.resolvers.js'),
+      this.templatePath('sql.resolvers.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'sql.metadata.js');
     this.fs.copyTpl(
-      this.templatePath('sql.metadata.js'),
+      this.templatePath('sql.metadata.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'sql.execute.js');
     this.fs.copyTpl(
-      this.templatePath('sql.execute.js'),
+      this.templatePath('sql.execute.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
     this.fs.copyTpl(
-      this.templatePath('graphql.service.js'),
+      this.templatePath('graphql.service.ejs'),
       mainFile,
       Object.assign({}, context, { insertFragment: insertFragment(mainFile)})
     );

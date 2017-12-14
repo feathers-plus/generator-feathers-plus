@@ -238,7 +238,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.schema.js`);
     this.fs.copyTpl(
-      this.templatePath('name.schema.js'),
+      this.templatePath('name.schema.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
@@ -266,7 +266,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.mongoose.js`);
     this.fs.copyTpl(
-      this.templatePath('name.mongoose.js'),
+      this.templatePath('name.mongoose.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
@@ -282,7 +282,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.validate.js`);
     this.fs.copyTpl(
-      this.templatePath('name.validate.js'),
+      this.templatePath('name.validate.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
