@@ -5,8 +5,8 @@
 let schema = {
   $schema: 'http://json-schema.org/draft-05/schema',
   <%- insertFragment('schema_header', [
-    '  title: \'...\',',
-    '  description: \'...\',',
+    '  title: \'___post___\',',
+    '  description: \'___Post database.___\',',
   ]) %>
   type: 'object',
   required: [
@@ -21,17 +21,16 @@ let schema = {
 let extension = {
   graphql: {
     <%- insertFragment('graphql_header', [
-    '    // name: \'...\',',
+    '    // name: \'___Post___\',',
     '    // service : {',
-    '    //   sort: { id: 1 },',
+    '    //   sort: { ___id___: 1 },',
     '    // },',
     '    // sql: {',
-    '    // sqlTable: \'Accounts\',',
-    '    //   uniqueKey: \'uuid\',',
+    '    //   sqlTable: \'___Posts___\',',
+    '    //   uniqueKey: \'___id___\',',
     '    //   sqlColumn: {',
-    '    //   email: { sqlColumn: \'email_address\' },',
-    '    //   firstName: { sqlColumn: \'first_name\' },',
-    '    //   lastName: { sqlColumn: \'last_name\' },',
+    '    //     ___authorId___: \'___author_id___\','
+    '    //   }',
     '    // },',
     ])
     %>,
@@ -40,15 +39,7 @@ let extension = {
     ],
     add: {
     <%- insertFragment('graphql_add', [
-        '      // ???: {',
-        '      //   type: \'User!\',',
-        '      //   args: false,',
-        '      //   sql: {',
-        '      //     sqlJoin(ourTable, otherTable) { return ourTable + \'.??? = \' + otherTable + \'.???\'; },',
-        '      //     orderBy(args, content) { return makeOrderBy(args, { ???: 1 }); },',
-        '      //     where(table, args) { return makeWhere(table, args, \'uuid\', {); },',
-        '      //   },',
-        '      // },',
+        '      // ___author___: { type: \'___User___!\', args: false },',
       ])
       %>
     },
