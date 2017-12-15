@@ -26,12 +26,12 @@ let moduleExports = function serviceResolvers(app, options) {
 <%# --- if/else-1 starts below. -%>
 <% if (fieldInfo[type].fields[field].serviceName) {
   __temp = [
-      '        // (parent, args, content, ast) => {',
+      '        (parent, args, content, ast) => {',
       '        //   const feathersParams = convertArgsToFeathers(args, {',
       '        //     query: { $sort: {} }',
       '        //   });',
       `        //   return ${fieldInfo[type].fields[field].serviceName}.find(feathersParams).then(${fieldInfo[type].fields[field].isArray ? "extractAllItems" : "extractFirstItem"});`,
-      '        // },'
+      '        },'
   ];
 -%>
         <%- insertFragment(`resolver-${type}-${field}`, __temp) %>

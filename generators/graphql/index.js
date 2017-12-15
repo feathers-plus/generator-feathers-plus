@@ -180,6 +180,13 @@ module.exports = class ServiceGenerator extends Generator {
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
+    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'batchloader.resolvers.js');
+    this.fs.copyTpl(
+      this.templatePath('batchloader.resolvers.ejs'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
+    );
+
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'sql.resolvers.js');
     this.fs.copyTpl(
       this.templatePath('sql.resolvers.ejs'),
