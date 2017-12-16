@@ -37,7 +37,7 @@ module.exports = class ServiceGenerator extends Generator {
     console.log('- Dynamically generated SQL statements.');
     console.log('You can tailor one or more of these modules to your specifications.\n');
     console.log('If you tailor several modules, you can switch between them by rerunning');
-    console.log('"feathers-plus graphql".\n');
+    console.log('"feathers-plus generate graphql".\n');
   }
 
   prompting() {

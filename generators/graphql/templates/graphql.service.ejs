@@ -2,85 +2,96 @@
 // Initializes the `<%= name %>` service on path `/<%= path %>`
 const createService = require('@feathers-x/graphql');
 const { mergeTypes } = require('merge-graphql-schemas');
+const deepMerge = require('deepmerge');
+const generatedSchema = require('./graphql.schemas');
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (strategy === 'services') { -%>
+const generatedResolvers = require('./service.resolvers');
+<% } -%>
+<%# --- if-1 ends above. -%>
+<%# -%>
+<%# --- if-2 starts below. -%>
+<% if (strategy === 'batchloaders') { -%>
+const generatedResolvers = require('./batchloader.resolvers');
+<% } -%>
+<%# --- if-2 ends above. -%>
+<%# -%>
+<%# --- if-3 starts below. -%>
+<% if (strategy === 'sql') { -%>
+const generatedResolvers = require('./sql.resolvers');
+const generatedMetadata = require('./sql.metadata');
+const { dialect, executeSql, openDb } = require('./sql.execute');
+<% } -%>
+<%# --- if-3 ends above. -%>
 const hooks = require('./graphql.hooks');
 <%- insertFragment('imports') %>
 
 const strategy = '<%- strategy %>';
 console.log(`\n===== configuring graphql service for ${strategy}.\n`);
 
-const schemas = mergeTypes([
-  require('./graphql.schemas'),
+let schemas = mergeTypes([
+  generatedSchema,
   <%- insertFragment('schemas') %>
 ]);
 
 <%# -%>
-<%# --- if-0 starts below. -%>
+<%# --- if-4 starts below. -%>
 <% if (strategy === 'services') { -%>
-// Setup for using Feathers service calls.
-const serviceResolvers = (app, options) => Object.assign({},
-  require('./service.resolvers')(app, options),
+let resolvers = (app, options) => deepMerge.all([{},
+  generatedResolvers(app, options),
   <%- insertFragment('service_resolvers') %>
-);
+]);
 <% } -%>
-<%# --- if-0 ends above. -%>
+<%# --- if-4 ends above. -%>
 <%# -%>
-<%# --- if-1 starts below. -%>
+<%# --- if-5 starts below. -%>
 <% if (strategy === 'batchloaders') { -%>
-// Setup for using BatchLoaders.
-const serviceResolvers = (app, options) => Object.assign({},
-  require('./batchloader.resolvers')(app, options),
+let resolvers = (app, options) => deepMerge.all([{},
+  generatedResolvers(app, options),
   <%- insertFragment('batchloader_resolvers') %>
-);
+]);
 <% } -%>
-<%# --- if/else-1 ends above. -%>
+<%# --- if-5 ends above. -%>
 <%# -%>
-<%# --- if-2 starts below. -%>
+<%# --- if-6 starts below. -%>
 <% if (strategy === 'sql') { -%>
-// Setup for using SQL statements.
-const { dialect, executeSql, openDb } = require('./sql.execute');
+let resolvers = (app, options) => deepMerge.all([{},
+  generatedResolvers(app, options),
+  <%- insertFragment('sql_resolvers') %>
+]);
+
+let sqlJoins = (app, options) => deepMerge.all([{},
+  generatedMetadata(app, options),
+  <%- insertFragment('sql_metadata') %>
+]);
+
 if (!dialect) {
   throw new Error('services/graphql/sql.execute.js has not been configured.');
 }
-
-const sqlResolvers = (app, options) => Object.assign({},
-  require('./sql.resolvers')(app, options),
-  <%- insertFragment('sql_resolvers') %>
-);
-
-const sqlJoins = (app, options) => Object.assign({},
-  require('./sql.metadata')(app, options),
-  <%- insertFragment('sql_metadata') %>
-);
 <% } -%>
-<%# --- if-2 ends above. -%>
+<%# --- if-6 ends above. -%>
 <%- insertFragment('init') %>
 
 let moduleExports = function(){
   const app = this;
   <%- insertFragment('func_init') %>
 
-  const options = {
-<%# -%>
-<%# --- if-4 starts below. -%>
-<% if (strategy === 'services' || strategy === 'batchloaders') { -%>
+  let options = {
     schemas,
-    resolvers: serviceResolvers,
-<% } -%>
-<%# --- if-4 ends above. -%>
+    resolvers,
 <%# -%>
-<%# --- if-5 starts below. -%>
+<%# --- if-7 starts below. -%>
 <% if (strategy === 'sql') { -%>
-    schemas,
-    resolvers: sqlResolvers,
     sqlJoins,
     dialect,
     executeSql,
     openDb,
     logSql: false,
 <% } -%>
-<%# --- if-5 ends above. -%>
-    <%- insertFragment('func_options') %>
+<%# --- if-7 ends above. -%>
   };
+  <%- insertFragment('func_options') %>
 
   // Initialize our service with any options it requires.
   const createdService = createService(options);
@@ -100,9 +111,24 @@ module.exports = moduleExports;
 <%- insertFragment('end') %>
 
 /*
-Stash custom code perhaps not used here but which may be used if the module is regenerated.
+Stash code not used now but which may be used if the module is regenerated.
+<%# -%>
+<%# --- if-a starts below. -%>
+<% if (strategy !== 'services') { -%>
 <%- insertFragment('service_resolvers') %>
+<% } -%>
+<%# --- if-a ends above. -%>
+<%# -%>
+<%# --- if-b starts below. -%>
+<% if (strategy !== 'batchloaders') { -%>
 <%- insertFragment('batchloader_resolvers') %>
+<% } -%>
+<%# --- if-b ends above. -%>
+<%# -%>
+<%# --- if-c starts below. -%>
+<% if (strategy !== 'sql') { -%>
 <%- insertFragment('sql_resolvers') %>
 <%- insertFragment('sql_metadata') %>
+<% } -%>
+<%# --- if-c ends above. -%>
 */
