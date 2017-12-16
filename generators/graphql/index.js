@@ -47,6 +47,7 @@ module.exports = class ServiceGenerator extends Generator {
     const { props, specs } = this;
     props.name = 'graphql';
     const prompts = [
+      /*
       {
         type: 'checkbox',
         name: 'resolvers',
@@ -64,20 +65,21 @@ module.exports = class ServiceGenerator extends Generator {
           value: 'sql',
           checked: this.specs.graphql.resolvers ? this.specs.graphql.resolvers.indexOf('sql') !== -1 : true,
         }]
-      }, {
+      },*/
+      {
         type: 'list',
-        name: 'resolvers1',
+        name: 'strategy',
         message: 'How should Queries be completed?.',
         default() {
-          return 'resolvers';
+          return graphqlSpecs.strategy || 'services';
         },
         choices: [
           {
             name: 'Using standalone Feathers service calls.',
-            value: 'resolvers',
+            value: 'services',
           }, {
             name: 'Using BatchLoaders.',
-            value: 'resolvers',
+            value: 'batchloaders',
           }, {
             name: 'Using dynamic SQL statements.',
             value: 'sql',

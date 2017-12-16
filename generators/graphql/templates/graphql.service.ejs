@@ -5,29 +5,38 @@ const { mergeTypes } = require('merge-graphql-schemas');
 const hooks = require('./graphql.hooks');
 <%- insertFragment('imports') %>
 
+const strategy = '<%- strategy %>';
+console.log(`\n===== configuring graphql service for ${strategy}.\n`);
+
 const schemas = mergeTypes([
   require('./graphql.schemas'),
   <%- insertFragment('schemas') %>
 ]);
 
 <%# -%>
-<%# --- if-1 starts below. -%>
-<% if (resolvers[0] === 'resolvers' || resolvers.length === 2) { -%>
-// Setup for using Feathers service resolvers.
-
+<%# --- if-0 starts below. -%>
+<% if (strategy === 'services') { -%>
+// Setup for using Feathers service calls.
 const serviceResolvers = (app, options) => Object.assign({},
   require('./service.resolvers')(app, options),
   <%- insertFragment('service_resolvers') %>
 );
-
 <% } -%>
-<%# --- if-1 ends above. -%>
-
+<%# --- if-0 ends above. -%>
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (strategy === 'batchloaders') { -%>
+// Setup for using BatchLoaders.
+const serviceResolvers = (app, options) => Object.assign({},
+  require('./batchloader.resolvers')(app, options),
+  <%- insertFragment('batchloader_resolvers') %>
+);
+<% } -%>
+<%# --- if/else-1 ends above. -%>
 <%# -%>
 <%# --- if-2 starts below. -%>
-<% if (resolvers[0] === 'sql' || resolvers.length === 2) { -%>
-// Setup for using SQL statement resolvers.
-
+<% if (strategy === 'sql') { -%>
+// Setup for using SQL statements.
 const { dialect, executeSql, openDb } = require('./sql.execute');
 if (!dialect) {
   throw new Error('services/graphql/sql.execute.js has not been configured.');
@@ -44,34 +53,23 @@ const sqlJoins = (app, options) => Object.assign({},
 );
 <% } -%>
 <%# --- if-2 ends above. -%>
+<%- insertFragment('init') %>
 
 let moduleExports = function(){
   const app = this;
-<%# -%>
-<%# --- if-3 starts below. -%>
-<% if (resolvers.length === 2) { -%>
-
-  // Setup for using both Feathers service and SQL statement resolvers.
-  <%- insertFragment('use_either', [
-    '  const usingSql = true;',
-  ]) %>
-<% } -%>
-<%# --- if-3 ends above. -%>
-  //!code: func_init //!end
-
-  console.log(`\n===== configuring graphql service for ${usingSql ? 'SQL statements' : 'Feathers services'}.\n`); // eslint-disable-line
+  <%- insertFragment('func_init') %>
 
   const options = {
 <%# -%>
 <%# --- if-4 starts below. -%>
-<% if (resolvers.length === 1 && resolvers[0] === 'resolvers') { -%>
+<% if (strategy === 'services' || strategy === 'batchloaders') { -%>
     schemas,
     resolvers: serviceResolvers,
 <% } -%>
 <%# --- if-4 ends above. -%>
 <%# -%>
 <%# --- if-5 starts below. -%>
-<% if (resolvers.length === 1 && resolvers[0] === 'sql') { -%>
+<% if (strategy === 'sql') { -%>
     schemas,
     resolvers: sqlResolvers,
     sqlJoins,
@@ -81,19 +79,7 @@ let moduleExports = function(){
     logSql: false,
 <% } -%>
 <%# --- if-5 ends above. -%>
-<%# -%>
-<%# --- if-6 starts below. -%>
-<% if (resolvers.length === 2) { -%>
-    schemas,
-    resolvers: usingSql ? sqlResolvers : serviceResolvers,
-    sqlJoins,
-    dialect,
-    executeSql,
-    openDb: usingSql ? openDb : undefined,
-    logSql: false,
-<% } -%>
-<%# --- if-6 ends above. -%>
-    //!code: func_options //!end
+    <%- insertFragment('func_options') %>
   };
 
   // Initialize our service with any options it requires.
@@ -112,3 +98,11 @@ module.exports = moduleExports;
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
+
+/*
+Stash custom code perhaps not used here but which may be used if the module is regenerated.
+<%- insertFragment('service_resolvers') %>
+<%- insertFragment('batchloader_resolvers') %>
+<%- insertFragment('sql_resolvers') %>
+<%- insertFragment('sql_metadata') %>
+*/
