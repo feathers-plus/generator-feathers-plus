@@ -1,3 +1,5 @@
+
+const chalk = require('chalk');
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
@@ -31,13 +33,18 @@ module.exports = class ServiceGenerator extends Generator {
       src: this.specs.app.src || (this.pkg.directories && this.pkg.directories.lib),
     };
     */
-    console.log('Modules matching your schemas will be generated to run GraphQL Queries using');
-    console.log('- Feathers service calls, and');
-    console.log('- BatchLoaders which cache and batch Feathers service calls, and');
-    console.log('- Dynamically generated SQL statements.');
-    console.log('You can tailor one or more of these modules to your specifications.\n');
-    console.log('If you tailor several modules, you can switch between them by rerunning');
-    console.log('"feathers-plus generate graphql".\n');
+
+    console.log(chalk.green([
+      'Modules matching your schemas will be generated to run GraphQL Queries using',
+      '- Feathers service calls, and',
+      '- BatchLoaders which cache and batch Feathers service calls, and',
+      '- Dynamically generated SQL statements.',
+      'You can tailor one or more of these modules to your specifications.',
+      '',
+      'If you tailor several modules, you can switch between them by rerunning',
+      '"feathers-plus generate graphql".',
+      '',
+    ].join('\n')));
   }
 
   prompting() {

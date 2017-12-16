@@ -42,13 +42,13 @@ let moduleExports = function batchloaderResolvers(app, options) {
     switch (dataLoaderName) {
       /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
       <%- insertFragment('bl-persisted', [
-        '      // case \'_persisted.___XXX___\':',
+        '      // case \'_persisted.user.one.id\': // service user, returns one object, key is field id',
       ]) %>
 
       /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
       <%- insertFragment('bl-shared', [
           '      // *.*: User',
-          '      // case \'_shared.user.one.uuid\':',
+          '      // case \'_shared.user.one.id\': // service user, returns one object, key is field id',
       ]) %>
 
       /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
@@ -57,9 +57,9 @@ let moduleExports = function batchloaderResolvers(app, options) {
 <% Object.keys(fieldInfo).forEach(type => { -%>
 <%# -%>
 <%# --- forEach-b starts below. Loop thru the fields to be renamed. -%>
-<% Object.keys(fieldInfo[type].fields).forEach(field => { -%>
-
-      // <%- type %>.<%- field %><%- fieldInfo[type].fields[field].args %>: <%- fieldInfo[type].fields[field].type %>
+<% Object.keys(fieldInfo[type].fields).forEach(field => {
+  __tempHead = `${type}.${field}${fieldInfo[type].fields[field].args}: ${fieldInfo[type].fields[field].type}`;
+-%>
 <%# -%>
 <%# --- if-1c starts below. -%>
 <% if (fieldInfo[type].fields[field].serviceName) {
@@ -68,16 +68,18 @@ let moduleExports = function batchloaderResolvers(app, options) {
   if (!__fieldInfo.isArray) { __code = __fieldInfo.isNullable ? '' : '!'; }
   __temp = [
     `      case '${type}.${field}':`,
-    `        return feathersBatchLoader(dataLoaderName, '${__code}', '___FOO___',`,
+    `        return feathersBatchLoader(dataLoaderName, '${__code}', '__KEY__',`,
     '          keys => {',
     '            feathersParams = convertArgsToFeathers(args,',
-    '              { query : { __FOO__: { $in: keys }, $sort: {} } },',
+    '              //  query: { __KEY__: { $in: keys } }',
     '            );',
     `            return ${fieldInfo[type].fields[field].serviceName}.find(feathersParams);`,
     '          }',
     '        );',
   ];
 -%>
+
+      // <%- __tempHead %>
       <%- insertFragment(`bl-${type}-${field}`, __temp) %>
 <% } -%>
 <%# --- if-c ends above. -%>
@@ -109,13 +111,13 @@ let moduleExports = function batchloaderResolvers(app, options) {
 <%# --- if/else-1 starts below. -%>
 <% if (fieldInfo[type].fields[field].serviceName) {
   __temp = [
-    `        // ${field}: getResult('${type}.${field}', '__FOO__'),`,
+    `      ${field}: getResult('${type}.${field}', '__KEY__'),`,
   ];
 -%>
       <%- insertFragment(`resolver-${type}-${field}`, __temp) %>
 <% } else { -%>
       <%- insertFragment(`resolver-${type}-${field}-non`, [
-        '        (parent, args, content, ast) => {},',
+        `      ${field}: (parent, args, content, ast) => {},`,
       ]) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>

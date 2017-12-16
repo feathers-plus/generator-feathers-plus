@@ -36,15 +36,15 @@ let moduleExports = function sqlMetadata(app, options) {
 <%# --- if/else-1 starts below. -%>
 <% if (fieldInfo[type].fields[field].serviceName) {
           __temp = [
-            '          sqlJoin(ourTable, otherTable) { return \'ourTable.__XXX__ = otherTable.BAR\'; },',
+            '          sqlJoin(ourTable, otherTable) { return `${ourTable}.__USER_ID__ = ${otherTable}.__ID__`; },',
             '          orderBy(args, content) { return makeOrderBy(args, null); },',
-            '          where(table, args) { return makeWhere(table, args, \'__ZZZ__\', undefined); },',
+            '          where(table, args) { return makeWhere(table, args, \'__USER_ID__\', undefined); },',
           ];
 -%>
           <%- insertFragment(`fields-${type}-${field}`, __temp) %>
 <% } else { -%>
           <%- insertFragment(`fields-${type}-${field}-non`, [
-            '          sqlExpr: (tableName, args) => `${tableName}.__XXX__ || \' \' || ${tableName}.__YYY__`',
+            '          sqlExpr: (tableName, args) => ``,',
 ]) %>
 <%# --- if/else-1 ends above. -%>
 <% } -%>
@@ -67,13 +67,13 @@ let moduleExports = function sqlMetadata(app, options) {
         `        // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
         `        get${graphqlName}: {`,
         '          orderBy: (args, content) => makeOrderBy(args, {}),',
-        `          where: (table, args) => makeWhere(table, args, '__XXX__'),`,
+        `          where: (table, args) => makeWhere(table, args, '__ID__'),`,
         '        },',
         '',
         `        // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
         `        find${graphqlName}: {`,
         `          orderBy: (args, content) => makeOrderBy(args, {}),`,
-        `          where: (table, args) => makeWhere(table, args, '__XXX__'),`,
+        `          where: (table, args) => makeWhere(table, args, '__ID__'),`,
         '        },',
       ];
 -%>
