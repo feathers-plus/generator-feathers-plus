@@ -25,19 +25,19 @@ module.exports = class ServiceGenerator extends Generator {
     this.queryInfo = queryInfo;
 
     /*
-    console.log(`...schemas:\n${this.graphqlSchemas}`);
-    console.log('...mapping:\n', this.mapping);
-    console.log('...fieldInfo:\n', this.fieldInfo);
-    console.log(`...queryInfo:\n${this.queryInfo}`);
-    */
-
-    /*
     this.props = {
       name: this.pkg.name || process.cwd().split(path.sep).pop(),
       description: this.pkg.description,
       src: this.specs.app.src || (this.pkg.directories && this.pkg.directories.lib),
     };
-*/
+    */
+    console.log('Modules matching your schemas will be generated to run GraphQL Queries using');
+    console.log('- Feathers service calls, and');
+    console.log('- BatchLoaders which cache and batch Feathers service calls, and');
+    console.log('- Dynamically generated SQL statements.');
+    console.log('You can tailor one or more of these modules to your specifications.\n');
+    console.log('If you tailor several modules, you can switch between them by rerunning');
+    console.log('"feathers-plus graphql".\n');
   }
 
   prompting() {
@@ -50,16 +50,39 @@ module.exports = class ServiceGenerator extends Generator {
       {
         type: 'checkbox',
         name: 'resolvers',
-        message: 'How should Queries be performed?.',
+        message: 'How should Queries be completed?.',
         choices: [{
           name: 'Using Feathers calls.',
           value: 'resolvers',
           checked: this.specs.graphql.resolvers ? this.specs.graphql.resolvers.indexOf('resolvers') !== -1 : true,
         }, {
-          name: 'Using SQL statements. (More complex.)',
+          name: 'Using BatchLoaders.',
+          value: 'resolvers',
+          checked: this.specs.graphql.resolvers ? this.specs.graphql.resolvers.indexOf('resolvers') !== -1 : true,
+        }, {
+          name: 'Using dynamic SQL statements. (More complex.)',
           value: 'sql',
           checked: this.specs.graphql.resolvers ? this.specs.graphql.resolvers.indexOf('sql') !== -1 : true,
         }]
+      }, {
+        type: 'list',
+        name: 'resolvers1',
+        message: 'How should Queries be completed?.',
+        default() {
+          return 'resolvers';
+        },
+        choices: [
+          {
+            name: 'Using standalone Feathers service calls.',
+            value: 'resolvers',
+          }, {
+            name: 'Using BatchLoaders.',
+            value: 'resolvers',
+          }, {
+            name: 'Using dynamic SQL statements.',
+            value: 'sql',
+          }
+        ]
       }, {
         name: 'path',
         message: 'Which path should the service be registered on?',
