@@ -18,17 +18,19 @@ let moduleExports = function serviceResolvers(app, options) {
     <%- type %>: {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
-<% Object.keys(fieldInfo[type].fields).forEach(field => { -%>
+<% Object.keys(fieldInfo[type].fields).forEach(field => {
+  __typeField = fieldInfo[type].fields[field];
+-%>
 
-      // <%- field %><%- fieldInfo[type].fields[field].args %>: <%- fieldInfo[type].fields[field].type %>
+      // <%- field %><%- __typeField.args %>: <%- __typeField.type %>
       <%- field %>:
 <%# -%>
 <%# --- if/else-1 starts below. -%>
-<% if (fieldInfo[type].fields[field].serviceName) {
+<% if (__typeField.serviceName) {
   __temp = [
       '        (parent, args, content, ast) => {',
       '          const feathersParams = convertArgsToFeathers(args, {',
-      '            //  query: { __ID__: __USER_ID__, $sort: { __ID__: 1 } }',
+      `            query: { ${__typeField.relationOtherTable}: parent.${__typeField.relationOurTable}${__typeField.type.charAt(0) === '[' ? `, $sort: { ${__typeField.relationOtherTable}: 1 }` : ''} }`,
       '          });',
       `          return ${fieldInfo[type].fields[field].serviceName}.find(feathersParams).then(${fieldInfo[type].fields[field].isArray ? "extractAllItems" : "extractFirstItem"});`,
       '        },'
@@ -36,9 +38,9 @@ let moduleExports = function serviceResolvers(app, options) {
 -%>
         <%- insertFragment(`resolver-${type}-${field}`, __temp) %>
 <% } else { -%>
-        <%- insertFragment(`resolver-${type}-${field}-non`, [
-          '        (parent, args, content, ast) => {},',
-        ]) %>
+        <%- insertFragment(`resolver-${type}-${field}-non`,
+          `        (parent, args, content, ast) => { throw Error('GraphQL field ${type}.${field} is not calculated.')},`
+        ) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>
 <% }); -%>
