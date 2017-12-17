@@ -3,9 +3,9 @@ const { getByDot, setByDot } = require('feathers-hooks-common');
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-let moduleExports = function batchloaderResolvers(app, options) {
+let moduleExports = function batchLoaderResolvers(app, options) {
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem, // eslint-disable-line
-    feathersDataLoader: { feathersDataLoader: feathersBatchLoader } } = options;
+    feathersBatchLoader: { feathersBatchLoader } } = options;
 
 <% let __temp = Object.keys(mapping.feathers).map(name =>
   `  const ${name} = app.service('${mapping.feathers[name].path}');`
