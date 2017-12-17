@@ -39,7 +39,7 @@ module.exports = class ServiceGenerator extends Generator {
       '- Feathers service calls, and',
       '- BatchLoaders which cache and batch Feathers service calls, and',
       '- Dynamically generated SQL statements.',
-      'You can tailor one or more of these modules to your specifications.',
+      'You can tailor one or more of these modules to your requirements.',
       '',
       'If you tailor several modules, you can switch between them by rerunning',
       '"feathers-plus generate graphql".',
@@ -255,7 +255,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     this._packagerInstall([
       'graphql',
-      '@feathers-x/graphql',
+      // '@feathers-plus/graphql', *******************************************************
       'merge-graphql-schemas',
     ], { save: true });
   }
