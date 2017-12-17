@@ -35,14 +35,14 @@ module.exports = class ServiceGenerator extends Generator {
     */
 
     console.log(chalk.green([
-      'Modules matching your schemas will be generated to run GraphQL Queries using',
+      'Modules tailored to your schemas will be generated to run GraphQL Queries using',
       '- Feathers service calls, and',
       '- BatchLoaders which cache and batch Feathers service calls, and',
       '- Dynamically generated SQL statements.',
-      'You can tailor one or more of these modules to your requirements.',
+      'You may modify one or more of these modules according to your needs.',
       '',
-      'If you tailor several modules, you can switch between them by rerunning',
-      '"feathers-plus generate graphql".',
+      'If you want to use several of these modules, you can switch between them',
+      'by rerunning "feathers-plus generate graphql" and switching options.',
       '',
     ].join('\n')));
   }
