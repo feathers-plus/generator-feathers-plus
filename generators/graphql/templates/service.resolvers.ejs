@@ -13,11 +13,13 @@ let moduleExports = function serviceResolvers(app, options) {
   let returns = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(fieldInfo).forEach(type => { -%>
+<% Object.keys(fieldInfo).forEach(type => {
+  __serviceName = mapping.graphql[type].service;
+-%>
 
     <%- type %>: {
 <%# -%>
-<%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
+<%# --- forEach-2 starts below. Loop thru the fields to be added. -%>
 <% Object.keys(fieldInfo[type].fields).forEach(field => {
   __typeField = fieldInfo[type].fields[field];
 -%>
@@ -27,13 +29,17 @@ let moduleExports = function serviceResolvers(app, options) {
 <%# -%>
 <%# --- if/else-1 starts below. -%>
 <% if (__typeField.serviceName) {
-  __temp = [
-      '        (parent, args, content, ast) => {',
-      '          const feathersParams = convertArgsToFeathers(args, {',
-      `            query: { ${__typeField.relationOtherTable}: parent.${__typeField.relationOurTable}${__typeField.type.charAt(0) === '[' ? `, $sort: { ${__typeField.relationOtherTable}: 1 }` : ''} }`,
-      '          });',
-      `          return ${fieldInfo[type].fields[field].serviceName}.find(feathersParams).then(${fieldInfo[type].fields[field].isArray ? "extractAllItems" : "extractFirstItem"});`,
-      '        },'
+    __ifArray = feathersSchemas[__serviceName] && feathersSchemas[__serviceName].properties && __typeField.relationOurTable &&
+            feathersSchemas[__serviceName].properties[__typeField.relationOurTable].type === 'array';
+    __temp = [
+        '        (parent, args, content, ast) => {',
+        '          const feathersParams = convertArgsToFeathers(args, {',
+        `            query: { ${__typeField.relationOtherTable}: `
+            + `${__ifArray ? '{ $in: ' : ''}parent.${__typeField.relationOurTable}${__ifArray ? ' }' : ''}`
+            + `${__typeField.type.charAt(0) === '[' ? `, $sort: { ${__typeField.relationOtherTable}: 1 }` : ''} }`,
+        '          });',
+        `          return ${fieldInfo[type].fields[field].serviceName}.find(feathersParams).then(${fieldInfo[type].fields[field].isArray ? "extractAllItems" : "extractFirstItem"});`,
+        '        },'
   ];
 -%>
         <%- insertFragment(`resolver-${type}-${field}`, __temp) %>

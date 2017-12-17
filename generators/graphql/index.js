@@ -19,8 +19,9 @@ module.exports = class ServiceGenerator extends Generator {
     this.fragments = await refreshCodeFragments();
     initSpecs(this.specs, 'graphql');
 
-    const { schemas, mapping, fieldInfo, queryInfo } = combineFeathersDeclarations(this.specs);
+    const { feathersSchemas, schemas, mapping, fieldInfo, queryInfo } = combineFeathersDeclarations(this.specs);
 
+    this.feathersSchemas = feathersSchemas;
     this.graphqlSchemas = schemas;
     this.mapping = mapping;
     this.fieldInfo = fieldInfo;
@@ -174,6 +175,7 @@ module.exports = class ServiceGenerator extends Generator {
       path: stripSlashes(this.props.path),
       serviceModule,
       stringifyPlus,
+      feathersSchemas: this.feathersSchemas,
       graphqlSchemas: this.graphqlSchemas,
       mapping: this.mapping,
       fieldInfo: this.fieldInfo,
