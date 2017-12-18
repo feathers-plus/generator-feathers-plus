@@ -58,22 +58,23 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 <%# -%>
 <%# --- forEach-b starts below. Loop thru the fields to be renamed. -%>
 <% Object.keys(fieldInfo[type].fields).forEach(field => {
-  __tempHead = `${type}.${field}${fieldInfo[type].fields[field].args}: ${fieldInfo[type].fields[field].type}`;
+  __typeField = fieldInfo[type].fields[field];
+  __tempHead = `${type}.${field}${__typeField.args}: ${__typeField.type}`;
 -%>
 <%# -%>
 <%# --- if-1c starts below. -%>
-<% if (fieldInfo[type].fields[field].serviceName) {
-  __fieldInfo = fieldInfo[type].fields[field];
+<% if (__typeField.serviceName) {
+  __fieldInfo = __typeField;
   __code = '[!]';
   if (!__fieldInfo.isArray) { __code = __fieldInfo.isNullable ? '' : '!'; }
   __temp = [
     `      case '${type}.${field}':`,
-    `        return feathersBatchLoader(dataLoaderName, '${__code}', '__KEY__',`,
+    `        return feathersBatchLoader(dataLoaderName, '${__code}', '${__typeField.relationOtherTable}',`,
     '          keys => {',
     '            feathersParams = convertArgsToFeathers(args,',
-    '              //  query: { __KEY__: { $in: keys } }',
+    `              { query: { ${__typeField.relationOtherTable}: { $in: keys }, $sort: { ${__typeField.relationOtherTable}: 1 } }, populate: false }`,
     '            );',
-    `            return ${fieldInfo[type].fields[field].serviceName}.find(feathersParams);`,
+    `            return ${__typeField.serviceName}.find(feathersParams);`,
     '          }',
     '        );',
   ];
@@ -104,20 +105,22 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     <%- type %>: {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
-<% Object.keys(fieldInfo[type].fields).forEach(field => { -%>
+<% Object.keys(fieldInfo[type].fields).forEach(field => {
+  __typeField = fieldInfo[type].fields[field];
+-%>
 
-      // <%- field %><%- fieldInfo[type].fields[field].args %>: <%- fieldInfo[type].fields[field].type %>
+      // <%- field %><%- __typeField.args %>: <%- __typeField.type %>
 <%# -%>
 <%# --- if/else-1 starts below. -%>
-<% if (fieldInfo[type].fields[field].serviceName) {
+<% if (__typeField.serviceName) {
   __temp = [
-    `      ${field}: getResult('${type}.${field}', '__KEY__'),`,
+    `      ${field}: getResult('${type}.${field}', '${__typeField.relationOurTable}'),`,
   ];
 -%>
       <%- insertFragment(`resolver-${type}-${field}`, __temp) %>
 <% } else { -%>
       <%- insertFragment(`resolver-${type}-${field}-non`, [
-        `      ${field}: (parent, args, content, ast) => {},`,
+        `      ${field}: (parent, args, content, ast) => { throw Error('GraphQL field ${type}.${field} is not calculated.'); },`,
       ]) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>

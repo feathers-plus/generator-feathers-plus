@@ -36,7 +36,8 @@ let moduleExports = function serviceResolvers(app, options) {
         '          const feathersParams = convertArgsToFeathers(args, {',
         `            query: { ${__typeField.relationOtherTable}: `
             + `${__ifArray ? '{ $in: ' : ''}parent.${__typeField.relationOurTable}${__ifArray ? ' }' : ''}`
-            + `${__typeField.type.charAt(0) === '[' ? `, $sort: { ${__typeField.relationOtherTable}: 1 }` : ''} }`,
+            + `${__typeField.type.charAt(0) === '[' ? `, $sort: { ${__typeField.relationOtherTable}: 1 }` : ''} }`
+            + ', paginate: false',
         '          });',
         `          return ${fieldInfo[type].fields[field].serviceName}.find(feathersParams).then(${fieldInfo[type].fields[field].isArray ? "extractAllItems" : "extractFirstItem"});`,
         '        },'
@@ -45,7 +46,7 @@ let moduleExports = function serviceResolvers(app, options) {
         <%- insertFragment(`resolver-${type}-${field}`, __temp) %>
 <% } else { -%>
         <%- insertFragment(`resolver-${type}-${field}-non`,
-          `        (parent, args, content, ast) => { throw Error('GraphQL field ${type}.${field} is not calculated.')},`
+          `        (parent, args, content, ast) => { throw Error('GraphQL field ${type}.${field} is not calculated.'); },`
         ) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>
