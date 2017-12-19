@@ -35,16 +35,25 @@ let moduleExports = function sqlMetadata(app, options) {
 <%# -%>
 <%# --- if/else-1 starts below. -%>
 <% if (fieldInfo[type].fields[field].serviceName) {
-          __temp = [
-            '          sqlJoin(ourTable, otherTable) { return `${ourTable}.__USER_ID__ = ${otherTable}.__ID__`; },',
-            '          orderBy(args, content) { return makeOrderBy(args, null); },',
-            '          where(table, args) { return makeWhere(table, args, \'__USER_ID__\', undefined); },',
-          ];
+    __fieldInfoField = fieldInfo[type].fields[field];
+    __relationOtherTableSql = fieldInfo[__fieldInfoField.typeName]
+        && fieldInfo[__fieldInfoField.typeName].sqlColumn[__fieldInfoField.relationOtherTable]
+            ? fieldInfo[__fieldInfoField.typeName].sqlColumn[__fieldInfoField.relationOtherTable]
+            : __fieldInfoField.relationOtherTable;
+    __temp = [
+        '          sqlJoin(ourTable, otherTable) { return `${ourTable}.'
+            + __fieldInfoField.relationOurTableSql
+            + ' = ${otherTable}.'
+            + __relationOtherTableSql
+            + '`; },',
+        '          orderBy(args, content) { return makeOrderBy(args, null); },',
+        `          where(table, args) { return makeWhere(table, args, '${__fieldInfoField.relationOurTableSql}', undefined); },`,
+    ];
 -%>
           <%- insertFragment(`fields-${type}-${field}`, __temp) %>
 <% } else { -%>
           <%- insertFragment(`fields-${type}-${field}-non`, [
-            '          sqlExpr: (tableName, args) => ``,',
+            '          sqlExpr: (tableName, args) => { throw Error(\'GraphQL field ${type}.${field} is not calculated.\'); },',
 ]) %>
 <%# --- if/else-1 ends above. -%>
 <% } -%>
@@ -63,19 +72,20 @@ let moduleExports = function sqlMetadata(app, options) {
 <%# -%>
 <%# --- forEach-4 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(queryInfo).forEach(graphqlName => {
-      __temp = [
+    __uniqueKey = queryInfo[graphqlName].uniqueKey;
+    __temp = [
         `        // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
         `        get${graphqlName}: {`,
-        '          orderBy: (args, content) => makeOrderBy(args, {}),',
-        `          where: (table, args) => makeWhere(table, args, '__ID__'),`,
+        `          orderBy: (args, content) => makeOrderBy(args, { ${__uniqueKey} : 1 }),`,
+        `          where: (table, args) => makeWhere(table, args, '${__uniqueKey}'),`,
         '        },',
         '',
         `        // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
         `        find${graphqlName}: {`,
-        `          orderBy: (args, content) => makeOrderBy(args, {}),`,
-        `          where: (table, args) => makeWhere(table, args, '__ID__'),`,
+        `          orderBy: (args, content) => makeOrderBy(args, { ${__uniqueKey} : 1 }),`,
+        `          where: (table, args) => makeWhere(table, args, '${__uniqueKey}'),`,
         '        },',
-      ];
+    ];
 -%>
 
         <%- insertFragment(`query-${graphqlName}`, __temp) %>

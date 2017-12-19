@@ -19,6 +19,15 @@ module.exports = class ServiceGenerator extends Generator {
     this.fragments = await refreshCodeFragments();
     initSpecs(this.specs, 'graphql');
 
+    const serviceSpecsExpand = require('../../lib/service-specs-expand');
+    const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
+    const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
+
+    const feathersSpecs = serviceSpecsExpand(this.specs);
+    serviceSpecsToGraphql(feathersSpecs);
+    serviceSpecsToMongoose('user', feathersSpecs);
+    process.exit(0);
+
     const { feathersSchemas, schemas, mapping, fieldInfo, queryInfo } = combineFeathersDeclarations(this.specs);
 
     this.feathersSchemas = feathersSchemas;
