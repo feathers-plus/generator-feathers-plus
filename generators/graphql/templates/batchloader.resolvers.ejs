@@ -75,7 +75,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     `        return feathersBatchLoader(dataLoaderName, '${__code}', '${__typeField.relation.otherTable}',`,
     '          keys => {',
     '            feathersParams = convertArgsToFeathers(args,',
-    `              { query: { ${__typeField.relation.otherTable}: { $in: keys }, $sort: { ${__typeField.relation.otherTable}: 1 } }, populate: false }`,
+    `              { query: { ${__typeField.relation.otherTable}: { $in: keys }, $sort: undefined, populate: false }`,
     '            );',
     `            return ${__typeField.serviceName}.find(feathersParams);`,
     '          }',

@@ -11,44 +11,43 @@ let moduleExports = function sqlMetadata(app, options) {
   let returns = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(type => {
-  __serviceName = mapping.graphql[type].service;
-  __graphql = feathersSpecs[__serviceName]._extensions.graphql;
-  __add = __graphql.add;
--%>
+<% Object.keys(fieldInfo).forEach(type => { -%>
 
     <%- type %>: {
-      sqlTable: '<%- __graphql.sql.sqlTable %>',
-      uniqueKey: '<%- __graphql.sql.uniqueKey %>',
+      sqlTable: '<%- fieldInfo[type].sqlTable %>',
+      uniqueKey: '<%- fieldInfo[type].uniqueKey %>',
       fields: {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
-<% Object.keys(__graphql.sql.sqlColumn).forEach(field => { -%>
+<% Object.keys(fieldInfo[type].sqlColumn).forEach(field => { -%>
         <%- field %>: {
-          sqlColumn: '<%- __graphql.sql.sqlColumn[field] %>',
+          sqlColumn: '<%- fieldInfo[type].sqlColumn[field] %>',
           <%- insertFragment(`fields-${type}-${field}`) %>
         },
 <% }); -%>
 <%# --- forEach-2 ends above. -%>
 <%# -%>
 <%# --- forEach-3 starts below. Loop thru the added fields. -%>
-<% Object.keys(__add).forEach(field => {
-  __typeField = __add[field];
--%>
+<% Object.keys(fieldInfo[type].fields).forEach(field => { -%>
 
-        // <%- field %><%- __typeField.args %>: <%- __typeField.type %>
+        // <%- field %><%- fieldInfo[type].fields[field].args %>: <%- fieldInfo[type].fields[field].type %>
         <%- field %>: {
 <%# -%>
 <%# --- if/else-1 starts below. -%>
-<% if (__typeField.serviceName) {
+<% if (fieldInfo[type].fields[field].serviceName) {
+    __fieldInfoField = fieldInfo[type].fields[field];
+    __relationOtherTableSql = fieldInfo[__fieldInfoField.typeName]
+        && fieldInfo[__fieldInfoField.typeName].sqlColumn[__fieldInfoField.relationOtherTable]
+            ? fieldInfo[__fieldInfoField.typeName].sqlColumn[__fieldInfoField.relationOtherTable]
+            : __fieldInfoField.relationOtherTable;
     __temp = [
         '          sqlJoin(ourTable, otherTable) { return `${ourTable}.'
-            + __typeField.relation.ourTableSql
+            + __fieldInfoField.relationOurTableSql
             + ' = ${otherTable}.'
-            + __typeField.relation.otherTableSql
+            + __relationOtherTableSql
             + '`; },',
         '          orderBy(args, content) { return makeOrderBy(args, null); },',
-        `          where(table, args) { return makeWhere(table, args, '${__typeField.relation.ourTableSql}', undefined); },`,
+        `          where(table, args) { return makeWhere(table, args, '${__fieldInfoField.relationOurTableSql}', undefined); },`,
     ];
 -%>
           <%- insertFragment(`fields-${type}-${field}`, __temp) %>
@@ -72,23 +71,21 @@ let moduleExports = function sqlMetadata(app, options) {
       fields: {
 <%# -%>
 <%# --- forEach-4 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(graphqlName => {
-  __serviceName = mapping.graphql[graphqlName].service;
-  __graphql = feathersSpecs[__serviceName]._extensions.graphql;
-  __uniqueKey = __graphql.sql.uniqueKey;
-  __temp = [
-    `        // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
-    `        get${graphqlName}: {`,
-    `          orderBy: (args, content) => makeOrderBy(args, { ${__uniqueKey} : 1 }),`,
-    `          where: (table, args) => makeWhere(table, args, '${__uniqueKey}'),`,
-    '        },',
-    '',
-    `        // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
-    `        find${graphqlName}: {`,
-    `          orderBy: (args, content) => makeOrderBy(args, { ${__uniqueKey} : 1 }),`,
-    `          where: (table, args) => makeWhere(table, args, '${__uniqueKey}'),`,
-    '        },',
-  ];
+<% Object.keys(queryInfo).forEach(graphqlName => {
+    __uniqueKey = queryInfo[graphqlName].uniqueKey;
+    __temp = [
+        `        // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
+        `        get${graphqlName}: {`,
+        `          orderBy: (args, content) => makeOrderBy(args, { ${__uniqueKey} : 1 }),`,
+        `          where: (table, args) => makeWhere(table, args, '${__uniqueKey}'),`,
+        '        },',
+        '',
+        `        // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
+        `        find${graphqlName}: {`,
+        `          orderBy: (args, content) => makeOrderBy(args, { ${__uniqueKey} : 1 }),`,
+        `          where: (table, args) => makeWhere(table, args, '${__uniqueKey}'),`,
+        '        },',
+    ];
 -%>
 
         <%- insertFragment(`query-${graphqlName}`, __temp) %>
