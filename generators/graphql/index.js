@@ -5,7 +5,6 @@ const fs = require('fs');
 const path = require('path');
 const Generator = require('../../lib/generator');
 
-const combineFeathersDeclarations = require('../../lib/combine-feathers-declarations'); // *******************************
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
@@ -19,16 +18,6 @@ module.exports = class ServiceGenerator extends Generator {
   async initializing() {
     this.fragments = await refreshCodeFragments();
     initSpecs(this.specs, 'graphql');
-
-    const serviceSpecsExpand = require('../../lib/service-specs-expand');
-    const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
-    const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
-
-    const { feathersSchemas, schemas, mapping, fieldInfo, queryInfo } = combineFeathersDeclarations(this.specs);
-
-    this.feathersSchemas = feathersSchemas;
-    this.fieldInfo = fieldInfo;
-    this.queryInfo = queryInfo;
 
     console.log(chalk.green([
       'Modules tailored to your schemas will be generated to run GraphQL Queries using',
@@ -55,10 +44,6 @@ module.exports = class ServiceGenerator extends Generator {
     props.mapping= mapping;
     props.stringifyPlus = stringifyPlus;
     props.graphqlSchemas = serviceSpecsToGraphql(feathersSpecs);
-
-    inspector('mapping', props.mapping);
-    console.log();
-    inspector('feathersSpecs', props.feathersSpecs);
 
     props.name = 'graphql';
     const prompts = [
@@ -141,9 +126,6 @@ module.exports = class ServiceGenerator extends Generator {
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
       serviceModule,
-      feathersSchemas: this.feathersSchemas,
-      fieldInfo: this.fieldInfo,
-      queryInfo: this.queryInfo,
     });
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`);
@@ -203,7 +185,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'index.js');
     this.fs.copyTpl(
-      this.templatePath('index.ejs'),
+      this.templatePath('../../templates-shared/index.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
@@ -228,9 +210,3 @@ module.exports = class ServiceGenerator extends Generator {
     updateSpecs(path, this.specs, 'graphql', this.props);
   }
 };
-
-const { inspect } = require('util');
-function inspector(desc, obj, depth = 9) {
-  console.log(desc);
-  console.log(inspect(obj, { depth, colors: true }));
-}

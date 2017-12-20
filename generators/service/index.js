@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
+const deepMerge = require('deepmerge');
 const Generator = require('../../lib/generator');
 
 const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
@@ -27,6 +28,7 @@ module.exports = class ServiceGenerator extends Generator {
     props.specs = specs;
     props.feathersSpecs = feathersSpecs;
     props.mapping= mapping;
+    props.deepMerge = deepMerge;
     props.stringifyPlus = stringifyPlus;
 
     const prompts = [
@@ -49,6 +51,7 @@ module.exports = class ServiceGenerator extends Generator {
             const { mongooseSchema, mongooseSchemaStr } =
               serviceSpecsToMongoose(input, props.feathersSpecs);
 
+            props.serviceName = input;
             props.feathersSpec = props.feathersSpecs[input] || {};
             props.mongooseSchema = mongooseSchema;
             props.mongooseSchemaStr = mongooseSchemaStr;
@@ -243,7 +246,7 @@ module.exports = class ServiceGenerator extends Generator {
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', 'index.js');
     this.fs.copyTpl(
-      this.templatePath('index.ejs'),
+      this.templatePath('../../templates-shared/index.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );

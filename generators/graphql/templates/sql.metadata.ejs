@@ -11,50 +11,50 @@ let moduleExports = function sqlMetadata(app, options) {
   let returns = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(type => {
-  __serviceName = mapping.graphql[type].service;
+<% Object.keys(mapping.graphql).forEach(graphqlName => {
+  __serviceName = mapping.graphql[graphqlName].service;
   __graphql = feathersSpecs[__serviceName]._extensions.graphql;
   __add = __graphql.add;
 -%>
 
-    <%- type %>: {
+    <%- graphqlName %>: {
       sqlTable: '<%- __graphql.sql.sqlTable %>',
       uniqueKey: '<%- __graphql.sql.uniqueKey %>',
       fields: {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
-<% Object.keys(__graphql.sql.sqlColumn).forEach(field => { -%>
-        <%- field %>: {
-          sqlColumn: '<%- __graphql.sql.sqlColumn[field] %>',
-          <%- insertFragment(`fields-${type}-${field}`) %>
+<% Object.keys(__graphql.sql.sqlColumn).forEach(fieldName => { -%>
+        <%- fieldName %>: {
+          sqlColumn: '<%- __graphql.sql.sqlColumn[fieldName] %>',
+          <%- insertFragment(`fields-${graphqlName}-${fieldName}`) %>
         },
 <% }); -%>
 <%# --- forEach-2 ends above. -%>
 <%# -%>
 <%# --- forEach-3 starts below. Loop thru the added fields. -%>
-<% Object.keys(__add).forEach(field => {
-  __typeField = __add[field];
+<% Object.keys(__add).forEach(fieldName => {
+  __addField = __add[fieldName];
 -%>
 
-        // <%- field %><%- __typeField.args %>: <%- __typeField.type %>
-        <%- field %>: {
+        // <%- fieldName %><%- __addField.args %>: <%- __addField.graphqlName %>
+        <%- fieldName %>: {
 <%# -%>
 <%# --- if/else-1 starts below. -%>
-<% if (__typeField.serviceName) {
+<% if (__addField.serviceName) {
     __temp = [
         '          sqlJoin(ourTable, otherTable) { return `${ourTable}.'
-            + __typeField.relation.ourTableSql
+            + __addField.relation.ourTableSql
             + ' = ${otherTable}.'
-            + __typeField.relation.otherTableSql
+            + __addField.relation.otherTableSql
             + '`; },',
         '          orderBy(args, content) { return makeOrderBy(args, null); },',
-        `          where(table, args) { return makeWhere(table, args, '${__typeField.relation.ourTableSql}', undefined); },`,
+        `          where(table, args) { return makeWhere(table, args, '${__addField.relation.ourTableSql}', undefined); },`,
     ];
 -%>
-          <%- insertFragment(`fields-${type}-${field}`, __temp) %>
+          <%- insertFragment(`fields-${graphqlName}-${fieldName}`, __temp) %>
 <% } else { -%>
-          <%- insertFragment(`fields-${type}-${field}-non`, [
-            '          sqlExpr: (tableName, args) => { throw Error(\'GraphQL field ${type}.${field} is not calculated.\'); },',
+          <%- insertFragment(`fields-${graphqlName}-${fieldName}-non`, [
+            '          sqlExpr: (tableName, args) => { throw Error(\'GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.\'); },',
 ]) %>
 <%# --- if/else-1 ends above. -%>
 <% } -%>
@@ -62,9 +62,9 @@ let moduleExports = function sqlMetadata(app, options) {
         },
 <% }); -%>
 <%# --- forEach-1 ends above. -%>
-        <%- insertFragment(`fields-${type}`) %>
+        <%- insertFragment(`fields-${graphqlName}`) %>
       },
-      <%- insertFragment(`type-${type}`) %>
+      <%- insertFragment(`type-${graphqlName}`) %>
     },
 <% }); -%>
 

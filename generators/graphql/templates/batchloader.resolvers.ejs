@@ -7,8 +7,8 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem, // eslint-disable-line
     feathersBatchLoader: { feathersBatchLoader } } = options;
 
-<% let __temp = Object.keys(mapping.feathers).map(name =>
-  `  const ${name} = app.service('${mapping.feathers[name].path}');`
+<% let __temp = Object.keys(mapping.feathers).map(serviceName =>
+  `  let ${serviceName} = app.service('${mapping.feathers[serviceName].path}');`
 ); -%>
   <%- insertFragment('services', __temp) %>
 
@@ -54,37 +54,37 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
 <%# -%>
 <%# --- forEach-a starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(type => {
-  __serviceName = mapping.graphql[type].service;
+<% Object.keys(mapping.graphql).forEach(graphqlName => {
+  __serviceName = mapping.graphql[graphqlName].service;
   __add = feathersSpecs[__serviceName]._extensions.graphql.add;
 -%>
 <%# -%>
 <%# --- forEach-b starts below. Loop thru the fields to be renamed. -%>
-<% Object.keys(__add).forEach(field => {
-  __typeField = __add[field];
+<% Object.keys(__add).forEach(fieldName => {
+  __addField = __add[fieldName];
 -%>
 <%# -%>
 <%# --- if-1c starts below. -%>
-<% if (__typeField.serviceName) {
+<% if (__addField.serviceName) {
   __code = '[!]';
-  if (!__typeField.isArray) {
-    __code = __typeField.isNullable ? '' : '!';
+  if (!__addField.isArray) {
+    __code = __addField.isNullable ? '' : '!';
   }
   __temp = [
-    `      case '${type}.${field}':`,
-    `        return feathersBatchLoader(dataLoaderName, '${__code}', '${__typeField.relation.otherTable}',`,
+    `      case '${graphqlName}.${fieldName}':`,
+    `        return feathersBatchLoader(dataLoaderName, '${__code}', '${__addField.relation.otherTable}',`,
     '          keys => {',
     '            feathersParams = convertArgsToFeathers(args,',
-    `              { query: { ${__typeField.relation.otherTable}: { $in: keys }, $sort: undefined, populate: false }`,
+    `              { query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined }, populate: false }`,
     '            );',
-    `            return ${__typeField.serviceName}.find(feathersParams);`,
+    `            return ${__addField.serviceName}.find(feathersParams);`,
     '          }',
     '        );',
   ];
 -%>
 
-      // <%- `${type}.${field}${__typeField.args}: ${__typeField.type}` %>
-      <%- insertFragment(`bl-${type}-${field}`, __temp) %>
+      // <%- `${graphqlName}.${fieldName}${__addField.args}: ${__addField.graphqlName}` %>
+      <%- insertFragment(`bl-${graphqlName}-${fieldName}`, __temp) %>
 <% } -%>
 <%# --- if-c ends above. -%>
 <% }); -%>
@@ -103,30 +103,30 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   let returns = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(type => {
-  __serviceName = mapping.graphql[type].service;
+<% Object.keys(mapping.graphql).forEach(graphqlName => {
+  __serviceName = mapping.graphql[graphqlName].service;
   __add = feathersSpecs[__serviceName]._extensions.graphql.add;
 -%>
 
-    <%- type %>: {
+    <%- graphqlName %>: {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
-<% Object.keys(__add).forEach(field => {
-  __typeField = __add[field];
+<% Object.keys(__add).forEach(fieldName => {
+  __addField = __add[fieldName];
 -%>
 
-      // <%- field %><%- __typeField.args %>: <%- __typeField.type %>
+      // <%- fieldName %><%- __addField.args %>: <%- __addField.graphqlName %>
 <%# -%>
 <%# --- if/else-1 starts below. -%>
-<% if (__typeField.serviceName) {
+<% if (__addField.serviceName) {
   __temp = [
-    `      ${field}: getResult('${type}.${field}', '${__typeField.relation.ourTable}'),`,
+    `      ${fieldName}: getResult('${graphqlName}.${fieldName}', '${__addField.relation.ourTable}'),`,
   ];
 -%>
-      <%- insertFragment(`resolver-${type}-${field}`, __temp) %>
+      <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
 <% } else { -%>
-      <%- insertFragment(`resolver-${type}-${field}-non`, [
-        `      ${field}: (parent, args, content, ast) => { throw Error('GraphQL field ${type}.${field} is not calculated.'); },`,
+      <%- insertFragment(`resolver-${graphqlName}-${fieldName}-non`, [
+        `      ${fieldName}: (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.'); },`,
       ]) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>

@@ -1,3 +1,4 @@
+<% __defaultGraphqlName = serviceName.charAt(0).toUpperCase() + serviceName.slice(1) -%>
 
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
@@ -5,8 +6,8 @@
 let schema = {
   $schema: 'http://json-schema.org/draft-05/schema',
   <%- insertFragment('schema_header', [
-    '  title: \'___post___\',',
-    '  description: \'___Post database.___\',',
+    `  title: '${__defaultGraphqlName}',`,
+    `  description: '${__defaultGraphqlName} database.',`,
   ]) %>
   type: 'object',
   required: [
@@ -21,15 +22,15 @@ let schema = {
 let extension = {
   graphql: {
     <%- insertFragment('graphql_header', [
-      '    // name: \'___Post___\',',
+      `    // name: '${__defaultGraphqlName}',`,
       '    // service : {',
-      '    //   sort: { ___id___: 1 },',
+      '    //   sort: { __id__: 1 },',
       '    // },',
       '    // sql: {',
-      '    //   sqlTable: \'___Posts___\',',
-      '    //   uniqueKey: \'___id___\',',
+      `    //   sqlTable: '${__defaultGraphqlName}',`,
+      '    //   uniqueKey: \'__id__\',',
       '    //   sqlColumn: {',
-      '    //     ___authorId___: \'___author_id___\',',
+      '    //     __authorId__: \'__author_id__\',',
       '    //   }',
       '    // },',
     ]) %>,
@@ -38,7 +39,7 @@ let extension = {
     ],
     add: {
     <%- insertFragment('graphql_add', [
-        '      // ___author___: { type: \'___User___!\', args: false },',
+        '      // __author__: { type: \'__User__!\', args: false, relation: { ourTable: \'__authorId__\', otherTable: \'__id__\' } },',
     ])%>
     },
     <%- insertFragment('graphql_more') %>

@@ -5,47 +5,47 @@
 let moduleExports = function serviceResolvers(app, options) {
   const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options;
 
-<% let __temp = Object.keys(mapping.feathers).map(name =>
-  `  const ${name} = app.service('${mapping.feathers[name].path}');`
+<% let __temp = Object.keys(mapping.feathers).map(serviceName =>
+  `  let ${serviceName} = app.service('${mapping.feathers[serviceName].path}');`
 ); -%>
   <%- insertFragment('services', __temp) %>
 
   let returns = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(type => {
-  __serviceName = mapping.graphql[type].service;
+<% Object.keys(mapping.graphql).forEach(graphqlName => {
+  __serviceName = mapping.graphql[graphqlName].service;
   __add = feathersSpecs[__serviceName]._extensions.graphql.add;
 -%>
 
-    <%- type %>: {
+    <%- graphqlName %>: {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the fields to be added. -%>
-<% Object.keys(__add).forEach(field => {
-  __typeField = __add[field];
+<% Object.keys(__add).forEach(fieldName => {
+  __addField = __add[fieldName];
 -%>
 
-      // <%- field %><%- __typeField.args %>: <%- __typeField.type %>
-      <%- field %>:
+      // <%- fieldName %><%- __addField.args %>: <%- __addField.graphqlName %>
+      <%- fieldName %>:
 <%# -%>
 <%# --- if/else-1 starts below. -%>
-<% if (__typeField.serviceName) {
+<% if (__addField.serviceName) {
     __temp = [
         '        (parent, args, content, ast) => {',
         '          const feathersParams = convertArgsToFeathers(args, {',
-        `            query: { ${__typeField.relation.otherTable}: `
-            + `${__typeField.ourTableIsArray ? '{ $in: ' : ''}parent.${__typeField.relation.ourTable}${__typeField.ourTableIsArray ? ' }' : ''}`
-            + `${__typeField.isArray ? `, $sort: undefined` : ''} }`
+        `            query: { ${__addField.relation.otherTable}: `
+            + `${__addField.ourTableIsArray ? '{ $in: ' : ''}parent.${__addField.relation.ourTable}${__addField.ourTableIsArray ? ' }' : ''}`
+            + `${__addField.isArray ? `, $sort: undefined` : ''} }`
             + ', paginate: false',
         '          });',
-        `          return ${__typeField.serviceName}.find(feathersParams).then(${__typeField.isArray ? "extractAllItems" : "extractFirstItem"});`,
+        `          return ${__addField.serviceName}.find(feathersParams).then(${__addField.isArray ? "extractAllItems" : "extractFirstItem"});`,
         '        },'
   ];
 -%>
-        <%- insertFragment(`resolver-${type}-${field}`, __temp) %>
+        <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
 <% } else { -%>
-        <%- insertFragment(`resolver-${type}-${field}-non`,
-          `        (parent, args, content, ast) => { throw Error('GraphQL field ${type}.${field} is not calculated.'); },`
+        <%- insertFragment(`resolver-${graphqlName}-${fieldName}-non`,
+          `        (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.'); },`
         ) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>
