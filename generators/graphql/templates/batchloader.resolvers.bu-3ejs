@@ -54,28 +54,25 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
 <%# -%>
 <%# --- forEach-a starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(type => {
-  __serviceName = mapping.graphql[type].service;
-  __add = feathersSpecs[__serviceName]._extensions.graphql.add;
--%>
+<% Object.keys(fieldInfo).forEach(type => { -%>
 <%# -%>
 <%# --- forEach-b starts below. Loop thru the fields to be renamed. -%>
-<% Object.keys(__add).forEach(field => {
-  __typeField = __add[field];
+<% Object.keys(fieldInfo[type].fields).forEach(field => {
+  __typeField = fieldInfo[type].fields[field];
+  __tempHead = `${type}.${field}${__typeField.args}: ${__typeField.type}`;
 -%>
 <%# -%>
 <%# --- if-1c starts below. -%>
 <% if (__typeField.serviceName) {
+  __fieldInfo = __typeField;
   __code = '[!]';
-  if (!__typeField.isArray) {
-    __code = __typeField.isNullable ? '' : '!';
-  }
+  if (!__fieldInfo.isArray) { __code = __fieldInfo.isNullable ? '' : '!'; }
   __temp = [
     `      case '${type}.${field}':`,
-    `        return feathersBatchLoader(dataLoaderName, '${__code}', '${__typeField.relation.otherTable}',`,
+    `        return feathersBatchLoader(dataLoaderName, '${__code}', '${__typeField.relationOtherTable}',`,
     '          keys => {',
     '            feathersParams = convertArgsToFeathers(args,',
-    `              { query: { ${__typeField.relation.otherTable}: { $in: keys }, $sort: { ${__typeField.relation.otherTable}: 1 } }, populate: false }`,
+    `              { query: { ${__typeField.relationOtherTable}: { $in: keys }, $sort: { ${__typeField.relationOtherTable}: 1 } }, populate: false }`,
     '            );',
     `            return ${__typeField.serviceName}.find(feathersParams);`,
     '          }',
@@ -83,7 +80,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   ];
 -%>
 
-      // <%- `${type}.${field}${__typeField.args}: ${__typeField.type}` %>
+      // <%- __tempHead %>
       <%- insertFragment(`bl-${type}-${field}`, __temp) %>
 <% } -%>
 <%# --- if-c ends above. -%>
@@ -103,16 +100,13 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   let returns = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(type => {
-  __serviceName = mapping.graphql[type].service;
-  __add = feathersSpecs[__serviceName]._extensions.graphql.add;
--%>
+<% Object.keys(fieldInfo).forEach(type => { -%>
 
     <%- type %>: {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
-<% Object.keys(__add).forEach(field => {
-  __typeField = __add[field];
+<% Object.keys(fieldInfo[type].fields).forEach(field => {
+  __typeField = fieldInfo[type].fields[field];
 -%>
 
       // <%- field %><%- __typeField.args %>: <%- __typeField.type %>
@@ -120,7 +114,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 <%# --- if/else-1 starts below. -%>
 <% if (__typeField.serviceName) {
   __temp = [
-    `      ${field}: getResult('${type}.${field}', '${__typeField.relation.ourTable}'),`,
+    `      ${field}: getResult('${type}.${field}', '${__typeField.relationOurTable}'),`,
   ];
 -%>
       <%- insertFragment(`resolver-${type}-${field}`, __temp) %>
@@ -141,20 +135,18 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     Query: {
 <%# -%>
 <%# --- forEach-3 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(graphqlName => {
-  __serviceName = mapping.graphql[graphqlName].service;
-  __graphql = feathersSpecs[__serviceName]._extensions.graphql;
+<% Object.keys(queryInfo).forEach(graphqlName => {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
     `      get${graphqlName} (parent, args, content, info) {`,
     '        const feathersParams = convertArgsToFeathers(args);',
-    `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem);`,
+    `        return ${queryInfo[graphqlName].schemaName}.get(args.key, feathersParams).then(extractFirstItem);`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
     `      find${graphqlName}(parent, args, content, info) {`,
-    `        const feathersParams = convertArgsToFeathers(args${__graphql.serviceSortParams});`,
-    `        return ${__serviceName}.find(feathersParams).then(extractAllItems);`,
+    `        const feathersParams = convertArgsToFeathers(args${queryInfo[graphqlName].moreParams});`,
+    `        return ${queryInfo[graphqlName].schemaName}.find(feathersParams).then(extractAllItems);`,
     '      },',
   ];
 -%>
