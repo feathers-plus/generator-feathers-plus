@@ -13,17 +13,15 @@ let moduleExports = function serviceResolvers(app, options) {
   let returns = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(type => {
+<% Object.keys(fieldInfo).forEach(type => {
   __serviceName = mapping.graphql[type].service;
-  __add = feathersSpecs[__serviceName]._extensions.graphql.add;
 -%>
 
     <%- type %>: {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the fields to be added. -%>
-<% Object.keys(__add).forEach(field => {
-  __typeField = __add[field];
-  console.log('forEach-2', type, field, __typeField);
+<% Object.keys(fieldInfo[type].fields).forEach(field => {
+  __typeField = fieldInfo[type].fields[field];
 -%>
 
       // <%- field %><%- __typeField.args %>: <%- __typeField.type %>
@@ -31,15 +29,17 @@ let moduleExports = function serviceResolvers(app, options) {
 <%# -%>
 <%# --- if/else-1 starts below. -%>
 <% if (__typeField.serviceName) {
+    __ifArray = feathersSchemas[__serviceName] && feathersSchemas[__serviceName].properties && __typeField.relationOurTable &&
+            feathersSchemas[__serviceName].properties[__typeField.relationOurTable].type === 'array';
     __temp = [
         '        (parent, args, content, ast) => {',
         '          const feathersParams = convertArgsToFeathers(args, {',
-        `            query: { ${__typeField.relation.otherTable}: `
-            + `${__typeField.ourTableIsArray ? '{ $in: ' : ''}parent.${__typeField.relation.ourTable}${__typeField.ourTableIsArray ? ' }' : ''}`
-            + `${__typeField.isArray ? `, $sort: { ${__typeField.relation.otherTable}: 1 }` : ''} }`
+        `            query: { ${__typeField.relationOtherTable}: `
+            + `${__ifArray ? '{ $in: ' : ''}parent.${__typeField.relationOurTable}${__ifArray ? ' }' : ''}`
+            + `${__typeField.type.charAt(0) === '[' ? `, $sort: { ${__typeField.relationOtherTable}: 1 }` : ''} }`
             + ', paginate: false',
         '          });',
-        `          return ${__typeField.serviceName}.find(feathersParams).then(${__typeField.isArray ? "extractAllItems" : "extractFirstItem"});`,
+        `          return ${fieldInfo[type].fields[field].serviceName}.find(feathersParams).then(${fieldInfo[type].fields[field].isArray ? "extractAllItems" : "extractFirstItem"});`,
         '        },'
   ];
 -%>
@@ -61,20 +61,18 @@ let moduleExports = function serviceResolvers(app, options) {
     Query: {
 <%# -%>
 <%# --- forEach-3 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(graphqlName => {
-  __serviceName = mapping.graphql[graphqlName].service;
-  __graphql = feathersSpecs[__serviceName]._extensions.graphql;
+<% Object.keys(queryInfo).forEach(graphqlName => {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
     `      get${graphqlName} (parent, args, content, info) {`,
     '        const feathersParams = convertArgsToFeathers(args);',
-    `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem);`,
+    `        return ${queryInfo[graphqlName].schemaName}.get(args.key, feathersParams).then(extractFirstItem);`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
     `      find${graphqlName}(parent, args, content, info) {`,
-    `        const feathersParams = convertArgsToFeathers(args${__graphql.serviceSortParams});`,
-    `        return ${__serviceName}.find(feathersParams).then(extractAllItems);`,
+    `        const feathersParams = convertArgsToFeathers(args${queryInfo[graphqlName].moreParams});`,
+    `        return ${queryInfo[graphqlName].schemaName}.find(feathersParams).then(extractAllItems);`,
     '      },',
   ];
 -%>

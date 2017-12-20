@@ -22,8 +22,11 @@ module.exports = class ServiceGenerator extends Generator {
     this.checkPackage();
 
     const { props, specs } = this;
+    const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
+
     props.specs = specs;
-    props.feathersSpecs = serviceSpecsExpand(specs);
+    props.feathersSpecs = feathersSpecs;
+    props.mapping= mapping;
     props.stringifyPlus = stringifyPlus;
 
     const prompts = [

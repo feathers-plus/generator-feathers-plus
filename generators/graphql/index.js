@@ -3,10 +3,11 @@ const chalk = require('chalk');
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
-const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
 
-const combineFeathersDeclarations = require('../../lib/combine-feathers-declarations');
+const combineFeathersDeclarations = require('../../lib/combine-feathers-declarations'); // *******************************
+const serviceSpecsExpand = require('../../lib/service-specs-expand');
+const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
 const stringifyPlus = require('../../lib/stringify-plus');
@@ -26,18 +27,8 @@ module.exports = class ServiceGenerator extends Generator {
     const { feathersSchemas, schemas, mapping, fieldInfo, queryInfo } = combineFeathersDeclarations(this.specs);
 
     this.feathersSchemas = feathersSchemas;
-    this.graphqlSchemas = schemas;
-    this.mapping = mapping;
     this.fieldInfo = fieldInfo;
     this.queryInfo = queryInfo;
-
-    /*
-    this.props = {
-      name: this.pkg.name || process.cwd().split(path.sep).pop(),
-      description: this.pkg.description,
-      src: this.specs.app.src || (this.pkg.directories && this.pkg.directories.lib),
-    };
-    */
 
     console.log(chalk.green([
       'Modules tailored to your schemas will be generated to run GraphQL Queries using',
@@ -57,7 +48,18 @@ module.exports = class ServiceGenerator extends Generator {
     this.checkPackage();
 
     const { props, specs } = this;
+    const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
+
     props.specs = specs;
+    props.feathersSpecs = feathersSpecs;
+    props.mapping= mapping;
+    props.stringifyPlus = stringifyPlus;
+    props.graphqlSchemas = serviceSpecsToGraphql(feathersSpecs);
+
+    inspector('mapping', props.mapping);
+    console.log();
+    inspector('feathersSpecs', props.feathersSpecs);
+
     props.name = 'graphql';
     const prompts = [
       {
@@ -117,27 +119,6 @@ module.exports = class ServiceGenerator extends Generator {
     });
   }
 
-  _transformCode(code) {
-    const { camelName, kebabName } = this.props;
-    const ast = j(code);
-    const mainExpression = ast.find(j.FunctionExpression)
-      .closest(j.ExpressionStatement);
-
-    if(mainExpression.length !== 1) {
-      throw new Error(`${this.libDirectory}/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`);
-    }
-
-    const serviceRequire = `const ${camelName} = require('./${kebabName}/${kebabName}.service.js');`;
-    const serviceCode = `app.configure(${camelName});`;
-
-    // Add require('./service')
-    mainExpression.insertBefore(serviceRequire);
-    // Add app.configure(service) to service/index.js
-    mainExpression.insertLastInFunction(serviceCode);
-
-    return ast.toSource();
-  }
-
   writing() {
     let destinationPath;
     const { adapter, kebabName } = this.props;
@@ -160,26 +141,10 @@ module.exports = class ServiceGenerator extends Generator {
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
       serviceModule,
-      stringifyPlus,
       feathersSchemas: this.feathersSchemas,
-      graphqlSchemas: this.graphqlSchemas,
-      mapping: this.mapping,
       fieldInfo: this.fieldInfo,
       queryInfo: this.queryInfo,
     });
-
-    // Do not run code transformations if the service file already exists
-    /*
-    if (!this.fs.exists(mainFile)) {
-      const servicejs = this.destinationPath(this.libDirectory, 'services', 'index.js');
-      const transformed = this._transformCode(
-        this.fs.read(servicejs).toString()
-      );
-
-      this.conflicter.force = true;
-      this.fs.write(servicejs, transformed);
-    }
-    */
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`);
     this.fs.copyTpl(
@@ -265,7 +230,7 @@ module.exports = class ServiceGenerator extends Generator {
 };
 
 const { inspect } = require('util');
-function inspector(desc, obj, depth = 5) {
+function inspector(desc, obj, depth = 9) {
   console.log(desc);
   console.log(inspect(obj, { depth, colors: true }));
 }
