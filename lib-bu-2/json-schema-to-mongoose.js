@@ -1,10 +1,8 @@
 
 // Should turn this into its own repo
 
+const _ = require('underscore');
 const mongoose = require('mongoose');
-const chalk = require('chalk');
-
-const stringifyPlus = require('./stringify-plus');
 
 const typeEquivalence = { // json-schema: mongoose
   'array': Array,
@@ -18,12 +16,6 @@ const typeEquivalence = { // json-schema: mongoose
   'object': Object,
   'integer': Number,
   'id': mongoose.Schema.ObjectId,
-};
-
-const nativeFuncs = {
-  [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
-  [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId',
-  [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId',
 };
 
 const keywordEquivalence = { // json-schema: mongoose
@@ -80,48 +72,10 @@ const keywordEquivalence = { // json-schema: mongoose
 
 const discardFields = ['id', '_id'];
 
-module.exports = function serviceSpecsToMongoose(name, feathersSpecs) {
-  if (!feathersSpecs[name]) {
-    console.log('\n\n' + chalk.green.bold('We are adding a new service.') + '\n');
-    console.log(chalk.green([
-      'Once this generation is complete, define the data schema in module',
-      `"services/${serviceName}/${serviceName}.schema.js". Then (re)generate this service once more.`,
-      '',
-      'This second generation will take the schema you added and generate',
-      '- A Mongoose model, and',
-      '- A Sequelize model, and',
-      '- Create, update and patch validation hooks.',
-      '',
-      'Run "feathers-plus generate graphql" if you want the schema also handled in GraphQL.',
-      '',
-    ].join('\n')));
-
-    return {
-      mongooseSchema: {},
-      mongooseSchemaStr: '{}',
-    };
-  }
-
-  console.log('\n\n' + chalk.green.bold('We are regenerating an existing service.') + '\n');
-  console.log(chalk.green([
-    'Run "feathers-plus generate graphql" afterwards if you want any',
-    'schema changes to also be handled in GraphQL.',
-    '',
-  ].join('\n')));
-
-  const mongooseSchema = feathersSpecToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions);
-  const mongooseSchemaStr = stringifyPlus(mongooseSchema, { nativeFuncs });
-
-  return {
-    mongooseSchema,
-    mongooseSchemaStr,
-  };
-}
-
 // Convert the single Feathers schema {properties:{...},...}
-function feathersSpecToMongoose(feathersSpec, feathersExtension, depth = 1) {
-  const required = feathersSpec.required || [];
-  const properties = feathersSpec.properties || {};
+function feathersSchemaToMongoose(feathersSchema, feathersExtension, depth = 1) {
+  const required = feathersSchema.required || [];
+  const properties = feathersSchema.properties || {};
   const mongooseSchema = {};
 
   Object.keys(properties).forEach(name => {
@@ -153,7 +107,7 @@ function feathersSpecToMongoose(feathersSpec, feathersExtension, depth = 1) {
 
       // convert json-schema type: 'object'
       // if (keyword === 'type' && value.toLowerCase() === 'object' && typeof property.properties === 'object') {
-      //   const innerModel = feathersSpecToMongoose(property, {}, ++depth);
+      //   const innerModel = feathersSchemaToMongoose(property, {}, ++depth);
       // }
 
       // Convert other keyword type
@@ -173,11 +127,9 @@ function feathersSpecToMongoose(feathersSpec, feathersExtension, depth = 1) {
   return mongooseSchema;
 }
 
-const { inspect } = require('util');
-function inspector(desc, obj, depth = 7) {
-  console.log(desc);
-  console.log(inspect(obj, { depth, colors: true }));
-}
+module.exports = {
+  convert: feathersSchemaToMongoose,
+};
 
 /* Code from topliceanu/mongoose-gen that we are not using yet
 
@@ -331,6 +283,6 @@ exports.setValidator = set('validator');
 exports.setSetter = set('setter');
 exports.setGetter = set('getter');
 exports.setDefault = set('default');
-exports.convert = feathersSpecToMongoose; //convert;
+exports.convert = feathersSchemaToMongoose; //convert;
 exports.getSchema = getSchema;
 */

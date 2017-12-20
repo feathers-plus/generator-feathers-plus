@@ -1,13 +1,14 @@
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
+const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
 
-const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
-const serviceSpecsExpand = require('../../lib/service-specs-expand');
+const feathersDeclarationToService = require('../../lib/feathers-declaration-to-service');
 const stringifyPlus = require('../../lib/stringify-plus');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
+
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -15,6 +16,14 @@ const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
 module.exports = class ServiceGenerator extends Generator {
   async initializing() {
     this.fragments = await refreshCodeFragments();
+
+    /*
+    this.props = {
+      name: this.pkg.name || process.cwd().split(path.sep).pop(),
+      description: this.pkg.description,
+      src: this.specs.app.src || (this.pkg.directories && this.pkg.directories.lib),
+    };
+*/
   }
 
   prompting() {
@@ -22,8 +31,6 @@ module.exports = class ServiceGenerator extends Generator {
     this.checkPackage();
 
     const { props, specs } = this;
-    props.specs = specs;
-    props.feathersSpecs = serviceSpecsExpand(specs);
     props.stringifyPlus = stringifyPlus;
 
     const prompts = [
@@ -43,10 +50,11 @@ module.exports = class ServiceGenerator extends Generator {
             initSpecs(specs, 'service', { name: input });
             serviceSpecs = specs.services[input];
 
-            const { mongooseSchema, mongooseSchemaStr } =
-              serviceSpecsToMongoose(input, props.feathersSpecs);
+            const { schema, extension, mongooseSchema, mongooseSchemaStr } =
+              feathersDeclarationToService(input, specs);
 
-            props.feathersSpec = props.feathersSpecs[input] || {};
+            props.schema = schema;
+            props.extension = extension;
             props.mongooseSchema = mongooseSchema;
             props.mongooseSchemaStr = mongooseSchemaStr;
           } catch (err) {
@@ -136,6 +144,27 @@ module.exports = class ServiceGenerator extends Generator {
     });
   }
 
+  _transformCode(code) {
+    const { camelName, kebabName } = this.props;
+    const ast = j(code);
+    const mainExpression = ast.find(j.FunctionExpression)
+      .closest(j.ExpressionStatement);
+
+    if(mainExpression.length !== 1) {
+      throw new Error(`${this.libDirectory}/services/index.js seems to have more than one function declaration and we can not register the new service. Did you modify it?`);
+    }
+
+    const serviceRequire = `const ${camelName} = require('./${kebabName}/${kebabName}.service.js');`;
+    const serviceCode = `app.configure(${camelName});`;
+
+    // Add require('./service')
+    mainExpression.insertBefore(serviceRequire);
+    // Add app.configure(service) to service/index.js
+    mainExpression.insertLastInFunction(serviceCode);
+
+    return ast.toSource();
+  }
+
   writing() {
     let destinationPath;
     const { adapter, kebabName } = this.props;
@@ -159,6 +188,17 @@ module.exports = class ServiceGenerator extends Generator {
       path: stripSlashes(this.props.path),
       serviceModule,
     });
+
+    // Do not run code transformations if the service file already exists
+    if (!this.fs.exists(mainFile)) {
+      const servicejs = this.destinationPath(this.libDirectory, 'services', 'index.js');
+      const transformed = this._transformCode(
+        this.fs.read(servicejs).toString()
+      );
+
+      this.conflicter.force = true;
+      this.fs.write(servicejs, transformed);
+    }
 
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
@@ -231,16 +271,18 @@ module.exports = class ServiceGenerator extends Generator {
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
-    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.validate.js`);
+    /* NeDB does not use a model
+    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.nedb.js`);
     this.fs.copyTpl(
-      this.templatePath('name.validate.ejs'),
+      this.templatePath('name.nedb.js'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
+    */
 
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'index.js');
+    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.validate.js`);
     this.fs.copyTpl(
-      this.templatePath('index.ejs'),
+      this.templatePath('name.validate.ejs'),
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );

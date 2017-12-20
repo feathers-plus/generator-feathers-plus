@@ -49,7 +49,6 @@ function updateSpecs(path, specs, what, props) {
       serviceSpecs.graphql = props.graphql;
       break;
     case 'graphql':
-      specs.graphql.name = 'graphql';
       specs.graphql.path = props.path;
       specs.graphql.strategy = props.strategy;
       break;

@@ -97,10 +97,148 @@ module.exports = function serviceSpecsExpand(specs) {
           otherTableSqlColumn[addField.relation.otherTable] || addField.relation.otherTable;
       }
     });
+    inspector('feathersSchemas', feathersSchemas);
+
   });
+
+  /*
+  // Get generation info from Feathers service schemas
+  Object.keys(feathersSchemas).forEach(schemaName => {
+    const feathersSchema = feathersSchemas[schemaName] || {};
+    const feathersExtension = feathersExtensions[schemaName] || {};
+
+    const graphqlExt = feathersExtension.graphql || {};
+    const graphqlName = graphqlExt.name || convertToGraphQLSchemaName(schemaName);
+    const added = graphqlExt.add || {};
+    const addedFields = Object.keys(added).sort();
+    const sqlHeader = graphqlExt.sql || {};
+    const sqlColumn = sqlHeader.sqlColumn || {};
+    const sqlColumnFields = Object.keys(sqlColumn).sort();
+
+    fieldSchemas.push([
+      `type ${graphqlName} {`,
+      feathersSchemaToGraphqlSchema(feathersSchema, feathersExtension),
+      Object.keys(added).map(field =>
+        `  ${field}${convertArgs(added[field].args)}: ${added[field].type || DEFAULT_GRAPHQL_TYPE}`
+      ).join(EOL),
+      '}',
+      ' ',
+    ].filter(str => str).join(EOL));
+
+    querySchemas.push([
+      `  get${graphqlName}(key: JSON, query: JSON, params: JSON): ${graphqlName}`,
+      `  find${graphqlName}(query: JSON, params: JSON): [${graphqlName}]!`,
+    ].join(EOL));
+
+    if (addedFields.length) {
+      const obj1 = fieldInfo[graphqlName] = {
+        // Needed for both Feathers services and SQL statements
+        fields: {},
+        // Needed for SQL statements
+        sqlTable: sqlHeader.sqlTable,
+        uniqueKey: sqlHeader.uniqueKey,
+        sqlColumn: {},
+      };
+      const obj = obj1.fields;
+
+      sqlColumnFields.forEach(field => {
+        obj1.sqlColumn[field] = sqlColumn[field];
+      });
+
+      addedFields.forEach(field => {
+        const addedField = added[field];
+
+        const { typeName, isNullable, isArray, isNullableElem } = parseType(addedField.type);
+        const serviceName = mapping.graphql[typeName] && mapping.graphql[typeName].service;
+
+        if (addedField) {
+          const type = addedField.type || DEFAULT_GRAPHQL_TYPE;
+          const relation = addedField.relation || {};
+          const relationOurTable = relation.ourTable || '__USER_ID__';
+          const relationOtherTable = relation.otherTable || '__ID__';
+
+          obj[field] = {
+            type,
+            isNullable,
+            isArray,
+            isNullableElem,
+            typeName: type.replace(/[\[!\]]/g,''),
+            serviceName,
+            args: convertArgs(addedField.args),
+            relationOurTable,
+            relationOtherTable,
+            relationOurTableSql: sqlColumn[relationOurTable] || relationOurTable,
+            sqlColumn,
+          };
+        }
+      });
+    }
+
+    const uniqueKey = sqlHeader.uniqueKey || 'id';
+    const defaultSort = (graphqlExt.service || {}).sort;
+    const moreParams = defaultSort ? `, { query: { $sort: ${JSON.stringify(defaultSort)} } }` : '';
+
+    queryInfo[graphqlName] = { schemaName, uniqueKey, moreParams };
+  });
+  */
+/*
+  // Return results
+  const schemas = [
+    fieldSchemas.join(EOL),
+    '',
+    'type Query {',
+    querySchemas.join(EOL),
+    '}',
+  ].join(EOL);
+  */
 
   return feathersSchemas;
 };
+
+// Convert the single Feathers schema {properties:{...},...}
+function feathersSchemaToGraphqlSchema(feathersSchema, feathersExtension, depth = 1) {
+  const leader = '  '.repeat(depth);
+  const required = feathersSchema.required || [];
+  const properties = feathersSchema.properties || {};
+  const graphqlDiscard = (feathersExtension.graphql || {}).discard || [];
+
+  const graphqlTypes = Object.keys(properties).map(name => {
+    // Handle names discarded for GraphQL
+    if (graphqlDiscard.indexOf(name) !== -1) return '';
+
+    const property = properties[name];
+    const req = required.indexOf(name) !== -1;
+
+    let type = property.type || 'string';
+    let array = false;
+
+    // Handle nested object address: { type: 'object', required: [...], properties: {...} }
+    if (type === 'object') {
+      return [
+        `${name}: {`,
+        feathersSchemaToGraphqlSchema(property, feathersExtension, ++depth),
+        `${leader}}`,
+      ].join(EOL);
+    }
+
+    // Handle array of properties
+    if (type === 'array') {
+      const items = property.items || { type: 'string' };
+
+      if (typeof items === 'object') {
+        type = items.type || 'string';
+        array = true;
+      } else {
+        throw new Error(`Property "${name}" is an array with an invalid "items".`);
+      }
+    }
+
+    // Handle simple property
+    return `${name}: ${array ? '[' : ''}${schemaTypeToGraphql[type.trim()]}${req ? '!' : ''}${array ? ']' : ''}`;
+  });
+
+  return leader + graphqlTypes.filter(prop => prop).join(`${EOL}${leader}`);
+}
 
 function convertToGraphQLSchemaName(name) {
   return upperFirst(camelCase(name));

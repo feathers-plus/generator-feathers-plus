@@ -21,25 +21,27 @@ let schema = {
 let extension = {
   graphql: {
     <%- insertFragment('graphql_header', [
-      '    // name: \'___Post___\',',
-      '    // service : {',
-      '    //   sort: { ___id___: 1 },',
-      '    // },',
-      '    // sql: {',
-      '    //   sqlTable: \'___Posts___\',',
-      '    //   uniqueKey: \'___id___\',',
-      '    //   sqlColumn: {',
-      '    //     ___authorId___: \'___author_id___\',',
-      '    //   }',
-      '    // },',
-    ]) %>,
+    '    // name: \'___Post___\',',
+    '    // service : {',
+    '    //   sort: { ___id___: 1 },',
+    '    // },',
+    '    // sql: {',
+    '    //   sqlTable: \'___Posts___\',',
+    '    //   uniqueKey: \'___id___\',',
+    '    //   sqlColumn: {',
+    '    //     ___authorId___: \'___author_id___\','
+    '    //   }',
+    '    // },',
+    ])
+    %>,
     discard: [
       <%- insertFragment('graphql_discard') %>
     ],
     add: {
     <%- insertFragment('graphql_add', [
         '      // ___author___: { type: \'___User___!\', args: false },',
-    ])%>
+      ])
+      %>
     },
     <%- insertFragment('graphql_more') %>
   },

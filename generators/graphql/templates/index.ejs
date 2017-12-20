@@ -1,0 +1,39 @@
+
+// Configure Feathers services.
+<%# -%>
+<%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
+<% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
+let <%- __name %> = require('./<%- __name %>/<%- __name %>.service');
+<% }); -%>
+<%# --- forEach-1 ends above. -%>
+
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (specs.graphql && specs.graphql.path) { -%>
+let <%- specs.graphql.name %> = require('./<%- specs.graphql.name %>/<%- specs.graphql.name %>.service');
+<% } -%>
+<%# --- if-1 ends above. -%>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+let moduleExports = function (app) {
+<%# -%>
+<%# --- forEach-2 starts below. Loop thru the schemas of GraphQL enabled services. -%>
+<% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
+  app.configure(<%- __name %>);
+<% }); -%>
+<%# --- forEach-2 ends above. -%>
+<%# -%>
+<%# --- if-2 starts below. -%>
+<% if (specs.graphql && specs.graphql.name) { %>
+  app.configure(<%- specs.graphql.name %>);
+<% } -%>
+<%# --- if-2 ends above. -%>
+  <%- insertFragment('func_return') %>
+};
+
+<%- insertFragment('exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

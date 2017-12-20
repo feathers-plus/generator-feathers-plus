@@ -23,11 +23,6 @@ module.exports = class ServiceGenerator extends Generator {
     const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
     const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 
-    const feathersSpecs = serviceSpecsExpand(this.specs);
-    serviceSpecsToGraphql(feathersSpecs);
-    serviceSpecsToMongoose('user', feathersSpecs);
-    process.exit(0);
-
     const { feathersSchemas, schemas, mapping, fieldInfo, queryInfo } = combineFeathersDeclarations(this.specs);
 
     this.feathersSchemas = feathersSchemas;
@@ -62,27 +57,9 @@ module.exports = class ServiceGenerator extends Generator {
     this.checkPackage();
 
     const { props, specs } = this;
+    props.specs = specs;
     props.name = 'graphql';
     const prompts = [
-      /*
-      {
-        type: 'checkbox',
-        name: 'resolvers',
-        message: 'How should Queries be completed?.',
-        choices: [{
-          name: 'Using Feathers calls.',
-          value: 'resolvers',
-          checked: this.specs.graphql.resolvers ? this.specs.graphql.resolvers.indexOf('resolvers') !== -1 : true,
-        }, {
-          name: 'Using BatchLoaders.',
-          value: 'resolvers',
-          checked: this.specs.graphql.resolvers ? this.specs.graphql.resolvers.indexOf('resolvers') !== -1 : true,
-        }, {
-          name: 'Using dynamic SQL statements. (More complex.)',
-          value: 'sql',
-          checked: this.specs.graphql.resolvers ? this.specs.graphql.resolvers.indexOf('sql') !== -1 : true,
-        }]
-      },*/
       {
         type: 'list',
         name: 'strategy',
@@ -192,6 +169,7 @@ module.exports = class ServiceGenerator extends Generator {
     });
 
     // Do not run code transformations if the service file already exists
+    /*
     if (!this.fs.exists(mainFile)) {
       const servicejs = this.destinationPath(this.libDirectory, 'services', 'index.js');
       const transformed = this._transformCode(
@@ -201,6 +179,7 @@ module.exports = class ServiceGenerator extends Generator {
       this.conflicter.force = true;
       this.fs.write(servicejs, transformed);
     }
+    */
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`);
     this.fs.copyTpl(
@@ -255,6 +234,13 @@ module.exports = class ServiceGenerator extends Generator {
       this.templatePath('graphql.service.ejs'),
       mainFile,
       Object.assign({}, context, { insertFragment: insertFragment(mainFile)})
+    );
+
+    destinationPath = this.destinationPath(this.libDirectory, 'services', 'index.js');
+    this.fs.copyTpl(
+      this.templatePath('index.ejs'),
+      destinationPath,
+      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
     );
 
     destinationPath = this.destinationPath(this.testDirectory, 'services', `${kebabName}.test.js`);
