@@ -2,8 +2,10 @@
 // Configure Feathers services.
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
-let <%- __name %> = require('./<%- __name %>/<%- __name %>.service');
+<% Object.keys(specs.services || {}).sort().forEach(__name => {
+  __fileName = specs.services[__name].fileName || __name;
+-%>
+let <%- __name %> = require('./<%- __fileName %>/<%- __fileName %>.service');
 <% }); -%>
 <%# --- forEach-1 ends above. -%>
 

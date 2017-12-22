@@ -61,7 +61,7 @@ module.exports = class ServiceGenerator extends Generator {
             initSpecs(specs, 'service', { name: input });
             serviceSpecs = specs.services[input];
 
-            if (!feathersSpecs[input]) {
+            if (!serviceSpecs) {
               console.log('\n\n' + chalk.green.bold('We are adding a new service.') + '\n');
               console.log(chalk.green([
                 'Once this generation is complete, define the JSON-schema for the data in module',
