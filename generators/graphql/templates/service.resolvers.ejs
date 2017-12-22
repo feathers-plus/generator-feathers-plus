@@ -13,8 +13,8 @@ let moduleExports = function serviceResolvers(app, options) {
   let returns = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(graphqlName => {
-  __serviceName = mapping.graphql[graphqlName].service;
+<% Object.keys(mapping.graphqlService).forEach(graphqlName => {
+  __serviceName = mapping.graphqlService[graphqlName].service;
   __add = feathersSpecs[__serviceName]._extensions.graphql.add;
 -%>
 
@@ -60,8 +60,8 @@ let moduleExports = function serviceResolvers(app, options) {
     Query: {
 <%# -%>
 <%# --- forEach-3 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(graphqlName => {
-  __serviceName = mapping.graphql[graphqlName].service;
+<% Object.keys(mapping.graphqlService).forEach(graphqlName => {
+  __serviceName = mapping.graphqlService[graphqlName].service;
   __graphql = feathersSpecs[__serviceName]._extensions.graphql;
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,

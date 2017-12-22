@@ -7,13 +7,13 @@ const ajv = require('ajv');
 <%- insertFragment('init') %>
 
 <%- insertFragment('set_id_type', [
-  'const idType = \'string\';',
+  'const ID = \'string\';',
 ]) %>
 
 const base = deepMerge.all([{},
 <% __jsonSchema = deepMerge({}, feathersSpec);
    delete __jsonSchema._extensions;
-   __str = stringifyPlus(__jsonSchema).replace(/"ID"/g, 'idType')
+   __str = stringifyPlus(__jsonSchema).replace(/"ID"/g, 'ID')
      .split('\n').map(str => `  ${str}`).join('\n');
 -%>
   <%- insertFragment('base', `${__str},`) %>

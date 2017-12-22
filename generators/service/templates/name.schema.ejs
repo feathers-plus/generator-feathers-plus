@@ -9,7 +9,6 @@ let schema = {
     `  title: '${__defaultGraphqlName}',`,
     `  description: '${__defaultGraphqlName} database.',`,
   ]) %>
-  type: 'object',
   required: [
     <%- insertFragment('schema_required') %>
   ],

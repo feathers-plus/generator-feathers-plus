@@ -3,12 +3,19 @@ const fs = require('fs');
 const path = require('path');
 const deepMerge = require('deepmerge');
 const Generator = require('../../lib/generator');
+const chalk = require('chalk');
+const mongoose = require('mongoose');
 
 const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const stringifyPlus = require('../../lib/stringify-plus');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
+
+const nativeFuncs = {
+  [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
+  [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId',
+};
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -24,6 +31,10 @@ module.exports = class ServiceGenerator extends Generator {
 
     const { props, specs } = this;
     const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
+
+    //inspector('specs', specs)
+    //inspector('feathersSpecs', feathersSpecs);
+    //inspector('mapping', mapping);
 
     props.specs = specs;
     props.feathersSpecs = feathersSpecs;
@@ -44,17 +55,43 @@ module.exports = class ServiceGenerator extends Generator {
             return '`authentication` is a reserved service name.';
           }
 
+          let mongooseSchema;
+
           try {
             initSpecs(specs, 'service', { name: input });
             serviceSpecs = specs.services[input];
 
-            const { mongooseSchema, mongooseSchemaStr } =
-              serviceSpecsToMongoose(input, props.feathersSpecs);
+            if (!feathersSpecs[input]) {
+              console.log('\n\n' + chalk.green.bold('We are adding a new service.') + '\n');
+              console.log(chalk.green([
+                'Once this generation is complete, define the JSON-schema for the data in module',
+                `"services/${_.kebabCase(input)}/${input}.schema.js". Then (re)generate this service.`,
+                '',
+                'This second generation will take the schema you added and generate',
+                '- A Mongoose model, and',
+                '- A Sequelize model, and',
+                '- Create, update and patch validation hooks.',
+                '',
+                'Run "feathers-plus generate graphql" if you want any changes reflected in GraphQL.',
+                '',
+              ].join('\n')));
+
+              mongooseSchema = {};
+            } else {
+              console.log('\n\n' + chalk.green.bold('We are regenerating an existing service.') + '\n');
+              console.log(chalk.green([
+                'Run "feathers-plus generate graphql" afterwards if you want any',
+                'schema changes to also be handled in GraphQL.',
+                '',
+              ].join('\n')));
+
+              mongooseSchema = serviceSpecsToMongoose(props.feathersSpecs[input], props.feathersSpecs[input]._extensions);
+            }
 
             props.serviceName = input;
             props.feathersSpec = props.feathersSpecs[input] || {};
             props.mongooseSchema = mongooseSchema;
-            props.mongooseSchemaStr = mongooseSchemaStr;
+            props.mongooseSchemaStr = stringifyPlus(mongooseSchema, { nativeFuncs });
           } catch (err) {
             console.log(err);
           }

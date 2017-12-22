@@ -11,8 +11,8 @@ let moduleExports = function sqlMetadata(app, options) {
   let returns = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(graphqlName => {
-  __serviceName = mapping.graphql[graphqlName].service;
+<% Object.keys(mapping.graphqlSql).forEach(graphqlName => {
+  __serviceName = mapping.graphqlSql[graphqlName].service;
   __graphql = feathersSpecs[__serviceName]._extensions.graphql;
   __add = __graphql.add;
 -%>
@@ -72,8 +72,8 @@ let moduleExports = function sqlMetadata(app, options) {
       fields: {
 <%# -%>
 <%# --- forEach-4 starts below. Loop thru the schemas of GraphQL enabled services. -%>
-<% Object.keys(mapping.graphql).forEach(graphqlName => {
-  __serviceName = mapping.graphql[graphqlName].service;
+<% Object.keys(mapping.graphqlSql).forEach(graphqlName => {
+  __serviceName = mapping.graphqlSql[graphqlName].service;
   __graphql = feathersSpecs[__serviceName]._extensions.graphql;
   __uniqueKey = __graphql.sql.uniqueKey;
   __temp = [
