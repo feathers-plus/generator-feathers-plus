@@ -29,20 +29,20 @@ Simply run `npm test` and all your tests in the `test/` directory will be run.
 
 ## Scaffolding
 
-Feathers has a powerful command line interface. Here are a few things it can do:
+Feathers-plus has a powerful command line interface. Here are a few things it can do:
 
 ```
-$ npm install -g @feathersjs/cli          # Install Feathers CLI
+$ npm install -g @feathers-plus/cli          # Install Feathers-plus CLI
 
-$ feathers generate service               # Generate a new Service
-$ feathers generate hook                  # Generate a new Hook
-$ feathers generate model                 # Generate a new Model
-$ feathers help                           # Show all commands
+$ feathers-plus generate service             # Generate a new Service
+$ feathers-plus generate hook                # Generate a new Hook
+$ feathers-plus generate model               # Generate a new Model
+$ feathers-plus help                         # Show all commands
 ```
 
 ## Help
 
-For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
+For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com) and [https://feathers-plus.github.io/](http://https://feathers-plus.github.io/).
 
 ## Changelog
 
@@ -52,6 +52,6 @@ __0.1.0__
 
 ## License
 
-Copyright (c) 2016
+Copyright (c) 2017
 
 Licensed under the [MIT license](LICENSE).

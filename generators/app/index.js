@@ -124,12 +124,15 @@ module.exports = class AppGenerator extends Generator {
   writing () {
     const props = this.props;
     const pkg = this.pkg = makeConfig.package(this);
-    const context = Object.assign({}, props, {
-      hasProvider (name) {
-        return props.providers.indexOf(name) !== -1;
-      }
-    });
 
+    const context = Object.assign({},
+      props,
+      { hasProvider (name) {
+        return props.providers.indexOf(name) !== -1;
+      }}
+    );
+
+    // ---start todo The following prevents 'generate app' from being used for regeneration
     // Static content for the root folder (including dotfiles)
     this.fs.copy(this.templatePath('static'), this.destinationPath());
     this.fs.copy(this.templatePath('static', '.*'), this.destinationPath());
@@ -143,9 +146,10 @@ module.exports = class AppGenerator extends Generator {
       this.destinationPath('', 'README.md'),
       context
     );
+    // ---end
 
-    this.fs.copyTpl(
-      this.templatePath('index.js'),
+    this.fs.copyTpl( // in @feathersjs generator, this template was app/templates/src/index.js
+      this.templatePath('index.ejs'),
       this.destinationPath(props.src, 'index.js'),
       Object.assign({}, context, { insertFragment: insertFragment(`${props.src}/index.js`)})
     );
@@ -162,6 +166,7 @@ module.exports = class AppGenerator extends Generator {
       context
     );
 
+    // todo does this prevent regeneration of 'generate app' ?
     this.fs.writeJSON(
       this.destinationPath('package.json'),
       pkg

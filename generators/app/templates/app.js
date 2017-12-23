@@ -1,3 +1,4 @@
+
 const path = require('path');
 const favicon = require('serve-favicon');
 const compress = require('compression');
@@ -55,7 +56,9 @@ app.use(express.errorHandler({ logger }));
 
 app.hooks(appHooks);
 
+const moduleExports = app;
 <%- insertFragment('exports') %>
-module.exports = app;
+module.exports = moduleExports;
 
+<%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

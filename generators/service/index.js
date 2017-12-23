@@ -5,6 +5,7 @@ const deepMerge = require('deepmerge');
 const Generator = require('../../lib/generator');
 const chalk = require('chalk');
 const mongoose = require('mongoose');
+const { join } = require('path');
 
 const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
@@ -61,7 +62,10 @@ module.exports = class ServiceGenerator extends Generator {
             initSpecs(specs, 'service', { name: input });
             serviceSpecs = specs.services[input];
 
-            if (!serviceSpecs) {
+            const fileName = specs.services[input].fileName || input; // todo || input is temporary
+            const path = join(process.cwd(), specs.app.src, 'services', fileName, `${fileName}.schema`);
+
+            if (!fileExists(`${path}.js`)) {
               console.log('\n\n' + chalk.green.bold('We are adding a new service.') + '\n');
               console.log(chalk.green([
                 'Once this generation is complete, define the JSON-schema for the data in module',
@@ -196,12 +200,18 @@ module.exports = class ServiceGenerator extends Generator {
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
-    const context = Object.assign({}, this.props, {
-      libDirectory: this.libDirectory,
-      modelName: hasModel ? `${kebabName}.model` : null,
-      path: stripSlashes(this.props.path),
-      serviceModule,
-    });
+
+    inspector('props', this.props);
+
+    const context = Object.assign({},
+      this.props,
+      {
+        libDirectory: this.libDirectory,
+        modelName: hasModel ? `${kebabName}.model` : null,
+        path: stripSlashes(this.props.path),
+        serviceModule,
+      }
+    );
 
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
@@ -299,6 +309,15 @@ module.exports = class ServiceGenerator extends Generator {
     updateSpecs(path, this.specs, 'service', this.props);
   }
 };
+
+function fileExists(path) {
+  try {
+    return fs.statSync(path).isFile();
+  } catch (err) {
+    if (err.code !== 'ENOENT') throw err;
+    return false;
+  }
+}
 
 const { inspect } = require('util');
 function inspector(desc, obj, depth = 5) {

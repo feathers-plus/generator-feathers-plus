@@ -1,3 +1,4 @@
+<% console.log('serviceName', serviceName) -%>
 <% __defaultGraphqlName = serviceName.charAt(0).toUpperCase() + serviceName.slice(1) -%>
 
 <%- insertFragment('imports') %>
@@ -9,6 +10,7 @@ let schema = {
     `  title: '${__defaultGraphqlName}',`,
     `  description: '${__defaultGraphqlName} database.',`,
   ]) %>
+  <%- insertFragment('schema_definitions') %>
   required: [
     <%- insertFragment('schema_required') %>
   ],
@@ -18,7 +20,7 @@ let schema = {
   <%- insertFragment('schema_more') %>
 };
 
-let extension = {
+let extensions = {
   graphql: {
     <%- insertFragment('graphql_header', [
       `    // name: '${__defaultGraphqlName}',`,
@@ -49,7 +51,7 @@ let extension = {
 
 let moduleExports = {
   schema,
-  extension,
+  extensions,
   <%- insertFragment('moduleExports') %>
 };
 
