@@ -3,7 +3,6 @@ const assert = require('assert');
 const rp = require('request-promise');
 const url = require('url');
 const app = require('../<%= src %>/app');
-<%- insertFragment('imports') %>
 
 let port = app.get('port') || 3030;
 let getUrl = pathname => url.format({
@@ -12,17 +11,14 @@ let getUrl = pathname => url.format({
   port,
   pathname
 });
-<%- insertFragment('init') %>
 
 describe('Feathers application tests', () => {
   before(function(done) {
     this.server = app.listen(port);
     this.server.once('listening', () => done());
-    <%- insertFragment('test_before') %>
   });
 
   after(function(done) {
-    <%- insertFragment('test_after') %>
     this.server.close(done);
   });
 
@@ -31,7 +27,6 @@ describe('Feathers application tests', () => {
       assert.ok(body.indexOf('<html>') !== -1)
     );
   });
-  <%- insertFragment('test_more') %>
 
   describe('404', function() {
     it('shows a 404 HTML page', () => {
@@ -57,6 +52,5 @@ describe('Feathers application tests', () => {
         assert.equal(res.error.name, 'NotFound');
       });
     });
-  <%- insertFragment('test_more_404') %>
   });
 });

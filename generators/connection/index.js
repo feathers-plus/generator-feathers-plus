@@ -1,38 +1,20 @@
 const { snakeCase } = require('lodash');
 const url = require('url');
-const j = require('@feathersjs/tools').transform;
 const Generator = require('../../lib/generator');
+
+const generatorFs = require('../../lib/generator-fs');
+const specsExpand = require('../../lib/specs-expand');
+const { initSpecs, updateSpecs } = require('../../lib/specs');
 
 module.exports = class ConnectionGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
 
+    initSpecs(this.specs, 'connections');
     this.dependencies = [];
   }
 
-  _transformCode (code) {
-    const { adapter } = this.props;
-
-    const ast = j(code);
-    const appDeclaration = ast.findDeclaration('app');
-    const configureMiddleware = ast.findConfigure('middleware');
-    const requireCall = `const ${adapter} = require('./${adapter}');`;
-
-    if (appDeclaration.length === 0) {
-      throw new Error('Could not find \'app\' variable declaration in app.js to insert database configuration. Did you modify app.js?');
-    }
-
-    if (configureMiddleware.length === 0) {
-      throw new Error('Could not find .configure(middleware) call in app.js after which to insert database configuration. Did you modify app.js?');
-    }
-
-    appDeclaration.insertBefore(requireCall);
-    configureMiddleware.insertBefore(`app.configure(${adapter});`);
-
-    return ast.toSource();
-  }
-
-  _getConfiguration () {
+  _getConfiguration (connectionString, database, adapter) {
     const sqlPackages = {
       mariadb: 'mysql',
       mysql: 'mysql2',
@@ -42,76 +24,59 @@ module.exports = class ConnectionGenerator extends Generator {
       // oracle: 'oracle'
     };
 
-    const { connectionString, database, adapter } = this.props;
     let parsed = {};
 
     switch (database) {
-    case 'nedb':
-      this.dependencies.push('nedb');
-      return connectionString.substring(7, connectionString.length);
+      case 'nedb':
+        this.dependencies.push('nedb');
+        return connectionString.substring(7, connectionString.length);
 
-    case 'rethinkdb':
-      parsed = url.parse(connectionString);
-      this.dependencies.push('rethinkdbdash');
-      
-      return {
-        db: parsed.path.substring(1, parsed.path.length),
-        servers: [
-          {
-            host: parsed.hostname,
-            port: parsed.port
-          }
-        ]
-      };
+      case 'rethinkdb':
+        parsed = url.parse(connectionString);
+        this.dependencies.push('rethinkdbdash');
 
-    case 'memory':
-      return null;
+        return {
+          db: parsed.path.substring(1, parsed.path.length),
+          servers: [
+            {
+              host: parsed.hostname,
+              port: parsed.port
+            }
+          ]
+        };
 
-    case 'mongodb':
-      this.dependencies.push(adapter);
-      return connectionString;
+      case 'memory':
+        return null;
 
-    case 'mariadb':
-    case 'mysql':
-    case 'mssql':
-    // case oracle:
-    case 'postgres': // eslint-disable-line no-fallthrough
-    case 'sqlite':
-      this.dependencies.push(adapter);
-
-      if (sqlPackages[database]) {
-        this.dependencies.push(sqlPackages[database]);
-      }
-
-      if (adapter === 'sequelize') {
+      case 'mongodb':
+        this.dependencies.push(adapter);
         return connectionString;
-      }
 
-      return {
-        client: sqlPackages[database],
-        connection: (database === 'sqlite' && typeof connectionString === 'string') ? {
-          filename: connectionString.substring(9, connectionString.length)
-        } : connectionString
-      };
+      case 'mariadb':
+      case 'mysql':
+      case 'mssql':
+      // case oracle:
+      case 'postgres': // eslint-disable-line no-fallthrough
+      case 'sqlite':
+        this.dependencies.push(adapter);
 
-    default:
-      throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
-    }
-  }
+        if (sqlPackages[database]) {
+          this.dependencies.push(sqlPackages[database]);
+        }
 
-  _writeConfiguration () {
-    const { database } = this.props;
-    const config = Object.assign({}, this.defaultConfig);
-    const configuration = this._getConfiguration();
+        if (adapter === 'sequelize') {
+          return connectionString;
+        }
 
-    if (!config[database]) {
-      config[database] = configuration;
+        return {
+          client: sqlPackages[database],
+          connection: (database === 'sqlite' && typeof connectionString === 'string') ? {
+            filename: connectionString.substring(9, connectionString.length)
+          } : connectionString
+        };
 
-      this.conflicter.force = true;
-      this.fs.writeJSON(
-        this.destinationPath('config', 'default.json'),
-        config
-      );
+      default:
+        throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
     }
   }
 
@@ -132,18 +97,20 @@ module.exports = class ConnectionGenerator extends Generator {
         default: 'nedb',
         choices: [
           { name: 'MariaDB', value: 'mariadb' },
-          { name: 'Memory', value: 'memory' },
+          { name: 'Memory', value: 'memory' }, // no adapter to choose
           { name: 'MongoDB', value: 'mongodb' },
           { name: 'MySQL', value: 'mysql' },
-          { name: 'NeDB', value: 'nedb' },
+          { name: 'NeDB', value: 'nedb' }, // no adapter to choose
           // { name: 'Oracle', value: 'oracle' },
           { name: 'PostgreSQL', value: 'postgres' },
-          { name: 'RethinkDB', value: 'rethinkdb' },
+          { name: 'RethinkDB', value: 'rethinkdb' }, // no adapter to choose
           { name: 'SQLite', value: 'sqlite' },
           { name: 'SQL Server', value: 'mssql' }
         ],
         when (current) {
           const answers = getProps(current);
+          // when called by connection generator, database & adapter = undefined
+          // when called by service generator, database = undefined, adapter = kind of service e.g. nedb
           const { database, adapter } = answers;
 
           if (database) {
@@ -151,15 +118,15 @@ module.exports = class ConnectionGenerator extends Generator {
           }
 
           switch (adapter) {
-          case 'nedb':
-          case 'rethinkdb':
-          case 'memory':
-          case 'mongodb':
-            setProps({ database: adapter });
-            return false;
-          case 'mongoose':
-            setProps({ database: 'mongodb' });
-            return false;
+            case 'nedb':
+            case 'rethinkdb':
+            case 'memory':
+            case 'mongodb':
+              setProps({ database: adapter });
+              return false;
+            case 'mongoose':
+              setProps({ database: 'mongodb' });
+              return false;
           }
 
           return true;
@@ -201,16 +168,15 @@ module.exports = class ConnectionGenerator extends Generator {
         when (current) {
           const answers = getProps(current);
           const { database, adapter } = answers;
-
           if (adapter) {
             return false;
           }
 
           switch (database) {
-          case 'nedb':
-          case 'rethinkdb':
-          case 'memory':
-            return false;
+            case 'nedb':
+            case 'rethinkdb':
+            case 'memory':
+              return false;
           }
 
           return true;
@@ -237,6 +203,8 @@ module.exports = class ConnectionGenerator extends Generator {
           return defaultConnectionStrings[database];
         },
         when (current) {
+          return true; // todo ******************** get default
+
           const answers = getProps(current);
           const { database } = answers;
           const connection = defaultConfig[database];
@@ -262,46 +230,86 @@ module.exports = class ConnectionGenerator extends Generator {
     });
   }
 
+  _specsExpand(specs) {
+
+    // Expand connections
+    const connections = specs.connections || {};
+    const _databases = specs._databases = {};
+    const _adapters = specs._adapters = {};
+    const _dbConfigs = specs._dbConfigs = {};
+
+    Object.keys(connections).forEach(databaseAdapter => {
+      let { database, adapter, connectionString } = connections[databaseAdapter];
+
+      _databases[database] = connectionString || null;
+      _dbConfigs[database] = this._getConfiguration (connectionString, database, adapter);
+
+      if (adapter) {
+        let template;
+
+        if (database === 'rethinkdb') {
+          template = 'rethinkdb.js';
+        } else if (database === 'mssql' && adapter === 'sequelize') {
+          template = `${adapter}-mssql.js`;
+          adapter = 'sequelizeMssql';
+        } else if (database !== 'nedb' && database !== 'memory') {
+          template = `${adapter}.js`;
+        }
+
+        if (template) {
+          _adapters[adapter] = template;
+        }
+      }
+    });
+  }
+
+  // We generate all the defined connections, not just the current one.
   writing () {
-    let template;
-    const { database, adapter } = this.props;
-    const context = Object.assign({}, this.props);
+    this.props.specs = this.specs;
+    const props = this.props;
+    const context = Object.assign({}, props, {
+      hasProvider (name) { return props.specs.app.providers.indexOf(name) !== -1; },
+    });
 
-    if (database === 'rethinkdb') {
-      template = 'rethinkdb.js';
-    } else if (database === 'mssql' && adapter === 'sequelize') {
-      template = `${adapter}-mssql.js`;
-    } else if (adapter && adapter !== 'nedb') {
-      template = `${adapter}.js`;
-    }
+    // Update specs
+    const path = this.destinationPath('feathers-gen-specs.json');
+    updateSpecs(path, this.specs, 'connections', props);
 
-    if (template) {
-      const dbFile = `${adapter}.js`;
-      const templateExists = this.fs.exists(this.destinationPath(this.libDirectory, dbFile));
+    // Expand specs
+    /*
+    this._specsExpand(props.specs);
+    inspector('current expanded', props.specs);
+    delete props.specs._databases;
+    delete props.specs._adapters;
+    delete props.specs._dbConfigs;
+    delete props.specs._connectionDeps;
+    */
+    specsExpand(props.specs);
+    inspector('new expanded', props.specs);
 
-      // If the file doesn't exist yet, add it to the app.js
-      if (!templateExists) {
-        const appjs = this.destinationPath(this.libDirectory, 'app.js');
+    // List what to generate
+    const specs = props.specs;
+    const connections = specs.connections;
+    const _adapters = specs._adapters;
 
-        this.conflicter.force = true;
-        this.fs.write(appjs, this._transformCode(
-          this.fs.read(appjs).toString()
-        ));
-      }
+    const newConfig = Object.assign({}, this.defaultConfig, specs._dbConfigs);
 
-      // Copy template only if connection generate is not composed
-      // from the service generator
-      if(!templateExists || (templateExists && !this.props.service)) {
-        this.fs.copyTpl(
-          this.templatePath(template),
-          this.destinationPath(this.libDirectory, dbFile),
-          context
-        );
-      }
-    }
+    const todos = !Object.keys(connections).length ? [] : [
+      { type: 'json', sourceObj: newConfig,                                           destination: ['config', 'default.json'] },
+      { type: 'tpl',  source: ['..', '..', 'templates-shared', `config.default.ejs`], destination: ['config', 'default.js'] },
+      { type: 'tpl',  source: ['..', '..', 'templates-shared', `src.app.ejs`],        destination: [this.libDirectory, 'app.js'] },
+    ];
 
-    this._writeConfiguration();
+    Object.keys(_adapters).sort().forEach(adapter => {
+      todos.push(
+        { type: 'copy',  source: _adapters[adapter], destination: [this.libDirectory, `${adapter}.js`], ifNew: true }
+      );
+    });
 
+    // Generate
+    generatorFs(this, context, todos);
+
+    // Write file explicitly so the user cannot prevent its update using the overwrite message.
     this._packagerInstall(this.dependencies, {
       save: true
     });
@@ -318,17 +326,23 @@ module.exports = class ConnectionGenerator extends Generator {
       this.log(`Woot! We've set up your ${database} database connection!`);
 
       switch (database) {
-      case 'mariadb':
-      case 'mongodb':
-      case 'mssql':
-      case 'mysql':
-      // case 'oracle':
-      case 'postgres': // eslint-disable-line no-fallthrough
-      case 'rethinkdb':
-        this.log(`Make sure that your ${database} database is running, the username/role is correct, and the database "${databaseName}" has been created.`);
-        this.log('Your configuration can be found in the projects config/ folder.');
-        break;
+        case 'mariadb':
+        case 'mongodb':
+        case 'mssql':
+        case 'mysql':
+        // case 'oracle':
+        case 'postgres': // eslint-disable-line no-fallthrough
+        case 'rethinkdb':
+          this.log(`Make sure that your ${database} database is running, the username/role is correct, and the database "${databaseName}" has been created.`);
+          this.log('Your configuration can be found in the projects config/ folder.');
+          break;
       }
     }
   }
 };
+
+const { inspect } = require('util');
+function inspector(desc, obj, depth = 5) {
+  console.log(`\n${desc}`);
+  console.log(inspect(obj, { depth, colors: true }));
+}

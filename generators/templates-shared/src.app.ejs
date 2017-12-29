@@ -11,12 +11,20 @@ const configuration = require('@feathersjs/configuration');
 const express = require('@feathersjs/express');
 <% if (hasProvider('socketio')) { %>const socketio = require('@feathersjs/socketio');<% } %>
 <% if (hasProvider('primus')) { %>const primus = require('@feathersjs/primus');<% } %>
-
 const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
 const channels = require('./channels');
 
+<%# -%>
+<%# --- forEach-1 starts below. -%>
+<% Object.keys(specs._adapters || []).sort().forEach(__adapter => {
+  __temp = specs._adapters[__adapter];
+  __module = __temp.substring(0, __temp.length - 3);
+-%>
+const <%- __adapter %> = require('<%- __module %>');
+<% }) -%>
+<%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
@@ -41,6 +49,13 @@ app.use('/', express.static(app.get('public')));
 <% if (hasProvider('rest')) { %>app.configure(express.rest());<% } %>
 <% if (hasProvider('socketio')) { %>app.configure(socketio());<% } %>
 <% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
+<%# --- forEach-3 starts below. -%>
+<% Object.keys(specs._adapters || []).sort().forEach((__adapter, __i) => { -%>
+<%- __i === 0 ? '// Configure database adapters\n' : '' -%>
+app.configure(<%- __adapter %>);
+<% }) -%>
+<%# --- forEach-3 ends above. -%>
+
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
 // Set up our services (see `services/index.js`)

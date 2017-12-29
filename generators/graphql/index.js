@@ -7,9 +7,10 @@ const Generator = require('../../lib/generator');
 
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
+const stringifyPlus = require('../../lib/stringify-plus');
+const generatorFs = require('../../lib/generator-fs');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
-const stringifyPlus = require('../../lib/stringify-plus');
 
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -105,19 +106,7 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   writing() {
-    let destinationPath;
     const { adapter, kebabName } = this.props;
-    const moduleMappings = {
-      generic: `./${kebabName}.class.js`,
-      memory: 'feathers-memory',
-      nedb: 'feathers-nedb',
-      mongodb: 'feathers-mongodb',
-      mongoose: 'feathers-mongoose',
-      sequelize: 'feathers-sequelize',
-      knex: 'feathers-knex',
-      rethinkdb: 'feathers-rethinkdb'
-    };
-    const serviceModule = moduleMappings[adapter];
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
@@ -125,8 +114,30 @@ module.exports = class ServiceGenerator extends Generator {
       libDirectory: this.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(this.props.path),
-      serviceModule,
     });
+
+    const todos = [
+      // Files which are written only if they don't exist. They are never rewritten.
+      { type: 'tpl',  source: ['test', 'name.test.ejs'],   destination: [this.testDirectory, 'services', `${kebabName}.test.js`], ifNew: true },
+
+      // Files rewritten every (re)generation.
+      { type: 'tpl',  source: `graphql.hooks${this.props.authentication ? '.auth' : ''}.ejs`,
+                                                           destination: [this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`] },
+      { type: 'tpl',  source: 'graphql.schemas.ejs',       destination: [this.libDirectory, 'services', 'graphql', 'graphql.schemas.js'] },
+      { type: 'tpl',  source: 'graphql.service.ejs',       destination: mainFile },
+      { type: 'tpl',  source: 'batchloader.resolvers.ejs', destination: [this.libDirectory, 'services', 'graphql', 'batchloader.resolvers.js'] },
+      { type: 'tpl',  source: 'service.resolvers.ejs',     destination: [this.libDirectory, 'services', 'graphql', 'service.resolvers.js'] },
+      { type: 'tpl',  source: 'sql.execute.ejs',           destination: [this.libDirectory, 'services', 'graphql', 'sql.execute.js'] },
+      { type: 'tpl',  source: 'sql.metadata.ejs',          destination: [this.libDirectory, 'services', 'graphql', 'sql.metadata.js'] },
+      { type: 'tpl',  source: 'sql.resolvers.ejs',         destination: [this.libDirectory, 'services', 'graphql', 'sql.resolvers.js'] },
+      { type: 'tpl',  source: '../../templates-shared/services.index.ejs',
+                                                           destination: [this.libDirectory, 'services', 'index.js'] },
+    ];
+
+    generatorFs(this, context, todos);
+
+    /*
+    let destinationPath;
 
     destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`);
     this.fs.copyTpl(
@@ -196,10 +207,11 @@ module.exports = class ServiceGenerator extends Generator {
       destinationPath,
       Object.assign({}, context, { insertFragment: insertFragment(destinationPath)})
     );
+    */
 
     this._packagerInstall([
       'graphql',
-      // '@feathers-plus/graphql', *******************************************************
+      // '@feathers-plus/graphql', todo *******************************************************
       'merge-graphql-schemas',
     ], { save: true });
   }

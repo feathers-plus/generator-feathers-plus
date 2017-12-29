@@ -9,7 +9,9 @@ const { join } = require('path');
 
 const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
+const doesFileExist = require('../../lib/does-file-exist');
 const stringifyPlus = require('../../lib/stringify-plus');
+const generatorFs = require('../../lib/generator-fs');
 const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
 
@@ -65,7 +67,7 @@ module.exports = class ServiceGenerator extends Generator {
             const fileName = specs.services[input].fileName || input; // todo || input is temporary
             const path = join(process.cwd(), specs.app.src, 'services', fileName, `${fileName}.schema`);
 
-            if (!fileExists(`${path}.js`)) {
+            if (!doesFileExist(`${path}.js`)) {
               console.log('\n\n' + chalk.green.bold('We are adding a new service.') + '\n');
               console.log(chalk.green([
                 'Once this generation is complete, define the JSON-schema for the data in module',
@@ -201,8 +203,6 @@ module.exports = class ServiceGenerator extends Generator {
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
 
-    inspector('props', this.props);
-
     const context = Object.assign({},
       this.props,
       {
@@ -242,19 +242,20 @@ module.exports = class ServiceGenerator extends Generator {
       );
     }
 
-    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`);
-    this.fs.copyTpl(
-      this.templatePath(`hooks${this.props.authentication ? '-user' : ''}.js`),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
+    const todos = [
+      // Files which are written only if they don't exist. They are never rewritten.
+      { type: 'tpl',  source: ['test', 'name.test.ejs'], destination: [this.testDirectory, 'services', `${kebabName}.test.js`], ifNew: true },
 
-    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.schema.js`);
-    this.fs.copyTpl(
-      this.templatePath('name.schema.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
+      // Files rewritten every (re)generation.
+      { type: 'tpl',  source: 'name.schema.ejs',         destination: [this.libDirectory, 'services', kebabName, `${kebabName}.schema.js`] },
+      { type: 'tpl',  source: 'name.mongoose.ejs',       destination: [this.libDirectory, 'services', kebabName, `${kebabName}.mongoose.js`] },
+      { type: 'tpl',  source: 'name.validate.ejs',       destination: [this.libDirectory, 'services', kebabName, `${kebabName}.validate.js`] },
+      { type: 'tpl',  source: `name.hooks${this.props.authentication ? '-auth' : ''}.ejs`,
+                                                                           destination: [this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`] },
+      { type: 'tpl',  source: '../../templates-shared/services.index.ejs', destination: [this.libDirectory, 'services', 'index.js'] },
+    ];
+
+    generatorFs(this, context, todos);
 
     if (fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`))) {
       this.fs.copyTpl(
@@ -264,39 +265,11 @@ module.exports = class ServiceGenerator extends Generator {
       );
     } else {
       this.fs.copyTpl(
-        this.templatePath('service.js'),
+        this.templatePath('name.service.ejs'),
         mainFile,
         Object.assign({}, context, { insertFragment: insertFragment(mainFile)})
       );
     }
-
-    destinationPath = this.destinationPath(this.testDirectory, 'services', `${kebabName}.test.js`);
-    this.fs.copyTpl(
-      this.templatePath('test.js'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.mongoose.js`);
-    this.fs.copyTpl(
-      this.templatePath('name.mongoose.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.validate.js`);
-    this.fs.copyTpl(
-      this.templatePath('name.validate.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'index.js');
-    this.fs.copyTpl(
-      this.templatePath('../../templates-shared/index.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
 
     if (serviceModule.charAt(0) !== '.') {
       this._packagerInstall([ serviceModule ], { save: true });
@@ -309,15 +282,6 @@ module.exports = class ServiceGenerator extends Generator {
     updateSpecs(path, this.specs, 'service', this.props);
   }
 };
-
-function fileExists(path) {
-  try {
-    return fs.statSync(path).isFile();
-  } catch (err) {
-    if (err.code !== 'ENOENT') throw err;
-    return false;
-  }
-}
 
 const { inspect } = require('util');
 function inspector(desc, obj, depth = 5) {

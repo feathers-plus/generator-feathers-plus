@@ -3,7 +3,8 @@ const path = require('path');
 const makeConfig = require('./configs');
 const { kebabCase } = require('lodash');
 
-const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
+const generatorFs = require('../../lib/generator-fs');
+const { refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
 
 module.exports = class AppGenerator extends Generator {
@@ -24,6 +25,7 @@ module.exports = class AppGenerator extends Generator {
       '@feathersjs/errors',
       '@feathersjs/configuration',
       '@feathersjs/express',
+      'feathers-hooks-common',
       'serve-favicon',
       'compression',
       'helmet',
@@ -40,12 +42,16 @@ module.exports = class AppGenerator extends Generator {
   }
 
   prompting () {
+    const { props, specs } = this;
+    props.specs = specs;
+
     const dependencies = this.dependencies.concat(this.devDependencies)
       .concat([
         '@feathersjs/express',
         '@feathersjs/socketio',
         '@feathersjs/primus'
       ]);
+
     const prompts = [{
       name: 'name',
       message: 'Project name',
@@ -72,7 +78,8 @@ module.exports = class AppGenerator extends Generator {
     }, {
       name: 'description',
       message: 'Description',
-      when: !this.pkg.description
+      when: !this.pkg.name, // Initial generate if name undefined.
+      default: this.props.description || `Project ${kebabCase(this.props.name)}`,
     }, {
       name: 'src',
       message: 'What folder should the source files live in?',
@@ -123,64 +130,56 @@ module.exports = class AppGenerator extends Generator {
 
   writing () {
     const props = this.props;
+    const specs = props.specs;
     const pkg = this.pkg = makeConfig.package(this);
 
     const context = Object.assign({},
       props,
-      { hasProvider (name) {
-        return props.providers.indexOf(name) !== -1;
-      }}
+      {
+        hasProvider (name) { return props.providers.indexOf(name) !== -1; },
+        requiresAuth: false,
+      },
     );
 
-    // ---start todo The following prevents 'generate app' from being used for regeneration
-    // Static content for the root folder (including dotfiles)
-    this.fs.copy(this.templatePath('static'), this.destinationPath());
-    this.fs.copy(this.templatePath('static', '.*'), this.destinationPath());
-    // Static content for the directories.lib folder
-    this.fs.copy(this.templatePath('src'), this.destinationPath(props.src));
-    // This hack is necessary because NPM does not publish `.gitignore` files
-    this.fs.copy(this.templatePath('_gitignore'), this.destinationPath('', '.gitignore'));
+    const todos = [
+      // Files which are written only if they don't exist. They are never rewritten (except for default.json)
+      { type: 'copy', source: '.editorconfig',  destination: '.editorconfig',  ifNew: true },
+      { type: 'copy', source: '.eslintrc.json', destination: '.eslintrc.json', ifNew: true },
+      // This name hack is necessary because NPM does not publish `.gitignore` files
+      { type: 'copy', source: '_gitignore',     destination: '.gitignore',     ifNew: true },
+      { type: 'copy', source: 'LICENSE',        destination: 'LICENSE',        ifNew: true },
+      { type: 'tpl',  source: 'README.md.ejs',  destination: 'README.md',      ifNew: true },
 
-    this.fs.copyTpl(
-      this.templatePath('README.md'),
-      this.destinationPath('', 'README.md'),
-      context
-    );
-    // ---end
+      { type: 'json', sourceObj: makeConfig.configDefault(this),    destination: ['config', 'default.json'],    ifNew: true, ifSkip: specs.options.configJs },
+      { type: 'json', sourceObj: makeConfig.configProduction(this), destination: ['config', 'production.json'], ifNew: true, ifSkip: specs.options.configJs },
 
-    this.fs.copyTpl( // in @feathersjs generator, this template was app/templates/src/index.js
-      this.templatePath('index.ejs'),
-      this.destinationPath(props.src, 'index.js'),
-      Object.assign({}, context, { insertFragment: insertFragment(`${props.src}/index.js`)})
-    );
+      { type: 'copy', source: ['public', 'favicon.ico'], destination: ['public', 'favicon.ico'],  ifNew: true },
+      { type: 'copy', source: ['public', 'index.html'],  destination: ['public', 'index.html'],   ifNew: true },
 
-    this.fs.copyTpl(
-      this.templatePath('app.js'),
-      this.destinationPath(props.src, 'app.js'),
-      Object.assign({}, context, { insertFragment: insertFragment(`${props.src}/app.js`)})
-    );
+      { type: 'copy', source: ['src', 'hooks', 'logger.js'],     destination: [props.src, 'hooks', 'logger.js'],     ifNew: true },
+      { type: 'copy', source: ['src', 'middleware', 'index.js'], destination: [props.src, 'middleware', 'index.js'], ifNew: true },
+      { type: 'copy', source: ['src', 'refs', 'common.json'],    destination: [props.src, 'refs', 'common.json'],    ifNew: true },
 
-    this.fs.copyTpl(
-      this.templatePath('app.test.js'),
-      this.destinationPath(this.testDirectory, 'app.test.js'),
-      context
-    );
+      { type: 'tpl',  source: ['test', 'app.test.js'], destination: [this.testDirectory, 'app.test.js'], ifNew: true },
 
-    // todo does this prevent regeneration of 'generate app' ?
-    this.fs.writeJSON(
-      this.destinationPath('package.json'),
-      pkg
-    );
+      // Files rewritten every (re)generation.
+      { type: 'tpl',  source: ['config', 'production.ejs'], destination: ['config', 'production.js'], ifSkip: !specs.options.configJs },
+      { type: 'tpl',  source: ['src', 'index.ejs'],         destination: [props.src, 'index.js'] },
 
-    this.fs.writeJSON(
-      this.destinationPath('config', 'default.json'),
-      makeConfig.configDefault(this)
-    );
+      { type: 'tpl',  source: ['src', 'app.hooks.ejs'],     destination: [props.src, 'app.hooks.js'] },
+      { type: 'tpl',  source: ['src', 'channels.ejs'],      destination: [props.src, 'channels.js'] }, // work todo
 
-    this.fs.writeJSON(
-      this.destinationPath('config', 'production.json'),
-      makeConfig.configProduction(this)
-    );
+
+      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'config.default.ejs'], destination: ['config', 'default.js'], ifSkip: !specs.options.configJs },
+      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'src.app.ejs'],        destination: [props.src, 'app.js'] },
+      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'services.index.ejs'], destination: [props.src, 'services', 'index.js'] },
+
+      // Last files to write.
+      { type: 'json', sourceObj: pkg, destination: ['package.json'], ifNew: true },
+
+    ];
+
+    generatorFs(this, context, todos);
   }
 
   install () {
