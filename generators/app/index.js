@@ -11,7 +11,7 @@ module.exports = class AppGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
 
-    initSpecs(this.specs, 'app');
+    this.specs = initSpecs('app');
     this.fragments = refreshCodeFragments();
 
     this.props = {
@@ -125,10 +125,13 @@ module.exports = class AppGenerator extends Generator {
 
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props);
+      this.logSteps && console.log('>>>>> app generator finished prompting()');
     });
   }
 
   writing () {
+    this.logSteps && console.log('>>>>> app generator started writing()');
+
     const props = this.props;
     const specs = props.specs;
     const pkg = this.pkg = makeConfig.package(this);
@@ -143,50 +146,69 @@ module.exports = class AppGenerator extends Generator {
 
     const todos = [
       // Files which are written only if they don't exist. They are never rewritten (except for default.json)
-      { type: 'copy', source: '.editorconfig',  destination: '.editorconfig',  ifNew: true },
-      { type: 'copy', source: '.eslintrc.json', destination: '.eslintrc.json', ifNew: true },
+      { type: 'copy', ifNew: true,  source: '.editorconfig',           destination: '.editorconfig' },
+      { type: 'copy', ifNew: true,  source: '.eslintrc.json',          destination: '.eslintrc.json' },
       // This name hack is necessary because NPM does not publish `.gitignore` files
-      { type: 'copy', source: '_gitignore',     destination: '.gitignore',     ifNew: true },
-      { type: 'copy', source: 'LICENSE',        destination: 'LICENSE',        ifNew: true },
-      { type: 'tpl',  source: 'README.md.ejs',  destination: 'README.md',      ifNew: true },
+      { type: 'copy', ifNew: true,  source: '_gitignore',              destination: '.gitignore' },
+      { type: 'copy', ifNew: true,  source: 'LICENSE',                 destination: 'LICENSE', },
+      { type: 'tpl',  ifNew: true,  source: 'README.md.ejs',           destination: 'README.md' },
 
-      { type: 'json', sourceObj: makeConfig.configDefault(this),    destination: ['config', 'default.json'],    ifNew: true, ifSkip: specs.options.configJs },
-      { type: 'json', sourceObj: makeConfig.configProduction(this), destination: ['config', 'production.json'], ifNew: true, ifSkip: specs.options.configJs },
+      { type: 'copy', ifNew: true,  source: ['public', 'favicon.ico'], destination: ['public', 'favicon.ico'] },
+      { type: 'copy', ifNew: true,  source: ['public', 'index.html'],  destination: ['public', 'index.html'] },
 
-      { type: 'copy', source: ['public', 'favicon.ico'], destination: ['public', 'favicon.ico'],  ifNew: true },
-      { type: 'copy', source: ['public', 'index.html'],  destination: ['public', 'index.html'],   ifNew: true },
+      { type: 'json', ifNew: true,  ifSkip: specs.options.configJs,
+                      sourceObj: makeConfig.configDefault(this),
+                      destination: ['config', 'default.json'] },
+      { type: 'json', ifNew: true,  ifSkip: specs.options.configJs,
+                      sourceObj: makeConfig.configProduction(this),
+                      destination: ['config', 'production.json'] },
 
-      { type: 'copy', source: ['src', 'hooks', 'logger.js'],     destination: [props.src, 'hooks', 'logger.js'],     ifNew: true },
-      { type: 'copy', source: ['src', 'middleware', 'index.js'], destination: [props.src, 'middleware', 'index.js'], ifNew: true },
-      { type: 'copy', source: ['src', 'refs', 'common.json'],    destination: [props.src, 'refs', 'common.json'],    ifNew: true },
+      { type: 'copy', ifNew: true,
+                      source: ['src', 'hooks', 'logger.js'],
+                      destination: [props.src, 'hooks', 'logger.js'] },
+      { type: 'copy', ifNew: true,
+                      source: ['src', 'middleware', 'index.js'],
+                      destination: [props.src, 'middleware', 'index.js'] },
+      { type: 'copy', ifNew: true,
+                      source: ['src', 'refs', 'common.json'],
+                      destination: [props.src, 'refs', 'common.json'] },
 
-      { type: 'tpl',  source: ['test', 'app.test.js'], destination: [this.testDirectory, 'app.test.js'], ifNew: true },
+      { type: 'tpl',  ifNew: true,
+                      source: ['test', 'app.test.js'],
+                      destination: [this.testDirectory, 'app.test.js']},
 
       // Files rewritten every (re)generation.
-      { type: 'tpl',  source: ['config', 'production.ejs'], destination: ['config', 'production.js'], ifSkip: !specs.options.configJs },
-      { type: 'tpl',  source: ['src', 'index.ejs'],         destination: [props.src, 'index.js'] },
+      { type: 'tpl',  ifSkip: !specs.options.configJs,
+                      source: ['..', '..', 'templates-shared', 'config.default.ejs'],
+                      destination: ['config', 'default.js'] },
+      { type: 'tpl',  ifSkip: !specs.options.configJs,
+                      source: ['config', 'production.ejs'],
+                      destination: ['config', 'production.js'] },
 
-      { type: 'tpl',  source: ['src', 'app.hooks.ejs'],     destination: [props.src, 'app.hooks.js'] },
-      { type: 'tpl',  source: ['src', 'channels.ejs'],      destination: [props.src, 'channels.js'] }, // work todo
+      { type: 'tpl',  source: ['src', 'index.ejs'],     destination: [props.src, 'index.js'] },
+      { type: 'tpl',  source: ['src', 'app.hooks.ejs'], destination: [props.src, 'app.hooks.js'] },
+      { type: 'tpl',  source: ['src', 'channels.ejs'],  destination: [props.src, 'channels.js'] }, // work todo
 
 
-      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'config.default.ejs'], destination: ['config', 'default.js'], ifSkip: !specs.options.configJs },
-      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'src.app.ejs'],        destination: [props.src, 'app.js'] },
-      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'services.index.ejs'], destination: [props.src, 'services', 'index.js'] },
+      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'src.app.ejs'],
+                      destination: [props.src, 'app.js'] },
+      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'services.index.ejs'],
+                      destination: [props.src, 'services', 'index.js'] },
 
       // Last files to write.
-      { type: 'json', sourceObj: pkg, destination: ['package.json'], ifNew: true },
+      { type: 'json', ifNew: true,
+                      sourceObj: pkg,
+                      destination: ['package.json'] },
 
     ];
 
     generatorFs(this, context, todos);
+
+    this.logSteps && console.log('>>>>> app generator finished writing()', todos.map(todo => todo.source || todo.sourceObj));
   }
 
   install () {
     // Write file explicitly so the user cannot prevent its update using the overwrite message.
-    const path = this.destinationPath('feathers-gen-specs.json');
-    updateSpecs(path, this.specs, 'app', this.props);
-
     this.props.providers.forEach(provider => {
       const type = provider === 'rest' ? 'express' : provider;
 
@@ -200,5 +222,12 @@ module.exports = class AppGenerator extends Generator {
     this._packagerInstall(this.devDependencies, {
       saveDev: true
     });
+
+    updateSpecs(this.specs, 'app', this.props, 'app generator');
+    this.logSteps && console.log('>>>>> app generator finished install()');
+  }
+
+  end () {
+    this.logSteps && console.log('>>>>> app generator finished end()');
   }
 };

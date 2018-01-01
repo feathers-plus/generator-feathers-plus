@@ -4,7 +4,7 @@ const commonHooks = require('feathers-hooks-common');
 <%- insertFragment('imports') %>
 
 <%- insertFragment('used', [
-  'const { iff } = commonHooks;'
+  'const { iff } = commonHooks; // eslint-disable-line no-unused-vars'
 ]) %>
 <%- insertFragment('init') %>
 
@@ -35,7 +35,7 @@ let moduleExports = {
 
   after: {
     all: [
-     <%- insertFragment('after_all') %>
+      <%- insertFragment('after_all') %>
     ],
     find: [
       <%- insertFragment('after_find') %>

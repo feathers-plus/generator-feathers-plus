@@ -1,4 +1,4 @@
-
+/* eslint quotes: 0 */
 // Validation definitions for validateSchema hook for service `<%= name %>`.
 const { validateSchema } = require('@feathers-plus/feathers-hooks-common');
 const deepMerge = require('deepmerge');
@@ -7,7 +7,7 @@ const ajv = require('ajv');
 <%- insertFragment('init') %>
 
 <%- insertFragment('set_id_type', [
-  'const ID = \'string\';',
+  'const ID = \'string\'; // eslint-disable-line no-unused-vars',
 ]) %>
 
 const base = deepMerge.all([{},

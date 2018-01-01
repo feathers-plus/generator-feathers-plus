@@ -10,74 +10,8 @@ module.exports = class ConnectionGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
 
-    initSpecs(this.specs, 'connections');
+    this.specs = initSpecs('connections');
     this.dependencies = [];
-  }
-
-  _getConfiguration (connectionString, database, adapter) {
-    const sqlPackages = {
-      mariadb: 'mysql',
-      mysql: 'mysql2',
-      mssql: 'mssql',
-      postgres: 'pg',
-      sqlite: 'sqlite3'
-      // oracle: 'oracle'
-    };
-
-    let parsed = {};
-
-    switch (database) {
-      case 'nedb':
-        this.dependencies.push('nedb');
-        return connectionString.substring(7, connectionString.length);
-
-      case 'rethinkdb':
-        parsed = url.parse(connectionString);
-        this.dependencies.push('rethinkdbdash');
-
-        return {
-          db: parsed.path.substring(1, parsed.path.length),
-          servers: [
-            {
-              host: parsed.hostname,
-              port: parsed.port
-            }
-          ]
-        };
-
-      case 'memory':
-        return null;
-
-      case 'mongodb':
-        this.dependencies.push(adapter);
-        return connectionString;
-
-      case 'mariadb':
-      case 'mysql':
-      case 'mssql':
-      // case oracle:
-      case 'postgres': // eslint-disable-line no-fallthrough
-      case 'sqlite':
-        this.dependencies.push(adapter);
-
-        if (sqlPackages[database]) {
-          this.dependencies.push(sqlPackages[database]);
-        }
-
-        if (adapter === 'sequelize') {
-          return connectionString;
-        }
-
-        return {
-          client: sqlPackages[database],
-          connection: (database === 'sqlite' && typeof connectionString === 'string') ? {
-            filename: connectionString.substring(9, connectionString.length)
-          } : connectionString
-        };
-
-      default:
-        throw new Error(`Invalid database '${database}'. Cannot assemble configuration.`);
-    }
   }
 
   prompting () {
@@ -203,20 +137,20 @@ module.exports = class ConnectionGenerator extends Generator {
           return defaultConnectionStrings[database];
         },
         when (current) {
-          return true; // todo ******************** get default
-
           const answers = getProps(current);
           const { database } = answers;
           const connection = defaultConfig[database];
+          console.log('1', database, connection, typeof connection, !!connection);
 
           if (connection) {
             if (connection.connection){
-              setProps({ connectionString:connection.connection });
+              setProps({ connectionString: connection.connection });
             } else if (database === 'rethinkdb' && connection.db) {
-              setProps({ connectionString:`rethinkdb://${connection.servers[0].host}:${connection.servers[0].port}/${connection.db}` });
+              setProps({ connectionString: `rethinkdb://${connection.servers[0].host}:${connection.servers[0].port}/${connection.db}` });
             } else {
-              setProps({ connectionString:connection });
+              setProps({ connectionString: connection });
             }
+            console.log('2 return false');
             return false;
           }
 
@@ -227,65 +161,26 @@ module.exports = class ConnectionGenerator extends Generator {
 
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props);
-    });
-  }
-
-  _specsExpand(specs) {
-
-    // Expand connections
-    const connections = specs.connections || {};
-    const _databases = specs._databases = {};
-    const _adapters = specs._adapters = {};
-    const _dbConfigs = specs._dbConfigs = {};
-
-    Object.keys(connections).forEach(databaseAdapter => {
-      let { database, adapter, connectionString } = connections[databaseAdapter];
-
-      _databases[database] = connectionString || null;
-      _dbConfigs[database] = this._getConfiguration (connectionString, database, adapter);
-
-      if (adapter) {
-        let template;
-
-        if (database === 'rethinkdb') {
-          template = 'rethinkdb.js';
-        } else if (database === 'mssql' && adapter === 'sequelize') {
-          template = `${adapter}-mssql.js`;
-          adapter = 'sequelizeMssql';
-        } else if (database !== 'nedb' && database !== 'memory') {
-          template = `${adapter}.js`;
-        }
-
-        if (template) {
-          _adapters[adapter] = template;
-        }
-      }
+      this.logSteps && console.log('>>>>> connection generator finished prompting()');
     });
   }
 
   // We generate all the defined connections, not just the current one.
   writing () {
+    this.logSteps && console.log('>>>>> connection generator started writing()');
     this.props.specs = this.specs;
     const props = this.props;
     const context = Object.assign({}, props, {
       hasProvider (name) { return props.specs.app.providers.indexOf(name) !== -1; },
     });
 
-    // Update specs
-    const path = this.destinationPath('feathers-gen-specs.json');
-    updateSpecs(path, this.specs, 'connections', props);
-
     // Expand specs
-    /*
-    this._specsExpand(props.specs);
-    inspector('current expanded', props.specs);
-    delete props.specs._databases;
-    delete props.specs._adapters;
-    delete props.specs._dbConfigs;
-    delete props.specs._connectionDeps;
-    */
+
     specsExpand(props.specs);
-    inspector('new expanded', props.specs);
+
+    // Update dependencies
+    console.log('1', props.specs._connectionDeps);
+    this.dependencies = this.dependencies.concat(props.specs._connectionDeps);
 
     // List what to generate
     const specs = props.specs;
@@ -295,14 +190,21 @@ module.exports = class ConnectionGenerator extends Generator {
     const newConfig = Object.assign({}, this.defaultConfig, specs._dbConfigs);
 
     const todos = !Object.keys(connections).length ? [] : [
-      { type: 'json', sourceObj: newConfig,                                           destination: ['config', 'default.json'] },
-      { type: 'tpl',  source: ['..', '..', 'templates-shared', `config.default.ejs`], destination: ['config', 'default.js'] },
-      { type: 'tpl',  source: ['..', '..', 'templates-shared', `src.app.ejs`],        destination: [this.libDirectory, 'app.js'] },
+      { type: 'json', sourceObj: newConfig,
+                      destination: ['config', 'default.json'],
+                      ifSkip: specs.options.configJs },
+      { type: 'tpl',  source: ['..', '..', 'templates-shared', `config.default.ejs`],
+                      destination: ['config', 'default.js'],
+                      ifSkip: !specs.options.configJs },
+      { type: 'tpl',  source: ['..', '..', 'templates-shared', `src.app.ejs`],
+                      destination: [this.libDirectory, 'app.js'] },
     ];
 
     Object.keys(_adapters).sort().forEach(adapter => {
       todos.push(
-        { type: 'copy',  source: _adapters[adapter], destination: [this.libDirectory, `${adapter}.js`], ifNew: true }
+        { type: 'copy', source: _adapters[adapter],
+                        destination: [this.libDirectory, `${adapter}.js`],
+                        ifNew: true }
       );
     });
 
@@ -313,6 +215,13 @@ module.exports = class ConnectionGenerator extends Generator {
     this._packagerInstall(this.dependencies, {
       save: true
     });
+
+    this.logSteps && console.log('>>>>> connection generator finished writing()', todos.map(todo => todo.source || todo.sourceObj));
+  }
+
+  install () {
+    updateSpecs(this.specs, 'connections', this.props, 'connection generator');
+    this.logSteps && console.log('>>>>> connection generator finished install()');
   }
 
   end () {
@@ -338,6 +247,8 @@ module.exports = class ConnectionGenerator extends Generator {
           break;
       }
     }
+
+    console.log('>>>>> connection generator finished end()');
   }
 };
 

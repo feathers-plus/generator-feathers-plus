@@ -29,10 +29,11 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   prompting() {
+    const generator = this;
     let serviceSpecs;
     this.checkPackage();
 
-    const { props, specs } = this;
+    let { props, specs } = this;
     const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
 
     //inspector('specs', specs)
@@ -61,15 +62,15 @@ module.exports = class ServiceGenerator extends Generator {
           let mongooseSchema;
 
           try {
-            initSpecs(specs, 'service', { name: input });
+            specs = props.specs = initSpecs('service', { name: input });
             serviceSpecs = specs.services[input];
 
             const fileName = specs.services[input].fileName || input; // todo || input is temporary
             const path = join(process.cwd(), specs.app.src, 'services', fileName, `${fileName}.schema`);
 
             if (!doesFileExist(`${path}.js`)) {
-              console.log('\n\n' + chalk.green.bold('We are adding a new service.') + '\n');
-              console.log(chalk.green([
+              generator.log('\n\n' + chalk.green.bold('We are adding a new service.') + '\n');
+              generator.log(chalk.green([
                 'Once this generation is complete, define the JSON-schema for the data in module',
                 `"services/${_.kebabCase(input)}/${input}.schema.js". Then (re)generate this service.`,
                 '',
@@ -84,8 +85,8 @@ module.exports = class ServiceGenerator extends Generator {
 
               mongooseSchema = {};
             } else {
-              console.log('\n\n' + chalk.green.bold('We are regenerating an existing service.') + '\n');
-              console.log(chalk.green([
+              generator.log('\n\n' + chalk.green.bold('We are regenerating an existing service.') + '\n');
+              generator.log(chalk.green([
                 'Run "feathers-plus generate graphql" afterwards if you want any',
                 'schema changes to also be handled in GraphQL.',
                 '',
@@ -99,7 +100,7 @@ module.exports = class ServiceGenerator extends Generator {
             props.mongooseSchema = mongooseSchema;
             props.mongooseSchemaStr = stringifyPlus(mongooseSchema, { nativeFuncs });
           } catch (err) {
-            console.log(err);
+            generator.log(err);
           }
 
           return true;
@@ -182,11 +183,14 @@ module.exports = class ServiceGenerator extends Generator {
         kebabName: _.kebabCase(name),
         camelName: _.camelCase(name)
       });
+
+      this.logSteps && console.log('>>>>> service generator finished prompting()');
     });
   }
 
   writing() {
-    let destinationPath;
+    this.logSteps && console.log('>>>>> service generator started writing()');
+
     const { adapter, kebabName } = this.props;
     const moduleMappings = {
       generic: `./${kebabName}.class.js`,
@@ -199,87 +203,69 @@ module.exports = class ServiceGenerator extends Generator {
       rethinkdb: 'feathers-rethinkdb'
     };
     const serviceModule = moduleMappings[adapter];
-    const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
 
-    const context = Object.assign({},
-      this.props,
-      {
-        libDirectory: this.libDirectory,
-        modelName: hasModel ? `${kebabName}.model` : null,
-        path: stripSlashes(this.props.path),
-        serviceModule,
-      }
-    );
+    const context = Object.assign({}, this.props, {
+      libDirectory: this.libDirectory,
+      modelName: hasModel ? `${kebabName}.model` : null,
+      path: stripSlashes(this.props.path),
+      serviceModule,
+    });
 
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
     if (adapter !== 'generic' && adapter !== 'memory') {
-      this.composeWith(require.resolve('../connection'), {
-        props: {
-          adapter,
-          service: this.props.name
-        }
-      });
-    } else if(adapter === 'generic') {
-      // Copy the generic service class
-      destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.class.js`);
-      this.fs.copyTpl(
-        this.templatePath(this.hasAsync ? 'class-async.js' : 'class.js'),
-        destinationPath,
-        Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-      );
+      this.composeWith(require.resolve('../connection'), { props: {
+        adapter,
+        service: this.props.name
+      } });
     }
 
-    if (context.modelName) {
-      // Copy the model
-      destinationPath = this.destinationPath(this.libDirectory, 'models', `${context.modelName}.js`);
-      this.fs.copyTpl(
-        this.templatePath('model', modelTpl),
-        destinationPath,
-        Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-      );
-    }
+    const mainFileTpl = fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`)) ?
+      ['types', `${adapter}.js`] : ['name.service.ejs'];
 
     const todos = [
       // Files which are written only if they don't exist. They are never rewritten.
-      { type: 'tpl',  source: ['test', 'name.test.ejs'], destination: [this.testDirectory, 'services', `${kebabName}.test.js`], ifNew: true },
+      { type: 'tpl',  source: '../../templates-shared/test.name.test.ejs',
+                      destination: [this.testDirectory, 'services', `${kebabName}.test.js`],
+                      ifNew: true },
+      { type: 'tpl',  source: mainFileTpl,
+                      destination: [this.libDirectory, 'services', kebabName, `${kebabName}.service.js`],
+                      ifNew: true },
+      { type: 'tpl',  source: ['model', modelTpl],
+                      destination: [this.libDirectory, 'models', `${context.modelName}.js`],
+                      ifNew: true,  ifSkip: !context.modelName },
+      { type: 'tpl',  source: [this.hasAsync ? 'class-async.js' : 'class.js'],
+                      destination: [this.libDirectory, 'services', kebabName, `${kebabName}.class.js`],
+                      ifNew: true,  ifSkip: adapter !== 'generic' },
 
       // Files rewritten every (re)generation.
-      { type: 'tpl',  source: 'name.schema.ejs',         destination: [this.libDirectory, 'services', kebabName, `${kebabName}.schema.js`] },
-      { type: 'tpl',  source: 'name.mongoose.ejs',       destination: [this.libDirectory, 'services', kebabName, `${kebabName}.mongoose.js`] },
-      { type: 'tpl',  source: 'name.validate.ejs',       destination: [this.libDirectory, 'services', kebabName, `${kebabName}.validate.js`] },
+      { type: 'tpl',  source: 'name.schema.ejs',   destination: [this.libDirectory, 'services', kebabName, `${kebabName}.schema.js`] },
+      { type: 'tpl',  source: 'name.mongoose.ejs', destination: [this.libDirectory, 'services', kebabName, `${kebabName}.mongoose.js`] },
+      { type: 'tpl',  source: 'name.validate.ejs', destination: [this.libDirectory, 'services', kebabName, `${kebabName}.validate.js`] },
       { type: 'tpl',  source: `name.hooks${this.props.authentication ? '-auth' : ''}.ejs`,
-                                                                           destination: [this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`] },
-      { type: 'tpl',  source: '../../templates-shared/services.index.ejs', destination: [this.libDirectory, 'services', 'index.js'] },
+                      destination: [this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`] },
+      { type: 'tpl',  source: '../../templates-shared/services.index.ejs',
+                      destination: [this.libDirectory, 'services', 'index.js'] },
     ];
 
     generatorFs(this, context, todos);
 
-    if (fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`))) {
-      this.fs.copyTpl(
-        this.templatePath('types', `${adapter}.js`),
-        mainFile,
-        Object.assign({}, context, { insertFragment: insertFragment(mainFile)})
-      );
-    } else {
-      this.fs.copyTpl(
-        this.templatePath('name.service.ejs'),
-        mainFile,
-        Object.assign({}, context, { insertFragment: insertFragment(mainFile)})
-      );
-    }
-
     if (serviceModule.charAt(0) !== '.') {
       this._packagerInstall([ serviceModule ], { save: true });
     }
+
+    this.logSteps && console.log('>>>>> service generator finished writing', todos.map(todo => todo.source || todo.sourceObj));
   }
 
   install () {
-    // Write file explicitly so the user cannot prevent its update using the overwrite message.
-    const path = this.destinationPath('feathers-gen-specs.json');
-    updateSpecs(path, this.specs, 'service', this.props);
+    updateSpecs(this.specs, 'service', this.props, 'service generator');
+    this.logSteps && console.log('>>>>> service generator finished install()');
+  }
+
+  end () {
+    this.logSteps && console.log('>>>>> service generator finished end()');
   }
 };
 

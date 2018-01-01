@@ -18,9 +18,22 @@ const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
 module.exports = class ServiceGenerator extends Generator {
   async initializing() {
     this.fragments = await refreshCodeFragments();
-    initSpecs(this.specs, 'graphql');
+    this.specs = initSpecs('graphql');
+  }
 
-    console.log(chalk.green([
+  prompting() {
+    const graphqlSpecs = this.specs.graphql;
+    this.checkPackage();
+
+    const { props, specs } = this;
+    const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
+
+    if (!Object.keys(mapping.feathers).length) {
+      this.log('No services are configured as being served by GraphQL. ');
+      process.exit(0);
+    }
+
+    this.log(chalk.green([
       'Modules tailored to your schemas will be generated to run GraphQL Queries using',
       '- Feathers service calls, and',
       '- BatchLoaders which cache and batch Feathers service calls, and',
@@ -31,14 +44,6 @@ module.exports = class ServiceGenerator extends Generator {
       'by rerunning "feathers-plus generate graphql" and switching options.',
       '',
     ].join('\n')));
-  }
-
-  prompting() {
-    const graphqlSpecs = this.specs.graphql;
-    this.checkPackage();
-
-    const { props, specs } = this;
-    const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
 
     props.specs = specs;
     props.feathersSpecs = feathersSpecs;
@@ -95,17 +100,24 @@ module.exports = class ServiceGenerator extends Generator {
     return this.prompt(prompts).then(answers => {
       const name = props.name;
 
-      this.props = Object.assign({
-        requiresAuth: false
-      }, props, answers, {
-        snakeName: _.snakeCase(name),
-        kebabName: _.kebabCase(name),
-        camelName: _.camelCase(name)
-      });
+      this.props = Object.assign(
+        { requiresAuth: false },
+        props,
+        answers,
+        {
+          snakeName: _.snakeCase(name),
+          kebabName: _.kebabCase(name),
+          camelName: _.camelCase(name)
+        }
+      );
+
+      this.logSteps && console.log('>>>>> graphql generator finished prompting()');
     });
   }
 
   writing() {
+    this.logSteps && console.log('>>>>> graphql generator started writing()');
+
     const { adapter, kebabName } = this.props;
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
@@ -118,11 +130,13 @@ module.exports = class ServiceGenerator extends Generator {
 
     const todos = [
       // Files which are written only if they don't exist. They are never rewritten.
-      { type: 'tpl',  source: ['test', 'name.test.ejs'],   destination: [this.testDirectory, 'services', `${kebabName}.test.js`], ifNew: true },
+      { type: 'tpl',  source: '../../templates-shared/test.name.test.ejs',
+                      destination: [this.testDirectory, 'services', `${kebabName}.test.js`],
+                      ifNew: true },
 
       // Files rewritten every (re)generation.
       { type: 'tpl',  source: `graphql.hooks${this.props.authentication ? '.auth' : ''}.ejs`,
-                                                           destination: [this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`] },
+                      destination: [this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`] },
       { type: 'tpl',  source: 'graphql.schemas.ejs',       destination: [this.libDirectory, 'services', 'graphql', 'graphql.schemas.js'] },
       { type: 'tpl',  source: 'graphql.service.ejs',       destination: mainFile },
       { type: 'tpl',  source: 'batchloader.resolvers.ejs', destination: [this.libDirectory, 'services', 'graphql', 'batchloader.resolvers.js'] },
@@ -131,94 +145,32 @@ module.exports = class ServiceGenerator extends Generator {
       { type: 'tpl',  source: 'sql.metadata.ejs',          destination: [this.libDirectory, 'services', 'graphql', 'sql.metadata.js'] },
       { type: 'tpl',  source: 'sql.resolvers.ejs',         destination: [this.libDirectory, 'services', 'graphql', 'sql.resolvers.js'] },
       { type: 'tpl',  source: '../../templates-shared/services.index.ejs',
-                                                           destination: [this.libDirectory, 'services', 'index.js'] },
+                      destination: [this.libDirectory, 'services', 'index.js'] },
     ];
 
     generatorFs(this, context, todos);
-
-    /*
-    let destinationPath;
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`);
-    this.fs.copyTpl(
-      this.templatePath(`graphql.hooks${this.props.authentication ? '.user' : ''}.js`),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath)})
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'graphql.schemas.js');
-    this.fs.copyTpl(
-      this.templatePath('graphql.schemas.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'service.resolvers.js');
-    this.fs.copyTpl(
-      this.templatePath('service.resolvers.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'batchloader.resolvers.js');
-    this.fs.copyTpl(
-      this.templatePath('batchloader.resolvers.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'sql.resolvers.js');
-    this.fs.copyTpl(
-      this.templatePath('sql.resolvers.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'sql.metadata.js');
-    this.fs.copyTpl(
-      this.templatePath('sql.metadata.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'graphql', 'sql.execute.js');
-    this.fs.copyTpl(
-      this.templatePath('sql.execute.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('graphql.service.ejs'),
-      mainFile,
-      Object.assign({}, context, { insertFragment: insertFragment(mainFile)})
-    );
-
-    destinationPath = this.destinationPath(this.libDirectory, 'services', 'index.js');
-    this.fs.copyTpl(
-      this.templatePath('../../templates-shared/index.ejs'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath) })
-    );
-
-    destinationPath = this.destinationPath(this.testDirectory, 'services', `${kebabName}.test.js`);
-    this.fs.copyTpl(
-      this.templatePath('test.js'),
-      destinationPath,
-      Object.assign({}, context, { insertFragment: insertFragment(destinationPath)})
-    );
-    */
 
     this._packagerInstall([
       'graphql',
       // '@feathers-plus/graphql', todo *******************************************************
       'merge-graphql-schemas',
     ], { save: true });
+
+    this.logSteps && console.log('>>>>> graphql generator finished writing()', todos.map(todo => todo.source || todo.sourceObj));
   }
 
   install () {
-    // Write file explicitly so the user cannot prevent its update using the overwrite message.
-    const path = this.destinationPath('feathers-gen-specs.json');
-    updateSpecs(path, this.specs, 'graphql', this.props);
+    updateSpecs(this.specs, 'graphql', this.props);
+    this.logSteps && console.log('>>>>> graphql generator finished install()');
+  }
+
+  end () {
+    this.logSteps && console.log('>>>>> graphql generator finished end()');
   }
 };
+
+const { inspect } = require('util');
+function inspector(desc, obj, depth = 5) {
+  console.log(`\n${desc}`);
+  console.log(inspect(obj, { depth, colors: true }));
+}
