@@ -191,7 +191,10 @@ module.exports = class ServiceGenerator extends Generator {
   writing() {
     this.logSteps && console.log('>>>>> service generator started writing()');
 
-    const { adapter, kebabName } = this.props;
+    const props = this.props;
+    const specs = props.specs;
+
+    const { adapter, kebabName } = props;
     const moduleMappings = {
       generic: `./${kebabName}.class.js`,
       memory: 'feathers-memory',
@@ -206,12 +209,24 @@ module.exports = class ServiceGenerator extends Generator {
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
 
-    const context = Object.assign({}, this.props, {
-      libDirectory: this.libDirectory,
-      modelName: hasModel ? `${kebabName}.model` : null,
-      path: stripSlashes(this.props.path),
-      serviceModule,
-    });
+    const context = Object.assign({},
+      /*
+       The connection generator is evoked below with an async 'composeWith'.
+       It appears it shares 'this' with this service generator.
+       The connection generator will update this.props.specs which means both generators see the changes.
+       This means the information in 'context' changes and the service templates can access the connection info.
+       The alternatives seem worse than this hack.
+       */
+      this.props,
+      {
+        libDirectory: this.libDirectory,
+        modelName: hasModel ? `${kebabName}.model` : null,
+        path: stripSlashes(this.props.path),
+        serviceModule,
+      }
+    );
+
+    inspector('service writing this.props', this.props);
 
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
@@ -222,32 +237,32 @@ module.exports = class ServiceGenerator extends Generator {
       } });
     }
 
+    // Common abbreviations for building 'todos'.
+    const src = props.src;
+    const libDir = this.libDirectory;
+    const testDir = this.testDirectory;
+    const shared = 'templates-shared';
+    const js = specs.options.configJs;
+    // Custom abbreviations.
     const mainFileTpl = fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`)) ?
       ['types', `${adapter}.js`] : ['name.service.ejs'];
+    const auth = this.props.authentication ? '-auth' : '';
+    const asyn = this.hasAsync ? 'class-async.js' : 'class.js';
+    const kn = kebabName;
 
     const todos = [
       // Files which are written only if they don't exist. They are never rewritten.
-      { type: 'tpl',  source: '../../templates-shared/test.name.test.ejs',
-                      destination: [this.testDirectory, 'services', `${kebabName}.test.js`],
-                      ifNew: true },
-      { type: 'tpl',  source: mainFileTpl,
-                      destination: [this.libDirectory, 'services', kebabName, `${kebabName}.service.js`],
-                      ifNew: true },
-      { type: 'tpl',  source: ['model', modelTpl],
-                      destination: [this.libDirectory, 'models', `${context.modelName}.js`],
-                      ifNew: true,  ifSkip: !context.modelName },
-      { type: 'tpl',  source: [this.hasAsync ? 'class-async.js' : 'class.js'],
-                      destination: [this.libDirectory, 'services', kebabName, `${kebabName}.class.js`],
-                      ifNew: true,  ifSkip: adapter !== 'generic' },
+      { type: 'tpl',  src: ['test', 'name.test.ejs'], dest: [testDir, 'services', `${kn}.test.js`],        ifNew: true },
+      { type: 'tpl',  src: mainFileTpl,               dest: [libDir, 'services', kn, `${kn}.service.js`],  ifNew: true },
+      { type: 'tpl',  src: ['model', modelTpl],       dest: [libDir, 'models', `${context.modelName}.js`], ifNew: true, ifSkip: !context.modelName },
+      { type: 'tpl',  src: asyn,                      dest: [libDir, 'services', kn, `${kn}.class.js`],    ifNew: true, ifSkip: adapter !== 'generic' },
 
       // Files rewritten every (re)generation.
-      { type: 'tpl',  source: 'name.schema.ejs',   destination: [this.libDirectory, 'services', kebabName, `${kebabName}.schema.js`] },
-      { type: 'tpl',  source: 'name.mongoose.ejs', destination: [this.libDirectory, 'services', kebabName, `${kebabName}.mongoose.js`] },
-      { type: 'tpl',  source: 'name.validate.ejs', destination: [this.libDirectory, 'services', kebabName, `${kebabName}.validate.js`] },
-      { type: 'tpl',  source: `name.hooks${this.props.authentication ? '-auth' : ''}.ejs`,
-                      destination: [this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`] },
-      { type: 'tpl',  source: '../../templates-shared/services.index.ejs',
-                      destination: [this.libDirectory, 'services', 'index.js'] },
+      { type: 'tpl',  src: 'name.schema.ejs',         dest: [libDir, 'services', kn, `${kn}.schema.js`] },
+      { type: 'tpl',  src: 'name.mongoose.ejs',       dest: [libDir, 'services', kn, `${kn}.mongoose.js`] },
+      { type: 'tpl',  src: 'name.validate.ejs',       dest: [libDir, 'services', kn, `${kn}.validate.js`] },
+      { type: 'tpl',  src: `name.hooks${auth}.ejs`,   dest: [libDir, 'services', kn, `${kn}.hooks.js`] },
+      { type: 'tpl',  src: ['..', '..', shared, 'services.index.ejs'], dest: [libDir, 'services', 'index.js'] },
     ];
 
     generatorFs(this, context, todos);
@@ -256,10 +271,11 @@ module.exports = class ServiceGenerator extends Generator {
       this._packagerInstall([ serviceModule ], { save: true });
     }
 
-    this.logSteps && console.log('>>>>> service generator finished writing', todos.map(todo => todo.source || todo.sourceObj));
+    this.logSteps && console.log('>>>>> service generator finished writing', todos.map(todo => todo.src || todo.obj));
   }
 
   install () {
+    inspector('service install this.props', this.props);
     updateSpecs(this.specs, 'service', this.props, 'service generator');
     this.logSteps && console.log('>>>>> service generator finished install()');
   }

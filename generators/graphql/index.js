@@ -128,24 +128,29 @@ module.exports = class ServiceGenerator extends Generator {
       path: stripSlashes(this.props.path),
     });
 
+    // Common abbreviations for building 'todos'.
+    const src = props.src;
+    const libDir = this.libDirectory;
+    const testDir = this.testDirectory;
+    const shared = 'templates-shared';
+    const js = specs.options.configJs;
+    // Custom abbreviations.
+    const auth = this.props.authentication ? '.auth' : '';
+
     const todos = [
       // Files which are written only if they don't exist. They are never rewritten.
-      { type: 'tpl',  source: '../../templates-shared/test.name.test.ejs',
-                      destination: [this.testDirectory, 'services', `${kebabName}.test.js`],
-                      ifNew: true },
+      { type: 'tpl',  src: ['..', '..', shared, 'test.name.test.ejs'], dest: [testDir, 'services', `${kebabName}.test.js`], ifNew: true },
 
       // Files rewritten every (re)generation.
-      { type: 'tpl',  source: `graphql.hooks${this.props.authentication ? '.auth' : ''}.ejs`,
-                      destination: [this.libDirectory, 'services', kebabName, `${kebabName}.hooks.js`] },
-      { type: 'tpl',  source: 'graphql.schemas.ejs',       destination: [this.libDirectory, 'services', 'graphql', 'graphql.schemas.js'] },
-      { type: 'tpl',  source: 'graphql.service.ejs',       destination: mainFile },
-      { type: 'tpl',  source: 'batchloader.resolvers.ejs', destination: [this.libDirectory, 'services', 'graphql', 'batchloader.resolvers.js'] },
-      { type: 'tpl',  source: 'service.resolvers.ejs',     destination: [this.libDirectory, 'services', 'graphql', 'service.resolvers.js'] },
-      { type: 'tpl',  source: 'sql.execute.ejs',           destination: [this.libDirectory, 'services', 'graphql', 'sql.execute.js'] },
-      { type: 'tpl',  source: 'sql.metadata.ejs',          destination: [this.libDirectory, 'services', 'graphql', 'sql.metadata.js'] },
-      { type: 'tpl',  source: 'sql.resolvers.ejs',         destination: [this.libDirectory, 'services', 'graphql', 'sql.resolvers.js'] },
-      { type: 'tpl',  source: '../../templates-shared/services.index.ejs',
-                      destination: [this.libDirectory, 'services', 'index.js'] },
+      { type: 'tpl',  src: `graphql.hooks${auth}.ejs`,  dest: [libDir, 'services', kebabName, `${kebabName}.hooks.js`] },
+      { type: 'tpl',  src: 'graphql.schemas.ejs',       dest: [libDir, 'services', 'graphql', 'graphql.schemas.js'] },
+      { type: 'tpl',  src: 'graphql.service.ejs',       dest: mainFile },
+      { type: 'tpl',  src: 'batchloader.resolvers.ejs', dest: [libDir, 'services', 'graphql', 'batchloader.resolvers.js'] },
+      { type: 'tpl',  src: 'service.resolvers.ejs',     dest: [libDir, 'services', 'graphql', 'service.resolvers.js'] },
+      { type: 'tpl',  src: 'sql.execute.ejs',           dest: [libDir, 'services', 'graphql', 'sql.execute.js'] },
+      { type: 'tpl',  src: 'sql.metadata.ejs',          dest: [libDir, 'services', 'graphql', 'sql.metadata.js'] },
+      { type: 'tpl',  src: 'sql.resolvers.ejs',         dest: [libDir, 'services', 'graphql', 'sql.resolvers.js'] },
+      { type: 'tpl',  src: ['..', '..', shared, 'services.index.ejs'], dest: [libDir, 'services', 'index.js'] },
     ];
 
     generatorFs(this, context, todos);
@@ -156,7 +161,7 @@ module.exports = class ServiceGenerator extends Generator {
       'merge-graphql-schemas',
     ], { save: true });
 
-    this.logSteps && console.log('>>>>> graphql generator finished writing()', todos.map(todo => todo.source || todo.sourceObj));
+    this.logSteps && console.log('>>>>> graphql generator finished writing()', todos.map(todo => todo.src || todo.obj));
   }
 
   install () {

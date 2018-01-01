@@ -174,8 +174,10 @@ module.exports = class ConnectionGenerator extends Generator {
       hasProvider (name) { return props.specs.app.providers.indexOf(name) !== -1; },
     });
 
-    // Expand specs
-
+    // Update specs with prompts and then expand the specs, as we use the result below.
+    // Also, the specs have to be updated before the end of writing() because of the comment
+    // in generators/service/index.js#writing.
+    updateSpecs(props.specs, 'connections', this.props, 'connection generator');
     specsExpand(props.specs);
 
     // Update dependencies
@@ -187,26 +189,24 @@ module.exports = class ConnectionGenerator extends Generator {
     const connections = specs.connections;
     const _adapters = specs._adapters;
 
+    // Common abbreviations for building 'todos'.
+    const src = props.src;
+    const libDir = this.libDirectory;
+    const testDir = this.testDirectory;
+    const shared = 'templates-shared';
+    const js = specs.options.configJs;
+    // Custom abbreviations.
     const newConfig = Object.assign({}, this.defaultConfig, specs._dbConfigs);
 
     const todos = !Object.keys(connections).length ? [] : [
-      { type: 'json', sourceObj: newConfig,
-                      destination: ['config', 'default.json'],
-                      ifSkip: specs.options.configJs },
-      { type: 'tpl',  source: ['..', '..', 'templates-shared', `config.default.ejs`],
-                      destination: ['config', 'default.js'],
-                      ifSkip: !specs.options.configJs },
-      { type: 'tpl',  source: ['..', '..', 'templates-shared', `src.app.ejs`],
-                      destination: [this.libDirectory, 'app.js'] },
+      { type: 'json', obj: newConfig,                                  dest: ['config', 'default.json'], ifSkip: js },
+      { type: 'tpl',  src: ['..', '..', shared, `config.default.ejs`], dest: ['config', 'default.js'],   ifSkip: !js },
+      { type: 'tpl',  src: ['..', '..', shared, `src.app.ejs`],        dest: [libDir, 'app.js'] },
     ];
 
-    Object.keys(_adapters).sort().forEach(adapter => {
-      todos.push(
-        { type: 'copy', source: _adapters[adapter],
-                        destination: [this.libDirectory, `${adapter}.js`],
-                        ifNew: true }
-      );
-    });
+    Object.keys(_adapters).sort().forEach(adapter => { todos.push(
+      { type: 'copy', src: _adapters[adapter],                         dest: [libDir, `${adapter}.js`],  ifNew: true }
+    ); });
 
     // Generate
     generatorFs(this, context, todos);
@@ -216,11 +216,10 @@ module.exports = class ConnectionGenerator extends Generator {
       save: true
     });
 
-    this.logSteps && console.log('>>>>> connection generator finished writing()', todos.map(todo => todo.source || todo.sourceObj));
+    this.logSteps && console.log('>>>>> connection generator finished writing()', todos.map(todo => todo.src || todo.obj));
   }
 
   install () {
-    updateSpecs(this.specs, 'connections', this.props, 'connection generator');
     this.logSteps && console.log('>>>>> connection generator finished install()');
   }
 

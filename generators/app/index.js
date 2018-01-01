@@ -144,67 +144,54 @@ module.exports = class AppGenerator extends Generator {
       },
     );
 
+    // Common abbreviations for building 'todos'.
+    const src = props.src;
+    const libDir = this.libDirectory;
+    const testDir = this.testDirectory;
+    const shared = 'templates-shared';
+    const js = specs.options.configJs;
+    // Custom abbreviations.
+    const configDefault = makeConfig.configDefault(this);
+    const configProd = makeConfig.configProduction(this);
+
     const todos = [
       // Files which are written only if they don't exist. They are never rewritten (except for default.json)
-      { type: 'copy', ifNew: true,  source: '.editorconfig',           destination: '.editorconfig' },
-      { type: 'copy', ifNew: true,  source: '.eslintrc.json',          destination: '.eslintrc.json' },
+      { type: 'copy', src: '.editorconfig',  dest: '.editorconfig',  ifNew: true },
+      { type: 'copy', src: '.eslintrc.json', dest: '.eslintrc.json', ifNew: true },
       // This name hack is necessary because NPM does not publish `.gitignore` files
-      { type: 'copy', ifNew: true,  source: '_gitignore',              destination: '.gitignore' },
-      { type: 'copy', ifNew: true,  source: 'LICENSE',                 destination: 'LICENSE', },
-      { type: 'tpl',  ifNew: true,  source: 'README.md.ejs',           destination: 'README.md' },
+      { type: 'copy', src: '_gitignore',     dest: '.gitignore',     ifNew: true },
+      { type: 'copy', src: 'LICENSE',        dest: 'LICENSE',        ifNew: true },
+      { type: 'tpl',  src: 'README.md.ejs',  dest: 'README.md',      ifNew: true },
+      { type: 'json', obj: pkg,              dest: 'package.json',   ifNew: true },
 
-      { type: 'copy', ifNew: true,  source: ['public', 'favicon.ico'], destination: ['public', 'favicon.ico'] },
-      { type: 'copy', ifNew: true,  source: ['public', 'index.html'],  destination: ['public', 'index.html'] },
+      { type: 'json', obj: configDefault,    dest: ['config', 'default.json'],    ifNew: true,  ifSkip: js },
+      { type: 'json', obj: configProd,       dest: ['config', 'production.json'], ifNew: true,  ifSkip: js },
 
-      { type: 'json', ifNew: true,  ifSkip: specs.options.configJs,
-                      sourceObj: makeConfig.configDefault(this),
-                      destination: ['config', 'default.json'] },
-      { type: 'json', ifNew: true,  ifSkip: specs.options.configJs,
-                      sourceObj: makeConfig.configProduction(this),
-                      destination: ['config', 'production.json'] },
+      { type: 'copy', src: ['public', 'favicon.ico'],         dest: ['public', 'favicon.ico'],       ifNew: true },
+      { type: 'copy', src: ['public', 'index.html'],          dest: ['public', 'index.html'],        ifNew: true },
 
-      { type: 'copy', ifNew: true,
-                      source: ['src', 'hooks', 'logger.js'],
-                      destination: [props.src, 'hooks', 'logger.js'] },
-      { type: 'copy', ifNew: true,
-                      source: ['src', 'middleware', 'index.js'],
-                      destination: [props.src, 'middleware', 'index.js'] },
-      { type: 'copy', ifNew: true,
-                      source: ['src', 'refs', 'common.json'],
-                      destination: [props.src, 'refs', 'common.json'] },
+      { type: 'tpl',  src: ['test', 'app.test.js'],           dest: [testDir, 'app.test.js'],        ifNew: true },
 
-      { type: 'tpl',  ifNew: true,
-                      source: ['test', 'app.test.js'],
-                      destination: [this.testDirectory, 'app.test.js']},
+      { type: 'copy', src: ['src', 'hooks', 'logger.js'],     dest: [src, 'hooks', 'logger.js'],     ifNew: true },
+      { type: 'copy', src: ['src', 'middleware', 'index.js'], dest: [src, 'middleware', 'index.js'], ifNew: true },
+      { type: 'copy', src: ['src', 'refs', 'common.json'],    dest: [src, 'refs', 'common.json'],    ifNew: true },
 
       // Files rewritten every (re)generation.
-      { type: 'tpl',  ifSkip: !specs.options.configJs,
-                      source: ['..', '..', 'templates-shared', 'config.default.ejs'],
-                      destination: ['config', 'default.js'] },
-      { type: 'tpl',  ifSkip: !specs.options.configJs,
-                      source: ['config', 'production.ejs'],
-                      destination: ['config', 'production.js'] },
+      { type: 'tpl',  src: ['config', 'production.ejs'],      dest: ['config', 'production.js'],     ifSkip: !js },
+      { type: 'tpl',  src: ['src', 'index.ejs'],              dest: [src, 'index.js'] },
 
-      { type: 'tpl',  source: ['src', 'index.ejs'],     destination: [props.src, 'index.js'] },
-      { type: 'tpl',  source: ['src', 'app.hooks.ejs'], destination: [props.src, 'app.hooks.js'] },
-      { type: 'tpl',  source: ['src', 'channels.ejs'],  destination: [props.src, 'channels.js'] }, // work todo
+      { type: 'tpl',  src: ['src', 'app.hooks.ejs'],          dest: [src, 'app.hooks.js'] },
+      { type: 'tpl',  src: ['src', 'channels.ejs'],           dest: [src, 'channels.js'] }, // work todo
 
 
-      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'src.app.ejs'],
-                      destination: [props.src, 'app.js'] },
-      { type: 'tpl',  source: ['..', '..', 'templates-shared', 'services.index.ejs'],
-                      destination: [props.src, 'services', 'index.js'] },
-
-      // Last files to write.
-      { type: 'json', ifNew: true,
-                      sourceObj: pkg,
-                      destination: ['package.json'] },
-
+      { type: 'tpl',  src: ['..', '..', shared, 'config.default.ejs'], dest: ['config', 'default.js'], ifSkip: !js },
+      { type: 'tpl',  src: ['..', '..', shared, 'src.app.ejs'],        dest: [src, 'app.js'] },
+      { type: 'tpl',  src: ['..', '..', shared, 'services.index.ejs'], dest: [src, 'services', 'index.js'] },
     ];
 
     generatorFs(this, context, todos);
 
-    this.logSteps && console.log('>>>>> app generator finished writing()', todos.map(todo => todo.source || todo.sourceObj));
+    this.logSteps && console.log('>>>>> app generator finished writing()', todos.map(todo => todo.src || todo.obj));
   }
 
   install () {
