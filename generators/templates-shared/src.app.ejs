@@ -15,6 +15,12 @@ const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
 const channels = require('./channels');
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (specs.authentication) { -%>
+const authentication = require('./authentication');
+<% } -%>
+<%# --- if-1 ends above. -%>
 
 <%# -%>
 <%# --- forEach-1 starts below. -%>
@@ -62,6 +68,13 @@ app.configure(middleware);
 app.configure(services);
 // Set up event channels (see channels.js)
 app.configure(channels);
+<%# -%>
+<%# --- if-2 starts below. -%>
+<% if (specs.authentication) { -%>
+// Configure authentication (see `authentication.js`)
+app.configure(authentication);
+<% } -%>
+<%# --- if-2 ends above. -%>
 <%- insertFragment('config_middle') %>
 
 // Configure a middleware for 404s and the error handler

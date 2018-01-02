@@ -162,13 +162,14 @@ module.exports = class AuthGenerator extends Generator {
     ];
 
     const context = Object.assign(
-      {
-        kebabEntity: _.kebabCase(this.props.entity),
-        camelEntity: _.camelCase(this.props.entity),
-        oauthProviders: []
-      },
       props,
-      { specs },
+      {
+        specs,
+        kebabEntity: _.kebabCase(props.entity),
+        camelEntity: _.camelCase(props.entity),
+        oauthProviders: [],
+        hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; }
+      },
     );
 
     // Set up strategies and add dependencies
@@ -197,21 +198,22 @@ module.exports = class AuthGenerator extends Generator {
       }
     });
 
-    // If the file doesn't exist yet, add it to the app.js
-    if (!this.fs.exists(this.destinationPath(this.libDirectory, 'authentication.js'))) {
-      const appjs = this.destinationPath(this.libDirectory, 'app.js');
+    updateSpecs(specs, 'authentication', props, 'service generator');
 
-      this.conflicter.force = true;
-      this.fs.write(appjs, this._transformCode(
-        this.fs.read(appjs).toString()
-      ));
-    }
+    // Common abbreviations for building 'todos'.
+    const src = specs.app.src;
+    const libDir = this.libDirectory;
+    const testDir = this.testDirectory;
+    const shared = 'templates-shared';
+    const js = specs.options.configJs;
 
-    this.fs.copyTpl(
-      this.templatePath('authentication.js'),
-      this.destinationPath(this.libDirectory, 'authentication.js'),
-      context
-    );
+    const todos = [
+      // Files rewritten every (re)generation.
+      { type: 'tpl',  src: 'authentication.ejs', dest: [libDir, 'authentication.js'] },
+      { type: 'tpl',  src: ['..', '..', shared, 'src.app.ejs'], dest: [src, 'app.js'] },
+    ];
+
+    generatorFs(this, context, todos);
 
     this._writeConfiguration(context);
     this._packagerInstall(dependencies, {

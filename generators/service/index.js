@@ -224,9 +224,9 @@ module.exports = class ServiceGenerator extends Generator {
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
 
     const context = Object.assign({},
-      this.props,
-      { specs },
+      props,
       {
+        specs,
         libDirectory: this.libDirectory,
         modelName: hasModel ? `${kebabName}.model` : null,
         path: stripSlashes(this.props.path),

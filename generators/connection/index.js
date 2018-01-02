@@ -171,8 +171,10 @@ module.exports = class ConnectionGenerator extends Generator {
 
     const context = Object.assign({},
       props,
-      { specs },
-      { hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; } },
+      {
+        specs,
+        hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
+      },
     );
 
     // Update specs with prompts and then expand the specs, as we use the result below.

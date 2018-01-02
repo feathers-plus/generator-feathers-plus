@@ -136,8 +136,8 @@ module.exports = class AppGenerator extends Generator {
 
     const context = Object.assign({},
       props,
-      { specs },
       {
+        specs,
         hasProvider (name) { return props.providers.indexOf(name) !== -1; },
         requiresAuth: false,
       },

@@ -126,8 +126,8 @@ module.exports = class ServiceGenerator extends Generator {
 
     const context = Object.assign({},
       props,
-      { specs },
       {
+        specs,
         libDirectory: this.libDirectory,
         modelName: hasModel ? `${kebabName}.model` : null,
         path: stripSlashes(this.props.path),
