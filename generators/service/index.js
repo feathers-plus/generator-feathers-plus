@@ -12,7 +12,7 @@ const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const doesFileExist = require('../../lib/does-file-exist');
 const stringifyPlus = require('../../lib/stringify-plus');
 const generatorFs = require('../../lib/generator-fs');
-const { insertFragment, refreshCodeFragments } = require('../../lib/code-fragments');
+const { refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
 
 const nativeFuncs = {
@@ -33,18 +33,23 @@ module.exports = class ServiceGenerator extends Generator {
     let serviceSpecs;
     this.checkPackage();
 
-    let { props, specs } = this;
+    const { props, _specs: specs } = this;
     const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
 
-    //inspector('specs', specs)
-    //inspector('feathersSpecs', feathersSpecs);
-    //inspector('mapping', mapping);
-
-    props.specs = specs;
     props.feathersSpecs = feathersSpecs;
     props.mapping= mapping;
     props.deepMerge = deepMerge;
     props.stringifyPlus = stringifyPlus;
+
+    function handleName(name, mongooseSchema) {
+      initSpecs('service', { name });
+      serviceSpecs = specs.services[name];
+
+      props.serviceName = name;
+      props.feathersSpec = props.feathersSpecs[name] || {};
+      props.mongooseSchema = mongooseSchema;
+      props.mongooseSchemaStr = stringifyPlus(mongooseSchema, { nativeFuncs });
+    }
 
     const prompts = [
       {
@@ -62,8 +67,9 @@ module.exports = class ServiceGenerator extends Generator {
           let mongooseSchema;
 
           try {
-            specs = props.specs = initSpecs('service', { name: input });
+            initSpecs('service', { name: input });
             serviceSpecs = specs.services[input];
+            inspector('serviceSpecs', serviceSpecs)
 
             const fileName = specs.services[input].fileName || input; // todo || input is temporary
             const path = join(process.cwd(), specs.app.src, 'services', fileName, `${fileName}.schema`);
@@ -95,17 +101,26 @@ module.exports = class ServiceGenerator extends Generator {
               mongooseSchema = serviceSpecsToMongoose(props.feathersSpecs[input], props.feathersSpecs[input]._extensions);
             }
 
+            handleName(input, mongooseSchema);
+            /*
             props.serviceName = input;
             props.feathersSpec = props.feathersSpecs[input] || {};
             props.mongooseSchema = mongooseSchema;
             props.mongooseSchemaStr = stringifyPlus(mongooseSchema, { nativeFuncs });
+            */
           } catch (err) {
             generator.log(err);
           }
 
           return true;
         },
-        when: !props.name
+        when: () => {
+          if (!props.name) return true;
+
+          // Generator called by 'generate authentication'
+          handleName(props.name, {});
+          return false;
+        }
       }, {
         type: 'list',
         name: 'adapter',
@@ -191,8 +206,7 @@ module.exports = class ServiceGenerator extends Generator {
   writing() {
     this.logSteps && console.log('>>>>> service generator started writing()');
 
-    const props = this.props;
-    const specs = props.specs;
+    const { props, _specs: specs } = this;
 
     const { adapter, kebabName } = props;
     const moduleMappings = {
@@ -210,14 +224,8 @@ module.exports = class ServiceGenerator extends Generator {
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
 
     const context = Object.assign({},
-      /*
-       The connection generator is evoked below with an async 'composeWith'.
-       It appears it shares 'this' with this service generator.
-       The connection generator will update this.props.specs which means both generators see the changes.
-       This means the information in 'context' changes and the service templates can access the connection info.
-       The alternatives seem worse than this hack.
-       */
       this.props,
+      { specs },
       {
         libDirectory: this.libDirectory,
         modelName: hasModel ? `${kebabName}.model` : null,
@@ -226,7 +234,7 @@ module.exports = class ServiceGenerator extends Generator {
       }
     );
 
-    inspector('service writing this.props', this.props);
+    updateSpecs(specs, 'service', this.props, 'service generator');
 
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
@@ -275,8 +283,6 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   install () {
-    inspector('service install this.props', this.props);
-    updateSpecs(this.specs, 'service', this.props, 'service generator');
     this.logSteps && console.log('>>>>> service generator finished install()');
   }
 

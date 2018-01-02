@@ -10,7 +10,7 @@ module.exports = class ConnectionGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
 
-    this.specs = initSpecs('connections');
+    initSpecs('connections');
     this.dependencies = [];
   }
 
@@ -140,7 +140,6 @@ module.exports = class ConnectionGenerator extends Generator {
           const answers = getProps(current);
           const { database } = answers;
           const connection = defaultConfig[database];
-          console.log('1', database, connection, typeof connection, !!connection);
 
           if (connection) {
             if (connection.connection){
@@ -150,7 +149,6 @@ module.exports = class ConnectionGenerator extends Generator {
             } else {
               setProps({ connectionString: connection });
             }
-            console.log('2 return false');
             return false;
           }
 
@@ -168,24 +166,23 @@ module.exports = class ConnectionGenerator extends Generator {
   // We generate all the defined connections, not just the current one.
   writing () {
     this.logSteps && console.log('>>>>> connection generator started writing()');
-    this.props.specs = this.specs;
-    const props = this.props;
-    const context = Object.assign({}, props, {
-      hasProvider (name) { return props.specs.app.providers.indexOf(name) !== -1; },
-    });
+
+    const { props, _specs: specs } = this;
+
+    const context = Object.assign({},
+      props,
+      { specs },
+      { hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; } },
+    );
 
     // Update specs with prompts and then expand the specs, as we use the result below.
-    // Also, the specs have to be updated before the end of writing() because of the comment
-    // in generators/service/index.js#writing.
-    updateSpecs(props.specs, 'connections', this.props, 'connection generator');
-    specsExpand(props.specs);
+    updateSpecs(specs, 'connections', props, 'connection generator');
+    specsExpand(specs);
 
     // Update dependencies
-    console.log('1', props.specs._connectionDeps);
-    this.dependencies = this.dependencies.concat(props.specs._connectionDeps);
+    this.dependencies = this.dependencies.concat(specs._connectionDeps);
 
     // List what to generate
-    const specs = props.specs;
     const connections = specs.connections;
     const _adapters = specs._adapters;
 

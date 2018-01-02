@@ -23,3 +23,5 @@ OK - don't write specs expanded to file
 - put in lib/generator.js generator.conflicter.force = true;
 - enable in graphql/index.js // '@feathers-plus/graphql'
 - hooks modules should be ifNew: true
+- get 'npm start' working for graphql
+- generate graphql has linting issues

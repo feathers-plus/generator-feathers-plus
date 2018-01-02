@@ -18,14 +18,14 @@ const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
 module.exports = class ServiceGenerator extends Generator {
   async initializing() {
     this.fragments = await refreshCodeFragments();
-    this.specs = initSpecs('graphql');
+    initSpecs('graphql');
   }
 
   prompting() {
-    const graphqlSpecs = this.specs.graphql;
+    const { props, _specs: specs } = this;
+    const graphqlSpecs = specs.graphql;
     this.checkPackage();
 
-    const { props, specs } = this;
     const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
 
     if (!Object.keys(mapping.feathers).length) {
@@ -45,7 +45,6 @@ module.exports = class ServiceGenerator extends Generator {
       '',
     ].join('\n')));
 
-    props.specs = specs;
     props.feathersSpecs = feathersSpecs;
     props.mapping= mapping;
     props.stringifyPlus = stringifyPlus;
@@ -118,15 +117,24 @@ module.exports = class ServiceGenerator extends Generator {
   writing() {
     this.logSteps && console.log('>>>>> graphql generator started writing()');
 
+    const { props, _specs: specs } = this;
+
     const { adapter, kebabName } = this.props;
     const mainFile = this.destinationPath(this.libDirectory, 'services', kebabName, `${kebabName}.service.js`);
     const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
-    const context = Object.assign({}, this.props, {
-      libDirectory: this.libDirectory,
-      modelName: hasModel ? `${kebabName}.model` : null,
-      path: stripSlashes(this.props.path),
-    });
+
+    const context = Object.assign({},
+      props,
+      { specs },
+      {
+        libDirectory: this.libDirectory,
+        modelName: hasModel ? `${kebabName}.model` : null,
+        path: stripSlashes(this.props.path),
+      }
+    );
+
+    updateSpecs(specs, 'graphql', props);
 
     // Common abbreviations for building 'todos'.
     const src = props.src;
@@ -165,7 +173,6 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   install () {
-    updateSpecs(this.specs, 'graphql', this.props);
     this.logSteps && console.log('>>>>> graphql generator finished install()');
   }
 

@@ -11,13 +11,13 @@ module.exports = class AppGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
 
-    this.specs = initSpecs('app');
+    initSpecs('app');
     this.fragments = refreshCodeFragments();
 
     this.props = {
       name: this.pkg.name || process.cwd().split(path.sep).pop(),
       description: this.pkg.description,
-      src: this.specs.app.src || (this.pkg.directories && this.pkg.directories.lib),
+      src: this._specs.app.src || (this.pkg.directories && this.pkg.directories.lib),
     };
 
     this.dependencies = [
@@ -42,8 +42,7 @@ module.exports = class AppGenerator extends Generator {
   }
 
   prompting () {
-    const { props, specs } = this;
-    props.specs = specs;
+    const { props, _specs: specs } = this;
 
     const dependencies = this.dependencies.concat(this.devDependencies)
       .concat([
@@ -83,13 +82,13 @@ module.exports = class AppGenerator extends Generator {
     }, {
       name: 'src',
       message: 'What folder should the source files live in?',
-      default: this.specs.app.src || 'src',
-      when: !this.specs.app.src && !(this.pkg.directories && this.pkg.directories.lib)
+      default: specs.app.src || 'src',
+      when: !specs.app.src && !(this.pkg.directories && this.pkg.directories.lib)
     }, {
       name: 'packager',
       type: 'list',
       message: 'Which package manager are you using (has to be installed globally)?',
-      default: this.specs.app.packager || 'npm@>= 3.0.0',
+      default: specs.app.packager || 'npm@>= 3.0.0',
       choices: [{
         name: 'npm',
         value: 'npm@>= 3.0.0'
@@ -104,15 +103,15 @@ module.exports = class AppGenerator extends Generator {
       choices: [{
         name: 'REST',
         value: 'rest',
-        checked: this.specs.app.providers ? this.specs.app.providers.indexOf('rest') !== -1 : true,
+        checked: specs.app.providers ? specs.app.providers.indexOf('rest') !== -1 : true,
       }, {
         name: 'Realtime via Socket.io',
         value: 'socketio',
-        checked: this.specs.app.providers ? this.specs.app.providers.indexOf('socketio') !== -1 : true,
+        checked: specs.app.providers ? specs.app.providers.indexOf('socketio') !== -1 : true,
       }, {
         name: 'Realtime via Primus',
         value: 'primus',
-        checked: this.specs.app.providers ? this.specs.app.providers.indexOf('primus') !== -1 : false,
+        checked: specs.app.providers ? specs.app.providers.indexOf('primus') !== -1 : false,
       }],
       validate (input) {
         if (input.indexOf('primus') !== -1 && input.indexOf('socketio') !== -1) {
@@ -132,17 +131,19 @@ module.exports = class AppGenerator extends Generator {
   writing () {
     this.logSteps && console.log('>>>>> app generator started writing()');
 
-    const props = this.props;
-    const specs = props.specs;
+    const { props, _specs: specs } = this;
     const pkg = this.pkg = makeConfig.package(this);
 
     const context = Object.assign({},
       props,
+      { specs },
       {
         hasProvider (name) { return props.providers.indexOf(name) !== -1; },
         requiresAuth: false,
       },
     );
+
+    updateSpecs(specs, 'app', props, 'app generator');
 
     // Common abbreviations for building 'todos'.
     const src = props.src;
@@ -210,7 +211,6 @@ module.exports = class AppGenerator extends Generator {
       saveDev: true
     });
 
-    updateSpecs(this.specs, 'app', this.props, 'app generator');
     this.logSteps && console.log('>>>>> app generator finished install()');
   }
 
