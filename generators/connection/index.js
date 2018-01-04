@@ -165,9 +165,10 @@ module.exports = class ConnectionGenerator extends Generator {
 
   // We generate all the defined connections, not just the current one.
   writing () {
-    this.logSteps && console.log('>>>>> connection generator started writing()');
+    const generator = this;
+    generator.logSteps && console.log('>>>>> connection generator started writing()');
 
-    const { props, _specs: specs } = this;
+    const { props, _specs: specs } = generator;
 
     const context = Object.assign({},
       props,
@@ -178,11 +179,11 @@ module.exports = class ConnectionGenerator extends Generator {
     );
 
     // Update specs with prompts and then expand the specs, as we use the result below.
-    updateSpecs(specs, 'connections', props, 'connection generator');
-    specsExpand(specs);
+    updateSpecs('connections', props, 'connection generator');
+    //specsExpand(specs);
 
     // Update dependencies
-    this.dependencies = this.dependencies.concat(specs._connectionDeps);
+    generator.dependencies = generator.dependencies.concat(specs._connectionDeps);
 
     // List what to generate
     const connections = specs.connections;
@@ -190,12 +191,12 @@ module.exports = class ConnectionGenerator extends Generator {
 
     // Common abbreviations for building 'todos'.
     const src = props.src;
-    const libDir = this.libDirectory;
-    const testDir = this.testDirectory;
+    const libDir = generator.libDirectory;
+    const testDir = generator.testDirectory;
     const shared = 'templates-shared';
     const js = specs.options.configJs;
     // Custom abbreviations.
-    const newConfig = Object.assign({}, this.defaultConfig, specs._dbConfigs);
+    const newConfig = Object.assign({}, generator.defaultConfig, specs._dbConfigs);
 
     const todos = !Object.keys(connections).length ? [] : [
       { type: 'json', obj: newConfig,                                  dest: ['config', 'default.json'], ifSkip: js },
@@ -208,14 +209,14 @@ module.exports = class ConnectionGenerator extends Generator {
     ); });
 
     // Generate
-    generatorFs(this, context, todos);
+    generatorFs(generator, context, todos);
 
     // Write file explicitly so the user cannot prevent its update using the overwrite message.
-    this._packagerInstall(this.dependencies, {
+    generator._packagerInstall(generator.dependencies, {
       save: true
     });
 
-    this.logSteps && console.log('>>>>> connection generator finished writing()', todos.map(todo => todo.src || todo.obj));
+    generator.logSteps && console.log('>>>>> connection generator finished writing()', todos.map(todo => todo.src || todo.obj));
   }
 
   install () {

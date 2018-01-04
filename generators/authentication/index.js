@@ -1,11 +1,11 @@
 const _ = require('lodash');
-const j = require('@feathersjs/tools').transform;
 const crypto = require('crypto');
 
 const Generator = require('../../lib/generator');
 const generatorFs = require('../../lib/generator-fs');
+const specsExpand = require('../../lib/specs-expand');
 const { refreshCodeFragments } = require('../../lib/code-fragments');
-const { initSpecs, updateSpecs } = require('../../lib/specs');
+const { updateSpecs } = require('../../lib/specs');
 
 const OAUTH2_STRATEGY_MAPPINGS = {
   auth0: 'passport-auth0',
@@ -58,26 +58,6 @@ module.exports = class AuthGenerator extends Generator {
 
       this.logSteps && console.log('>>>>> authentication generator finished prompting()');
     });
-  }
-
-  _transformCode(code) {
-    const ast = j(code);
-    const appDeclaration = ast.findDeclaration('app');
-    const configureServices = ast.findConfigure('services');
-    const requireCall = 'const authentication = require(\'./authentication\');';
-
-    if (appDeclaration.length === 0) {
-      throw new Error('Could not find \'app\' variable declaration in app.js to insert database configuration. Did you modify app.js?');
-    }
-
-    if (configureServices.length === 0) {
-      throw new Error('Could not find .configure(services) call in app.js after which to insert database configuration. Did you modify app.js?');
-    }
-
-    appDeclaration.insertBefore(requireCall);
-    configureServices.insertBefore('app.configure(authentication);');
-
-    return ast.toSource();
   }
 
   _writeConfiguration(context) {
@@ -144,7 +124,7 @@ module.exports = class AuthGenerator extends Generator {
       };
     }
 
-    this.conflicter.force = true;
+    // todo this.conflicter.force = true;
     this.fs.writeJSON(
       this.destinationPath('config', 'default.json'),
       config
@@ -152,9 +132,10 @@ module.exports = class AuthGenerator extends Generator {
   }
 
   writing() {
-    this.logSteps && console.log('>>>>> authentication generator started writing()');
+    const generator = this;
+    generator.logSteps && console.log('>>>>> authentication generator started writing()');
 
-    const { props, _specs: specs } = this;
+    const { props, _specs: specs } = generator;
 
     const dependencies = [
       '@feathersjs/authentication',
@@ -190,7 +171,7 @@ module.exports = class AuthGenerator extends Generator {
     });
 
     // Create the users service
-    this.composeWith(require.resolve('../service'), {
+    generator.composeWith(require.resolve('../service'), {
       props: {
         name: context.entity,
         path: `/${context.kebabEntity}`,
@@ -198,12 +179,13 @@ module.exports = class AuthGenerator extends Generator {
       }
     });
 
-    updateSpecs(specs, 'authentication', props, 'service generator');
+    updateSpecs('authentication', props, 'service generator');
+    //specsExpand(specs);
 
     // Common abbreviations for building 'todos'.
     const src = specs.app.src;
-    const libDir = this.libDirectory;
-    const testDir = this.testDirectory;
+    const libDir = generator.libDirectory;
+    const testDir = generator.testDirectory;
     const shared = 'templates-shared';
     const js = specs.options.configJs;
 
@@ -213,14 +195,14 @@ module.exports = class AuthGenerator extends Generator {
       { type: 'tpl',  src: ['..', '..', shared, 'src.app.ejs'], dest: [src, 'app.js'] },
     ];
 
-    generatorFs(this, context, todos);
+    generatorFs(generator, context, todos);
 
-    this._writeConfiguration(context);
-    this._packagerInstall(dependencies, {
+    generator._writeConfiguration(context);
+    generator._packagerInstall(dependencies, {
       save: true
     });
 
-    this.logSteps && console.log('>>>>> authentication generator finished writing'/*, todos.map(todo => todo.src || todo.obj)*/);
+    generator.logSteps && console.log('>>>>> authentication generator finished writing'/*, todos.map(todo => todo.src || todo.obj)*/);
   }
 
   install () {

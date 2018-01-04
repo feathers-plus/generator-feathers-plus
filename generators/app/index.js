@@ -4,8 +4,11 @@ const makeConfig = require('./configs');
 const { kebabCase } = require('lodash');
 
 const generatorFs = require('../../lib/generator-fs');
+const specsExpand = require('../../lib/specs-expand');
 const { refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
+
+const generatorWriting = require('../writing');
 
 module.exports = class AppGenerator extends Generator {
   constructor (args, opts) {
@@ -129,10 +132,13 @@ module.exports = class AppGenerator extends Generator {
   }
 
   writing () {
-    this.logSteps && console.log('>>>>> app generator started writing()');
+    generatorWriting(this, 'app');
+    /*
+    const generator = this;
+    generator.logSteps && console.log('>>>>> app generator started writing()');
 
-    const { props, _specs: specs } = this;
-    const pkg = this.pkg = makeConfig.package(this);
+    const { props, _specs: specs } = generator;
+    const pkg = generator.pkg = makeConfig.package(generator);
 
     const context = Object.assign({},
       props,
@@ -143,17 +149,18 @@ module.exports = class AppGenerator extends Generator {
       },
     );
 
-    updateSpecs(specs, 'app', props, 'app generator');
+    updateSpecs('app', props, 'app generator');
+    //specsExpand(specs);
 
     // Common abbreviations for building 'todos'.
-    const src = props.src;
-    const libDir = this.libDirectory;
-    const testDir = this.testDirectory;
+    const src = specs.app.src;
+    const libDir = generator.libDirectory;
+    const testDir = generator.testDirectory;
     const shared = 'templates-shared';
     const js = specs.options.configJs;
     // Custom abbreviations.
-    const configDefault = makeConfig.configDefault(this);
-    const configProd = makeConfig.configProduction(this);
+    const configDefault = makeConfig.configDefault(generator);
+    const configProd = makeConfig.configProduction(generator);
 
     const todos = [
       // Files which are written only if they don't exist. They are never rewritten (except for default.json)
@@ -174,7 +181,7 @@ module.exports = class AppGenerator extends Generator {
       { type: 'tpl',  src: ['test', 'app.test.js'],           dest: [testDir, 'app.test.js'],        ifNew: true },
 
       { type: 'copy', src: ['src', 'hooks', 'logger.js'],     dest: [src, 'hooks', 'logger.js'],     ifNew: true },
-      { type: 'copy', src: ['src', 'middleware', 'index.js'], dest: [src, 'middleware', 'index.js'], ifNew: true },
+      // todo { type: 'copy', src: ['src', 'middleware', 'index.js'], dest: [src, 'middleware', 'index.js'], ifNew: true },
       { type: 'copy', src: ['src', 'refs', 'common.json'],    dest: [src, 'refs', 'common.json'],    ifNew: true },
 
       // Files rewritten every (re)generation.
@@ -185,14 +192,16 @@ module.exports = class AppGenerator extends Generator {
       { type: 'tpl',  src: ['src', 'channels.ejs'],           dest: [src, 'channels.js'] }, // work todo
 
 
-      { type: 'tpl',  src: ['..', '..', shared, 'config.default.ejs'], dest: ['config', 'default.js'], ifSkip: !js },
-      { type: 'tpl',  src: ['..', '..', shared, 'src.app.ejs'],        dest: [src, 'app.js'] },
-      { type: 'tpl',  src: ['..', '..', shared, 'services.index.ejs'], dest: [src, 'services', 'index.js'] },
+      { type: 'tpl',  src: ['..', '..', shared, 'config.default.ejs'],  dest: ['config', 'default.js'], ifSkip: !js },
+      { type: 'tpl',  src: ['..', '..', shared, 'middleware.index.ejs'], dest: [src, 'middleware', 'index.js'] },
+      { type: 'tpl',  src: ['..', '..', shared, 'src.app.ejs'],         dest: [src, 'app.js'] },
+      { type: 'tpl',  src: ['..', '..', shared, 'services.index.ejs'],  dest: [src, 'services', 'index.js'] },
     ];
 
-    generatorFs(this, context, todos);
+    generatorFs(generator, context, todos);
 
-    this.logSteps && console.log('>>>>> app generator finished writing()', todos.map(todo => todo.src || todo.obj));
+    generator.logSteps && console.log('>>>>> app generator finished writing()', todos.map(todo => todo.src || todo.obj));
+    */
   }
 
   install () {

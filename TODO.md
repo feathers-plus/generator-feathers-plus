@@ -20,8 +20,13 @@ OK - connection string prompted for again when nedb service is regenerated
 OK - test src !== 'src'
 - lib/generator.js defaultConfig needs to change if config/default.js is to be used
 OK - don't write specs expanded to file
-- put in lib/generator.js generator.conflicter.force = true;
+OK - put in lib/generator.js generator.conflicter.force = true;
 - enable in graphql/index.js // '@feathers-plus/graphql'
 - hooks modules should be ifNew: true
 - get 'npm start' working for graphql
 - generate graphql has linting issues
+- check all // todo
+OK - updateSpecs likely no longer needs to update 'specs' param
+- remove configJs: false
+OK - call specsExpand from specs.js
+- check if nedb-1.validate.js does not create props at code: base when service is first created

@@ -15,6 +15,8 @@ const generatorFs = require('../../lib/generator-fs');
 const { refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
 
+const generatorWriting = require('../writing');
+
 const nativeFuncs = {
   [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
   [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId',
@@ -33,8 +35,10 @@ module.exports = class ServiceGenerator extends Generator {
     let serviceSpecs;
     this.checkPackage();
 
-    const { props, _specs: specs } = this;
+    const { props, _specs: specs } = generator;
+    inspector('specs: service before', specs)
     const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
+    inspector('specs: service after', specs)
 
     props.feathersSpecs = feathersSpecs;
     props.mapping= mapping;
@@ -69,7 +73,6 @@ module.exports = class ServiceGenerator extends Generator {
           try {
             initSpecs('service', { name: input });
             serviceSpecs = specs.services[input];
-            inspector('serviceSpecs', serviceSpecs)
 
             const fileName = specs.services[input].fileName || input; // todo || input is temporary
             const path = join(process.cwd(), specs.app.src, 'services', fileName, `${fileName}.schema`);
@@ -204,9 +207,12 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   writing() {
-    this.logSteps && console.log('>>>>> service generator started writing()');
+    generatorWriting(this, 'service');
+      /*
+    const generator = this;
+    generator.logSteps && console.log('>>>>> service generator started writing()');
 
-    const { props, _specs: specs } = this;
+    const { props, _specs: specs } = generator;
 
     const { adapter, kebabName } = props;
     const moduleMappings = {
@@ -220,42 +226,42 @@ module.exports = class ServiceGenerator extends Generator {
       rethinkdb: 'feathers-rethinkdb'
     };
     const serviceModule = moduleMappings[adapter];
-    const modelTpl = `${adapter}${this.props.authentication ? '-user' : ''}.js`;
+    const modelTpl = `${adapter}${props.authentication ? '-user' : ''}.js`;
     const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
 
     const context = Object.assign({},
       props,
       {
         specs,
-        libDirectory: this.libDirectory,
+        libDirectory: generator.libDirectory,
         modelName: hasModel ? `${kebabName}.model` : null,
-        path: stripSlashes(this.props.path),
+        path: stripSlashes(props.path),
         serviceModule,
       }
     );
 
-    updateSpecs(specs, 'service', this.props, 'service generator');
+    updateSpecs('service', props, 'service generator');
 
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
     if (adapter !== 'generic' && adapter !== 'memory') {
-      this.composeWith(require.resolve('../connection'), { props: {
+      generator.composeWith(require.resolve('../connection'), { props: {
         adapter,
-        service: this.props.name
+        service: props.name
       } });
     }
 
     // Common abbreviations for building 'todos'.
-    const src = props.src;
-    const libDir = this.libDirectory;
-    const testDir = this.testDirectory;
+    const src = specs.app.src;
+    const libDir = generator.libDirectory;
+    const testDir = generator.testDirectory;
     const shared = 'templates-shared';
     const js = specs.options.configJs;
     // Custom abbreviations.
     const mainFileTpl = fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`)) ?
       ['types', `${adapter}.js`] : ['name.service.ejs'];
-    const auth = this.props.authentication ? '-auth' : '';
-    const asyn = this.hasAsync ? 'class-async.js' : 'class.js';
+    const auth = props.authentication ? '-auth' : '';
+    const asyn = generator.hasAsync ? 'class-async.js' : 'class.js';
     const kn = kebabName;
 
     const todos = [
@@ -273,13 +279,14 @@ module.exports = class ServiceGenerator extends Generator {
       { type: 'tpl',  src: ['..', '..', shared, 'services.index.ejs'], dest: [libDir, 'services', 'index.js'] },
     ];
 
-    generatorFs(this, context, todos);
+    generatorFs(generator, context, todos);
 
     if (serviceModule.charAt(0) !== '.') {
-      this._packagerInstall([ serviceModule ], { save: true });
+      generator._packagerInstall([ serviceModule ], { save: true });
     }
 
-    this.logSteps && console.log('>>>>> service generator finished writing', todos.map(todo => todo.src || todo.obj));
+    generator.logSteps && console.log('>>>>> service generator finished writing', todos.map(todo => todo.src || todo.obj));
+    */
   }
 
   install () {

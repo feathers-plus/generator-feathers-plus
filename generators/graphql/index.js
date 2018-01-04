@@ -134,7 +134,7 @@ module.exports = class ServiceGenerator extends Generator {
       }
     );
 
-    updateSpecs(specs, 'graphql', props);
+    updateSpecs('graphql', props);
 
     // Common abbreviations for building 'todos'.
     const src = props.src;
