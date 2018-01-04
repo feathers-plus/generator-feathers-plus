@@ -16,7 +16,7 @@ const base = deepMerge.all([{},
    __str = stringifyPlus(__jsonSchema).replace(/"ID"/g, 'ID')
      .split('\n').map(str => `  ${str}`).join('\n');
 -%>
-  <%- insertFragment('base', `${__str},`) %>
+  <%- insertFragment('base', Object.keys(__jsonSchema).length === 0 ? undefined : `${__str},`) %>
   <%- insertFragment('base_more') %>
 ]);
 

@@ -1,6 +1,6 @@
 const Generator = require('../../lib/generator');
 const path = require('path');
-const makeConfig = require('./configs');
+// todo const makeConfig = require('./configs');
 const { kebabCase } = require('lodash');
 
 const generatorFs = require('../../lib/generator-fs');

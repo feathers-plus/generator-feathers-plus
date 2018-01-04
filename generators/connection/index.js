@@ -6,11 +6,13 @@ const generatorFs = require('../../lib/generator-fs');
 const specsExpand = require('../../lib/specs-expand');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
 
+const generatorWriting = require('../writing');
+
 module.exports = class ConnectionGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
 
-    initSpecs('connections');
+    initSpecs('connection');
     this.dependencies = [];
   }
 
@@ -165,6 +167,8 @@ module.exports = class ConnectionGenerator extends Generator {
 
   // We generate all the defined connections, not just the current one.
   writing () {
+    generatorWriting(this, 'connection');
+    /*
     const generator = this;
     generator.logSteps && console.log('>>>>> connection generator started writing()');
 
@@ -217,6 +221,7 @@ module.exports = class ConnectionGenerator extends Generator {
     });
 
     generator.logSteps && console.log('>>>>> connection generator finished writing()', todos.map(todo => todo.src || todo.obj));
+    */
   }
 
   install () {

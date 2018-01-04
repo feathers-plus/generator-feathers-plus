@@ -36,9 +36,7 @@ module.exports = class ServiceGenerator extends Generator {
     this.checkPackage();
 
     const { props, _specs: specs } = generator;
-    inspector('specs: service before', specs)
     const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
-    inspector('specs: service after', specs)
 
     props.feathersSpecs = feathersSpecs;
     props.mapping= mapping;
