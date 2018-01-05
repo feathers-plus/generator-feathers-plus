@@ -6,6 +6,8 @@ const generatorFs = require('../../lib/generator-fs');
 const { refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs, updateSpecs } = require('../../lib/specs');
 
+const generatorWriting = require('../writing');
+
 module.exports = class MiddlewareGenerator extends Generator {
   async initializing() {
     this.fragments = await refreshCodeFragments();
@@ -33,32 +35,15 @@ module.exports = class MiddlewareGenerator extends Generator {
         camelName: camelCase(props.name)
       });
 
-      initSpecs('middlewares', props);
+      initSpecs('middleware', props);
       this.logSteps && console.log('>>>>> middleware generator finished prompting()');
     });
   }
 
-  _transformCode (code) {
-    const { props } = this;
-    const ast = j(code);
-    const mainExpression = ast.find(j.FunctionExpression)
-      .closest(j.ExpressionStatement);
-
-    if (mainExpression.length !== 1) {
-      throw new Error(`${this.libDirectory}/middleware/index.js seems to have more than one function declaration and we can not register the new middleware. Did you modify it?`);
-    }
-
-    const middlewareRequire = `const ${props.camelName} = require('./${props.kebabName}');`;
-    const middlewareCode = props.path === '*' ? `app.use(${props.camelName}());` : `app.use('${props.path}', ${props.camelName}());`;
-
-    mainExpression.insertBefore(middlewareRequire);
-    mainExpression.insertLastInFunction(middlewareCode);
-
-    return ast.toSource();
-  }
-
   // We generate all the defined middlewares, not just the current one.
   writing () {
+    generatorWriting(this, 'middleware');
+    /*
     const generator = this;
     generator.logSteps && console.log('>>>>> middleware generator started writing()');
 
@@ -95,5 +80,6 @@ module.exports = class MiddlewareGenerator extends Generator {
     });
 
     generatorFs(generator, context, todos);
+    */
   }
 };

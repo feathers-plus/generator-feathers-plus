@@ -16,7 +16,7 @@ npm install generator-feathers-plus --save
 
 ## Documentation
 
-Please refer to the [generator-feathers-plus documentation](http://docs.feathersjs.com/) for more details.
+Please refer to the [feathers-plus documentation](https://feathers-plus.github.io/) for more details.
 
 ## Complete Example
 

@@ -7,6 +7,8 @@ const specsExpand = require('../../lib/specs-expand');
 const { refreshCodeFragments } = require('../../lib/code-fragments');
 const { updateSpecs } = require('../../lib/specs');
 
+const generatorWriting = require('../writing');
+
 const OAUTH2_STRATEGY_MAPPINGS = {
   auth0: 'passport-auth0',
   google: 'passport-google-oauth20',
@@ -132,6 +134,8 @@ module.exports = class AuthGenerator extends Generator {
   }
 
   writing() {
+    generatorWriting(this, 'authentication');
+    /*
     const generator = this;
     generator.logSteps && console.log('>>>>> authentication generator started writing()');
 
@@ -202,7 +206,8 @@ module.exports = class AuthGenerator extends Generator {
       save: true
     });
 
-    generator.logSteps && console.log('>>>>> authentication generator finished writing'/*, todos.map(todo => todo.src || todo.obj)*/);
+    generator.logSteps && console.log('>>>>> authentication generator finished writing', todos.map(todo => todo.src || todo.obj));
+    */
   }
 
   install () {

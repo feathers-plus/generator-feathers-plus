@@ -1,0 +1,21 @@
+<%# -%>
+<%# --- forEach-1 starts below. -%>
+<% Object.keys(specs.middlewares || {}).sort().forEach(name => {
+  __temp = specs.middlewares[name];
+-%>
+const <%- __temp.camel %> = require('./<%- __temp.kebab %>');
+<% }) -%>
+<%# --- forEach-1 ends above. -%>
+
+module.exports = function (app) { // eslint-disable-line no-unused-vars
+  // Add your custom middleware here. Remember, that
+  // in Express the order matters
+<%# -%>
+<%# --- forEach-2 starts below. -%>
+<% Object.keys(specs.middlewares || {}).forEach(name => {
+  __temp = specs.middlewares[name];
+-%>
+  app.use(<%- __temp.path !== '*' ? `'${__temp.path}', ` : '' %><%- __temp.camel %>());
+<% }) -%>
+<%# --- forEach-2 ends above. -%>
+};

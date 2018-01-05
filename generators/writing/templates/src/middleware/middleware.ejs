@@ -1,0 +1,6 @@
+module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
+  return function <%= specs.middlewares[mwName].camel %>(req, res, next) {
+    console.log('<%= mwName %> middleware is running'); // eslint-disable-line no-console
+    next();
+  };
+};

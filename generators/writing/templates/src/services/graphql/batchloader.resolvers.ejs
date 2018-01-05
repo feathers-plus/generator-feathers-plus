@@ -1,0 +1,179 @@
+
+const { getByDot, setByDot } = require('feathers-hooks-common');
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+let moduleExports = function batchLoaderResolvers(app, options) {
+  let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem, // eslint-disable-line
+    feathersBatchLoader: { feathersBatchLoader } } = options;
+
+<% let __temp = Object.keys(mapping.feathers).map(serviceName =>
+  `  let ${serviceName} = app.service('${mapping.feathers[serviceName].path}');`
+); -%>
+  <%- insertFragment('services', __temp) %>
+
+  <%- insertFragment('get-result', [
+    '  // Given a fieldName in the parent record, return the result from a BatchLoader',
+    '  // The result will be an object, an array of objects, or null.',
+    '  function getResult(batchLoaderName, fieldName) {',
+    '    const contentByDot = `batchLoaders.${batchLoaderName}`;',
+    '',
+    '    // `content.app = app` is the Feathers app object.',
+    '    // `content.batchLoaders = {}` is where the BatchLoaders for a request are stored.',
+    '    return (parent, args, content, ast) => {',
+    '      let batchLoader = getByDot(content, contentByDot);',
+    '',
+    '      if (!batchLoader) {',
+    '        batchLoader = getBatchLoader(batchLoaderName, parent, args, content, ast);',
+    '        setByDot(content, contentByDot, batchLoader);',
+    '      }',
+    '',
+    '      return batchLoader.load(parent[fieldName]);',
+    '    };',
+    '  }',
+  ]) %>
+
+  // A transient BatchLoader can be created only when (one of) its resolver has been called,
+  // as the BatchLoader loading function may require data from the 'args' passed to the resolver.
+  // Note that each resolver's 'args' are static throughout a GraphQL call.
+  function getBatchLoader(dataLoaderName, parent, args, content, ast) {
+    let feathersParams;
+
+    switch (dataLoaderName) {
+      /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
+      <%- insertFragment('bl-persisted', [
+        '      // case \'_persisted.user.one.id\': // service user, returns one object, key is field id',
+      ]) %>
+
+      /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
+      <%- insertFragment('bl-shared', [
+          '      // *.*: User',
+          '      // case \'_shared.user.one.id\': // service user, returns one object, key is field id',
+      ]) %>
+
+      /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
+<%# -%>
+<%# --- forEach-a starts below. Loop thru the schemas of GraphQL enabled services. -%>
+<% Object.keys(mapping.graphqlService).forEach(graphqlName => {
+  __serviceName = mapping.graphqlService[graphqlName].service;
+  __add = feathersSpecs[__serviceName]._extensions.graphql.add;
+-%>
+<%# -%>
+<%# --- forEach-b starts below. Loop thru the fields to be renamed. -%>
+<% Object.keys(__add).forEach(fieldName => {
+  __addField = __add[fieldName];
+-%>
+<%# -%>
+<%# --- if-1c starts below. -%>
+<% if (__addField.serviceName) {
+  __code = '[!]';
+  if (!__addField.isArray) {
+    __code = __addField.isNullable ? '' : '!';
+  }
+  __temp = [
+    `      case '${graphqlName}.${fieldName}':`,
+    `        return feathersBatchLoader(dataLoaderName, '${__code}', '${__addField.relation.otherTable}',`,
+    '          keys => {',
+    '            feathersParams = convertArgsToFeathers(args,',
+    `              { query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined }, populate: false }`,
+    '            );',
+    `            return ${__addField.serviceName}.find(feathersParams);`,
+    '          }',
+    '        );',
+  ];
+-%>
+
+      // <%- `${graphqlName}.${fieldName}${__addField.args}: ${__addField.graphqlName}` %>
+      <%- insertFragment(`bl-${graphqlName}-${fieldName}`, __temp) %>
+<% } -%>
+<%# --- if-c ends above. -%>
+<% }); -%>
+<%# --- forEach-b ends above. -%>
+<% }); -%>
+<%# --- forEach-a ends above. -%>
+
+      /* Throw on unknown BatchLoader name. */
+      default:
+        <%- insertFragment('bl-default', [
+          '        throw new Error(`GraphQL query requires BatchLoader named \'${dataLoaderName}\' but no definition exists for it.`);',
+        ]) %>
+    }
+  }
+
+  let returns = {
+<%# -%>
+<%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
+<% Object.keys(mapping.graphqlService).forEach(graphqlName => {
+  __serviceName = mapping.graphqlService[graphqlName].service;
+  __add = feathersSpecs[__serviceName]._extensions.graphql.add;
+-%>
+
+    <%- graphqlName %>: {
+<%# -%>
+<%# --- forEach-2 starts below. Loop thru the fields to be renamed. -%>
+<% Object.keys(__add).forEach(fieldName => {
+  __addField = __add[fieldName];
+-%>
+
+      // <%- fieldName %><%- __addField.args %>: <%- __addField.graphqlName %>
+<%# -%>
+<%# --- if/else-1 starts below. -%>
+<% if (__addField.serviceName) {
+  __temp = [
+    `      ${fieldName}: getResult('${graphqlName}.${fieldName}', '${__addField.relation.ourTable}'),`,
+  ];
+-%>
+      <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
+<% } else { -%>
+      <%- insertFragment(`resolver-${graphqlName}-${fieldName}-non`, [
+        `      ${fieldName}: (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.'); },`,
+      ]) %>
+<% } -%>
+<%# --- if/else-1 ends above. -%>
+<% }); -%>
+<%# --- forEach-2 ends above. -%>
+    },
+<% }); -%>
+<%# --- forEach-1 ends above. -%>
+
+    <%- insertFragment('resolver_field_more') %>
+
+    Query: {
+<%# -%>
+<%# --- forEach-3 starts below. Loop thru the schemas of GraphQL enabled services. -%>
+<% Object.keys(mapping.graphqlService).forEach(graphqlName => {
+  __serviceName = mapping.graphqlService[graphqlName].service;
+  __graphql = feathersSpecs[__serviceName]._extensions.graphql;
+  __temp = [
+    `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
+    `      get${graphqlName} (parent, args, content, info) {`,
+    '        const feathersParams = convertArgsToFeathers(args);',
+    `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem);`,
+    '      },',
+    '',
+    `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
+    `      find${graphqlName}(parent, args, content, info) {`,
+    `        const feathersParams = convertArgsToFeathers(args${__graphql.serviceSortParams});`,
+    `        return ${__serviceName}.find(feathersParams).then(extractAllItems);`,
+    '      },',
+  ];
+-%>
+
+      <%- insertFragment(`query-${graphqlName}`, __temp) %>
+<% }); -%>
+<%# --- forEach-3 ends above. -%>
+      <%- insertFragment('resolver_query_more') %>
+    },
+  };
+
+  //!code: func_return //!end
+  return returns;
+};
+
+<%- insertFragment('more') %>
+
+<%- insertFragment('exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

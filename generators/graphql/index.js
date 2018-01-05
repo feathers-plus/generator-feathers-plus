@@ -15,6 +15,8 @@ const { initSpecs, updateSpecs } = require('../../lib/specs');
 const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
 
+const generatorWriting = require('../writing');
+
 module.exports = class ServiceGenerator extends Generator {
   async initializing() {
     this.fragments = await refreshCodeFragments();
@@ -115,6 +117,8 @@ module.exports = class ServiceGenerator extends Generator {
   }
 
   writing() {
+    generatorWriting(this, 'graphql');
+    /*
     this.logSteps && console.log('>>>>> graphql generator started writing()');
 
     const { props, _specs: specs } = this;
@@ -170,6 +174,7 @@ module.exports = class ServiceGenerator extends Generator {
     ], { save: true });
 
     this.logSteps && console.log('>>>>> graphql generator finished writing()', todos.map(todo => todo.src || todo.obj));
+    */
   }
 
   install () {

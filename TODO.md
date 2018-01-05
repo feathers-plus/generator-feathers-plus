@@ -31,3 +31,8 @@ OK - updateSpecs likely no longer needs to update 'specs' param
 OK - call specsExpand from specs.js
 - check if nedb-1.validate.js does not create props at code: base when service is first created
 - "shows a 404 JSON error without stack trace" shows a stack trace.
+- move things like deepMerge into the default context
+- is context.requiresAuth needed in writing#app?
+- should class.js and class-async.js be in their own folder?
+- service generator, this looks wrong. (Also check graphql)
+  const auth = generator.props.authentication ? '.auth' : '';
