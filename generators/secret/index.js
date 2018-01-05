@@ -1,4 +1,5 @@
-const crypto = require('crypto');
+
+const { randomBytes } = require('crypto');
 const Generator = require('../../lib/generator');
 
 module.exports = class SecretGenerator extends Generator {
@@ -6,11 +7,9 @@ module.exports = class SecretGenerator extends Generator {
     super(args, opts);
   }
 
-  prompting () {}
-
   writing () {
     this.props = {
-      secret: crypto.randomBytes(256).toString('hex')
+      secret: randomBytes(256).toString('hex')
     };
   }
 

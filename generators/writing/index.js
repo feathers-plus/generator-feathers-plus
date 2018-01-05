@@ -1,13 +1,13 @@
 
-const _ = require('lodash');
 const crypto = require('crypto');
-const fs = require('fs');
-const { join, resolve } = require('path');
+const { camelCase, kebabCase, upperFirst } = require('lodash');
+const { existsSync } = require('fs');
+const { join } = require('path');
 
 const generatorFs = require('../../lib/generator-fs');
 const makeConfig = require('./templates/_configs');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
-const { setPath, updateSpecs } = require('../../lib/specs');
+const { updateSpecs } = require('../../lib/specs');
 
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
 
@@ -131,6 +131,19 @@ module.exports = function generatorWriting(generator, what) {
 
     // Update dependencies
     // todo dependencies defined in app#prompting()
+    generator.props.providers.forEach(provider => {
+      const type = provider === 'rest' ? 'express' : provider;
+
+      generator.dependencies.push(`@feathersjs/${type}`);
+    });
+
+    generator._packagerInstall(generator.dependencies, {
+      save: true
+    });
+
+    generator._packagerInstall(generator.devDependencies, {
+      saveDev: true
+    });
   }
 
   // ===== service =================================================================================
@@ -148,7 +161,7 @@ module.exports = function generatorWriting(generator, what) {
     };
     const serviceModule = moduleMappings[adapter];
     const modelTpl = `${adapter}${authentication ? '-user' : ''}.js`;
-    const hasModel = fs.existsSync(join(serPath, '_model', modelTpl));
+    const hasModel = existsSync(join(serPath, '_model', modelTpl));
 
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
@@ -168,7 +181,7 @@ module.exports = function generatorWriting(generator, what) {
     });
 
     // Custom abbreviations for building 'todos'.
-    const mainFileTpl = fs.existsSync(join(serPath, '_types', `${adapter}.js`)) ?
+    const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.js`)) ?
       [serPath, '_model', '_types', `${adapter}.js`] : [serPath, 'name', 'name.service.ejs'];
     const auth = authentication ? '-auth' : '';
     const asyn = generator.hasAsync ? 'class-async.js' : 'class.js';
@@ -233,8 +246,8 @@ module.exports = function generatorWriting(generator, what) {
   function authentication(generator) {
     // Custom template context
     context = Object.assign({}, context, {
-      kebabEntity: _.kebabCase(props.entity),
-      camelEntity: _.camelCase(props.entity),
+      kebabEntity: kebabCase(props.entity),
+      camelEntity: camelCase(props.entity),
       oauthProviders: [],
     });
 
@@ -252,7 +265,7 @@ module.exports = function generatorWriting(generator, what) {
         dependencies.push(oauthProvider);
         context.oauthProviders.push({
           name: strategy,
-          strategyName: `${_.upperFirst(strategy)}Strategy`,
+          strategyName: `${upperFirst(strategy)}Strategy`,
           module: oauthProvider
         });
       } else {
@@ -309,7 +322,7 @@ module.exports = function generatorWriting(generator, what) {
     const { adapter, authentication, kebabName, name, path } = props;
 
     //todo const modelTpl = `${adapter}${generator.props.authentication ? '-user' : ''}.js`;
-    //todo const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
+    //todo const hasModel = existsSync(path.join(templatePath, 'model', modelTpl));
 
     // Custom template context
     context = Object.assign({}, context, {
@@ -344,7 +357,7 @@ module.exports = function generatorWriting(generator, what) {
     // Update dependencies
     generator._packagerInstall([
       'graphql',
-      '@feathers-plus/graphql',
+      //todo '@feathers-plus/graphql',
       'merge-graphql-schemas',
     ], { save: true });
   }

@@ -1,14 +1,11 @@
-const Generator = require('../../lib/generator');
+
 const path = require('path');
-// todo const makeConfig = require('./configs');
 const { kebabCase } = require('lodash');
 
-const generatorFs = require('../../lib/generator-fs');
-const specsExpand = require('../../lib/specs-expand');
-const { refreshCodeFragments } = require('../../lib/code-fragments');
-const { initSpecs, updateSpecs } = require('../../lib/specs');
-
+const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
+const { initSpecs } = require('../../lib/specs');
+const { refreshCodeFragments } = require('../../lib/code-fragments');
 
 module.exports = class AppGenerator extends Generator {
   constructor (args, opts) {
@@ -45,7 +42,7 @@ module.exports = class AppGenerator extends Generator {
   }
 
   prompting () {
-    const { props, _specs: specs } = this;
+    const { _specs: specs } = this;
 
     const dependencies = this.dependencies.concat(this.devDependencies)
       .concat([
@@ -133,97 +130,5 @@ module.exports = class AppGenerator extends Generator {
 
   writing () {
     generatorWriting(this, 'app');
-    /*
-    const generator = this;
-    generator.logSteps && console.log('>>>>> app generator started writing()');
-
-    const { props, _specs: specs } = generator;
-    const pkg = generator.pkg = makeConfig.package(generator);
-
-    const context = Object.assign({},
-      props,
-      {
-        specs,
-        hasProvider (name) { return props.providers.indexOf(name) !== -1; },
-        requiresAuth: false,
-      },
-    );
-
-    updateSpecs('app', props, 'app generator');
-    //specsExpand(specs);
-
-    // Common abbreviations for building 'todos'.
-    const src = specs.app.src;
-    const libDir = generator.libDirectory;
-    const testDir = generator.testDirectory;
-    const shared = 'templates-shared';
-    const js = specs.options.configJs;
-    // Custom abbreviations.
-    const configDefault = makeConfig.configDefault(generator);
-    const configProd = makeConfig.configProduction(generator);
-
-    const todos = [
-      // Files which are written only if they don't exist. They are never rewritten (except for default.json)
-      { type: 'copy', src: '.editorconfig',  dest: '.editorconfig',  ifNew: true },
-      { type: 'copy', src: '.eslintrc.json', dest: '.eslintrc.json', ifNew: true },
-      // This name hack is necessary because NPM does not publish `.gitignore` files
-      { type: 'copy', src: '_gitignore',     dest: '.gitignore',     ifNew: true },
-      { type: 'copy', src: 'LICENSE',        dest: 'LICENSE',        ifNew: true },
-      { type: 'tpl',  src: 'README.md.ejs',  dest: 'README.md',      ifNew: true },
-      { type: 'json', obj: pkg,              dest: 'package.json',   ifNew: true },
-
-      { type: 'json', obj: configDefault,    dest: ['config', 'default.json'],    ifNew: true,  ifSkip: js },
-      { type: 'json', obj: configProd,       dest: ['config', 'production.json'], ifNew: true,  ifSkip: js },
-
-      { type: 'copy', src: ['public', 'favicon.ico'],         dest: ['public', 'favicon.ico'],       ifNew: true },
-      { type: 'copy', src: ['public', 'index.html'],          dest: ['public', 'index.html'],        ifNew: true },
-
-      { type: 'tpl',  src: ['test', 'app.test.js'],           dest: [testDir, 'app.test.js'],        ifNew: true },
-
-      { type: 'copy', src: ['src', 'hooks', 'logger.js'],     dest: [src, 'hooks', 'logger.js'],     ifNew: true },
-      // todo { type: 'copy', src: ['src', 'middleware', 'index.js'], dest: [src, 'middleware', 'index.js'], ifNew: true },
-      { type: 'copy', src: ['src', 'refs', 'common.json'],    dest: [src, 'refs', 'common.json'],    ifNew: true },
-
-      // Files rewritten every (re)generation.
-      { type: 'tpl',  src: ['config', 'production.ejs'],      dest: ['config', 'production.js'],     ifSkip: !js },
-      { type: 'tpl',  src: ['src', 'index.ejs'],              dest: [src, 'index.js'] },
-
-      { type: 'tpl',  src: ['src', 'app.hooks.ejs'],          dest: [src, 'app.hooks.js'] },
-      { type: 'tpl',  src: ['src', 'channels.ejs'],           dest: [src, 'channels.js'] }, // work todo
-
-
-      { type: 'tpl',  src: ['..', '..', shared, 'config.default.ejs'],  dest: ['config', 'default.js'], ifSkip: !js },
-      { type: 'tpl',  src: ['..', '..', shared, 'middleware.index.ejs'], dest: [src, 'middleware', 'index.js'] },
-      { type: 'tpl',  src: ['..', '..', shared, 'src.app.ejs'],         dest: [src, 'app.js'] },
-      { type: 'tpl',  src: ['..', '..', shared, 'services.index.ejs'],  dest: [src, 'services', 'index.js'] },
-    ];
-
-    generatorFs(generator, context, todos);
-
-    generator.logSteps && console.log('>>>>> app generator finished writing()', todos.map(todo => todo.src || todo.obj));
-    */
-  }
-
-  install () {
-    // Write file explicitly so the user cannot prevent its update using the overwrite message.
-    this.props.providers.forEach(provider => {
-      const type = provider === 'rest' ? 'express' : provider;
-
-      this.dependencies.push(`@feathersjs/${type}`);
-    });
-
-    this._packagerInstall(this.dependencies, {
-      save: true
-    });
-
-    this._packagerInstall(this.devDependencies, {
-      saveDev: true
-    });
-
-    this.logSteps && console.log('>>>>> app generator finished install()');
-  }
-
-  end () {
-    this.logSteps && console.log('>>>>> app generator finished end()');
   }
 };

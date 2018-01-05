@@ -1,21 +1,21 @@
-const _ = require('lodash');
-const fs = require('fs');
+
 const path = require('path');
-const deepMerge = require('deepmerge');
-const Generator = require('../../lib/generator');
 const chalk = require('chalk');
+const deepMerge = require('deepmerge');
 const mongoose = require('mongoose');
+
+const { camelCase, kebabCase, snakeCase } = require('lodash');
 const { join } = require('path');
 
-const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
-const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const doesFileExist = require('../../lib/does-file-exist');
-const stringifyPlus = require('../../lib/stringify-plus');
-const generatorFs = require('../../lib/generator-fs');
-const { refreshCodeFragments } = require('../../lib/code-fragments');
-const { initSpecs, updateSpecs } = require('../../lib/specs');
-
+const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
+const serviceSpecsExpand = require('../../lib/service-specs-expand');
+const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
+const stringifyPlus = require('../../lib/stringify-plus');
+
+const { refreshCodeFragments } = require('../../lib/code-fragments');
+const { initSpecs } = require('../../lib/specs');
 
 const nativeFuncs = {
   [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
@@ -79,7 +79,7 @@ module.exports = class ServiceGenerator extends Generator {
               generator.log('\n\n' + chalk.green.bold('We are adding a new service.') + '\n');
               generator.log(chalk.green([
                 'Once this generation is complete, define the JSON-schema for the data in module',
-                `"services/${_.kebabCase(input)}/${input}.schema.js". Then (re)generate this service.`,
+                `"services/${kebabCase(input)}/${input}.schema.js". Then (re)generate this service.`,
                 '',
                 'This second generation will take the schema you added and generate',
                 '- A Mongoose model, and',
@@ -161,7 +161,7 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'Which path should the service be registered on?',
         when: !props.path,
         default(answers) {
-          return serviceSpecs.path || `/${_.kebabCase(answers.name || props.name)}`;
+          return serviceSpecs.path || `/${kebabCase(answers.name || props.name)}`;
         },
         validate(input) {
           if(input.trim() === '') {
@@ -195,9 +195,9 @@ module.exports = class ServiceGenerator extends Generator {
       this.props = Object.assign({
         requiresAuth: false
       }, props, answers, {
-        snakeName: _.snakeCase(name),
-        kebabName: _.kebabCase(name),
-        camelName: _.camelCase(name)
+        snakeName: snakeCase(name),
+        kebabName: kebabCase(name),
+        camelName: camelCase(name)
       });
 
       this.logSteps && console.log('>>>>> service generator finished prompting()');
@@ -206,98 +206,5 @@ module.exports = class ServiceGenerator extends Generator {
 
   writing() {
     generatorWriting(this, 'service');
-      /*
-    const generator = this;
-    generator.logSteps && console.log('>>>>> service generator started writing()');
-
-    const { props, _specs: specs } = generator;
-
-    const { adapter, kebabName } = props;
-    const moduleMappings = {
-      generic: `./${kebabName}.class.js`,
-      memory: 'feathers-memory',
-      nedb: 'feathers-nedb',
-      mongodb: 'feathers-mongodb',
-      mongoose: 'feathers-mongoose',
-      sequelize: 'feathers-sequelize',
-      knex: 'feathers-knex',
-      rethinkdb: 'feathers-rethinkdb'
-    };
-    const serviceModule = moduleMappings[adapter];
-    const modelTpl = `${adapter}${props.authentication ? '-user' : ''}.js`;
-    const hasModel = fs.existsSync(path.join(templatePath, 'model', modelTpl));
-
-    const context = Object.assign({},
-      props,
-      {
-        specs,
-        libDirectory: generator.libDirectory,
-        modelName: hasModel ? `${kebabName}.model` : null,
-        path: stripSlashes(props.path),
-        serviceModule,
-      }
-    );
-
-    updateSpecs('service', props, 'service generator');
-
-    // Run the `connection` generator for the selected database
-    // It will not do anything if the db has been set up already
-    if (adapter !== 'generic' && adapter !== 'memory') {
-      generator.composeWith(require.resolve('../connection'), { props: {
-        adapter,
-        service: props.name
-      } });
-    }
-
-    // Common abbreviations for building 'todos'.
-    const src = specs.app.src;
-    const libDir = generator.libDirectory;
-    const testDir = generator.testDirectory;
-    const shared = 'templates-shared';
-    const js = specs.options.configJs;
-    // Custom abbreviations.
-    const mainFileTpl = fs.existsSync(path.join(templatePath, 'types', `${adapter}.js`)) ?
-      ['types', `${adapter}.js`] : ['name.service.ejs'];
-    const auth = props.authentication ? '-auth' : '';
-    const asyn = generator.hasAsync ? 'class-async.js' : 'class.js';
-    const kn = kebabName;
-
-    const todos = [
-      // Files which are written only if they don't exist. They are never rewritten.
-      { type: 'tpl',  src: ['test', 'name.test.ejs'], dest: [testDir, 'services', `${kn}.test.js`],        ifNew: true },
-      { type: 'tpl',  src: mainFileTpl,               dest: [libDir, 'services', kn, `${kn}.service.js`],  ifNew: true },
-      { type: 'tpl',  src: ['model', modelTpl],       dest: [libDir, 'models', `${context.modelName}.js`], ifNew: true, ifSkip: !context.modelName },
-      { type: 'tpl',  src: asyn,                      dest: [libDir, 'services', kn, `${kn}.class.js`],    ifNew: true, ifSkip: adapter !== 'generic' },
-
-      // Files rewritten every (re)generation.
-      { type: 'tpl',  src: 'name.schema.ejs',         dest: [libDir, 'services', kn, `${kn}.schema.js`] },
-      { type: 'tpl',  src: 'name.mongoose.ejs',       dest: [libDir, 'services', kn, `${kn}.mongoose.js`] },
-      { type: 'tpl',  src: 'name.validate.ejs',       dest: [libDir, 'services', kn, `${kn}.validate.js`] },
-      { type: 'tpl',  src: `name.hooks${auth}.ejs`,   dest: [libDir, 'services', kn, `${kn}.hooks.js`] },
-      { type: 'tpl',  src: ['..', '..', shared, 'services.index.ejs'], dest: [libDir, 'services', 'index.js'] },
-    ];
-
-    generatorFs(generator, context, todos);
-
-    if (serviceModule.charAt(0) !== '.') {
-      generator._packagerInstall([ serviceModule ], { save: true });
-    }
-
-    generator.logSteps && console.log('>>>>> service generator finished writing', todos.map(todo => todo.src || todo.obj));
-    */
-  }
-
-  install () {
-    this.logSteps && console.log('>>>>> service generator finished install()');
-  }
-
-  end () {
-    this.logSteps && console.log('>>>>> service generator finished end()');
   }
 };
-
-const { inspect } = require('util');
-function inspector(desc, obj, depth = 5) {
-  console.log(`\n${desc}`);
-  console.log(inspect(obj, { depth, colors: true }));
-}
