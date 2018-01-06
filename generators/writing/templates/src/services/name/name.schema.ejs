@@ -38,9 +38,9 @@ let extensions = {
       <%- insertFragment('graphql_discard') %>
     ],
     add: {
-    <%- insertFragment('graphql_add', [
+      <%- insertFragment('graphql_add', [
         '      // __author__: { type: \'__User__!\', args: false, relation: { ourTable: \'__authorId__\', otherTable: \'__id__\' } },',
-    ])%>
+      ])%>
     },
     <%- insertFragment('graphql_more') %>
   },

@@ -29,10 +29,13 @@ OK - put in lib/generator.js generator.conflicter.force = true;
 OK - updateSpecs likely no longer needs to update 'specs' param
 - remove configJs: false
 OK - call specsExpand from specs.js
-- check if nedb-1.validate.js does not create props at code: base when service is first created
+OK - check if nedb-1.validate.js does not create props at code: base when service is first created
+- nedb-1.validate.js creates empty 'base' when a service without a schema is regenerated.
 - "shows a 404 JSON error without stack trace" shows a stack trace.
 - move things like deepMerge into the default context
 - is context.requiresAuth needed in writing#app?
 - should class.js and class-async.js be in their own folder?
 - service generator, this looks wrong. (Also check graphql)
   const auth = generator.props.authentication ? '.auth' : '';
+- look at how dependencies are done in writing() generators
+- add new/old headings to generators

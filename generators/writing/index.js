@@ -227,7 +227,7 @@ module.exports = function generatorWriting(generator, what) {
     ];
 
     Object.keys(_adapters).sort().forEach(adapter => { todos.push(
-      { type: 'copy', src: [srcPath, _adapters[adapter]],     dest: [libDir, `${adapter}.js`],  ifNew: true }
+      { type: 'copy', src: [srcPath, '_adapters', _adapters[adapter]], dest: [libDir, `${adapter}.js`],  ifNew: true }
     ); });
 
     // Generate modules
@@ -278,7 +278,8 @@ module.exports = function generatorWriting(generator, what) {
       props: {
         name: context.entity,
         path: `/${context.kebabEntity}`,
-        authentication: context
+        authentication: context,
+        isAuthService: true,
       }
     });
 
