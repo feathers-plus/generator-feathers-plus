@@ -1,5 +1,7 @@
 
 const crypto = require('crypto');
+const deepMerge = require('deepmerge');
+const mongoose = require('mongoose');
 const { camelCase, kebabCase, upperFirst } = require('lodash');
 const { existsSync } = require('fs');
 const { join } = require('path');
@@ -7,6 +9,8 @@ const { join } = require('path');
 const generatorFs = require('../../lib/generator-fs');
 const makeConfig = require('./templates/_configs');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
+const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
+const stringifyPlus = require('../../lib/stringify-plus');
 const { updateSpecs } = require('../../lib/specs');
 
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
@@ -18,9 +22,14 @@ const OAUTH2_STRATEGY_MAPPINGS = {
   github: 'passport-github'
 };
 
+const nativeFuncs = {
+  [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
+  [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId',
+};
+
 module.exports = function generatorWriting(generator, what) {
   // Get expanded app specs
-  const { props, _specs: specs } = generator;
+  let { props, _specs: specs } = generator;
   const generators = [...new Set(specs._generators)].sort(); // get unique elements
   generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
 
@@ -60,7 +69,32 @@ module.exports = function generatorWriting(generator, what) {
   switch (what) {
     case 'all':
       app(generator);
-      //service(generator);
+
+      const propsStashed = props;
+      Object.keys(specs.services || {}).forEach(name => {
+        console.log('++++++++++++++', name);
+        const specsService = specs.services[name];
+
+        props = {
+          adapter: specsService.adapter,
+          authentication: specsService.isAuthEntity ? specs.authentication : undefined,
+          kebabName: kebabCase(name),
+          name,
+          path: specsService.path,
+          feathersSpecs,
+          mapping,
+          serviceName: name,
+          feathersSpec: feathersSpecs[name] || {},
+          mongooseSchema:  serviceSpecsToMongoose(propsStashed.feathersSpecs[name], propsStashed.feathersSpecs[name]._extensions),
+          deepMerge: deepMerge,
+          stringifyPlus: stringifyPlus,
+        };
+        props.mongooseSchemaStr = stringifyPlus(props.mongooseSchema, { nativeFuncs }),
+
+        service(generator);
+      });
+      props = propsStashed;
+
       connection(generator);
       authentication(generator);
       middleware(generator);
@@ -185,6 +219,7 @@ module.exports = function generatorWriting(generator, what) {
     generator.logSteps && console.log('>>>>> service generator writing()');
 
     const { adapter, authentication, kebabName, name, path } = props;
+    console.log('service props.authentication', authentication);
     const moduleMappings = {
       generic: `./${kebabName}.class.js`,
       memory: 'feathers-memory',
@@ -201,15 +236,17 @@ module.exports = function generatorWriting(generator, what) {
 
     // Run the `connection` generator for the selected database
     // It will not do anything if the db has been set up already
-    if (adapter !== 'generic' && adapter !== 'memory') {
-      generator.composeWith(require.resolve('../connection'), { props: {
-        adapter,
-        service: name
-      } });
+    if (!generatorsInclude('all')) {
+      if (adapter !== 'generic' && adapter !== 'memory') {
+        generator.composeWith(require.resolve('../connection'), { props: {
+          adapter,
+          service: name
+        } });
+      }
     }
 
-    // Custom template context
-    context = Object.assign({}, context, {
+    // Custom template context. Include 'props' customized for this ervice.
+    context = Object.assign({}, context, props, {
       libDirectory: generator.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
       path: stripSlashes(path),
@@ -283,7 +320,6 @@ module.exports = function generatorWriting(generator, what) {
   // ===== authentication ==========================================================================
   function authentication(generator) {
     generator.logSteps && console.log('>>>>> authentication generator writing()');
-    console.log('props', props);
 
     // Custom template context
     const entity = specs.authentication.entity;
@@ -302,8 +338,6 @@ module.exports = function generatorWriting(generator, what) {
     ];
 
     // Set up strategies and add dependencies
-    console.log('ifall', generatorsInclude('all'));
-    inspector('auth specs', specs)
     strategies.forEach(strategy => {
       const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
 
@@ -327,7 +361,7 @@ module.exports = function generatorWriting(generator, what) {
           name: context.entity,
           path: `/${context.kebabEntity}`,
           authentication: context,
-          isAuthService: true,
+          isAuthEntity: true,
         }
       });
     }
