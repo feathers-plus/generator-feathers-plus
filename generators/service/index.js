@@ -14,8 +14,8 @@ const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const stringifyPlus = require('../../lib/stringify-plus');
 
-const { refreshCodeFragments } = require('../../lib/code-fragments');
 const { initSpecs } = require('../../lib/specs');
+const { refreshCodeFragments } = require('../../lib/code-fragments');
 
 const nativeFuncs = {
   [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',

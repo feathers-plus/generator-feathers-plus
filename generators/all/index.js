@@ -1,6 +1,7 @@
 
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
+const { initSpecs } = require('../../lib/specs');
 const { refreshCodeFragments } = require('../../lib/code-fragments');
 
 module.exports = class MiddlewareGenerator extends Generator {
@@ -9,6 +10,7 @@ module.exports = class MiddlewareGenerator extends Generator {
   }
 
   prompting () {
+    initSpecs('all');
     this.checkPackage();
     const { props, _specs: specs } = this;
 

@@ -19,11 +19,12 @@ const OAUTH2_STRATEGY_MAPPINGS = {
 };
 
 module.exports = function generatorWriting(generator, what) {
-  generator.logSteps && console.log(`>>>>> ${what} generator started writing()`);
-
   // Get expanded app specs
   const { props, _specs: specs } = generator;
   const generators = [...new Set(specs._generators)].sort(); // get unique elements
+  generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
+
+  const generatorsInclude = name =>(specs._generators || []).indexOf(name) !== -1;
 
   if ( what !== 'all') {
     updateSpecs(what, props, `${what} generator`);
@@ -61,7 +62,7 @@ module.exports = function generatorWriting(generator, what) {
       app(generator);
       //service(generator);
       connection(generator);
-      //authentication(generator);
+      authentication(generator);
       middleware(generator);
       //graphql(generator);
       break;
@@ -282,12 +283,17 @@ module.exports = function generatorWriting(generator, what) {
   // ===== authentication ==========================================================================
   function authentication(generator) {
     generator.logSteps && console.log('>>>>> authentication generator writing()');
+    console.log('props', props);
 
     // Custom template context
+    const entity = specs.authentication.entity;
+    const strategies = specs.authentication.strategies;
+
     context = Object.assign({}, context, {
-      kebabEntity: kebabCase(props.entity),
-      camelEntity: camelCase(props.entity),
+      kebabEntity: kebabCase(entity),
+      camelEntity: camelCase(entity),
       oauthProviders: [],
+      strategies,
     });
 
     const dependencies = [
@@ -296,8 +302,9 @@ module.exports = function generatorWriting(generator, what) {
     ];
 
     // Set up strategies and add dependencies
+    console.log('ifall', generatorsInclude('all'));
     inspector('auth specs', specs)
-    props.strategies.forEach(strategy => {
+    strategies.forEach(strategy => {
       const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
 
       if (oauthProvider) {
@@ -313,15 +320,17 @@ module.exports = function generatorWriting(generator, what) {
       }
     });
 
-    // Create the users service
-    generator.composeWith(require.resolve('../service'), {
-      props: {
-        name: context.entity,
-        path: `/${context.kebabEntity}`,
-        authentication: context,
-        isAuthService: true,
-      }
-    });
+    // Create the users (entity) service
+    if (!generatorsInclude('all')) {
+      generator.composeWith(require.resolve('../service'), {
+        props: {
+          name: context.entity,
+          path: `/${context.kebabEntity}`,
+          authentication: context,
+          isAuthService: true,
+        }
+      });
+    }
 
     todos = [
       // Files rewritten every (re)generation.
@@ -369,7 +378,6 @@ module.exports = function generatorWriting(generator, what) {
     //todo const hasModel = existsSync(path.join(templatePath, 'model', modelTpl));
 
     // Custom template context
-    console.log('ql specs', specs);
     context = Object.assign({}, context, {
       libDirectory: generator.libDirectory,
       //todo modelName: hasModel ? `${kebabName}.model` : null,

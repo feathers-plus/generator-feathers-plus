@@ -40,3 +40,5 @@ OK - check if nedb-1.validate.js does not create props at code: base when servic
 - look at how dependencies are done in writing() generators
 - add new/old headings to generators
 - move this.refreshCodeFragments to lib/generator.js & only run once for composedWith
+- GraphQL extensions.graphql.name & .sqlTable should not be kebab case
+- src/services/name/name.validate.js the service name in //Defines should not be kebab case

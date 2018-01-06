@@ -1,6 +1,7 @@
 
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
+const { initSpecs } = require('../../lib/specs');
 const { refreshCodeFragments } = require('../../lib/code-fragments');
 
 module.exports = class AuthGenerator extends Generator {
@@ -10,6 +11,7 @@ module.exports = class AuthGenerator extends Generator {
 
   prompting() {
     const { props } = this;
+    initSpecs('authentication');
     this.checkPackage();
 
     const prompts = [{
