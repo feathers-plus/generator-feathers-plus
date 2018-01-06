@@ -39,3 +39,4 @@ OK - check if nedb-1.validate.js does not create props at code: base when servic
   const auth = generator.props.authentication ? '.auth' : '';
 - look at how dependencies are done in writing() generators
 - add new/old headings to generators
+- move this.refreshCodeFragments to lib/generator.js & only run once for composedWith

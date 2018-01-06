@@ -2,9 +2,9 @@ const semver = require('semver');
 
 module.exports = function(generator) {
   const major = semver.major(process.version);
-  const { props } = generator;
+  const { props, _specs: specs } = generator;
   const lib = props.src;
-  const [ packager, version ] = props.packager.split('@');
+  const [ packager, version ] = specs.app.packager.split('@');
   const pkg = {
     name: props.name,
     description: props.description,

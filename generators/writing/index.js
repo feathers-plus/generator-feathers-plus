@@ -23,8 +23,11 @@ module.exports = function generatorWriting(generator, what) {
 
   // Get expanded app specs
   const { props, _specs: specs } = generator;
-  updateSpecs(what, props, `${what} generator`);
   const generators = [...new Set(specs._generators)].sort(); // get unique elements
+
+  if ( what !== 'all') {
+    updateSpecs(what, props, `${what} generator`);
+  }
 
   // Get expanded Feathers service specs
   const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
@@ -54,6 +57,14 @@ module.exports = function generatorWriting(generator, what) {
   });
 
   switch (what) {
+    case 'all':
+      app(generator);
+      //service(generator);
+      connection(generator);
+      //authentication(generator);
+      middleware(generator);
+      //graphql(generator);
+      break;
     case 'app':
       app(generator);
       break;
@@ -82,6 +93,8 @@ module.exports = function generatorWriting(generator, what) {
 
   // ===== app =====================================================================================
   function app(generator) {
+    generator.logSteps && console.log('>>>>> app generator writing()');
+
     // Custom template context
     context = Object.assign({}, context, {
       requiresAuth: false,
@@ -130,8 +143,28 @@ module.exports = function generatorWriting(generator, what) {
     generatorFs(generator, context, todos);
 
     // Update dependencies
-    // todo dependencies defined in app#prompting()
-    generator.props.providers.forEach(provider => {
+    // todo dependencies also defined in app#prompting()
+    generator.dependencies = [
+      '@feathersjs/feathers',
+      '@feathersjs/errors',
+      '@feathersjs/configuration',
+      '@feathersjs/express',
+      'feathers-hooks-common',
+      'serve-favicon',
+      'compression',
+      'helmet',
+      'winston',
+      'cors'
+    ];
+
+    generator.devDependencies = [
+      'eslint',
+      'mocha',
+      'request',
+      'request-promise'
+    ];
+
+    specs.app.providers.forEach(provider => {
       const type = provider === 'rest' ? 'express' : provider;
 
       generator.dependencies.push(`@feathersjs/${type}`);
@@ -148,6 +181,8 @@ module.exports = function generatorWriting(generator, what) {
 
   // ===== service =================================================================================
   function service(generator) {
+    generator.logSteps && console.log('>>>>> service generator writing()');
+
     const { adapter, authentication, kebabName, name, path } = props;
     const moduleMappings = {
       generic: `./${kebabName}.class.js`,
@@ -215,6 +250,8 @@ module.exports = function generatorWriting(generator, what) {
 
   // ===== connection ==============================================================================
   function connection(generator) {
+    generator.logSteps && console.log('>>>>> connection generator writing()');
+
     // Common abbreviations for building 'todos'.
     const newConfig = Object.assign({}, generator.defaultConfig, specs._dbConfigs);
     const connections = specs.connections;
@@ -244,6 +281,8 @@ module.exports = function generatorWriting(generator, what) {
 
   // ===== authentication ==========================================================================
   function authentication(generator) {
+    generator.logSteps && console.log('>>>>> authentication generator writing()');
+
     // Custom template context
     context = Object.assign({}, context, {
       kebabEntity: kebabCase(props.entity),
@@ -257,6 +296,7 @@ module.exports = function generatorWriting(generator, what) {
     ];
 
     // Set up strategies and add dependencies
+    inspector('auth specs', specs)
     props.strategies.forEach(strategy => {
       const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
 
@@ -301,12 +341,14 @@ module.exports = function generatorWriting(generator, what) {
 
   // ===== middleware ==============================================================================
   function middleware(generator) {
+    generator.logSteps && console.log('>>>>> middleware generator writing()');
+
     todos = [
       // Files rewritten every (re)generation.
       { type: 'tpl',  src: [mwPath, 'index.ejs'], dest: [src, 'middleware', 'index.js'] },
     ];
 
-    Object.keys(specs.middlewares).sort().forEach(mwName => {
+    Object.keys(specs.middlewares || {}).sort().forEach(mwName => {
       const fileName = specs.middlewares[mwName].kebab;
       todos.push(
         { type: 'tpl',  src: [mwPath, 'middleware.ejs'],
@@ -320,16 +362,18 @@ module.exports = function generatorWriting(generator, what) {
 
   // ===== graphql =================================================================================
   function graphql(generator) {
-    const { adapter, authentication, kebabName, name, path } = props;
+    generator.logSteps && console.log('>>>>> graphql generator writing()');
 
+    //todo const { kebabName } = props;
     //todo const modelTpl = `${adapter}${generator.props.authentication ? '-user' : ''}.js`;
     //todo const hasModel = existsSync(path.join(templatePath, 'model', modelTpl));
 
     // Custom template context
+    console.log('ql specs', specs);
     context = Object.assign({}, context, {
       libDirectory: generator.libDirectory,
       //todo modelName: hasModel ? `${kebabName}.model` : null,
-      path: stripSlashes(generator.props.path),
+      path: stripSlashes(specs.graphql.path),
     });
 
     // Common abbreviations for building 'todos'.
@@ -337,11 +381,11 @@ module.exports = function generatorWriting(generator, what) {
 
     todos = [
       // Files which are written only if they don't exist. They are never rewritten.
-      { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'], dest: [testDir, 'services', `${kebabName}.test.js`], ifNew: true },
+      { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'], dest: [testDir, 'services', 'graphql.test.js'], ifNew: true },
 
       // Files rewritten every (re)generation.
-      //todo { type: 'tpl',  src: [qlPath,  `graphql.hooks${auth}.ejs`],   dest: [libDir, 'services', kebabName, `${kebabName}.hooks.js`] },
-      { type: 'tpl',  src: [qlPath,  `graphql.hooks.ejs`],   dest: [libDir, 'services', kebabName, `${kebabName}.hooks.js`] },
+      //todo { type: 'tpl',  src: [qlPath,  `graphql.hooks${auth}.ejs`],   dest: [libDir, 'services', 'graphql', 'graphql.hooks.js'] },
+      { type: 'tpl',  src: [qlPath,  `graphql.hooks.ejs`],          dest: [libDir, 'services', 'graphql', 'graphql.hooks.js'] },
       { type: 'tpl',  src: [qlPath,  'graphql.schemas.ejs'],        dest: [libDir, 'services', 'graphql', 'graphql.schemas.js'] },
       { type: 'tpl',  src: [qlPath,  'graphql.service.ejs'],        dest: [libDir, 'services', 'graphql', 'graphql.service.js'] },
       { type: 'tpl',  src: [qlPath,  'batchloader.resolvers.ejs'],  dest: [libDir, 'services', 'graphql', 'batchloader.resolvers.js'] },
