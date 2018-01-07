@@ -30,6 +30,8 @@ const nativeFuncs = {
 module.exports = function generatorWriting(generator, what) {
   // Get expanded app specs
   let { props, _specs: specs } = generator;
+  let propsStashed;
+
   const generators = [...new Set(specs._generators)].sort(); // get unique elements
   generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
 
@@ -55,14 +57,20 @@ module.exports = function generatorWriting(generator, what) {
   const qlPath = join(serPath, 'graphql');
   const testPath = join(tpl, 'test');
 
-  const libDir = generator.libDirectory;
-  const testDir = generator.testDirectory;
   const js = specs.options.configJs; // todo we remove configJs ?
+  const libDir = generator.libDirectory;
   let todos;
+
+  let testDir = generator.testDirectory;
+  if (testDir.charAt(testDir.length - 1) === '/') {
+    testDir = testDir.substring(0, testDir.length - 1);
+  }
 
   // Common template context
   let context = Object.assign({}, props, {
     specs,
+    deepMerge: deepMerge,
+    stringifyPlus: stringifyPlus,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
   });
 
@@ -70,30 +78,10 @@ module.exports = function generatorWriting(generator, what) {
     case 'all':
       app(generator);
 
-      const propsStashed = props;
       Object.keys(specs.services || {}).forEach(name => {
-        console.log('++++++++++++++', name);
-        const specsService = specs.services[name];
-
-        props = {
-          adapter: specsService.adapter,
-          authentication: specsService.isAuthEntity ? specs.authentication : undefined,
-          kebabName: kebabCase(name),
-          name,
-          path: specsService.path,
-          feathersSpecs,
-          mapping,
-          serviceName: name,
-          feathersSpec: feathersSpecs[name] || {},
-          mongooseSchema:  serviceSpecsToMongoose(propsStashed.feathersSpecs[name], propsStashed.feathersSpecs[name]._extensions),
-          deepMerge: deepMerge,
-          stringifyPlus: stringifyPlus,
-        };
-        props.mongooseSchemaStr = stringifyPlus(props.mongooseSchema, { nativeFuncs }),
-
+        props = { name }; // we depend on no existing, required name prop
         service(generator);
       });
-      props = propsStashed;
 
       connection(generator);
       authentication(generator);
@@ -218,8 +206,14 @@ module.exports = function generatorWriting(generator, what) {
   function service(generator) {
     generator.logSteps && console.log('>>>>> service generator writing()');
 
-    const { adapter, authentication, kebabName, name, path } = props;
-    console.log('service props.authentication', authentication);
+    const { name } = props;
+
+    const specsService = specs.services[name];
+    const kebabName = kebabCase(name);
+    const adapter = specsService.adapter;
+    const path = specsService.path;
+    const authentication = specsService.isAuthEntity ? specs.authentication : undefined;
+
     const moduleMappings = {
       generic: `./${kebabName}.class.js`,
       memory: 'feathers-memory',
@@ -230,6 +224,7 @@ module.exports = function generatorWriting(generator, what) {
       knex: 'feathers-knex',
       rethinkdb: 'feathers-rethinkdb'
     };
+
     const serviceModule = moduleMappings[adapter];
     const modelTpl = `${adapter}${authentication ? '-user' : ''}.js`;
     const hasModel = existsSync(join(serPath, '_model', modelTpl));
@@ -245,13 +240,21 @@ module.exports = function generatorWriting(generator, what) {
       }
     }
 
-    // Custom template context. Include 'props' customized for this ervice.
+    // Custom template context. Include 'props' customized for this service.
     context = Object.assign({}, context, props, {
+      name,
+      serviceName: name,
+      kebabName,
+      adapter,
+      path: stripSlashes(path),
+      authentication,
+
       libDirectory: generator.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
-      path: stripSlashes(path),
       serviceModule,
+      mongooseSchema:  serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
     });
+    context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
 
     // Custom abbreviations for building 'todos'.
     const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.js`)) ?
@@ -263,10 +266,10 @@ module.exports = function generatorWriting(generator, what) {
     todos = [
       // Files which are written only if they don't exist. They are never rewritten.
       { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'],
-                                            dest: [testDir, 'services', `${kn}.test.js`],        ifNew: true },
-      { type: 'tpl',  src: mainFileTpl,     dest: [libDir, 'services', kn, `${kn}.service.js`],  ifNew: true },
+                                             dest: [testDir, 'services', `${kn}.test.js`],        ifNew: true },
+      { type: 'tpl',  src: mainFileTpl,      dest: [libDir, 'services', kn, `${kn}.service.js`],  ifNew: true },
       { type: 'tpl',  src: [serPath, '_model', modelTpl],
-                                            dest: [libDir, 'models', `${context.modelName}.js`], ifNew: true, ifSkip: !context.modelName },
+                                             dest: [libDir, 'models', `${context.modelName}.js`], ifNew: true, ifSkip: !context.modelName },
       { type: 'tpl',  src: [namePath, asyn], dest: [libDir, 'services', kn, `${kn}.class.js`],    ifNew: true, ifSkip: adapter !== 'generic' },
 
       // Files rewritten every (re)generation.
@@ -274,7 +277,7 @@ module.exports = function generatorWriting(generator, what) {
       { type: 'tpl',  src: [namePath, 'name.mongoose.ejs'],     dest: [libDir, 'services', kn, `${kn}.mongoose.js`] },
       { type: 'tpl',  src: [namePath, 'name.validate.ejs'],     dest: [libDir, 'services', kn, `${kn}.validate.js`] },
       { type: 'tpl',  src: [namePath, `name.hooks${auth}.ejs`], dest: [libDir, 'services', kn, `${kn}.hooks.js`] },
-      { type: 'tpl',  src: [serPath, 'index.ejs'],             dest: [libDir, 'services', 'index.js'] },
+      { type: 'tpl',  src: [serPath,  'index.ejs'],             dest: [libDir, 'services', 'index.js'] },
     ];
 
     // Generate modules

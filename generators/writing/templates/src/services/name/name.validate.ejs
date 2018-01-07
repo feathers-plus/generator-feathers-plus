@@ -11,7 +11,7 @@ const ajv = require('ajv');
 ]) %>
 
 const base = deepMerge.all([{},
-<% __jsonSchema = deepMerge({}, feathersSpec);
+<% __jsonSchema = deepMerge({}, feathersSpecs[name]);
    delete __jsonSchema._extensions;
    __str = stringifyPlus(__jsonSchema).replace(/"ID"/g, 'ID')
      .split('\n').map(str => `  ${str}`).join('\n');
