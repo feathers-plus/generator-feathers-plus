@@ -293,6 +293,8 @@ module.exports = function generatorWriting(generator, what) {
   function connection(generator) {
     generator.logSteps && console.log('>>>>> connection generator writing()');
 
+    if (!specs.connections) return;
+
     // Common abbreviations for building 'todos'.
     const newConfig = Object.assign({}, generator.defaultConfig, specs._dbConfigs);
     const connections = specs.connections;
@@ -323,6 +325,8 @@ module.exports = function generatorWriting(generator, what) {
   // ===== authentication ==========================================================================
   function authentication(generator) {
     generator.logSteps && console.log('>>>>> authentication generator writing()');
+
+    if (!specs.authentication) return;
 
     // Custom template context
     const entity = specs.authentication.entity;
@@ -388,6 +392,8 @@ module.exports = function generatorWriting(generator, what) {
   // ===== middleware ==============================================================================
   function middleware(generator) {
     generator.logSteps && console.log('>>>>> middleware generator writing()');
+
+    if (!specs.middlewares) return;
 
     todos = [
       // Files rewritten every (re)generation.

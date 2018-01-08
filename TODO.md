@@ -43,3 +43,4 @@ OK - check if nedb-1.validate.js does not create props at code: base when servic
 OK - GraphQL extensions.graphql.name & .sqlTable should not be kebab case
 OK - src/services/name/name.validate.js the service name in //Defines should not be kebab case
 - review which modules are regenerated and which are written just once.
+- do not update secret in default.json
