@@ -2,13 +2,8 @@
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
-const { refreshCodeFragments } = require('../../lib/code-fragments');
 
 module.exports = class MiddlewareGenerator extends Generator {
-  async initializing() {
-    this.fragments = await refreshCodeFragments();
-  }
-
   prompting () {
     initSpecs('all');
     this.checkPackage();

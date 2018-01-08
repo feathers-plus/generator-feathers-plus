@@ -5,14 +5,12 @@ const { kebabCase } = require('lodash');
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
-const { refreshCodeFragments } = require('../../lib/code-fragments');
 
 module.exports = class AppGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
 
     initSpecs('app');
-    this.fragments = refreshCodeFragments();
 
     this.props = {
       name: this.pkg.name || process.cwd().split(path.sep).pop(),

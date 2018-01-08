@@ -15,7 +15,6 @@ const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const stringifyPlus = require('../../lib/stringify-plus');
 
 const { initSpecs } = require('../../lib/specs');
-const { refreshCodeFragments } = require('../../lib/code-fragments');
 
 const nativeFuncs = {
   [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
@@ -26,10 +25,6 @@ const templatePath = path.join(__dirname, 'templates');
 const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
 
 module.exports = class ServiceGenerator extends Generator {
-  async initializing() {
-    this.fragments = await refreshCodeFragments();
-  }
-
   prompting() {
     const generator = this;
     let serviceSpecs;

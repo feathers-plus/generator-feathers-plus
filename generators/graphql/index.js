@@ -9,14 +9,8 @@ const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 const stringifyPlus = require('../../lib/stringify-plus');
 
 const { initSpecs } = require('../../lib/specs');
-const { refreshCodeFragments } = require('../../lib/code-fragments');
 
 module.exports = class ServiceGenerator extends Generator {
-  async initializing() {
-    this.fragments = await refreshCodeFragments();
-    initSpecs('graphql');
-  }
-
   prompting() {
     const { props, _specs: specs } = this;
     const graphqlSpecs = specs.graphql;

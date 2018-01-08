@@ -4,13 +4,8 @@ const { kebabCase, camelCase } = require('lodash');
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
-const { refreshCodeFragments } = require('../../lib/code-fragments');
 
 module.exports = class MiddlewareGenerator extends Generator {
-  async initializing() {
-    this.fragments = await refreshCodeFragments();
-  }
-
   prompting () {
     this.checkPackage();
     const { props, _specs: specs } = this;

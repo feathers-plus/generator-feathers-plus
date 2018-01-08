@@ -39,7 +39,7 @@ OK - check if nedb-1.validate.js does not create props at code: base when servic
   const auth = generator.props.authentication ? '.auth' : '';
 - look at how dependencies are done in writing() generators
 - add new/old headings to generators
-- move this.refreshCodeFragments to lib/generator.js & only run once for composedWith
+OK - move this.refreshCodeFragments to lib/generator.js & only run once for composedWith
 OK - GraphQL extensions.graphql.name & .sqlTable should not be kebab case
 OK - src/services/name/name.validate.js the service name in //Defines should not be kebab case
 - review which modules are regenerated and which are written just once.
