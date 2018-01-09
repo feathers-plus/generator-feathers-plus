@@ -21,6 +21,7 @@ OK - test src !== 'src'
 - lib/generator.js defaultConfig needs to change if config/default.js is to be used
 OK - don't write specs expanded to file
 OK - put in lib/generator.js generator.conflicter.force = true;
+OK - publish feathers-plus/graphql
 - enable in graphql/index.js // '@feathers-plus/graphql'
 - hooks modules should be ifNew: true
 - get 'npm start' working for graphql
@@ -44,3 +45,5 @@ OK - GraphQL extensions.graphql.name & .sqlTable should not be kebab case
 OK - src/services/name/name.validate.js the service name in //Defines should not be kebab case
 - review which modules are regenerated and which are written just once.
 - do not update secret in default.json
+- generate authentication does not seem to default to data in specs.
+- findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi

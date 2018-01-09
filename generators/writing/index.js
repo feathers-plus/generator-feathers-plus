@@ -453,7 +453,7 @@ module.exports = function generatorWriting(generator, what) {
     // Update dependencies
     generator._packagerInstall([
       'graphql',
-      //todo '@feathers-plus/graphql',
+      '@feathers-plus/graphql',
       'merge-graphql-schemas',
     ], { save: true });
   }
@@ -463,7 +463,7 @@ function writeAuthenticationConfiguration(generator, context) {
   const config = Object.assign({}, generator.defaultConfig);
 
   config.authentication = {
-    secret: crypto.randomBytes(256).toString('hex'),
+    secret: generator.defaultConfig.authentication.secret || crypto.randomBytes(256).toString('hex'),
     strategies: [ 'jwt' ],
     path: '/authentication',
     service: context.kebabEntity,

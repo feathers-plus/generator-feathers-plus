@@ -23,7 +23,7 @@ let extensions = {
   graphql: {
     <%- insertFragment('graphql_header', [
       `    // name: '${__defaultGraphqlName}',`,
-      '    // service : {',
+      '    // service: {',
       '    //   sort: { __id__: 1 },',
       '    // },',
       '    // sql: {',
@@ -31,9 +31,9 @@ let extensions = {
       '    //   uniqueKey: \'__id__\',',
       '    //   sqlColumn: {',
       '    //     __authorId__: \'__author_id__\',',
-      '    //   }',
+      '    //   },',
       '    // },',
-    ]) %>,
+    ]) %>
     discard: [
       <%- insertFragment('graphql_discard') %>
     ],

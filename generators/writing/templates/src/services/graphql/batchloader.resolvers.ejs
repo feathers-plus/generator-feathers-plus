@@ -83,7 +83,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   ];
 -%>
 
-      // <%- `${graphqlName}.${fieldName}${__addField.args}: ${__addField.graphqlName}` %>
+      // <%- `${graphqlName}.${fieldName}${__addField.args}: ${__addField.type}` %>
       <%- insertFragment(`bl-${graphqlName}-${fieldName}`, __temp) %>
 <% } -%>
 <%# --- if-c ends above. -%>
@@ -115,7 +115,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   __addField = __add[fieldName];
 -%>
 
-      // <%- fieldName %><%- __addField.args %>: <%- __addField.graphqlName %>
+      // <%- fieldName %><%- __addField.args %>: <%- __addField.type %>
 <%# -%>
 <%# --- if/else-1 starts below. -%>
 <% if (__addField.serviceName) {

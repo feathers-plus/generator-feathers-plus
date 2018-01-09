@@ -25,7 +25,7 @@ let moduleExports = function serviceResolvers(app, options) {
   __addField = __add[fieldName];
 -%>
 
-      // <%- fieldName %><%- __addField.args %>: <%- __addField.graphqlName %>
+      // <%- fieldName %><%- __addField.args %>: <%- __addField.type %>
       <%- fieldName %>:
 <%# -%>
 <%# --- if/else-1 starts below. -%>
