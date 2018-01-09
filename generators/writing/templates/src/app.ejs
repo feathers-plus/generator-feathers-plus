@@ -1,4 +1,5 @@
 
+// Configure Feathers app. (Can be re-generated.)
 const path = require('path');
 const favicon = require('serve-favicon');
 const compress = require('compression');

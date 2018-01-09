@@ -18,21 +18,21 @@ OK - app test doesn't run
 OK - service test not created
 OK - connection string prompted for again when nedb service is regenerated
 OK - test src !== 'src'
-- lib/generator.js defaultConfig needs to change if config/default.js is to be used
+LATER - lib/generator.js defaultConfig needs to change if config/default.js is to be used
 OK - don't write specs expanded to file
 OK - put in lib/generator.js generator.conflicter.force = true;
 OK - publish feathers-plus/graphql
-- enable in graphql/index.js // '@feathers-plus/graphql'
+OK - enable in graphql/index.js // '@feathers-plus/graphql'
 - hooks modules should be ifNew: true
-- get 'npm start' working for graphql
+OK - get 'npm start' working for graphql
 - generate graphql has linting issues
 - check all // todo
 OK - updateSpecs likely no longer needs to update 'specs' param
-- remove configJs: false
+LATER - remove configJs: false
 OK - call specsExpand from specs.js
 OK - check if nedb-1.validate.js does not create props at code: base when service is first created
 - nedb-1.validate.js creates empty 'base' when a service without a schema is regenerated.
-- "shows a 404 JSON error without stack trace" shows a stack trace.
+OK - "shows a 404 JSON error without stack trace" shows a stack trace.
 - move things like deepMerge into the default context
 - is context.requiresAuth needed in writing#app?
 - should class.js and class-async.js be in their own folder?
@@ -44,6 +44,9 @@ OK - move this.refreshCodeFragments to lib/generator.js & only run once for comp
 OK - GraphQL extensions.graphql.name & .sqlTable should not be kebab case
 OK - src/services/name/name.validate.js the service name in //Defines should not be kebab case
 - review which modules are regenerated and which are written just once.
-- do not update secret in default.json
+OK - do not update secret in default.json
 - generate authentication does not seem to default to data in specs.
 - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
+  Maybe we need to have batchloader().then(result => result || [])
+- lib/generator.js#checkPackage() should check existance of geathers-gen-specs.json not package.json internals
+  generators to call checkPackage() consistently.

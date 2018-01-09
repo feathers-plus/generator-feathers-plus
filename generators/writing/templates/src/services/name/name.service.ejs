@@ -1,4 +1,5 @@
-// Initializes the `<%= name %>` service on path `/<%= path %>`
+
+// Initializes the `<%= name %>` service on path `/<%= path %>`. (Can be re-generated.)
 const createService = require('<%= serviceModule %>');<% if(modelName) { %>
 const createModel = require('../../models/<%= modelName %>');<% } %>
 const hooks = require('./<%= kebabName %>.hooks');

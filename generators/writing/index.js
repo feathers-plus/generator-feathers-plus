@@ -9,6 +9,7 @@ const { join } = require('path');
 const generatorFs = require('../../lib/generator-fs');
 const makeConfig = require('./templates/_configs');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
+const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const stringifyPlus = require('../../lib/stringify-plus');
 const { updateSpecs } = require('../../lib/specs');
@@ -30,7 +31,6 @@ const nativeFuncs = {
 module.exports = function generatorWriting(generator, what) {
   // Get expanded app specs
   let { props, _specs: specs } = generator;
-  let propsStashed;
 
   const generators = [...new Set(specs._generators)].sort(); // get unique elements
   generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
@@ -46,7 +46,7 @@ module.exports = function generatorWriting(generator, what) {
   props.feathersSpecs = feathersSpecs;
   props.mapping= mapping;
 
-  // Common abbreviations for building 'todos'.
+  // Abbreviations for paths used in building 'todos'.
   const tpl = join(__dirname, 'templates');
   const cfgPath = join(tpl, 'config');
   const src = specs.app.src;
@@ -57,6 +57,7 @@ module.exports = function generatorWriting(generator, what) {
   const qlPath = join(serPath, 'graphql');
   const testPath = join(tpl, 'test');
 
+  // Other abbreviations using in building 'todos'.
   const js = specs.options.configJs; // todo we remove configJs ?
   const libDir = generator.libDirectory;
   let todos;
@@ -66,7 +67,7 @@ module.exports = function generatorWriting(generator, what) {
     testDir = testDir.substring(0, testDir.length - 1);
   }
 
-  // Common template context
+  // Basic context used with templates.
   let context = Object.assign({}, props, {
     specs,
     deepMerge: deepMerge,
@@ -74,6 +75,7 @@ module.exports = function generatorWriting(generator, what) {
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
   });
 
+  // Generate what is needed.
   switch (what) {
     case 'all':
       app(generator);
@@ -86,7 +88,11 @@ module.exports = function generatorWriting(generator, what) {
       connection(generator);
       authentication(generator);
       middleware(generator);
-      //graphql(generator);
+
+      if (Object.keys(mapping.feathers).length) {
+        graphql(generator);
+      }
+
       break;
     case 'app':
       app(generator);
@@ -110,9 +116,7 @@ module.exports = function generatorWriting(generator, what) {
       throw new Error(`Unexpected generate ${what}. (writing`);
   }
 
-  generator.logSteps && console.log(
-    `>>>>> ${what} generator finished writing()`/*, todos.map(todo => todo.src || todo.obj)*/
-  );
+  generator.logSteps && console.log(`>>>>> ${what} generator finished writing()`);
 
   // ===== app =====================================================================================
   function app(generator) {
@@ -226,7 +230,7 @@ module.exports = function generatorWriting(generator, what) {
     };
 
     const serviceModule = moduleMappings[adapter];
-    const modelTpl = `${adapter}${authentication ? '-user' : ''}.js`;
+    const modelTpl = `${adapter}${authentication ? '-user' : ''}.ejs`;
     const hasModel = existsSync(join(serPath, '_model', modelTpl));
 
     // Run the `connection` generator for the selected database
@@ -257,8 +261,8 @@ module.exports = function generatorWriting(generator, what) {
     context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
 
     // Custom abbreviations for building 'todos'.
-    const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.js`)) ?
-      [serPath, '_model', '_types', `${adapter}.js`] : [serPath, 'name', 'name.service.ejs'];
+    const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.ejs`)) ?
+      [serPath, '_types', `${adapter}.ejs`] : [serPath, 'name', 'name.service.ejs'];
     const auth = authentication ? '-auth' : '';
     const asyn = generator.hasAsync ? 'class-async.js' : 'class.js';
     const kn = kebabName;
@@ -266,11 +270,11 @@ module.exports = function generatorWriting(generator, what) {
     todos = [
       // Files which are written only if they don't exist. They are never rewritten.
       { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'],
-                                             dest: [testDir, 'services', `${kn}.test.js`],        ifNew: true },
-      { type: 'tpl',  src: mainFileTpl,      dest: [libDir, 'services', kn, `${kn}.service.js`],  ifNew: true },
-      { type: 'tpl',  src: [serPath, '_model', modelTpl],
-                                             dest: [libDir, 'models', `${context.modelName}.js`], ifNew: true, ifSkip: !context.modelName },
-      { type: 'tpl',  src: [namePath, asyn], dest: [libDir, 'services', kn, `${kn}.class.js`],    ifNew: true, ifSkip: adapter !== 'generic' },
+                                             dest: [testDir, 'services', `${kn}.test.js`],           ifNew: true },
+      { type: 'tpl',  src: [serPath,  '_model',   modelTpl],
+                                             dest: [libDir,  'models',   `${context.modelName}.js`], ifNew: true, ifSkip: !context.modelName },
+      { type: 'tpl',  src: mainFileTpl,      dest: [libDir,  'services', kn, `${kn}.service.js`],    ifNew: true },
+      { type: 'tpl',  src: [namePath, asyn], dest: [libDir,  'services', kn, `${kn}.class.js`],      ifNew: true, ifSkip: adapter !== 'generic' },
 
       // Files rewritten every (re)generation.
       { type: 'tpl',  src: [namePath, 'name.schema.ejs'],       dest: [libDir, 'services', kn, `${kn}.schema.js`] },
@@ -416,35 +420,33 @@ module.exports = function generatorWriting(generator, what) {
   function graphql(generator) {
     generator.logSteps && console.log('>>>>> graphql generator writing()');
 
-    //todo const { kebabName } = props;
-    //todo const modelTpl = `${adapter}${generator.props.authentication ? '-user' : ''}.js`;
-    //todo const hasModel = existsSync(path.join(templatePath, 'model', modelTpl));
-
     // Custom template context
     context = Object.assign({}, context, {
-      libDirectory: generator.libDirectory,
-      //todo modelName: hasModel ? `${kebabName}.model` : null,
+      serviceName : 'graphql',
       path: stripSlashes(specs.graphql.path),
+      strategy: specs.graphql.strategy,
+      graphqlSchemas: serviceSpecsToGraphql(feathersSpecs),
+      libDirectory: generator.libDirectory,
     });
 
-    // Common abbreviations for building 'todos'.
-    //todo const auth = generator.props.authentication ? '.auth' : '';
+    // Custom abbreviations for building 'todos'.
+    const auth = specs.graphql.requiresAuth ? '-auth' : '';
 
     todos = [
       // Files which are written only if they don't exist. They are never rewritten.
       { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'], dest: [testDir, 'services', 'graphql.test.js'], ifNew: true },
 
       // Files rewritten every (re)generation.
-      //todo { type: 'tpl',  src: [qlPath,  `graphql.hooks${auth}.ejs`],   dest: [libDir, 'services', 'graphql', 'graphql.hooks.js'] },
-      { type: 'tpl',  src: [qlPath,  `graphql.hooks.ejs`],          dest: [libDir, 'services', 'graphql', 'graphql.hooks.js'] },
-      { type: 'tpl',  src: [qlPath,  'graphql.schemas.ejs'],        dest: [libDir, 'services', 'graphql', 'graphql.schemas.js'] },
-      { type: 'tpl',  src: [qlPath,  'graphql.service.ejs'],        dest: [libDir, 'services', 'graphql', 'graphql.service.js'] },
-      { type: 'tpl',  src: [qlPath,  'batchloader.resolvers.ejs'],  dest: [libDir, 'services', 'graphql', 'batchloader.resolvers.js'] },
-      { type: 'tpl',  src: [qlPath,  'service.resolvers.ejs'],      dest: [libDir, 'services', 'graphql', 'service.resolvers.js'] },
-      { type: 'tpl',  src: [qlPath,  'sql.execute.ejs'],            dest: [libDir, 'services', 'graphql', 'sql.execute.js'] },
-      { type: 'tpl',  src: [qlPath,  'sql.metadata.ejs'],           dest: [libDir, 'services', 'graphql', 'sql.metadata.js'] },
-      { type: 'tpl',  src: [qlPath,  'sql.resolvers.ejs'],          dest: [libDir, 'services', 'graphql', 'sql.resolvers.js'] },
-      { type: 'tpl',  src: [serPath, 'index.ejs'],                  dest: [libDir, 'services', 'index.js'] },
+      { type: 'tpl',  src: [qlPath,  `graphql.hooks${auth}.ejs`],   dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
+      { type: 'tpl',  src: [qlPath,  `graphql.hooks.ejs`],          dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
+      { type: 'tpl',  src: [qlPath,  'graphql.schemas.ejs'],        dest: [libDir,  'services', 'graphql', 'graphql.schemas.js'] },
+      { type: 'tpl',  src: [qlPath,  'graphql.service.ejs'],        dest: [libDir,  'services', 'graphql', 'graphql.service.js'] },
+      { type: 'tpl',  src: [qlPath,  'batchloader.resolvers.ejs'],  dest: [libDir,  'services', 'graphql', 'batchloader.resolvers.js'] },
+      { type: 'tpl',  src: [qlPath,  'service.resolvers.ejs'],      dest: [libDir,  'services', 'graphql', 'service.resolvers.js'] },
+      { type: 'tpl',  src: [qlPath,  'sql.execute.ejs'],            dest: [libDir,  'services', 'graphql', 'sql.execute.js'] },
+      { type: 'tpl',  src: [qlPath,  'sql.metadata.ejs'],           dest: [libDir,  'services', 'graphql', 'sql.metadata.js'] },
+      { type: 'tpl',  src: [qlPath,  'sql.resolvers.ejs'],          dest: [libDir,  'services', 'graphql', 'sql.resolvers.js'] },
+      { type: 'tpl',  src: [serPath, 'index.ejs'],                  dest: [libDir,  'services', 'index.js'] },
     ];
 
     // Generate modules
@@ -452,8 +454,7 @@ module.exports = function generatorWriting(generator, what) {
 
     // Update dependencies
     generator._packagerInstall([
-      'graphql',
-      '@feathers-plus/graphql',
+      '@feathers-plus/graphql', // has graphql/graphql as a dependency
       'merge-graphql-schemas',
     ], { save: true });
   }

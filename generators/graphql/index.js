@@ -35,19 +35,13 @@ module.exports = class ServiceGenerator extends Generator {
       '',
     ].join('\n')));
 
-    props.feathersSpecs = feathersSpecs;
-    props.mapping= mapping;
-    props.stringifyPlus = stringifyPlus;
-    props.graphqlSchemas = serviceSpecsToGraphql(feathersSpecs);
-
-    props.name = 'graphql';
     const prompts = [
       {
         type: 'list',
         name: 'strategy',
         message: 'How should Queries be completed?.',
         default() {
-          return graphqlSpecs.strategy || 'services';
+          return graphqlSpecs.strategy ;
         },
         choices: [
           {
@@ -64,9 +58,8 @@ module.exports = class ServiceGenerator extends Generator {
       }, {
         name: 'path',
         message: 'Which path should the service be registered on?',
-        when: !props.path,
         default(answers) {
-          return graphqlSpecs.path || `/${kebabCase(answers.name || props.name)}`;
+          return graphqlSpecs.path;
         },
         validate(input) {
           if(input.trim() === '') {
@@ -80,24 +73,18 @@ module.exports = class ServiceGenerator extends Generator {
         message: 'Does the service require authentication?',
         type: 'confirm',
         default() {
-          return graphqlSpecs.requiresAuth || false;
+          return graphqlSpecs.requiresAuth;
         },
-        when: !!(this.defaultConfig.authentication && !props.authentication)
+        when: !!this.defaultConfig.authentication
       }
     ];
 
     return this.prompt(prompts).then(answers => {
-      const name = props.name;
-
       this.props = Object.assign(
-        { requiresAuth: false },
         props,
         answers,
-        {
-          snakeName: snakeCase(name),
-          kebabName: kebabCase(name),
-          camelName: camelCase(name)
-        }
+        { requiresAuth: answers.requiresAuth || false },
+        { snakeName: 'graphql', kebabName: 'graphql', camelName: 'graphql' },
       );
 
       this.logSteps && console.log('>>>>> graphql generator finished prompting()');

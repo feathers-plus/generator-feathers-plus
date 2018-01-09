@@ -1,5 +1,6 @@
-<% __defaultGraphqlName = serviceName.charAt(0).toUpperCase() + serviceName.slice(1) -%>
 
+// Define the Feathers schema for service `<%= name %>`. (Can be re-generated.)
+<% __defaultGraphqlName = serviceName.charAt(0).toUpperCase() + serviceName.slice(1) -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
