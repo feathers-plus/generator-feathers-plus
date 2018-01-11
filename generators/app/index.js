@@ -120,8 +120,8 @@ module.exports = class AppGenerator extends Generator {
       }
     }];
 
-    return this.prompt(prompts).then(props => {
-      this.props = Object.assign(this.props, props);
+    return this.prompt(prompts).then(answers => {
+      this.props = Object.assign(this.props, answers);
       this.logSteps && console.log('>>>>> app generator finished prompting()');
     });
   }

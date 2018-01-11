@@ -1,8 +1,10 @@
 
+/* eslint-disable no-console */
 const crypto = require('crypto');
 const deepMerge = require('deepmerge');
 const mongoose = require('mongoose');
 const { camelCase, kebabCase, upperFirst } = require('lodash');
+const { EOL } = require('os');
 const { existsSync } = require('fs');
 const { join } = require('path');
 
@@ -70,6 +72,7 @@ module.exports = function generatorWriting(generator, what) {
   // Basic context used with templates.
   let context = Object.assign({}, props, {
     specs,
+    EOL,
     deepMerge: deepMerge,
     stringifyPlus: stringifyPlus,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
@@ -216,7 +219,7 @@ module.exports = function generatorWriting(generator, what) {
     const kebabName = kebabCase(name);
     const adapter = specsService.adapter;
     const path = specsService.path;
-    const authentication = specsService.isAuthEntity ? specs.authentication : undefined;
+    const isAuthEntityWithAuthentication = specsService.isAuthEntity ? specs.authentication : undefined;
 
     const moduleMappings = {
       generic: `./${kebabName}.class.js`,
@@ -230,7 +233,7 @@ module.exports = function generatorWriting(generator, what) {
     };
 
     const serviceModule = moduleMappings[adapter];
-    const modelTpl = `${adapter}${authentication ? '-user' : ''}.ejs`;
+    const modelTpl = `${adapter}${isAuthEntityWithAuthentication ? '-user' : ''}.ejs`;
     const hasModel = existsSync(join(serPath, '_model', modelTpl));
 
     // Run the `connection` generator for the selected database
@@ -251,7 +254,8 @@ module.exports = function generatorWriting(generator, what) {
       kebabName,
       adapter,
       path: stripSlashes(path),
-      authentication,
+      authentication: isAuthEntityWithAuthentication,
+      isAuthEntityWithAuthentication,
 
       libDirectory: generator.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
@@ -263,25 +267,27 @@ module.exports = function generatorWriting(generator, what) {
     // Custom abbreviations for building 'todos'.
     const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.ejs`)) ?
       [serPath, '_types', `${adapter}.ejs`] : [serPath, 'name', 'name.service.ejs'];
-    const auth = authentication ? '-auth' : '';
-    const asyn = generator.hasAsync ? 'class-async.js' : 'class.js';
+    // todo const hookFileTpl = isAuthEntityWithAuthentication ? 'name.hooks-user.ejs' : 'name.hooks.ejs';
+    const genericFileTpl = generator.hasAsync ? 'class-async.js' : 'class.js';
     const kn = kebabName;
 
     todos = [
       // Files which are written only if they don't exist. They are never rewritten.
       { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'],
-                                             dest: [testDir, 'services', `${kn}.test.js`],           ifNew: true },
+                        dest: [testDir, 'services', `${kn}.test.js`],           ifNew: true },
       { type: 'tpl',  src: [serPath,  '_model',   modelTpl],
-                                             dest: [libDir,  'models',   `${context.modelName}.js`], ifNew: true, ifSkip: !context.modelName },
-      { type: 'tpl',  src: mainFileTpl,      dest: [libDir,  'services', kn, `${kn}.service.js`],    ifNew: true },
-      { type: 'tpl',  src: [namePath, asyn], dest: [libDir,  'services', kn, `${kn}.class.js`],      ifNew: true, ifSkip: adapter !== 'generic' },
+                        dest: [libDir,  'models', `${context.modelName}.js`],   ifNew: true, ifSkip: !context.modelName },
+      { type: 'tpl',  src: mainFileTpl,
+                        dest: [libDir,  'services', kn, `${kn}.service.js`],    ifNew: true },
+      { type: 'tpl',  src: [namePath, genericFileTpl],
+                        dest: [libDir,  'services', kn, `${kn}.class.js`],      ifNew: true, ifSkip: adapter !== 'generic' },
 
       // Files rewritten every (re)generation.
-      { type: 'tpl',  src: [namePath, 'name.schema.ejs'],       dest: [libDir, 'services', kn, `${kn}.schema.js`] },
-      { type: 'tpl',  src: [namePath, 'name.mongoose.ejs'],     dest: [libDir, 'services', kn, `${kn}.mongoose.js`] },
-      { type: 'tpl',  src: [namePath, 'name.validate.ejs'],     dest: [libDir, 'services', kn, `${kn}.validate.js`] },
-      { type: 'tpl',  src: [namePath, `name.hooks${auth}.ejs`], dest: [libDir, 'services', kn, `${kn}.hooks.js`] },
-      { type: 'tpl',  src: [serPath,  'index.ejs'],             dest: [libDir, 'services', 'index.js'] },
+      { type: 'tpl',  src: [namePath, 'name.schema.ejs'],   dest: [libDir, 'services', kn, `${kn}.schema.js`] },
+      { type: 'tpl',  src: [namePath, 'name.mongoose.ejs'], dest: [libDir, 'services', kn, `${kn}.mongoose.js`] },
+      { type: 'tpl',  src: [namePath, 'name.validate.ejs'], dest: [libDir, 'services', kn, `${kn}.validate.js`] },
+      { type: 'tpl',  src: [namePath, 'name.hooks.ejs'],    dest: [libDir, 'services', kn, `${kn}.hooks.js`] },
+      { type: 'tpl',  src: [serPath,  'index.ejs'],         dest: [libDir, 'services', 'index.js'] },
     ];
 
     // Generate modules
@@ -430,15 +436,15 @@ module.exports = function generatorWriting(generator, what) {
     });
 
     // Custom abbreviations for building 'todos'.
-    const auth = specs.graphql.requiresAuth ? '-auth' : '';
+    const hookFileTpl = specs.graphql.requiresAuth ? 'graphql.hooks-user.ejs' : 'graphql.hooks.ejs';
 
     todos = [
       // Files which are written only if they don't exist. They are never rewritten.
       { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'], dest: [testDir, 'services', 'graphql.test.js'], ifNew: true },
 
       // Files rewritten every (re)generation.
-      { type: 'tpl',  src: [qlPath,  `graphql.hooks${auth}.ejs`],   dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
-      { type: 'tpl',  src: [qlPath,  `graphql.hooks.ejs`],          dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
+      { type: 'tpl',  src: [qlPath,  hookFileTpl],                  dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
+      { type: 'tpl',  src: [qlPath,  'graphql.hooks.ejs'],          dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
       { type: 'tpl',  src: [qlPath,  'graphql.schemas.ejs'],        dest: [libDir,  'services', 'graphql', 'graphql.schemas.js'] },
       { type: 'tpl',  src: [qlPath,  'graphql.service.ejs'],        dest: [libDir,  'services', 'graphql', 'graphql.service.js'] },
       { type: 'tpl',  src: [qlPath,  'batchloader.resolvers.ejs'],  dest: [libDir,  'services', 'graphql', 'batchloader.resolvers.js'] },

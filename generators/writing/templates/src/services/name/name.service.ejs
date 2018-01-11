@@ -1,7 +1,12 @@
 
 // Initializes the `<%= name %>` service on path `/<%= path %>`. (Can be re-generated.)
-const createService = require('<%= serviceModule %>');<% if(modelName) { %>
-const createModel = require('../../models/<%= modelName %>');<% } %>
+const createService = require('<%= serviceModule %>');
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if(modelName) { -%>
+const createModel = require('../../models/<%= modelName %>');
+<% } -%>
+<%# --- if-1 ends above. -%>
 const hooks = require('./<%= kebabName %>.hooks');
 
 module.exports = function (app) {

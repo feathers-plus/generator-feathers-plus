@@ -1,0 +1,14 @@
+{
+  "options": {
+    "configJs": false
+  },
+  "app": {
+    "src": "lib",
+    "packager": "npm@>= 3.0.0",
+    "providers": [
+      "rest",
+      "socketio"
+    ]
+  },
+  "services": {}
+}

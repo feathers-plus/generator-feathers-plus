@@ -1,7 +1,19 @@
 
 // Hooks for service `<%= name %>`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
-<% if (requiresAuth) { %>const { authenticate } = require('@feathersjs/authentication').hooks;<% } %>
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (requiresAuth || isAuthEntityWithAuthentication) { -%>
+const { authenticate } = require('@feathersjs/authentication').hooks;
+<% } -%>
+<%# --- if-1 ends above. -%>
+
+<%# -%>
+<%# --- if-2 starts below. -%>
+<% if (isAuthEntityWithAuthentication && authentication.strategies.indexOf('local') !== -1) { -%>
+const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
+<% } -%>
+<%# --- if-2 ends above. -%>
 <%- insertFragment('imports') %>
 
 <%- insertFragment('used', [
@@ -11,75 +23,78 @@ const commonHooks = require('feathers-hooks-common');
 
 let moduleExports = {
   before: {
-    all: [ <% if (requiresAuth) { %> authenticate('jwt') <% } %>
-      <%- insertFragment('before_all') %>
-    ],
-    find: [
-      <%- insertFragment('before_find') %>
-    ],
-    get: [
-      <%- insertFragment('before_get') %>
-    ],
-    create: [
-      <%- insertFragment('before_create') %>
-    ],
-    update: [
-      <%- insertFragment('before_update') %>
-    ],
-    patch: [
-      <%- insertFragment('before_patch') %>
-    ],
-    remove: [
-      <%- insertFragment('before_remove') %>
-    ]
+<%# -%>
+<%# --- if/else-3 starts below. -%>
+<% if (!isAuthEntityWithAuthentication) { -%>
+    <%- insertFragment('before', [
+      `    all: [${requiresAuth ? " authenticate('jwt') " : ''}],`,
+      '    find: [],',
+      '    get: [],',
+      '    create: [],',
+      '    update: [],',
+      '    patch: [],',
+      '    remove: [],',
+    ]) %>
+<% } else {
+  __temp = authentication.strategies.indexOf('local') !== -1 ? ' hashPassword() ' : ''
+-%>
+    <%- insertFragment('before', [
+      '    all: [],',
+      "    find: [ authenticate('jwt') ],",
+      '    get: [],',
+      `    create: [${__temp}],`,
+      `    update: [${__temp}],`,
+      `    patch: [${__temp}],`,
+      '    remove: []',
+    ]) %>
+<% } -%>
+<%# --- if/else-3 ends above. -%>
   },
 
   after: {
-    all: [
-      <%- insertFragment('after_all') %>
-    ],
-    find: [
-      <%- insertFragment('after_find') %>
-    ],
-    get: [
-      <%- insertFragment('after_get') %>
-    ],
-    create: [
-      <%- insertFragment('after_create') %>
-    ],
-    update: [
-      <%- insertFragment('after_update') %>
-    ],
-    patch: [
-      <%- insertFragment('after_patch') %>
-    ],
-    remove: [
-      <%- insertFragment('after_remove') %>
-    ]
+<%# -%>
+<%# --- if/else-4 starts below. -%>
+<% if (!isAuthEntityWithAuthentication) { -%>
+    <%- insertFragment('after', [
+      '    all: [],',
+      '    find: [],',
+      '    get: [],',
+      '    create: [],',
+      '    update: [],',
+      '    patch: [],',
+      '    remove: [],',
+    ]) %>
+<% } else {
+  __temp = !authentication.strategies.indexOf('local') !== -1 ? '' : [
+    '',
+          '      // Make sure the password field is never sent to the client',
+          '      // Always must be the last hook',
+          "       protect('password'),",
+  ].join(EOL);
+-%>
+    <%- insertFragment('after', [
+      `    all: [${__temp}],`,
+      '    find: [],',
+      '    get: [],',
+      '    create: [],',
+      '    update: [],',
+      '    patch: [],',
+      '    remove: [],',
+    ]) %>
+<% } -%>
+<%# --- if/else-4 ends above. -%>
   },
 
   error: {
-    all: [
-      <%- insertFragment('error_all') %>
-    ],
-    find: [
-      <%- insertFragment('error_find') %>
-    ],
-    get: [
-      <%- insertFragment('error_get') %>
-    ],
-    create: [
-      <%- insertFragment('error_create') %>
-    ],
-    update: [
-      <%- insertFragment('error_update') %>
-    ],
-    patch: [
-      <%- insertFragment('error_patch') %>
-    ],
-    remove: [
-      <%- insertFragment('error_remove') %>
-    ]
+    <%- insertFragment('error', [
+      '    all: [],',
+      '    find: [],',
+      '    get: [],',
+      '    create: [],',
+      '    update: [],',
+      '    patch: [],',
+      '    remove: [],',
+    ]) %>
   },
   <%- insertFragment('moduleExports') %>
 };

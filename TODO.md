@@ -50,3 +50,7 @@ OK - do not update secret in default.json
   Maybe we need to have batchloader().then(result => result || [])
 - lib/generator.js#checkPackage() should check existance of geathers-gen-specs.json not package.json internals
   generators to call checkPackage() consistently.
+- read config/default.json at start of writing() so as not to lose double updates to it.
+- eliminate config/defauly.js and option in specs.
+- Implement https://mail.google.com/mail/u/0/#inbox/16074e58e85beea7
+- Look into https://mail.google.com/mail/u/0/#inbox/16074e913372c0c8

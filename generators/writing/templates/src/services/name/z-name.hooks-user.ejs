@@ -2,6 +2,7 @@
 // Hooks for service `<%= name %>`, including auth. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
+<%- insertFragment('imports') %>
 
 <% if (authentication.strategies.indexOf('local') !== -1) { %>const {
   hashPassword, protect
@@ -10,8 +11,9 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 <%- insertFragment('used', [
   'const { iff } = commonHooks; // eslint-disable-line no-unused-vars'
 ]) %>
+<%- insertFragment('init') %>
 
-module.exports = {
+let moduleExports = {
   before: {
     all: [],
     find: [ authenticate('jwt') ],
@@ -24,25 +26,37 @@ module.exports = {
 
   after: {
     all: [ <% if (authentication.strategies.indexOf('local') !== -1) { %>
+      <%- insertFragment('after_all') %>
       // Make sure the password field is never sent to the client
       // Always must be the last hook
-      protect('password')<% } %>
+      protect('password')<% } %>,
     ],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
+    <%- insertFragment('after', [
+      '    find: [],',
+      '    get: [],',
+      '    create: [],',
+      '    update: [],',
+      '    patch: [],',
+      '    remove: [],',
+    ]) %>
   },
 
   error: {
-    all: [],
-    find: [],
-    get: [],
-    create: [],
-    update: [],
-    patch: [],
-    remove: []
-  }
+    <%- insertFragment('error', [
+      '    all: [],',
+      '    find: [],',
+      '    get: [],',
+      '    create: [],',
+      '    update: [],',
+      '    patch: [],',
+      '    remove: [],',
+    ]) %>
+  },
+<%- insertFragment('moduleExports') %>
 };
+
+<%- insertFragment('exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>
