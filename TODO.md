@@ -65,5 +65,6 @@ TEST - Add "Your hooks should contain ..." to app, service and graphql hooks.ejs
   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 - why does mapping.feathers have all services not just those for GraphQL?
 - finalize src.channels.ejs
-- Implement https://mail.google.com/mail/u/0/#inbox/16074e58e85beea7
-- Look into https://mail.google.com/mail/u/0/#inbox/16074e913372c0c8
+OK - Implement https://mail.google.com/mail/u/0/#inbox/16074e58e85beea7
+OK - Look into https://mail.google.com/mail/u/0/#inbox/16074e913372c0c8
+- implement generator tests: feathersjs/generators-feathers/test/generators.test.js
