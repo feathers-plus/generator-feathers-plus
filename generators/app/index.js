@@ -1,5 +1,7 @@
 
-const path = require('path');
+const chalk = require('chalk');
+const { parse, sep } = require('path');
+const { cwd } = require('process');
 const { kebabCase } = require('lodash');
 
 const Generator = require('../../lib/generator');
@@ -9,16 +11,34 @@ const { initSpecs } = require('../../lib/specs');
 module.exports = class AppGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
+  }
 
+  prompting () {
+    const { props, _specs: specs } = this;
+    this._initialGeneration = !this._specs.app;
     initSpecs('app');
 
-    this.props = {
-      name: this.pkg.name || process.cwd().split(path.sep).pop(),
-      description: this.pkg.description,
-      src: this._specs.app.src || (this.pkg.directories && this.pkg.directories.lib),
-    };
+    if (this._initialGeneration) {
+      this.log(
+        '\n\n'
+        + chalk.green.bold('We are creating a new app in dir ')
+        + chalk.yellow.bold(parse(cwd()).base)
+        + '\n'
+      );
+    } else {
+      this.log(
+        '\n\n'
+        + chalk.green.bold('We are changing the app base in dir ')
+        + chalk.yellow.bold(parse(cwd()).base)
+        + '\n'
+      );
+    }
 
-    this.dependencies = [
+    props.name = this.pkg.name || process.cwd().split(sep).pop();
+    props.description = this.pkg.description || `Project ${kebabCase(this.props.name)}`;
+    props.src = specs.app.src || (this.pkg.directories && this.pkg.directories.lib);
+
+    const dependencies = [
       '@feathersjs/feathers',
       '@feathersjs/errors',
       '@feathersjs/configuration',
@@ -28,26 +48,17 @@ module.exports = class AppGenerator extends Generator {
       'compression',
       'helmet',
       'winston',
-      'cors'
-    ];
+      'cors',
 
-    this.devDependencies = [
       'eslint',
       'mocha',
       'request',
-      'request-promise'
+      'request-promise',
+
+      '@feathersjs/express',
+      '@feathersjs/socketio',
+      '@feathersjs/primus'
     ];
-  }
-
-  prompting () {
-    const { _specs: specs } = this;
-
-    const dependencies = this.dependencies.concat(this.devDependencies)
-      .concat([
-        '@feathersjs/express',
-        '@feathersjs/socketio',
-        '@feathersjs/primus'
-      ]);
 
     const prompts = [{
       name: 'name',

@@ -7,7 +7,7 @@ const { join } = require('path');
 
 <%- insertFragment('main', [
   'let dialect, openDb, executeSql;',
-  '// const sqlite = require(\'sqlite\')',
+  '// const sqlite = require(\'sqlite\');',
   '// dialect = \'sqlite3\';',
   '',
   '// openDb = () => {',
@@ -17,7 +17,7 @@ const { join } = require('path');
   '',
   '// executeSql = sql => sqlite.all(sql)',
   '//   .catch(err => {',
-  '//     console.log(\'executeSql error=\', err.message);',
+  '//     console.log(\'executeSql error=\', err.message); // eslint-disable-line no-console',
   '//     throw err;',
   '//   });',
 ]) %>

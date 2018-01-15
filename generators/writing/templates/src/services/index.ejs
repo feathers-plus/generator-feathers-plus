@@ -1,7 +1,7 @@
 
 // Configure the Feathers services. (Can be re-generated.)
 <%# -%>
-<%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
+<%# --- forEach-1 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => {
   __fileName = specs.services[__name].fileName || __name;
 -%>
@@ -20,7 +20,7 @@ let <%- specs.graphql.name %> = require('./<%- specs.graphql.name %>/<%- specs.g
 
 let moduleExports = function (app) { // eslint-disable-line no-unused-vars
 <%# -%>
-<%# --- forEach-2 starts below. Loop thru the schemas of GraphQL enabled services. -%>
+<%# --- forEach-2 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
   app.configure(<%- __name %>);
 <% }); -%>

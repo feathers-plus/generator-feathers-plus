@@ -1,5 +1,5 @@
 
-// Hooks for service `<%= name %>`. (Can be re-generated.)
+// Hooks for service `<%= serviceName %>`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 <%# -%>
 <%# --- if-1 starts below. -%>
@@ -11,7 +11,7 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (isAuthEntityWithAuthentication && authentication.strategies.indexOf('local') !== -1) { -%>
-const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
+const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks; // eslint-disable-line no-unused-vars
 <% } -%>
 <%# --- if-2 ends above. -%>
 <%- insertFragment('imports') %>
@@ -26,6 +26,10 @@ let moduleExports = {
 <%# -%>
 <%# --- if/else-3 starts below. -%>
 <% if (!isAuthEntityWithAuthentication) { -%>
+<% if (requiresAuth) { -%>
+    // Your hooks should include:
+    // all: authenticate('jwt')
+<% } -%>
     <%- insertFragment('before', [
       `    all: [${requiresAuth ? " authenticate('jwt') " : ''}],`,
       '    find: [],',
@@ -36,8 +40,15 @@ let moduleExports = {
       '    remove: [],',
     ]) %>
 <% } else {
-  __temp = authentication.strategies.indexOf('local') !== -1 ? ' hashPassword() ' : ''
+  __temp = authentication.strategies.indexOf('local') !== -1 ? ' hashPassword() ' : '';
 -%>
+    // Your hooks should include:
+    // find: authenticate('jwt')
+<% if (__temp) { -%>
+    // create: <%- __temp %>
+    // update: <%- __temp %>
+    // patch: <%- __temp %>
+<% } -%>
     <%- insertFragment('before', [
       '    all: [],',
       "    find: [ authenticate('jwt') ],",
@@ -67,11 +78,14 @@ let moduleExports = {
 <% } else {
   __temp = !authentication.strategies.indexOf('local') !== -1 ? '' : [
     '',
-          '      // Make sure the password field is never sent to the client',
-          '      // Always must be the last hook',
-          "       protect('password'),",
+    '      // Make sure the password field is never sent to the client',
+    '      // Always must be the last hook',
+    "       protect('password'),",
   ].join(EOL);
 -%>
+<% if (__temp) { -%>
+    // all: <% __temp %>
+<% } -%>
     <%- insertFragment('after', [
       `    all: [${__temp}],`,
       '    find: [],',

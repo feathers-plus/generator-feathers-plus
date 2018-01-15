@@ -1,5 +1,8 @@
 
+const chalk = require('chalk');
 const { snakeCase } = require('lodash');
+const { parse } = require('path');
+const { cwd } = require('process');
 
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
@@ -8,13 +11,30 @@ const { initSpecs } = require('../../lib/specs');
 module.exports = class ConnectionGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
-
-    initSpecs('connection');
-    this.dependencies = [];
   }
 
   prompting () {
-    this.checkPackage();
+    this.checkDirContainsApp();
+    this._initialGeneration = !this._specs.connections;
+    initSpecs('connection');
+
+    if (this._initialGeneration) {
+      this.log(
+        '\n\n'
+        + chalk.green.bold('We are adding the first connection in dir ')
+        + chalk.yellow.bold(parse(cwd()).base)
+        + '\n'
+      );
+    } else {
+      this.log(
+        '\n\n'
+        + chalk.green.bold('We are adding or changing connections in dir ')
+        + chalk.yellow.bold(parse(cwd()).base)
+        + '\n'
+      );
+    }
+
+    this.dependencies = [];
 
     const databaseName = snakeCase(this.pkg.name);
     const { defaultConfig } = this;

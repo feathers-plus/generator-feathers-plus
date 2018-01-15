@@ -1,4 +1,5 @@
 
+/* eslint-disable no-unused-vars */
 // Define GraphQL resolvers using Feathers services and BatchLoaders. (Can be re-generated.)
 const { getByDot, setByDot } = require('feathers-hooks-common');
 <%- insertFragment('imports') %>
@@ -41,18 +42,18 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     let feathersParams;
 
     switch (dataLoaderName) {
-      /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
-      <%- insertFragment('bl-persisted', [
-        '      // case \'_persisted.user.one.id\': // service user, returns one object, key is field id',
-      ]) %>
+    /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
+    <%- insertFragment('bl-persisted', [
+      '    // case \'_persisted.user.one.id\': // service user, returns one object, key is field id',
+    ]) %>
 
-      /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
-      <%- insertFragment('bl-shared', [
-          '      // *.*: User',
-          '      // case \'_shared.user.one.id\': // service user, returns one object, key is field id',
-      ]) %>
+    /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
+    <%- insertFragment('bl-shared', [
+        '    // *.*: User',
+        '    // case \'_shared.user.one.id\': // service user, returns one object, key is field id',
+    ]) %>
 
-      /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
+    /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
 <%# -%>
 <%# --- forEach-a starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(mapping.graphqlService).forEach(graphqlName => {
@@ -72,20 +73,20 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     __code = __addField.isNullable ? '' : '!';
   }
   __temp = [
-    `      case '${graphqlName}.${fieldName}':`,
-    `        return feathersBatchLoader(dataLoaderName, '${__code}', '${__addField.relation.otherTable}',`,
-    '          keys => {',
-    '            feathersParams = convertArgsToFeathers(args,',
-    `              { query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined }, populate: false }`,
-    '            );',
-    `            return ${__addField.serviceName}.find(feathersParams);`,
-    '          }',
-    '        );',
+    `    case '${graphqlName}.${fieldName}':`,
+    `      return feathersBatchLoader(dataLoaderName, '${__code}', '${__addField.relation.otherTable}',`,
+    '        keys => {',
+    '          feathersParams = convertArgsToFeathers(args,',
+    `            { query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined }, populate: false }`,
+    '          );',
+    `          return ${__addField.serviceName}.find(feathersParams);`,
+    '        }',
+    '      );',
   ];
 -%>
 
-      // <%- `${graphqlName}.${fieldName}${__addField.args}: ${__addField.type}` %>
-      <%- insertFragment(`bl-${graphqlName}-${fieldName}`, __temp) %>
+    // <%- `${graphqlName}.${fieldName}${__addField.args}: ${__addField.type}` %>
+    <%- insertFragment(`bl-${graphqlName}-${fieldName}`, __temp) %>
 <% } -%>
 <%# --- if-c ends above. -%>
 <% }); -%>
@@ -93,11 +94,11 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 <% }); -%>
 <%# --- forEach-a ends above. -%>
 
-      /* Throw on unknown BatchLoader name. */
-      default:
-        <%- insertFragment('bl-default', [
-          '        throw new Error(`GraphQL query requires BatchLoader named \'${dataLoaderName}\' but no definition exists for it.`);',
-        ]) %>
+    /* Throw on unknown BatchLoader name. */
+    default:
+      <%- insertFragment('bl-default', [
+        '      throw new Error(`GraphQL query requires BatchLoader named \'${dataLoaderName}\' but no definition exists for it.`);',
+      ]) %>
     }
   }
 

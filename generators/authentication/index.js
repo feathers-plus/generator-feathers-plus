@@ -1,13 +1,40 @@
 
+const chalk = require('chalk');
+const { parse } = require('path');
+const { cwd } = require('process');
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
 
 module.exports = class AuthGenerator extends Generator {
+  constructor (args, opts) {
+    super(args, opts);
+  }
+
   prompting() {
-    const { props } = this;
+    this.checkDirContainsApp();
+    const { props, _specs: specs } = this;
+    this._initialGeneration = !specs.authentication;
     initSpecs('authentication');
-    this.checkPackage();
+
+    if (this._initialGeneration) {
+      this.log(
+        '\n\n'
+        + chalk.green.bold('We are adding initial authentication in dir ')
+        + chalk.yellow.bold(parse(cwd()).base)
+        + '\n'
+      );
+    } else {
+      this.log(
+        '\n\n'
+        + chalk.green.bold('We are changing the authentication in dir ')
+        + chalk.yellow.bold(parse(cwd()).base)
+        + '\n'
+      );
+    }
+
+    const ifStrategy = value => specs.authentication && specs.authentication.strategies &&
+      specs.authentication.strategies.indexOf(value) !== -1;
 
     const prompts = [{
       type: 'checkbox',
@@ -18,24 +45,28 @@ module.exports = class AuthGenerator extends Generator {
         {
           name: 'Username + Password (Local)',
           value: 'local',
-          checked: true
+          checked: !specs.authentication || ifStrategy('local'),
         }, {
           name: 'Auth0',
-          value: 'auth0'
+          value: 'auth0',
+          checked: ifStrategy('auth0'),
         }, {
           name: 'Google',
-          value: 'google'
+          value: 'google',
+          checked: ifStrategy('google'),
         }, {
           name: 'Facebook',
-          value: 'facebook'
+          value: 'facebook',
+          checked: ifStrategy('facebook'),
         }, {
           name: 'GitHub',
-          value: 'github'
+          value: 'github',
+          checked: ifStrategy('github'),
         }]
     }, {
       name: 'entity',
       message: 'What is the name of the user (entity) service?',
-      default: 'users'
+      default: specs.authentication && specs.authentication.entity || 'users',
     }];
 
     return this.prompt(prompts).then(props1 => {

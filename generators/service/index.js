@@ -1,11 +1,10 @@
 
-const path = require('path');
 const chalk = require('chalk');
 const deepMerge = require('deepmerge');
 const mongoose = require('mongoose');
-
 const { camelCase, kebabCase, snakeCase } = require('lodash');
-const { join } = require('path');
+const { cwd } = require('process');
+const { join, parse } = require('path');
 
 const doesFileExist = require('../../lib/does-file-exist');
 const Generator = require('../../lib/generator');
@@ -21,16 +20,17 @@ const nativeFuncs = {
   [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId',
 };
 
-const templatePath = path.join(__dirname, 'templates');
-const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
-
 module.exports = class ServiceGenerator extends Generator {
+  constructor (args, opts) {
+    super(args, opts);
+  }
+
   prompting() {
+    this.checkDirContainsApp();
+    const { props, _specs: specs } = this;
     const generator = this;
     let serviceSpecs;
-    this.checkPackage();
 
-    const { props, _specs: specs } = generator;
     const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
 
     props.feathersSpecs = feathersSpecs;
@@ -67,11 +67,16 @@ module.exports = class ServiceGenerator extends Generator {
             initSpecs('service', { name: input });
             serviceSpecs = specs.services[input];
 
-            const fileName = specs.services[input].fileName || input; // todo || input is temporary
+            const fileName = specs.services[input].fileName;
             const path = join(process.cwd(), specs.app.src, 'services', fileName, `${fileName}.schema`);
 
             if (!doesFileExist(`${path}.js`)) {
-              generator.log('\n\n' + chalk.green.bold('We are adding a new service.') + '\n');
+              generator.log(
+                '\n\n'
+                + chalk.green.bold('We are adding a new service in dir ')
+                + chalk.yellow.bold(parse(cwd()).base)
+                + '\n'
+              );
               generator.log(chalk.green([
                 'Once this generation is complete, define the JSON-schema for the data in module',
                 `"services/${kebabCase(input)}/${input}.schema.js". Then (re)generate this service.`,
@@ -87,7 +92,12 @@ module.exports = class ServiceGenerator extends Generator {
 
               mongooseSchema = {};
             } else {
-              generator.log('\n\n' + chalk.green.bold('We are regenerating an existing service.') + '\n');
+              generator.log(
+                '\n\n'
+                + chalk.green.bold('We are changing an existing service in dir ')
+                + chalk.yellow.bold(parse(cwd()).base)
+                + '\n'
+              );
               generator.log(chalk.green([
                 'Run "feathers-plus generate graphql" afterwards if you want any',
                 'schema changes to also be handled in GraphQL.',
@@ -98,12 +108,6 @@ module.exports = class ServiceGenerator extends Generator {
             }
 
             handleName(input, mongooseSchema);
-            /*
-            props.serviceName = input;
-            props.feathersSpec = props.feathersSpecs[input] || {};
-            props.mongooseSchema = mongooseSchema;
-            props.mongooseSchemaStr = stringifyPlus(mongooseSchema, { nativeFuncs });
-            */
           } catch (err) {
             generator.log(err);
           }

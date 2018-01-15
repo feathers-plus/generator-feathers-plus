@@ -1,21 +1,13 @@
 
-// Application hooks that run for every service. (Can be re-generated.)
-const commonHooks = require('feathers-hooks-common');
-<%- insertFragment('imports', [
-  'const logger = require(\'./hooks/logger\');',
-]) %>
-
-<%- insertFragment('used', [
-  'const { iff } = commonHooks; // eslint-disable-line no-unused-vars'
-]) %>
-<%- insertFragment('init') %>
+// Hooks for GraphQL service. (Can be re-generated.)
+<% if (requiresAuth) { %>const { authenticate } = require('@feathersjs/authentication').hooks;<% } %>
+//!code: imports //!end
+//!code: init //!end
 
 let moduleExports = {
   before: {
     <%- insertFragment('before', [
-      '    all: [',
-      '      logger(),',
-      '    ],',
+      `    all: [${requiresAuth ? " authenticate('jwt') " : ''}],`,
       '    find: [],',
       '    get: [],',
       '    create: [],',
@@ -27,9 +19,7 @@ let moduleExports = {
 
   after: {
     <%- insertFragment('after', [
-      '    all: [',
-      '      logger()',
-      '    ],',
+      '    all: [],',
       '    find: [],',
       '    get: [],',
       '    create: [],',
@@ -50,11 +40,11 @@ let moduleExports = {
       '    remove: [],',
     ]) %>
   },
-  <%- insertFragment('moduleExports') %>
+  //!code: moduleExports //!end
 };
 
-<%- insertFragment('exports') %>
+//!code: exports //!end
 module.exports = moduleExports;
 
-<%- insertFragment('funcs') %>
-<%- insertFragment('end') %>
+//!code: funcs //!end
+//!code: end //!end

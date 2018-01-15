@@ -4,18 +4,19 @@ const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
 
 module.exports = class MiddlewareGenerator extends Generator {
-  prompting () {
-    initSpecs('all');
-    this.checkPackage();
-    const { props, _specs: specs } = this;
+  constructor (args, opts) {
+    super(args, opts);
+  }
 
-    const prompts = [
-      {
-        name: 'confirmation',
-        message: 'Regenerate the entire application?',
-        type: 'confirm',
-      },
-    ];
+  prompting () {
+    this.checkDirContainsApp();
+    initSpecs('all');
+
+    const prompts = [{
+      name: 'confirmation',
+      message: 'Regenerate the entire application?',
+      type: 'confirm',
+    }];
 
     return this.prompt(prompts).then(answers => {
       if (!answers.confirmation) process.exit(0);

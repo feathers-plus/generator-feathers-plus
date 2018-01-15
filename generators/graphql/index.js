@@ -1,22 +1,42 @@
 
 const chalk = require('chalk');
-const { camelCase, kebabCase, snakeCase } = require('lodash');
+const { parse } = require('path');
+const { cwd } = require('process');
 
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
-const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
-const stringifyPlus = require('../../lib/stringify-plus');
-
 const { initSpecs } = require('../../lib/specs');
 
 module.exports = class ServiceGenerator extends Generator {
-  prompting() {
-    const { props, _specs: specs } = this;
-    const graphqlSpecs = specs.graphql;
-    this.checkPackage();
+  constructor (args, opts) {
+    super(args, opts);
+  }
 
-    const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
+  prompting() {
+    this.checkDirContainsApp();
+    const { props, _specs: specs } = this;
+    this._initialGeneration = !specs.graphql;
+    initSpecs('graphql');
+
+    if (this._initialGeneration) {
+      this.log(
+        '\n\n'
+        + chalk.green.bold('We are creating the initial GraphQL endpoint in dir ')
+        + chalk.yellow.bold(parse(cwd()).base)
+        + '\n'
+      );
+    } else {
+      this.log(
+        '\n\n'
+        + chalk.green.bold('We are changing the GraphQL endpoint in dir ')
+        + chalk.yellow.bold(parse(cwd()).base)
+        + '\n'
+      );
+    }
+
+    const graphqlSpecs = specs.graphql;
+    const { mapping } = serviceSpecsExpand(specs);
 
     if (!Object.keys(mapping.feathers).length) {
       this.log('No services are configured as being served by GraphQL. ');

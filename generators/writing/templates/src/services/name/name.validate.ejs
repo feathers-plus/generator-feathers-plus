@@ -1,6 +1,6 @@
 
 /* eslint quotes: 0 */
-// Validation definitions for validateSchema hook for service `<%= name %>`. (Can be re-generated.)
+// Validation definitions for validateSchema hook for service `<%= serviceName %>`. (Can be re-generated.)
 const { validateSchema } = require('@feathers-plus/feathers-hooks-common');
 const deepMerge = require('deepmerge');
 const ajv = require('ajv');
@@ -12,7 +12,7 @@ const ajv = require('ajv');
 ]) %>
 
 const base = deepMerge.all([{},
-<% __jsonSchema = deepMerge({}, feathersSpecs[name]);
+<% __jsonSchema = deepMerge({}, feathersSpecs[serviceName]);
    delete __jsonSchema._extensions;
    __str = stringifyPlus(__jsonSchema).replace(/"ID"/g, 'ID')
      .split('\n').map(str => `  ${str}`).join('\n');

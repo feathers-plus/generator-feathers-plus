@@ -1,7 +1,5 @@
 {
-  "options": {
-    "configJs": false
-  },
+  "options": {},
   "app": {
     "src": "lib",
     "packager": "npm@>= 3.0.0",

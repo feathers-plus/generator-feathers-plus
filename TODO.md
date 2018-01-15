@@ -18,39 +18,52 @@ OK - app test doesn't run
 OK - service test not created
 OK - connection string prompted for again when nedb service is regenerated
 OK - test src !== 'src'
-LATER - lib/generator.js defaultConfig needs to change if config/default.js is to be used
 OK - don't write specs expanded to file
 OK - put in lib/generator.js generator.conflicter.force = true;
 OK - publish feathers-plus/graphql
 OK - enable in graphql/index.js // '@feathers-plus/graphql'
-- hooks modules should be ifNew: true
 OK - get 'npm start' working for graphql
-- generate graphql has linting issues
-- check all // todo
 OK - updateSpecs likely no longer needs to update 'specs' param
-LATER - remove configJs: false
 OK - call specsExpand from specs.js
 OK - check if nedb-1.validate.js does not create props at code: base when service is first created
-- nedb-1.validate.js creates empty 'base' when a service without a schema is regenerated.
 OK - "shows a 404 JSON error without stack trace" shows a stack trace.
-- move things like deepMerge into the default context
-- is context.requiresAuth needed in writing#app?
-- should class.js and class-async.js be in their own folder?
-- service generator, this looks wrong. (Also check graphql)
-  const auth = generator.props.authentication ? '.auth' : '';
-- look at how dependencies are done in writing() generators
-- add new/old headings to generators
 OK - move this.refreshCodeFragments to lib/generator.js & only run once for composedWith
 OK - GraphQL extensions.graphql.name & .sqlTable should not be kebab case
 OK - src/services/name/name.validate.js the service name in //Defines should not be kebab case
-- review which modules are regenerated and which are written just once.
 OK - do not update secret in default.json
-- generate authentication does not seem to default to data in specs.
+OK - read config/default.json at start of writing() so as not to lose double updates to it.
+OK - Redo app, service and graphql hook templates.
+OK - generate graphql has linting issues
+OK - eliminate config/default.js and option in specs.
+OK - move things like deepMerge into the default context
+OK - is context.requiresAuth needed in writing#app?
+OK - service generator, this looks wrong. (Also check graphql)
+OK   const auth = generator.props.authentication ? '.auth' : '';
+OK - add new/old headings to generators
+OK - generate authentication does not seem to default to data in specs.
+OK - nedb-1.validate.js creates empty 'base' when a service without a schema is regenerated.
+OK - name.validate.js does not include the following when a service is first created, but does when its recreated without change
+OK   $schema: "http://json-schema.org/draft-05/schema",
+OK   title: "Nedb1",
+OK   description: "Nedb1 database.",
+OK - remove configJs: false
+OK - check all // todo
+OK - look at how dependencies are done in writing() generators
+OK - lib/generator.js#checkDirContainsApp() should check existance of feathers-gen-specs.json not package.json internals
+OK -  generators to call checkDirContainsApp() consistently.
+OK - Add the generator vers creating the app.
+
+NO - hooks modules should be ifNew: true
+NO - should class.js and class-async.js be in their own folder?
+NO - lib/generator.js defaultConfig needs to change if config/default.js is to be used
+NO - add initial/updating for connections
+
+TEST - Add "Your hooks should contain ..." to app, service and graphql hooks.ejs
+
+- review which modules are regenerated and which are written just once.
 - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
-  Maybe we need to have batchloader().then(result => result || [])
-- lib/generator.js#checkPackage() should check existance of geathers-gen-specs.json not package.json internals
-  generators to call checkPackage() consistently.
-- read config/default.json at start of writing() so as not to lose double updates to it.
-- eliminate config/defauly.js and option in specs.
+  graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
+- why does mapping.feathers have all services not just those for GraphQL?
+- finalize src.channels.ejs
 - Implement https://mail.google.com/mail/u/0/#inbox/16074e58e85beea7
 - Look into https://mail.google.com/mail/u/0/#inbox/16074e913372c0c8

@@ -33,6 +33,8 @@ const nativeFuncs = {
 module.exports = function generatorWriting(generator, what) {
   // Get expanded app specs
   let { props, _specs: specs } = generator;
+  // Get latest config as a previous generator may have updated it.
+  generator.defaultConfig = generator.fs.readJSON(generator.destinationPath('config', 'default.json'), {});
 
   const generators = [...new Set(specs._generators)].sort(); // get unique elements
   generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
@@ -50,7 +52,7 @@ module.exports = function generatorWriting(generator, what) {
 
   // Abbreviations for paths used in building 'todos'.
   const tpl = join(__dirname, 'templates');
-  const cfgPath = join(tpl, 'config');
+  // const cfgPath = join(tpl, 'config');
   const src = specs.app.src;
   const srcPath = join(tpl, src);
   const mwPath = join(srcPath, 'middleware');
@@ -60,7 +62,6 @@ module.exports = function generatorWriting(generator, what) {
   const testPath = join(tpl, 'test');
 
   // Other abbreviations using in building 'todos'.
-  const js = specs.options.configJs; // todo we remove configJs ?
   const libDir = generator.libDirectory;
   let todos;
 
@@ -72,10 +73,11 @@ module.exports = function generatorWriting(generator, what) {
   // Basic context used with templates.
   let context = Object.assign({}, props, {
     specs,
-    EOL,
-    deepMerge: deepMerge,
-    stringifyPlus: stringifyPlus,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
+
+    deepMerge: deepMerge,
+    EOL,
+    stringifyPlus,
   });
 
   // Generate what is needed.
@@ -92,7 +94,7 @@ module.exports = function generatorWriting(generator, what) {
       authentication(generator);
       middleware(generator);
 
-      if (Object.keys(mapping.feathers).length) {
+      if (Object.keys(mapping.graphqlService).length || Object.keys(mapping.graphqlSql).length) {
         graphql(generator);
       }
 
@@ -125,11 +127,6 @@ module.exports = function generatorWriting(generator, what) {
   function app(generator) {
     generator.logSteps && console.log('>>>>> app generator writing()');
 
-    // Custom template context
-    context = Object.assign({}, context, {
-      requiresAuth: false,
-    });
-
     // Custom abbreviations for building 'todos'.
     const pkg = generator.pkg = makeConfig.package(generator);
     const configDefault = makeConfig.configDefault(generator);
@@ -145,8 +142,8 @@ module.exports = function generatorWriting(generator, what) {
       { type: 'tpl',  src: [tpl, 'README.md.ejs'],  dest: 'README.md',      ifNew: true },
       { type: 'json', obj: pkg,              dest: 'package.json',   ifNew: true },
 
-      { type: 'json', obj: configDefault,    dest: ['config', 'default.json'],    ifNew: true,  ifSkip: js },
-      { type: 'json', obj: configProd,       dest: ['config', 'production.json'], ifNew: true,  ifSkip: js },
+      { type: 'json', obj: configDefault,    dest: ['config', 'default.json'],    ifNew: true },
+      { type: 'json', obj: configProd,       dest: ['config', 'production.json'], ifNew: true },
 
       { type: 'copy', src: [tpl, 'public', 'favicon.ico'],      dest: ['public', 'favicon.ico'],    ifNew: true },
       { type: 'copy', src: [tpl, 'public', 'index.html'],       dest: ['public', 'index.html'],     ifNew: true },
@@ -157,13 +154,11 @@ module.exports = function generatorWriting(generator, what) {
       { type: 'copy', src: [tpl, 'src', 'refs', 'common.json'], dest: [src, 'refs', 'common.json'], ifNew: true },
 
       // Files rewritten every (re)generation.
-      { type: 'tpl',  src: [tpl, 'config', 'production.ejs'],   dest: ['config', 'production.js'],  ifSkip: !js },
       { type: 'tpl',  src: [tpl, 'src', 'index.ejs'],           dest: [src, 'index.js'] },
 
       { type: 'tpl',  src: [tpl, 'src', 'app.hooks.ejs'],       dest: [src, 'app.hooks.js'] },
       { type: 'tpl',  src: [tpl, 'src', 'channels.ejs'],        dest: [src, 'channels.js'] }, // work todo
 
-      { type: 'tpl',  src: [cfgPath, 'default.ejs'], dest: ['config', 'default.js'], ifSkip: !js },
       { type: 'tpl',  src: [mwPath, 'index.ejs'],    dest: [src, 'middleware', 'index.js'] },
       { type: 'tpl',  src: [srcPath, 'app.ejs'],     dest: [src, 'app.js'] },
       { type: 'tpl',  src: [serPath, 'index.ejs'],   dest: [src, 'services', 'index.js'] },
@@ -173,7 +168,6 @@ module.exports = function generatorWriting(generator, what) {
     generatorFs(generator, context, todos);
 
     // Update dependencies
-    // todo dependencies also defined in app#prompting()
     generator.dependencies = [
       '@feathersjs/feathers',
       '@feathersjs/errors',
@@ -249,38 +243,37 @@ module.exports = function generatorWriting(generator, what) {
 
     // Custom template context. Include 'props' customized for this service.
     context = Object.assign({}, context, props, {
-      name,
       serviceName: name,
       kebabName,
       adapter,
       path: stripSlashes(path),
       authentication: isAuthEntityWithAuthentication,
       isAuthEntityWithAuthentication,
+      requiresAuth: specsService.requiresAuth,
 
       libDirectory: generator.libDirectory,
       modelName: hasModel ? `${kebabName}.model` : null,
       serviceModule,
-      mongooseSchema:  serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
+      mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
     });
     context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
 
     // Custom abbreviations for building 'todos'.
     const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.ejs`)) ?
       [serPath, '_types', `${adapter}.ejs`] : [serPath, 'name', 'name.service.ejs'];
-    // todo const hookFileTpl = isAuthEntityWithAuthentication ? 'name.hooks-user.ejs' : 'name.hooks.ejs';
-    const genericFileTpl = generator.hasAsync ? 'class-async.js' : 'class.js';
+    const genericFileTpl = generator.hasAsync ? 'name.class-async.js' : 'name.class.js';
     const kn = kebabName;
 
     todos = [
       // Files which are written only if they don't exist. They are never rewritten.
-      { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'],
-                        dest: [testDir, 'services', `${kn}.test.js`],           ifNew: true },
-      { type: 'tpl',  src: [serPath,  '_model',   modelTpl],
-                        dest: [libDir,  'models', `${context.modelName}.js`],   ifNew: true, ifSkip: !context.modelName },
-      { type: 'tpl',  src: mainFileTpl,
-                        dest: [libDir,  'services', kn, `${kn}.service.js`],    ifNew: true },
-      { type: 'tpl',  src: [namePath, genericFileTpl],
-                        dest: [libDir,  'services', kn, `${kn}.class.js`],      ifNew: true, ifSkip: adapter !== 'generic' },
+      { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'], dest: [testDir, 'services', `${kn}.test.js`],
+                      ifNew: true },
+      { type: 'tpl',  src: [serPath,  '_model',   modelTpl],        dest: [libDir,  'models', `${context.modelName}.js`],
+                      ifNew: true, ifSkip: !context.modelName },
+      { type: 'tpl',  src: mainFileTpl,                             dest: [libDir,  'services', kn, `${kn}.service.js`],
+                      ifNew: true },
+      { type: 'tpl',  src: [namePath, genericFileTpl],              dest: [libDir,  'services', kn, `${kn}.class.js`],
+                      ifNew: true, ifSkip: adapter !== 'generic' },
 
       // Files rewritten every (re)generation.
       { type: 'tpl',  src: [namePath, 'name.schema.ejs'],   dest: [libDir, 'services', kn, `${kn}.schema.js`] },
@@ -311,8 +304,7 @@ module.exports = function generatorWriting(generator, what) {
     const _adapters = specs._adapters;
 
     const todos = !Object.keys(connections).length ? [] : [
-      { type: 'json', obj: newConfig,                dest: ['config', 'default.json'], ifSkip: js },
-      { type: 'tpl',  src: [cfgPath, 'default.ejs'], dest: ['config', 'default.js'],   ifSkip: !js },
+      { type: 'json', obj: newConfig,                dest: ['config', 'default.json'] },
       { type: 'tpl',  src: [srcPath, 'app.ejs'],     dest: [libDir, 'app.js'] },
     ];
 
@@ -428,31 +420,31 @@ module.exports = function generatorWriting(generator, what) {
 
     // Custom template context
     context = Object.assign({}, context, {
+      name: 'graphql',
       serviceName : 'graphql',
       path: stripSlashes(specs.graphql.path),
+      authentication: specs.graphql.requiresAuth,
+      isAuthEntityWithAuthentication: false,
+
       strategy: specs.graphql.strategy,
       graphqlSchemas: serviceSpecsToGraphql(feathersSpecs),
       libDirectory: generator.libDirectory,
     });
-
-    // Custom abbreviations for building 'todos'.
-    const hookFileTpl = specs.graphql.requiresAuth ? 'graphql.hooks-user.ejs' : 'graphql.hooks.ejs';
 
     todos = [
       // Files which are written only if they don't exist. They are never rewritten.
       { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'], dest: [testDir, 'services', 'graphql.test.js'], ifNew: true },
 
       // Files rewritten every (re)generation.
-      { type: 'tpl',  src: [qlPath,  hookFileTpl],                  dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
-      { type: 'tpl',  src: [qlPath,  'graphql.hooks.ejs'],          dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
-      { type: 'tpl',  src: [qlPath,  'graphql.schemas.ejs'],        dest: [libDir,  'services', 'graphql', 'graphql.schemas.js'] },
-      { type: 'tpl',  src: [qlPath,  'graphql.service.ejs'],        dest: [libDir,  'services', 'graphql', 'graphql.service.js'] },
-      { type: 'tpl',  src: [qlPath,  'batchloader.resolvers.ejs'],  dest: [libDir,  'services', 'graphql', 'batchloader.resolvers.js'] },
-      { type: 'tpl',  src: [qlPath,  'service.resolvers.ejs'],      dest: [libDir,  'services', 'graphql', 'service.resolvers.js'] },
-      { type: 'tpl',  src: [qlPath,  'sql.execute.ejs'],            dest: [libDir,  'services', 'graphql', 'sql.execute.js'] },
-      { type: 'tpl',  src: [qlPath,  'sql.metadata.ejs'],           dest: [libDir,  'services', 'graphql', 'sql.metadata.js'] },
-      { type: 'tpl',  src: [qlPath,  'sql.resolvers.ejs'],          dest: [libDir,  'services', 'graphql', 'sql.resolvers.js'] },
-      { type: 'tpl',  src: [serPath, 'index.ejs'],                  dest: [libDir,  'services', 'index.js'] },
+      { type: 'tpl',  src: [namePath, 'name.hooks.ejs'],            dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
+      { type: 'tpl',  src: [qlPath,   'graphql.schemas.ejs'],       dest: [libDir,  'services', 'graphql', 'graphql.schemas.js'] },
+      { type: 'tpl',  src: [qlPath,   'graphql.service.ejs'],       dest: [libDir,  'services', 'graphql', 'graphql.service.js'] },
+      { type: 'tpl',  src: [qlPath,   'batchloader.resolvers.ejs'], dest: [libDir,  'services', 'graphql', 'batchloader.resolvers.js'] },
+      { type: 'tpl',  src: [qlPath,   'service.resolvers.ejs'],     dest: [libDir,  'services', 'graphql', 'service.resolvers.js'] },
+      { type: 'tpl',  src: [qlPath,   'sql.execute.ejs'],           dest: [libDir,  'services', 'graphql', 'sql.execute.js'] },
+      { type: 'tpl',  src: [qlPath,   'sql.metadata.ejs'],          dest: [libDir,  'services', 'graphql', 'sql.metadata.js'] },
+      { type: 'tpl',  src: [qlPath,   'sql.resolvers.ejs'],         dest: [libDir,  'services', 'graphql', 'sql.resolvers.js'] },
+      { type: 'tpl',  src: [serPath,  'index.ejs'],                 dest: [libDir,  'services', 'index.js'] },
     ];
 
     // Generate modules
@@ -470,7 +462,7 @@ function writeAuthenticationConfiguration(generator, context) {
   const config = Object.assign({}, generator.defaultConfig);
 
   config.authentication = {
-    secret: generator.defaultConfig.authentication.secret || crypto.randomBytes(256).toString('hex'),
+    secret: (generator.defaultConfig.authentication || {}).secret || crypto.randomBytes(256).toString('hex'),
     strategies: [ 'jwt' ],
     path: '/authentication',
     service: context.kebabEntity,

@@ -15,8 +15,6 @@ module.exports = class SecretGenerator extends Generator {
 
   end () {
     const { secret } = this.props;
-
-    this.log();
-    this.log(`Secret: ${secret}`);
+    this.log(`\nSecret: ${secret}`);
   }
 };

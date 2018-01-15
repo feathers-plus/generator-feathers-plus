@@ -28,7 +28,7 @@ const hooks = require('./graphql.hooks');
 <%- insertFragment('imports') %>
 
 const strategy = '<%- strategy %>';
-console.log(`\n===== configuring graphql service for ${strategy}.\n`);
+console.log(`\n===== configuring graphql service for ${strategy}.\n`); // eslint-disable-line no-console
 
 let schemas = mergeTypes([
   generatedSchema,
