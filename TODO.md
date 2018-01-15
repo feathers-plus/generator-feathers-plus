@@ -52,6 +52,9 @@ OK - look at how dependencies are done in writing() generators
 OK - lib/generator.js#checkDirContainsApp() should check existance of feathers-gen-specs.json not package.json internals
 OK -  generators to call checkDirContainsApp() consistently.
 OK - Add the generator vers creating the app.
+OK - why does mapping.feathers have all services not just those for GraphQL?
+OK - Implement https://mail.google.com/mail/u/0/#inbox/16074e58e85beea7
+OK - Look into https://mail.google.com/mail/u/0/#inbox/16074e913372c0c8
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -60,11 +63,9 @@ NO - add initial/updating for connections
 
 TEST - Add "Your hooks should contain ..." to app, service and graphql hooks.ejs
 
+LATER - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
+LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
+
 - review which modules are regenerated and which are written just once.
-- findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
-  graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
-- why does mapping.feathers have all services not just those for GraphQL?
 - finalize src.channels.ejs
-OK - Implement https://mail.google.com/mail/u/0/#inbox/16074e58e85beea7
-OK - Look into https://mail.google.com/mail/u/0/#inbox/16074e913372c0c8
 - implement generator tests: feathersjs/generators-feathers/test/generators.test.js

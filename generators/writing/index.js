@@ -33,7 +33,7 @@ const nativeFuncs = {
 module.exports = function generatorWriting(generator, what) {
   // Get expanded app specs
   let { props, _specs: specs } = generator;
-  // Get latest config as a previous generator may have updated it.
+  // Get latest config as a previously run generator may have updated it.
   generator.defaultConfig = generator.fs.readJSON(generator.destinationPath('config', 'default.json'), {});
 
   const generators = [...new Set(specs._generators)].sort(); // get unique elements
@@ -41,12 +41,13 @@ module.exports = function generatorWriting(generator, what) {
 
   const generatorsInclude = name =>(specs._generators || []).indexOf(name) !== -1;
 
-  if ( what !== 'all') {
+  if (what !== 'all') {
     updateSpecs(what, props, `${what} generator`);
   }
 
   // Get expanded Feathers service specs
   const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
+  inspector('mapping', mapping)
   props.feathersSpecs = feathersSpecs;
   props.mapping= mapping;
 
@@ -54,7 +55,7 @@ module.exports = function generatorWriting(generator, what) {
   const tpl = join(__dirname, 'templates');
   // const cfgPath = join(tpl, 'config');
   const src = specs.app.src;
-  const srcPath = join(tpl, src);
+  const srcPath = join(tpl, 'src');
   const mwPath = join(srcPath, 'middleware');
   const serPath = join(srcPath, 'services');
   const namePath = join(serPath, 'name');

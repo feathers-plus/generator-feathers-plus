@@ -15,13 +15,15 @@ module.exports = class AppGenerator extends Generator {
 
   prompting () {
     const { props, _specs: specs } = this;
-    this._initialGeneration = !this._specs.app;
+    this._initialGeneration = !this._specs.app.src;
     initSpecs('app');
 
     if (this._initialGeneration) {
       this.log(
         '\n\n'
-        + chalk.green.bold('We are creating a new app in dir ')
+        + chalk.green.bold('We are creating a ')
+        + chalk.yellow.bold('NEW')
+        + chalk.green.bold(' app in dir ')
         + chalk.yellow.bold(parse(cwd()).base)
         + '\n'
       );
