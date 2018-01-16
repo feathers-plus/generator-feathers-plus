@@ -47,7 +47,6 @@ module.exports = function generatorWriting(generator, what) {
 
   // Get expanded Feathers service specs
   const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
-  inspector('mapping', mapping)
   props.feathersSpecs = feathersSpecs;
   props.mapping= mapping;
 

@@ -1,0 +1,13 @@
+{
+  "options": {
+    "ver": "1.0.0"
+  },
+  "app": {
+    "src": "src1",
+    "packager": "npm@>= 3.0.0",
+    "providers": [
+      "socketio"
+    ]
+  },
+  "services": {}
+}
