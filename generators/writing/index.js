@@ -16,8 +16,6 @@ const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const stringifyPlus = require('../../lib/stringify-plus');
 const { updateSpecs } = require('../../lib/specs');
 
-const stripSlashes = name => name.replace(/^(\/*)|(\/*)$/g, '');
-
 const OAUTH2_STRATEGY_MAPPINGS = {
   auth0: 'passport-auth0',
   google: 'passport-google-oauth20',
@@ -30,29 +28,43 @@ const nativeFuncs = {
   [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId',
 };
 
+function tmpl(src, dest, ifNew, ifSkip, ctx) {
+  return { type: 'tpl', src, dest, ifNew, ifSkip, ctx };
+}
+
+function copy(src, dest, ifNew, ifSkip, ctx) {
+  return { type: 'copy', src, dest, ifNew, ifSkip, ctx };
+}
+
+function json(obj, dest, ifNew, ifSkip, ctx) {
+  return { type: 'json', obj, dest, ifNew, ifSkip, ctx };
+}
+
+function stripSlashes(name) {
+  return name.replace(/^(\/*)|(\/*)$/g, '');
+}
+
+let generators;
+function generatorsInclude(name) {
+  return generators.indexOf(name) !== -1;
+}
+
 module.exports = function generatorWriting(generator, what) {
-  // Get expanded app specs
-  let { props, _specs: specs } = generator;
-  // Get latest config as a previously run generator may have updated it.
-  generator.defaultConfig = generator.fs.readJSON(generator.destinationPath('config', 'default.json'), {});
-
-  const generators = [...new Set(specs._generators)].sort(); // get unique elements
-  generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
-
-  const generatorsInclude = name =>(specs._generators || []).indexOf(name) !== -1;
-
+  // Update specs with answers to prompts
+  let { props, _specs: specs } = generator; // todo remove props
   if (what !== 'all') {
     updateSpecs(what, props, `${what} generator`);
   }
 
-  // Get expanded Feathers service specs
-  const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
-  props.feathersSpecs = feathersSpecs;
-  props.mapping= mapping;
+  // Get unique generators which have been run
+  generators = [...new Set(specs._generators)].sort();
+
+  // Get latest config as a previously run generator may have updated it.
+  generator.defaultConfig = generator.fs.readJSON(generator.destinationPath('config', 'default.json'), {});
+  generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
 
   // Abbreviations for paths used in building 'todos'.
   const tpl = join(__dirname, 'templates');
-  // const cfgPath = join(tpl, 'config');
   const src = specs.app.src;
   const srcPath = join(tpl, 'src');
   const mwPath = join(srcPath, 'middleware');
@@ -70,9 +82,14 @@ module.exports = function generatorWriting(generator, what) {
     testDir = testDir.substring(0, testDir.length - 1);
   }
 
+  // Get expanded Feathers service specs
+  const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
+
   // Basic context used with templates.
-  let context = Object.assign({}, props, {
+  let context = Object.assign({}, /*props,*/  { // todo props
     specs,
+    feathersSpecs,
+    mapping,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
 
     deepMerge: deepMerge,
@@ -80,13 +97,16 @@ module.exports = function generatorWriting(generator, what) {
     stringifyPlus,
   });
 
+  inspector('props', props);
+  inspector('context', context);
+
   // Generate what is needed.
   switch (what) {
     case 'all':
       app(generator);
 
       Object.keys(specs.services || {}).forEach(name => {
-        props = { name }; // we depend on no existing, required name prop
+        props = { name }; // we depend on no existing, required name prop // todo
         service(generator);
       });
 
@@ -133,6 +153,34 @@ module.exports = function generatorWriting(generator, what) {
     const configProd = makeConfig.configProduction(generator);
 
     todos = [
+      copy([tpl, '.editorconfig'],              '.editorconfig',               true),
+      copy([tpl, '.eslintrc.json'],             '.eslintrc.json',              true),
+      // This name hack is necessary because NPM does not publish `.gitignore` files
+      copy([tpl, '_gitignore'],                 '.gitignore',                  true),
+      copy([tpl, 'LICENSE'],                    'LICENSE',                     true),
+      tmpl([tpl, 'README.md.ejs'],              'README.md',                   true),
+
+      json(pkg,                                 'package.json',                true),
+      json(configDefault,                       ['config', 'default.json'],    true),
+      json(configProd,                          ['config', 'production.json'], true),
+
+      copy([tpl, 'public', 'favicon.ico'],      ['public', 'favicon.ico'],     true),
+      copy([tpl, 'public', 'index.html'],       ['public', 'index.html'],      true),
+
+      tmpl([tpl, 'test', 'app.test.js'],        [testDir,  'app.test.js'],     true),
+
+      copy([tpl, 'src', 'hooks', 'logger.js'],  [src, 'hooks', 'logger.js'],   true),
+      copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'],  true),
+
+      tmpl([tpl, 'src', 'index.ejs'],           [src, 'index.js']),
+      tmpl([tpl, 'src', 'app.hooks.ejs'],       [src, 'app.hooks.js']),
+      tmpl([tpl, 'src', 'channels.ejs'],        [src, 'channels.js']), // work todo
+
+      tmpl([mwPath,  'index.ejs'],              [src, 'middleware', 'index.js']),
+      tmpl([srcPath, 'app.ejs'],                [src, 'app.js']),
+      tmpl([serPath, 'index.ejs'],              [src, 'services', 'index.js']),
+
+      /*
       // Files which are written only if they don't exist. They are never rewritten (except for default.json)
       { type: 'copy', src: [tpl, '.editorconfig'],  dest: '.editorconfig',  ifNew: true },
       { type: 'copy', src: [tpl, '.eslintrc.json'], dest: '.eslintrc.json', ifNew: true },
@@ -140,8 +188,8 @@ module.exports = function generatorWriting(generator, what) {
       { type: 'copy', src: [tpl, '_gitignore'],     dest: '.gitignore',     ifNew: true },
       { type: 'copy', src: [tpl, 'LICENSE'],        dest: 'LICENSE',        ifNew: true },
       { type: 'tpl',  src: [tpl, 'README.md.ejs'],  dest: 'README.md',      ifNew: true },
-      { type: 'json', obj: pkg,              dest: 'package.json',   ifNew: true },
 
+      { type: 'json', obj: pkg,              dest: 'package.json',                ifNew: true },
       { type: 'json', obj: configDefault,    dest: ['config', 'default.json'],    ifNew: true },
       { type: 'json', obj: configProd,       dest: ['config', 'production.json'], ifNew: true },
 
@@ -155,13 +203,13 @@ module.exports = function generatorWriting(generator, what) {
 
       // Files rewritten every (re)generation.
       { type: 'tpl',  src: [tpl, 'src', 'index.ejs'],           dest: [src, 'index.js'] },
-
       { type: 'tpl',  src: [tpl, 'src', 'app.hooks.ejs'],       dest: [src, 'app.hooks.js'] },
       { type: 'tpl',  src: [tpl, 'src', 'channels.ejs'],        dest: [src, 'channels.js'] }, // work todo
 
       { type: 'tpl',  src: [mwPath, 'index.ejs'],    dest: [src, 'middleware', 'index.js'] },
       { type: 'tpl',  src: [srcPath, 'app.ejs'],     dest: [src, 'app.js'] },
       { type: 'tpl',  src: [serPath, 'index.ejs'],   dest: [src, 'services', 'index.js'] },
+      */
     ];
 
     // Generate modules
@@ -242,7 +290,7 @@ module.exports = function generatorWriting(generator, what) {
     }
 
     // Custom template context. Include 'props' customized for this service.
-    context = Object.assign({}, context, props, {
+    context = Object.assign({}, context, /*props,*/ { // todo props
       serviceName: name,
       kebabName,
       adapter,

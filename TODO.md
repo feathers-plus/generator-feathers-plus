@@ -69,3 +69,7 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 - review which modules are regenerated and which are written just once.
 - finalize src.channels.ejs
 - implement generator tests: feathersjs/generators-feathers/test/generators.test.js
+- testing generator app, feathers-gen-specs.json must ve
+  "name": "z-1",
+  "description": "Project z-1",
+  and prompt must be "z-1" as "z1" does not work WHY NOT?    

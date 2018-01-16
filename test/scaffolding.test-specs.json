@@ -3,6 +3,8 @@
     "ver": "1.0.0"
   },
   "app": {
+    "name": "z-1",
+    "description": "Project z-1",
     "src": "src1",
     "packager": "npm@>= 3.0.0",
     "providers": [

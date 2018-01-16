@@ -61,6 +61,7 @@
     "chai": "3.5.0",
     "fs-extra": "5.0.0",
     "istanbul": "1.1.0-alpha.1",
+    "klaw-sync": "3.0.2",
     "mocha": "4.0.1",
     "request": "2.83.0",
     "request-promise": "4.2.2",

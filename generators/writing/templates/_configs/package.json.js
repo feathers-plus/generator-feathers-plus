@@ -6,11 +6,11 @@ module.exports = function(generator) {
   const lib = props.src;
   const [ packager, version ] = specs.app.packager.split('@');
   const pkg = {
-    name: props.name,
-    description: props.description,
+    name: specs.app.name,
+    description: specs.app.description,
     version: '0.0.0',
     homepage: '',
-    main: lib,
+    main: specs.app.src,
     keywords: [
       'feathers'
     ],
@@ -21,7 +21,7 @@ module.exports = function(generator) {
     contributors: [],
     bugs: {},
     directories: {
-      lib,
+      lib: specs.app.src,
       test: 'test/'
     },
     engines: {
@@ -30,8 +30,8 @@ module.exports = function(generator) {
     },
     'scripts': {
       test: `${packager} run eslint && ${packager} run mocha`,
-      eslint: `eslint ${lib}/. test/. --config .eslintrc.json`,
-      start: `node ${lib}/`,
+      eslint: `eslint ${specs.app.src}/. test/. --config .eslintrc.json`,
+      start: `node ${specs.app.src}/`,
       mocha: 'mocha test/ --recursive --exit'
     }
   };

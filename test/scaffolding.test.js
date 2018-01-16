@@ -2,6 +2,7 @@ const path = require('path');
 const helpers = require('yeoman-test');
 const assert = require('yeoman-assert');
 const fs = require('fs-extra');
+const klawSync = require('klaw-sync');
 const cp = require('child_process');
 const rp = require('request-promise');
 
@@ -46,7 +47,7 @@ function delay (ms) {
 describe('scaffolding.test.js', function () {
   let appDir;
 
-  function runTest (expectedText) {
+  function runGeneratedTests (expectedText) {
     return startAndWait('npm', ['test'], {cwd: appDir})
       .then(({buffer}) => {
         assert.ok(buffer.indexOf(expectedText) !== -1,
@@ -56,37 +57,52 @@ describe('scaffolding.test.js', function () {
 
   beforeEach(() => {
     console.log('start beforeEach');
-    return helpers.run(path.join(__dirname, '..', 'generators', 'app'))
+    return helpers.run(path.join(__dirname, '..', 'generators', 'all'))
       .inTmpDir(dir => {
         appDir = dir;
-        console.log('temp dir is', dir);
-        console.log('before file copy');
-        fs.copySync(path.join(__dirname, './dir1/feathers-gen-specs.json'), path.join(`${dir}/feathers-gen-specs.json`));
-        console.log('after file copy');
+        fs.copySync(path.join(__dirname, 'scaffolding.test-specs.json'), path.join(`${dir}/feathers-gen-specs.json`));
       })
       .withPrompts({
-        name: 'app1',
-        providers: ['rest', 'socketio'],
-        src: 'src1',
-        //packager: 'yarn@>= 0.18.0',
-        packager : 'npm@>= 3.0.0',
+        confirmation: true,
       })
       .withOptions({
-        skipInstall: false
+        skipInstall: true
       });
   });
 
-  it('feathers:app', () => {
-    console.log('start feathers:app');
+  it('feathers:all', () => {
+    console.log('start feathers:all');
+    const testName = 'scaffolding.test';
 
-    assert.file('config/default.json');
+    const expectedPaths = getFileNames(path.join(__dirname, `${testName}-expected`));
+    const actualPaths = getFileNames(appDir);
+    assert.deepEqual(actualPaths.relativePaths, expectedPaths.relativePaths, 'Unexpected files in generated dir');
 
-    return runTest('starts and shows the index page')
-      .then(() => console.log('after runTest'))
+    actualPaths.paths.forEach((actualPath, i) => {
+      const actual = fs.readFileSync(actualPath.path, 'utf8');
+      const expected = fs.readFileSync(expectedPaths.paths[i].path, 'utf8');
+
+      assert.equal(actual, expected, `Unexpected contents for file ${actualPaths.relativePaths[i]}`);
+    });
+
+
+    /*
+    return runGeneratedTests('starts and shows the index page')
+      .then(() => console.log('after runGeneratedTests'))
       .then(() => {
         const pkg = require(path.join(appDir, 'package.json'));
 
         assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
       });
+    */
   });
 });
+
+function getFileNames(dir) {
+  const paths = klawSync(dir, { nodir: true });
+
+  return {
+    paths: paths,
+    relativePaths: paths.map(path => path.path.replace(`${dir}/`, '')).sort(),
+  };
+}

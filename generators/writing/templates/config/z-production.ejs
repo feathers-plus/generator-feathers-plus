@@ -9,7 +9,7 @@ module.exports = (function(generator) {
 
   let config = {
     <%- insertFragment('host', [
-      `    host: '${name}-app.feathersjs.com',`,
+      `    host: '${app.name}-app.feathersjs.com',`,
       '    port: `PORT`,',
     ]) %>
     <%- insertFragment('config_more') %>

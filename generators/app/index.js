@@ -36,8 +36,8 @@ module.exports = class AppGenerator extends Generator {
       );
     }
 
-    props.name = this.pkg.name || process.cwd().split(sep).pop();
-    props.description = this.pkg.description || `Project ${kebabCase(this.props.name)}`;
+    props.name = specs.app.name || this.pkg.name || process.cwd().split(sep).pop();
+    props.description = specs.app.description || this.pkg.description || `Project ${kebabCase(this.props.name)}`;
     props.src = specs.app.src || (this.pkg.directories && this.pkg.directories.lib);
 
     const dependencies = [

@@ -1,6 +1,6 @@
-# <%= specs.app.name %>
+# z-1
 
-> <%= specs.app.description %>
+> Project z-1
 
 ## About
 
@@ -14,7 +14,7 @@ Getting up and running is as easy as 1, 2, 3.
 2. Install your dependencies
 
     ```
-    cd path/to/<%= specs.app.name %>; npm install
+    cd path/to/z-1; npm install
     ```
 
 3. Start your app

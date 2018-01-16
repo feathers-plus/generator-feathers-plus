@@ -2,7 +2,7 @@
 const assert = require('assert');
 const rp = require('request-promise');
 const url = require('url');
-const app = require('../<%= specs.app.src %>/app');
+const app = require('../src1/app');
 
 let port = app.get('port') || 3030;
 let getUrl = pathname => url.format({
