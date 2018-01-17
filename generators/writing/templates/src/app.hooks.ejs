@@ -13,41 +13,37 @@ const commonHooks = require('feathers-hooks-common');
 let moduleExports = {
   before: {
     <%- insertFragment('before', [
-      '    all: [',
-      '      logger(),',
-      '    ],',
+      '    all: [ logger() ],',
       '    find: [],',
       '    get: [],',
       '    create: [],',
       '    update: [],',
       '    patch: [],',
-      '    remove: [],',
+      '    remove: []'
     ]) %>
   },
 
   after: {
     <%- insertFragment('after', [
-      '    all: [',
-      '      logger()',
-      '    ],',
+      '    all: [ logger() ],',
       '    find: [],',
       '    get: [],',
       '    create: [],',
       '    update: [],',
       '    patch: [],',
-      '    remove: [],',
+      '    remove: []'
     ]) %>
   },
 
   error: {
     <%- insertFragment('error', [
-      '    all: [],',
+      '    all: [ logger() ],',
       '    find: [],',
       '    get: [],',
       '    create: [],',
       '    update: [],',
       '    patch: [],',
-      '    remove: [],',
+      '    remove: []'
     ]) %>
   },
   <%- insertFragment('moduleExports') %>

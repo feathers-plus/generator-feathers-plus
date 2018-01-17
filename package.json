@@ -34,7 +34,8 @@
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "lint": "semistandard lib/*.js lib/**/*.js test/*.js test/**/*.js --fix",
     "mochax": "mocha --opts mocha.opts",
-    "mocha": "mocha test/ --timeout 600000 --exit",
+    "mocha:code": "mocha test/ --timeout 1200000 --exit --bail --grep \"writes code\"",
+    "mocha:tests": "mocha test/ --timeout 1200000 --exit --bail --grep \"runs test\"",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
     "test": "npm run lint && npm run coverage"
   },

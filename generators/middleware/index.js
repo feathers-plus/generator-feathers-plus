@@ -23,7 +23,7 @@ module.exports = class MiddlewareGenerator extends Generator {
       name: 'name',
       message: 'What is the name of the Express middleware?',
       validate (input) {
-        if (!specs.middlewares[input]) {
+        if (!specs.middlewares || !specs.middlewares[input]) {
           defaultPath = '*';
           generator.log(
             '\n\n'

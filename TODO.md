@@ -55,6 +55,10 @@ OK - Add the generator vers creating the app.
 OK - why does mapping.feathers have all services not just those for GraphQL?
 OK - Implement https://mail.google.com/mail/u/0/#inbox/16074e58e85beea7
 OK - Look into https://mail.google.com/mail/u/0/#inbox/16074e913372c0c8
+OK - testing generator app, feathers-gen-specs.json must ve
+OK   "name": "z-1",
+OK   "description": "Project z-1",
+OK   and prompt must be "z-1" as "z1" does not work WHY NOT?
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -69,7 +73,5 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 - review which modules are regenerated and which are written just once.
 - finalize src.channels.ejs
 - implement generator tests: feathersjs/generators-feathers/test/generators.test.js
-- testing generator app, feathers-gen-specs.json must ve
-  "name": "z-1",
-  "description": "Project z-1",
-  and prompt must be "z-1" as "z1" does not work WHY NOT?    
+- middleware/index.js: user should change order, need comments saying what should be there e.g. name:path
+    

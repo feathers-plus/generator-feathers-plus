@@ -49,6 +49,10 @@ function generatorsInclude(name) {
   return generators.indexOf(name) !== -1;
 }
 
+function getConfigDefaultJson(generator) {
+  generator.defaultConfig = generator.fs.readJSON(generator.destinationPath('config', 'default.json'), {});
+}
+
 module.exports = function generatorWriting(generator, what) {
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator; // todo remove props
@@ -60,7 +64,7 @@ module.exports = function generatorWriting(generator, what) {
   generators = [...new Set(specs._generators)].sort();
 
   // Get latest config as a previously run generator may have updated it.
-  generator.defaultConfig = generator.fs.readJSON(generator.destinationPath('config', 'default.json'), {});
+  getConfigDefaultJson(generator);
   generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
 
   // Abbreviations for paths used in building 'todos'.
@@ -74,7 +78,7 @@ module.exports = function generatorWriting(generator, what) {
   const testPath = join(tpl, 'test');
 
   // Other abbreviations using in building 'todos'.
-  const libDir = generator.libDirectory;
+  const libDir = specs.app.src;
   let todos;
 
   let testDir = generator.testDirectory;
@@ -106,15 +110,22 @@ module.exports = function generatorWriting(generator, what) {
       app(generator);
 
       Object.keys(specs.services || {}).forEach(name => {
+        getConfigDefaultJson(generator);
         props = { name }; // we depend on no existing, required name prop // todo
         service(generator);
       });
 
+      getConfigDefaultJson(generator);
       connection(generator);
+
+      getConfigDefaultJson(generator);
       authentication(generator);
+
+      getConfigDefaultJson(generator);
       middleware(generator);
 
       if (Object.keys(mapping.graphqlService).length || Object.keys(mapping.graphqlSql).length) {
+        getConfigDefaultJson(generator);
         graphql(generator);
       }
 
@@ -167,49 +178,18 @@ module.exports = function generatorWriting(generator, what) {
       copy([tpl, 'public', 'favicon.ico'],      ['public', 'favicon.ico'],     true),
       copy([tpl, 'public', 'index.html'],       ['public', 'index.html'],      true),
 
-      tmpl([tpl, 'test', 'app.test.js'],        [testDir,  'app.test.js'],     true),
+      tmpl([tpl, 'test', 'app.test.ejs'],        [testDir,  'app.test.js'],     true),
 
       copy([tpl, 'src', 'hooks', 'logger.js'],  [src, 'hooks', 'logger.js'],   true),
       copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'],  true),
 
-      tmpl([tpl, 'src', 'index.ejs'],           [src, 'index.js']),
-      tmpl([tpl, 'src', 'app.hooks.ejs'],       [src, 'app.hooks.js']),
-      tmpl([tpl, 'src', 'channels.ejs'],        [src, 'channels.js']), // work todo
+      tmpl([tpl, 'src', 'index.ejs'],           [src, 'index.js']                  ),
+      tmpl([tpl, 'src', 'app.hooks.ejs'],       [src, 'app.hooks.js']              ),
+      tmpl([tpl, 'src', 'channels.ejs'],        [src, 'channels.js']               ), // work todo
 
-      tmpl([mwPath,  'index.ejs'],              [src, 'middleware', 'index.js']),
-      tmpl([srcPath, 'app.ejs'],                [src, 'app.js']),
-      tmpl([serPath, 'index.ejs'],              [src, 'services', 'index.js']),
-
-      /*
-      // Files which are written only if they don't exist. They are never rewritten (except for default.json)
-      { type: 'copy', src: [tpl, '.editorconfig'],  dest: '.editorconfig',  ifNew: true },
-      { type: 'copy', src: [tpl, '.eslintrc.json'], dest: '.eslintrc.json', ifNew: true },
-      // This name hack is necessary because NPM does not publish `.gitignore` files
-      { type: 'copy', src: [tpl, '_gitignore'],     dest: '.gitignore',     ifNew: true },
-      { type: 'copy', src: [tpl, 'LICENSE'],        dest: 'LICENSE',        ifNew: true },
-      { type: 'tpl',  src: [tpl, 'README.md.ejs'],  dest: 'README.md',      ifNew: true },
-
-      { type: 'json', obj: pkg,              dest: 'package.json',                ifNew: true },
-      { type: 'json', obj: configDefault,    dest: ['config', 'default.json'],    ifNew: true },
-      { type: 'json', obj: configProd,       dest: ['config', 'production.json'], ifNew: true },
-
-      { type: 'copy', src: [tpl, 'public', 'favicon.ico'],      dest: ['public', 'favicon.ico'],    ifNew: true },
-      { type: 'copy', src: [tpl, 'public', 'index.html'],       dest: ['public', 'index.html'],     ifNew: true },
-
-      { type: 'tpl',  src: [tpl, 'test', 'app.test.js'],        dest: [testDir, 'app.test.js'],     ifNew: true },
-
-      { type: 'copy', src: [tpl, 'src', 'hooks', 'logger.js'],  dest: [src, 'hooks', 'logger.js'],  ifNew: true },
-      { type: 'copy', src: [tpl, 'src', 'refs', 'common.json'], dest: [src, 'refs', 'common.json'], ifNew: true },
-
-      // Files rewritten every (re)generation.
-      { type: 'tpl',  src: [tpl, 'src', 'index.ejs'],           dest: [src, 'index.js'] },
-      { type: 'tpl',  src: [tpl, 'src', 'app.hooks.ejs'],       dest: [src, 'app.hooks.js'] },
-      { type: 'tpl',  src: [tpl, 'src', 'channels.ejs'],        dest: [src, 'channels.js'] }, // work todo
-
-      { type: 'tpl',  src: [mwPath, 'index.ejs'],    dest: [src, 'middleware', 'index.js'] },
-      { type: 'tpl',  src: [srcPath, 'app.ejs'],     dest: [src, 'app.js'] },
-      { type: 'tpl',  src: [serPath, 'index.ejs'],   dest: [src, 'services', 'index.js'] },
-      */
+      tmpl([mwPath,  'index.ejs'],              [src, 'middleware', 'index.js']    ),
+      tmpl([srcPath, 'app.ejs'],                [src, 'app.js']                    ),
+      tmpl([serPath, 'index.ejs'],              [src, 'services', 'index.js']      ),
     ];
 
     // Generate modules
@@ -299,7 +279,7 @@ module.exports = function generatorWriting(generator, what) {
       isAuthEntityWithAuthentication,
       requiresAuth: specsService.requiresAuth,
 
-      libDirectory: generator.libDirectory,
+      libDirectory: specs.app.src,
       modelName: hasModel ? `${kebabName}.model` : null,
       serviceModule,
       mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
@@ -313,22 +293,16 @@ module.exports = function generatorWriting(generator, what) {
     const kn = kebabName;
 
     todos = [
-      // Files which are written only if they don't exist. They are never rewritten.
-      { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'], dest: [testDir, 'services', `${kn}.test.js`],
-                      ifNew: true },
-      { type: 'tpl',  src: [serPath,  '_model',   modelTpl],        dest: [libDir,  'models', `${context.modelName}.js`],
-                      ifNew: true, ifSkip: !context.modelName },
-      { type: 'tpl',  src: mainFileTpl,                             dest: [libDir,  'services', kn, `${kn}.service.js`],
-                      ifNew: true },
-      { type: 'tpl',  src: [namePath, genericFileTpl],              dest: [libDir,  'services', kn, `${kn}.class.js`],
-                      ifNew: true, ifSkip: adapter !== 'generic' },
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`],           true                        ),
+      tmpl([serPath,  '_model',   modelTpl],        [libDir,  'models',   `${context.modelName}.js`], true, !context.modelName    ),
+      tmpl(mainFileTpl,                             [libDir,  'services', kn, `${kn}.service.js`],    true                        ),
+      tmpl([namePath, genericFileTpl],              [libDir,  'services', kn, `${kn}.class.js`],      true, adapter !== 'generic' ),
 
-      // Files rewritten every (re)generation.
-      { type: 'tpl',  src: [namePath, 'name.schema.ejs'],   dest: [libDir, 'services', kn, `${kn}.schema.js`] },
-      { type: 'tpl',  src: [namePath, 'name.mongoose.ejs'], dest: [libDir, 'services', kn, `${kn}.mongoose.js`] },
-      { type: 'tpl',  src: [namePath, 'name.validate.ejs'], dest: [libDir, 'services', kn, `${kn}.validate.js`] },
-      { type: 'tpl',  src: [namePath, 'name.hooks.ejs'],    dest: [libDir, 'services', kn, `${kn}.hooks.js`] },
-      { type: 'tpl',  src: [serPath,  'index.ejs'],         dest: [libDir, 'services', 'index.js'] },
+      tmpl([namePath, 'name.schema.ejs'],           [libDir,  'services', kn, `${kn}.schema.js`]      ),
+      tmpl([namePath, 'name.mongoose.ejs'],         [libDir,  'services', kn, `${kn}.mongoose.js`]    ),
+      tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', kn, `${kn}.validate.js`]    ),
+      tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', kn, `${kn}.hooks.js`]       ),
+      tmpl([serPath,  'index.ejs'],                 [libDir,  'services', 'index.js']                 ),
     ];
 
     // Generate modules
@@ -352,12 +326,12 @@ module.exports = function generatorWriting(generator, what) {
     const _adapters = specs._adapters;
 
     const todos = !Object.keys(connections).length ? [] : [
-      { type: 'json', obj: newConfig,                dest: ['config', 'default.json'] },
-      { type: 'tpl',  src: [srcPath, 'app.ejs'],     dest: [libDir, 'app.js'] },
+      json(newConfig,              ['config', 'default.json'] ),
+      tmpl([srcPath, 'app.ejs'],   [libDir, 'app.js']         ),
     ];
 
     Object.keys(_adapters).sort().forEach(adapter => { todos.push(
-      { type: 'copy', src: [srcPath, '_adapters', _adapters[adapter]], dest: [libDir, `${adapter}.js`],  ifNew: true }
+      copy([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`],  true )
     ); });
 
     // Generate modules
@@ -424,9 +398,8 @@ module.exports = function generatorWriting(generator, what) {
     }
 
     todos = [
-      // Files rewritten every (re)generation.
-      { type: 'tpl',  src: [srcPath, 'authentication.ejs'], dest: [libDir, 'authentication.js'] },
-      { type: 'tpl',  src: [srcPath, 'app.ejs'],            dest: [src, 'app.js'] },
+      tmpl([srcPath, 'authentication.ejs'], [libDir, 'authentication.js'] ),
+      tmpl([srcPath, 'app.ejs'],            [src, 'app.js']               ),
     ];
 
     // Generate modules
@@ -446,15 +419,13 @@ module.exports = function generatorWriting(generator, what) {
     if (!specs.middlewares) return;
 
     todos = [
-      // Files rewritten every (re)generation.
-      { type: 'tpl',  src: [mwPath, 'index.ejs'], dest: [src, 'middleware', 'index.js'] },
+      tmpl([mwPath, 'index.ejs'], [src, 'middleware', 'index.js'] ),
     ];
 
     Object.keys(specs.middlewares || {}).sort().forEach(mwName => {
       const fileName = specs.middlewares[mwName].kebab;
       todos.push(
-        { type: 'tpl',  src: [mwPath, 'middleware.ejs'],
-                dest: [libDir, 'middleware', `${fileName}.js`], ifNew: true, ctx: { mwName } },
+        tmpl([mwPath, 'middleware.ejs'], [libDir, 'middleware', `${fileName}.js`], true, null, { mwName } ),
       );
     });
 
@@ -480,19 +451,17 @@ module.exports = function generatorWriting(generator, what) {
     });
 
     todos = [
-      // Files which are written only if they don't exist. They are never rewritten.
-      { type: 'tpl',  src: [testPath, 'services', 'name.test.ejs'], dest: [testDir, 'services', 'graphql.test.js'], ifNew: true },
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', 'graphql.test.js'],                    true ),
 
-      // Files rewritten every (re)generation.
-      { type: 'tpl',  src: [namePath, 'name.hooks.ejs'],            dest: [libDir,  'services', 'graphql', 'graphql.hooks.js'] },
-      { type: 'tpl',  src: [qlPath,   'graphql.schemas.ejs'],       dest: [libDir,  'services', 'graphql', 'graphql.schemas.js'] },
-      { type: 'tpl',  src: [qlPath,   'graphql.service.ejs'],       dest: [libDir,  'services', 'graphql', 'graphql.service.js'] },
-      { type: 'tpl',  src: [qlPath,   'batchloader.resolvers.ejs'], dest: [libDir,  'services', 'graphql', 'batchloader.resolvers.js'] },
-      { type: 'tpl',  src: [qlPath,   'service.resolvers.ejs'],     dest: [libDir,  'services', 'graphql', 'service.resolvers.js'] },
-      { type: 'tpl',  src: [qlPath,   'sql.execute.ejs'],           dest: [libDir,  'services', 'graphql', 'sql.execute.js'] },
-      { type: 'tpl',  src: [qlPath,   'sql.metadata.ejs'],          dest: [libDir,  'services', 'graphql', 'sql.metadata.js'] },
-      { type: 'tpl',  src: [qlPath,   'sql.resolvers.ejs'],         dest: [libDir,  'services', 'graphql', 'sql.resolvers.js'] },
-      { type: 'tpl',  src: [serPath,  'index.ejs'],                 dest: [libDir,  'services', 'index.js'] },
+      tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', 'graphql', 'graphql.hooks.js']              ),
+      tmpl([qlPath,   'graphql.schemas.ejs'],       [libDir,  'services', 'graphql', 'graphql.schemas.js']            ),
+      tmpl([qlPath,   'graphql.service.ejs'],       [libDir,  'services', 'graphql', 'graphql.service.js']            ),
+      tmpl([qlPath,   'batchloader.resolvers.ejs'], [libDir,  'services', 'graphql', 'batchloader.resolvers.js']      ),
+      tmpl([qlPath,   'service.resolvers.ejs'],     [libDir,  'services', 'graphql', 'service.resolvers.js']          ),
+      tmpl([qlPath,   'sql.execute.ejs'],           [libDir,  'services', 'graphql', 'sql.execute.js']                ),
+      tmpl([qlPath,   'sql.metadata.ejs'],          [libDir,  'services', 'graphql', 'sql.metadata.js']               ),
+      tmpl([qlPath,   'sql.resolvers.ejs'],         [libDir,  'services', 'graphql', 'sql.resolvers.js']              ),
+      tmpl([serPath,  'index.ejs'],                 [libDir,  'services', 'index.js'] ),
     ];
 
     // Generate modules

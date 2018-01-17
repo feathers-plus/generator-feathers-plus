@@ -37,7 +37,7 @@ let moduleExports = {
       '    create: [],',
       '    update: [],',
       '    patch: [],',
-      '    remove: [],',
+      '    remove: []',
     ]) %>
 <% } else {
   __temp = authentication.strategies.indexOf('local') !== -1 ? ' hashPassword() ' : '';
@@ -73,7 +73,7 @@ let moduleExports = {
       '    create: [],',
       '    update: [],',
       '    patch: [],',
-      '    remove: [],',
+      '    remove: []',
     ]) %>
 <% } else {
   __temp = !authentication.strategies.indexOf('local') !== -1 ? '' : [
@@ -93,7 +93,7 @@ let moduleExports = {
       '    create: [],',
       '    update: [],',
       '    patch: [],',
-      '    remove: [],',
+      '    remove: []',
     ]) %>
 <% } -%>
 <%# --- if/else-4 ends above. -%>
@@ -107,7 +107,7 @@ let moduleExports = {
       '    create: [],',
       '    update: [],',
       '    patch: [],',
-      '    remove: [],',
+      '    remove: []',
     ]) %>
   },
   <%- insertFragment('moduleExports') %>
