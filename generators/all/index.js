@@ -1,14 +1,16 @@
 
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
-const { initSpecs } = require('../../lib/specs');
+const { initSpecs, setPath } = require('../../lib/specs');
 
 module.exports = class MiddlewareGenerator extends Generator {
   constructor (args, opts) {
     super(args, opts);
   }
 
-  prompting () {
+  async prompting () {
+    const appSpecsFile = 'feathers-gen-specs.json';
+    this._specs = await setPath(this, this.destinationPath(appSpecsFile));
     this.checkDirContainsApp();
     initSpecs('all');
 

@@ -56,6 +56,8 @@ function getConfigDefaultJson(generator) {
 module.exports = function generatorWriting(generator, what) {
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator; // todo remove props
+  inspector('props', props); // todo
+  inspector('specs', specs)
   if (what !== 'all') {
     updateSpecs(what, props, `${what} generator`);
   }
@@ -100,9 +102,6 @@ module.exports = function generatorWriting(generator, what) {
     EOL,
     stringifyPlus,
   });
-
-  inspector('props', props);
-  inspector('context', context);
 
   // Generate what is needed.
   switch (what) {
@@ -235,7 +234,7 @@ module.exports = function generatorWriting(generator, what) {
   function service(generator) {
     generator.logSteps && console.log('>>>>> service generator writing()');
 
-    const { name } = props;
+    const { name } = props; // todo is this needed?
 
     const specsService = specs.services[name];
     const kebabName = kebabCase(name);
@@ -285,6 +284,10 @@ module.exports = function generatorWriting(generator, what) {
       mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
     });
     context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
+
+    console.log('name', name);
+    inspector('feathersSpecs[name]', feathersSpecs[name]);
+    inspector('context.mongooseSchema', context.mongooseSchema);
 
     // Custom abbreviations for building 'todos'.
     const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.ejs`)) ?
@@ -442,8 +445,9 @@ module.exports = function generatorWriting(generator, what) {
       name: 'graphql',
       serviceName : 'graphql',
       path: stripSlashes(specs.graphql.path),
-      authentication: specs.graphql.requiresAuth,
+      authentication: false,
       isAuthEntityWithAuthentication: false,
+      requiresAuth: specs.graphql.requiresAuth,
 
       strategy: specs.graphql.strategy,
       graphqlSchemas: serviceSpecsToGraphql(feathersSpecs),
@@ -466,7 +470,6 @@ module.exports = function generatorWriting(generator, what) {
 
     // Generate modules
     generatorFs(generator, context, todos);
-
     // Update dependencies
     generator._packagerInstall([
       '@feathers-plus/graphql', // has graphql/graphql as a dependency

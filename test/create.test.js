@@ -11,18 +11,28 @@ const { resetForTest: resetFragments } = require('../lib/code-fragments');
 
 const packageInstaller = 'npm'; // npm measured as faster than yarn for this
 const tests = [
+  // t1, z1
   // generate app # z-1, Project z-1, npm, src1, socketio (only)
-  'app.test',
-  // generate app     # z-1, Project z-1, npm, src1, socketio (only)
-  // generate service # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
-  // generate service # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-  'service.test',
+  //'app.test',
+  // t2, z2
+  // generate app        # z-1, Project z-1, npm, src1, socketio (only)
+  // generate service    # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
+  // generate service    # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
+  //'service.test',
+  // t3,z3
   // generate app        # z-1, Project z-1, npm, src1, socketio (only)
   // generate service    # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   // generate service    # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
   // generate middleware # mw1, *
   // generate middleware # mw2, mw2
-  'middleware.test',
+  //'middleware.test',
+  // t4, z4
+  // generate app        # z-1, Project z-1, npm, src1, socketio (only)
+  // generate service    # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
+  // generate service    # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
+  // Add schemas for nedb1 and nedb2, then regenerate both
+  // generate graphql    # servioce calls, /graphql,
+  'graphql.test',
 ];
 
 let appDir;
@@ -60,8 +70,6 @@ describe('create.test.js', function () {
   });
 });
 
-
-
 // Configure the yeoman test generator
 function configureGenerator(testName, withOptions) {
   return helpers.run(path.join(__dirname, '..', 'generators', 'all'))
@@ -69,15 +77,14 @@ function configureGenerator(testName, withOptions) {
       appDir = dir;
       // specs.app.name must be 'z-1' not 'z1' as Feathers-generate app converts the project name
       // to kebab-case during the prompt.
-      console.log('dir', dir);
-      console.log('copy', path.join(__dirname, `${testName}-copy`));
-      fs.copySync(path.join(__dirname, `${testName}-copy`), path.join(dir));
+      fs.copySync(path.join(__dirname, `${testName}-copy`), dir);
 
       resetSpecs();
       resetFragments();
     })
     .withPrompts({
       confirmation: true,
+      action: 'force', // force file overwrites
     })
     .withOptions(withOptions);
 }
@@ -94,7 +101,6 @@ function runGeneratedTests (expectedText) {
 // Start a process and wait either for it to exit
 // or to display a certain text
 function runCommand (cmd, args, options, text) {
-  console.log('start runCommand');
   return new Promise((resolve, reject) => {
     let buffer = '';
 
