@@ -101,8 +101,7 @@ module.exports = function generatorWriting(generator, what) {
       app(generator);
 
       Object.keys(specs.services || {}).forEach(name => {
-        props = { name };
-        service(generator);
+        service(generator, name);
       });
 
       authentication(generator);
@@ -120,8 +119,7 @@ module.exports = function generatorWriting(generator, what) {
       app(generator);
       break;
     case 'service':
-      // props.name is the name of the service.
-      service(generator);
+      service(generator, props.name);
       break;
     case 'connection':
       connection(generator);
@@ -219,10 +217,8 @@ module.exports = function generatorWriting(generator, what) {
   }
 
   // ===== service =================================================================================
-  function service(generator) {
+  function service(generator, name) {
     generator.logSteps && console.log('>>>>> service generator writing()');
-
-    const { name } = props;
 
     const specsService = specs.services[name];
     const kebabName = kebabCase(name);

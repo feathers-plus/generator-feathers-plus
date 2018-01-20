@@ -64,6 +64,8 @@ OK   also the service generation part asks for the service name again
 OK - generate service ()after generate authentication) does not ask if service s/b authenticated.
 OK - middleware/index.js: user should change order, need comments saying what should be there e.g. name:path
 OK - implement generator tests: feathersjs/generators-feathers/test/generators.test.js
+OK - move defaultConfig into specs so we don't have to keep reading it for the latest updates 
+OK - pass name as param to writing#service rather than thru generator.props.name
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -77,4 +79,4 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 
 - review which modules are regenerated and which are written just once.
 - finalize src.channels.ejs
-- move defaultConfig into specs so we don't have to keep reading it for the latest updates    
+   
