@@ -49,10 +49,6 @@ function generatorsInclude(name) {
   return generators.indexOf(name) !== -1;
 }
 
-function getConfigDefaultJson(generator) {
-  generator.defaultConfig = generator.fs.readJSON(generator.destinationPath('config', 'default.json'), {});
-}
-
 module.exports = function generatorWriting(generator, what) {
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator;
@@ -63,8 +59,6 @@ module.exports = function generatorWriting(generator, what) {
   // Get unique generators which have been run
   generators = [...new Set(specs._generators)].sort();
 
-  // Get latest config as a previously run generator may have updated it.
-  getConfigDefaultJson(generator);
   generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
 
   // Abbreviations for paths used in building 'todos'.
@@ -107,22 +101,17 @@ module.exports = function generatorWriting(generator, what) {
       app(generator);
 
       Object.keys(specs.services || {}).forEach(name => {
-        getConfigDefaultJson(generator);
         props = { name };
         service(generator);
       });
 
-      getConfigDefaultJson(generator);
       authentication(generator);
 
-      getConfigDefaultJson(generator);
       connection(generator);
 
-      getConfigDefaultJson(generator);
       middleware(generator);
 
       if (Object.keys(mapping.graphqlService).length || Object.keys(mapping.graphqlSql).length) {
-        getConfigDefaultJson(generator);
         graphql(generator);
       }
 
@@ -158,7 +147,7 @@ module.exports = function generatorWriting(generator, what) {
 
     // Custom abbreviations for building 'todos'.
     const pkg = generator.pkg = makeConfig.package(generator);
-    const configDefault = makeConfig.configDefault(generator);
+    const configDefault = specs._defaultJson = makeConfig.configDefault(generator);
     const configProd = makeConfig.configProduction(generator);
 
     todos = [
@@ -319,7 +308,7 @@ module.exports = function generatorWriting(generator, what) {
     if (!specs.connections) return;
 
     // Common abbreviations for building 'todos'.
-    const newConfig = Object.assign({}, generator.defaultConfig, specs._dbConfigs);
+    const newConfig = specs._defaultJson = Object.assign({}, specs._defaultJson, specs._dbConfigs);
     const connections = specs.connections;
     const _adapters = specs._adapters;
 
@@ -474,12 +463,12 @@ module.exports = function generatorWriting(generator, what) {
 };
 
 function writeAuthenticationConfiguration(generator, context) {
-  const config = Object.assign({}, generator.defaultConfig);
+  const config = Object.assign({}, generator._specs._defaultJson);
 
   config.authentication = {
     secret: generator._specs._isRunningTests
       ? '***** secret generated for tests *****'
-      : (generator.defaultConfig.authentication || {}).secret || crypto.randomBytes(256).toString('hex'),
+      : (config.authentication || {}).secret || crypto.randomBytes(256).toString('hex'),
     strategies: [ 'jwt' ],
     path: '/authentication',
     service: context.kebabEntity,
@@ -538,6 +527,8 @@ function writeAuthenticationConfiguration(generator, context) {
       secure: false
     };
   }
+
+  generator._specs._defaultJson = config;
 
   generator.fs.writeJSON(
     generator.destinationPath('config', 'default.json'),

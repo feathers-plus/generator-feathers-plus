@@ -96,7 +96,7 @@ module.exports = class ServiceGenerator extends Generator {
         default() {
           return graphqlSpecs.requiresAuth;
         },
-        when: !!this.defaultConfig.authentication
+        when: !!specs.defaultJson.authentication
       }
     ];
 

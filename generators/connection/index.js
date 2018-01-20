@@ -16,6 +16,7 @@ module.exports = class ConnectionGenerator extends Generator {
   async prompting () {
     this.checkDirContainsApp();
     await Generator.asyncInit(this);
+    const { _specs: specs } = this;
     this._initialGeneration = !this._specs.connections;
     initSpecs('connection');
 
@@ -38,7 +39,8 @@ module.exports = class ConnectionGenerator extends Generator {
     this.dependencies = [];
 
     const databaseName = snakeCase(this.pkg.name);
-    const { defaultConfig } = this;
+    const defaultJson = specs._defaultJson;
+    console.log('connection prompting', defaultJson);
 
     const getProps = answers => Object.assign({}, this.props, answers);
     const setProps = props => Object.assign(this.props, props);
@@ -157,7 +159,7 @@ module.exports = class ConnectionGenerator extends Generator {
         when (current) {
           const answers = getProps(current);
           const { database } = answers;
-          const connection = defaultConfig[database];
+          const connection = defaultJson[database];
 
           if (connection) {
             if (connection.connection){
