@@ -11,7 +11,9 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (isAuthEntityWithAuthentication && authentication.strategies.indexOf('local') !== -1) { -%>
-const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks; // eslint-disable-line no-unused-vars
+const {
+  hashPassword, protect // eslint-disable-line no-unused-vars
+} = require('@feathersjs/authentication-local').hooks;
 <% } -%>
 <%# --- if-2 ends above. -%>
 <%- insertFragment('imports') %>
@@ -26,10 +28,13 @@ let moduleExports = {
 <%# -%>
 <%# --- if/else-3 starts below. -%>
 <% if (!isAuthEntityWithAuthentication) { -%>
+<%# -%>
+<%# --- if-3a starts below. -%>
 <% if (requiresAuth) { -%>
     // Your hooks should include:
-    // all: authenticate('jwt')
+    //   all: authenticate('jwt')
 <% } -%>
+<%# --- if/-3a ends above. -%>
     <%- insertFragment('before', [
       `    all: [${requiresAuth ? " authenticate('jwt') " : ''}],`,
       '    find: [],',
@@ -40,23 +45,28 @@ let moduleExports = {
       '    remove: []',
     ]) %>
 <% } else {
-  __temp = authentication.strategies.indexOf('local') !== -1 ? ' hashPassword() ' : '';
+  __temp = authentication.strategies.indexOf('local') !== -1 ? ' hashPassword()' : '';
 -%>
     // Your hooks should include:
-    // find: authenticate('jwt')
+    //   find:   authenticate('jwt')
+    //   get:    authenticate('jwt')
+<%# -%>
+<%# --- if-3b starts below. -%>
 <% if (__temp) { -%>
-    // create: <%- __temp %>
-    // update: <%- __temp %>
-    // patch: <%- __temp %>
+    //   create:<%- __temp %>
 <% } -%>
+<%# --- if/-3b ends above. -%>
+    //   update: authenticate('jwt')<%- __temp %>
+    //   patch:  authenticate('jwt')<%- __temp %>
+    //   remove: authenticate('jwt')
     <%- insertFragment('before', [
       '    all: [],',
-      "    find: [ authenticate('jwt') ],",
-      '    get: [],',
-      `    create: [${__temp}],`,
-      `    update: [${__temp}],`,
-      `    patch: [${__temp}],`,
-      '    remove: []',
+      '    find: [ authenticate(\'jwt\') ],',
+      '    get: [ authenticate(\'jwt\') ],',
+      `    create: [${__temp}${__temp ? ' ' : ''}],`,
+      `    update: [${__temp}${__temp ? ', ' : ''}authenticate('jwt') ],`,
+      `    patch: [${__temp}${__temp ? ', ' : ''}authenticate('jwt') ],`,
+      '    remove: [ authenticate(\'jwt\') ]',
     ]) %>
 <% } -%>
 <%# --- if/else-3 ends above. -%>
@@ -75,26 +85,38 @@ let moduleExports = {
       '    patch: [],',
       '    remove: []',
     ]) %>
-<% } else {
-  __temp = !authentication.strategies.indexOf('local') !== -1 ? '' : [
-    '',
-    '      // Make sure the password field is never sent to the client',
-    '      // Always must be the last hook',
-    "       protect('password'),",
-  ].join(EOL);
--%>
-<% if (__temp) { -%>
-    // all: <% __temp %>
+<% } else { -%>
+<%# -%>
+<%# --- if-4a starts below. -%>
+<% if (authentication.strategies.indexOf('local') !== -1) { -%>
+    // Your hooks should include:
+    //   all: protect('password')
 <% } -%>
-    <%- insertFragment('after', [
-      `    all: [${__temp}],`,
-      '    find: [],',
-      '    get: [],',
-      '    create: [],',
-      '    update: [],',
-      '    patch: [],',
-      '    remove: []',
-    ]) %>
+<%# --- if-4a ends above. -%>
+    <%- insertFragment('after', authentication.strategies.indexOf('local') !== -1
+      ? [
+        '    all: [',
+        '      // Make sure the password field is never sent to the client',
+        '      // Always must be the last hook',
+        '      protect(\'password\')',
+        '    ],',
+        '    find: [],',
+        '    get: [],',
+        '    create: [],',
+        '    update: [],',
+        '    patch: [],',
+        '    remove: []',
+      ]
+      : [
+        `    all: [],`,
+        '    find: [],',
+        '    get: [],',
+        '    create: [],',
+        '    update: [],',
+        '    patch: [],',
+        '    remove: []',
+      ]
+    ) %>
 <% } -%>
 <%# --- if/else-4 ends above. -%>
   },

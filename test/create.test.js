@@ -7,32 +7,47 @@ const cp = require('child_process');
 const rp = require('request-promise');
 
 const { resetForTest: resetSpecs } = require('../lib/specs');
-const { resetForTest: resetFragments } = require('../lib/code-fragments');
 
 const packageInstaller = 'npm'; // npm measured as faster than yarn for this
 const tests = [
-  // t1, z1
-  // generate app # z-1, Project z-1, npm, src1, socketio (only)
-  //'app.test',
-  // t2, z2
-  // generate app        # z-1, Project z-1, npm, src1, socketio (only)
-  // generate service    # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
-  // generate service    # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-  //'service.test',
-  // t3,z3
-  // generate app        # z-1, Project z-1, npm, src1, socketio (only)
-  // generate service    # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
-  // generate service    # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-  // generate middleware # mw1, *
-  // generate middleware # mw2, mw2
-  //'middleware.test',
-  // t4, z4
-  // generate app        # z-1, Project z-1, npm, src1, socketio (only)
-  // generate service    # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
-  // generate service    # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-  // Add schemas for nedb1 and nedb2, then regenerate both
-  // generate graphql    # servioce calls, /graphql,
-  'graphql.test',
+  // t1, z1 Test creation of app scaffolding.
+  //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
+    'app.test',
+  // t2, z2 (z1 ->) Test service creation without authentication scaffolding.
+  //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
+  //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
+  //  generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
+    'service.test',
+  // t3,z3 (z2 ->) Test middleware creation.
+  //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
+  //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
+  //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
+  //  generate middleware     # mw1, *
+  //  generate middleware     # mw2, mw2
+    'middleware.test',
+  // t4, z4 (z2 ->) Test graphql endpoint creation.
+  //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
+  //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
+  //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
+  //  Add schemas for nedb1 and nedb2
+  //  Regenerate nedb1 and nedb2
+  //  generate graphql        # service calls, /graphql,
+    'graphql.test',
+  // t5, z5 Test authentication scaffolding.
+  //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
+  //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
+    'authentication-1.test',
+  // t6, z6 (z5 ->) Test creation of authenticated service with auth scaffolding.
+  //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
+  //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
+  //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
+    'authentication-2.test',
+  // t7, z7 (z6 ->) Test creation of non-authenticated service with auth scaffolding.
+  //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
+  //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
+  //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
+  //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
+    'authentication-2.test',
 ];
 
 let appDir;
@@ -80,7 +95,6 @@ function configureGenerator(testName, withOptions) {
       fs.copySync(path.join(__dirname, `${testName}-copy`), dir);
 
       resetSpecs();
-      resetFragments();
     })
     .withPrompts({
       confirmation: true,

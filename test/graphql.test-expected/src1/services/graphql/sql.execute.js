@@ -1,7 +1,7 @@
 
 // Execute raw SQL statement for GraphQL. (Can be re-generated.)
-const { cwd } = require('process');
-const { join } = require('path');
+const { cwd } = require('process'); // eslint-disable-line no-unused-vars
+const { join } = require('path'); // eslint-disable-line no-unused-vars
 //!code: imports //!end
 //!code: init //!end
 

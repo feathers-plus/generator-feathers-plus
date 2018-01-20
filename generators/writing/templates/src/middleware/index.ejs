@@ -11,11 +11,33 @@ const <%- __temp.camel %> = require('./<%- __temp.kebab %>');
 
 module.exports = function (app) { // eslint-disable-line no-unused-vars
 <%# -%>
+<%# --- if-1 starts below. -%>
+<% if (!Object.keys(specs.middlewares || {}).length) { -%>
+  // Add your custom middleware here. Remember, that
+  // in Express the order matters
+<% } -%>
+<%# --- if-1 ends above. -%>
+<%# -%>
 <%# --- forEach-2 starts below. -%>
+<% __temp0 = [];-%>
 <% Object.keys(specs.middlewares || {}).forEach(name => {
   __temp = specs.middlewares[name];
--%>
-  app.use(<%- __temp.path !== '*' ? `'${__temp.path}', ` : '' %><%- __temp.camel %>());
-<% }) -%>
+  __temp0.push(
+    `  app.use(${__temp.path !== '*' ? `'${__temp.path}', ` : ''}${__temp.camel}());`
+  );
+}) -%>
 <%# --- forEach-2 ends above. -%>
+<%# -%>
+<%# --- if-2 starts below. -%>
+<% if (__temp0.length) { -%>
+  // Your middleware should include:
+<%# -%>
+<%# --- forEach-3 starts below. -%>
+<% __temp0.forEach(line => { -%>
+  // <%- line %>
+<% }) -%>
+<%# --- forEach-3 ends above. -%>
+<% } -%>
+<%# --- if-2 ends above. -%>
+  <%- insertFragment('middleware', __temp0.length ? __temp0 : null) %>
 };

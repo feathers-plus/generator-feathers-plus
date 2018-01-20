@@ -13,8 +13,9 @@ module.exports = class ServiceGenerator extends Generator {
     super(args, opts);
   }
 
-  prompting() {
+  async prompting () {
     this.checkDirContainsApp();
+    await Generator.asyncInit(this);
     const { props, _specs: specs } = this;
     this._initialGeneration = !specs.graphql;
     initSpecs('graphql');

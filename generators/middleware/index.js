@@ -13,8 +13,9 @@ module.exports = class MiddlewareGenerator extends Generator {
     super(args, opts);
   }
 
-  prompting () {
+  async prompting () {
     this.checkDirContainsApp();
+    await Generator.asyncInit(this);
     const { _specs: specs } = this;
     const generator = this;
     let defaultPath;

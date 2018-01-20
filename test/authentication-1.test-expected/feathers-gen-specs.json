@@ -1,0 +1,40 @@
+{
+  "options": {
+    "ver": "1.0.0"
+  },
+  "app": {
+    "name": "z-1",
+    "description": "Project z-1",
+    "src": "src1",
+    "packager": "npm@>= 3.0.0",
+    "providers": [
+      "rest",
+      "socketio"
+    ]
+  },
+  "services": {
+    "users1": {
+      "name": "users1",
+      "fileName": "users-1",
+      "adapter": "nedb",
+      "path": "/users-1",
+      "isAuthEntity": true,
+      "requiresAuth": false,
+      "graphql": true
+    }
+  },
+  "authentication": {
+    "strategies": [
+      "local",
+      "auth0"
+    ],
+    "entity": "users1"
+  },
+  "connections": {
+    "nedb+nedb": {
+      "database": "nedb",
+      "adapter": "nedb",
+      "connectionString": "../data"
+    }
+  }
+}

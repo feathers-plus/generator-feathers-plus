@@ -11,8 +11,9 @@ module.exports = class AuthGenerator extends Generator {
     super(args, opts);
   }
 
-  prompting() {
+  async prompting () {
     this.checkDirContainsApp();
+    await Generator.asyncInit(this);
     const { props, _specs: specs } = this;
     this._initialGeneration = !specs.authentication;
     initSpecs('authentication');
@@ -36,6 +37,9 @@ module.exports = class AuthGenerator extends Generator {
     const ifStrategy = value => specs.authentication && specs.authentication.strategies &&
       specs.authentication.strategies.indexOf(value) !== -1;
 
+    console.log('!specs.authentication.strategies.length', !specs.authentication.strategies.length);
+    console.log('ifStrategy(\'local\')', ifStrategy('local'));
+
     const prompts = [{
       type: 'checkbox',
       name: 'strategies',
@@ -45,7 +49,7 @@ module.exports = class AuthGenerator extends Generator {
         {
           name: 'Username + Password (Local)',
           value: 'local',
-          checked: !specs.authentication || ifStrategy('local'),
+          checked: !specs.authentication.strategies.length || ifStrategy('local'),
         }, {
           name: 'Auth0',
           value: 'auth0',

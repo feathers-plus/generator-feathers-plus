@@ -55,9 +55,7 @@ function getConfigDefaultJson(generator) {
 
 module.exports = function generatorWriting(generator, what) {
   // Update specs with answers to prompts
-  let { props, _specs: specs } = generator; // todo remove props
-  inspector('props', props); // todo
-  inspector('specs', specs)
+  let { props, _specs: specs } = generator;
   if (what !== 'all') {
     updateSpecs(what, props, `${what} generator`);
   }
@@ -92,7 +90,7 @@ module.exports = function generatorWriting(generator, what) {
   const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
 
   // Basic context used with templates.
-  let context = Object.assign({}, /*props,*/  { // todo props
+  let context = Object.assign({}, {
     specs,
     feathersSpecs,
     mapping,
@@ -110,15 +108,15 @@ module.exports = function generatorWriting(generator, what) {
 
       Object.keys(specs.services || {}).forEach(name => {
         getConfigDefaultJson(generator);
-        props = { name }; // we depend on no existing, required name prop // todo
+        props = { name };
         service(generator);
       });
 
       getConfigDefaultJson(generator);
-      connection(generator);
+      authentication(generator);
 
       getConfigDefaultJson(generator);
-      authentication(generator);
+      connection(generator);
 
       getConfigDefaultJson(generator);
       middleware(generator);
@@ -133,6 +131,7 @@ module.exports = function generatorWriting(generator, what) {
       app(generator);
       break;
     case 'service':
+      // props.name is the name of the service.
       service(generator);
       break;
     case 'connection':
@@ -234,7 +233,7 @@ module.exports = function generatorWriting(generator, what) {
   function service(generator) {
     generator.logSteps && console.log('>>>>> service generator writing()');
 
-    const { name } = props; // todo is this needed?
+    const { name } = props;
 
     const specsService = specs.services[name];
     const kebabName = kebabCase(name);
@@ -268,8 +267,8 @@ module.exports = function generatorWriting(generator, what) {
       }
     }
 
-    // Custom template context. Include 'props' customized for this service.
-    context = Object.assign({}, context, /*props,*/ { // todo props
+    // Custom template context.
+    context = Object.assign({}, context, {
       serviceName: name,
       kebabName,
       adapter,
@@ -284,10 +283,6 @@ module.exports = function generatorWriting(generator, what) {
       mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
     });
     context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
-
-    console.log('name', name);
-    inspector('feathersSpecs[name]', feathersSpecs[name]);
-    inspector('context.mongooseSchema', context.mongooseSchema);
 
     // Custom abbreviations for building 'todos'.
     const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.ejs`)) ?
@@ -392,7 +387,7 @@ module.exports = function generatorWriting(generator, what) {
     if (!generatorsInclude('all')) {
       generator.composeWith(require.resolve('../service'), {
         props: {
-          name: context.entity,
+          name: entity,
           path: `/${context.kebabEntity}`,
           authentication: context,
           isAuthEntity: true,
@@ -482,7 +477,9 @@ function writeAuthenticationConfiguration(generator, context) {
   const config = Object.assign({}, generator.defaultConfig);
 
   config.authentication = {
-    secret: (generator.defaultConfig.authentication || {}).secret || crypto.randomBytes(256).toString('hex'),
+    secret: generator._specs._isRunningTests
+      ? '***** secret generated for tests *****'
+      : (generator.defaultConfig.authentication || {}).secret || crypto.randomBytes(256).toString('hex'),
     strategies: [ 'jwt' ],
     path: '/authentication',
     service: context.kebabEntity,

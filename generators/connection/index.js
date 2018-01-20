@@ -13,8 +13,9 @@ module.exports = class ConnectionGenerator extends Generator {
     super(args, opts);
   }
 
-  prompting () {
+  async prompting () {
     this.checkDirContainsApp();
+    await Generator.asyncInit(this);
     this._initialGeneration = !this._specs.connections;
     initSpecs('connection');
 

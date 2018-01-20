@@ -13,9 +13,10 @@ module.exports = class AppGenerator extends Generator {
     super(args, opts);
   }
 
-  prompting () {
+  async prompting () {
+    await Generator.asyncInit(this);
     const { props, _specs: specs } = this;
-    this._initialGeneration = !this._specs.app.src;
+    this._initialGeneration = !specs.app || !specs.app.src;
     initSpecs('app');
 
     if (this._initialGeneration) {

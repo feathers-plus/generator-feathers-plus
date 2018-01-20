@@ -59,6 +59,11 @@ OK - testing generator app, feathers-gen-specs.json must ve
 OK   "name": "z-1",
 OK   "description": "Project z-1",
 OK   and prompt must be "z-1" as "z1" does not work WHY NOT?
+OK - when adding generate authentication, Local is not the default
+OK   also the service generation part asks for the service name again
+OK - generate service ()after generate authentication) does not ask if service s/b authenticated.
+OK - middleware/index.js: user should change order, need comments saying what should be there e.g. name:path
+OK - implement generator tests: feathersjs/generators-feathers/test/generators.test.js
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -72,6 +77,4 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 
 - review which modules are regenerated and which are written just once.
 - finalize src.channels.ejs
-- implement generator tests: feathersjs/generators-feathers/test/generators.test.js
-- middleware/index.js: user should change order, need comments saying what should be there e.g. name:path
-    
+- move defaultConfig into specs so we don't have to keep reading it for the latest updates    

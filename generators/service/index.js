@@ -25,8 +25,9 @@ module.exports = class ServiceGenerator extends Generator {
     super(args, opts);
   }
 
-  prompting() {
+  async prompting () {
     this.checkDirContainsApp();
+    await Generator.asyncInit(this);
     const { props, _specs: specs } = this;
     const generator = this;
     let serviceSpecs;
@@ -176,7 +177,7 @@ module.exports = class ServiceGenerator extends Generator {
         default() {
           return !!serviceSpecs.requiresAuth;
         },
-        when: !this.defaultConfig.authentication && !props.authentication
+        when: !!(specs.authentication && specs._generators.indexOf('authentication') === -1)
       }, {
         name: 'graphql',
         message: 'Should this be served by GraphQL?',
@@ -184,7 +185,6 @@ module.exports = class ServiceGenerator extends Generator {
         default() {
           return !!serviceSpecs.graphql;
         },
-        //when: !!(this.defaultConfig.graphql && !props.graphql)
       }
     ];
 
