@@ -1,6 +1,8 @@
 {
   "options": {
-    "ver": "1.0.0"
+    "ver": "1.0.0",
+    "inspectConflicts": false,
+    "freeze": []
   },
   "app": {
     "name": "z-1",

@@ -66,6 +66,10 @@ OK - middleware/index.js: user should change order, need comments saying what sh
 OK - implement generator tests: feathersjs/generators-feathers/test/generators.test.js
 OK - move defaultConfig into specs so we don't have to keep reading it for the latest updates 
 OK - pass name as param to writing#service rather than thru generator.props.name
+OK - check all prompting that they refer to specs, not to this.props 
+OK - add freeze and inspectConflicts options
+OK - remove inspector functions
+OK - remove tracing
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -79,4 +83,7 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 
 - review which modules are regenerated and which are written just once.
 - finalize src.channels.ejs
-   
+- create Sequelize schema
+- create fastJoin definitions
+- create for swagger
+  

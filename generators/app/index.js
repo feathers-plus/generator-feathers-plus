@@ -9,37 +9,29 @@ const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
 
 module.exports = class AppGenerator extends Generator {
-  constructor (args, opts) {
-    super(args, opts);
-  }
-
   async prompting () {
     await Generator.asyncInit(this);
     const { props, _specs: specs } = this;
     this._initialGeneration = !specs.app || !specs.app.src;
     initSpecs('app');
 
+    this.log('\n\n');
     if (this._initialGeneration) {
-      this.log(
-        '\n\n'
-        + chalk.green.bold('We are creating a ')
-        + chalk.yellow.bold('NEW')
-        + chalk.green.bold(' app in dir ')
-        + chalk.yellow.bold(parse(cwd()).base)
-        + '\n'
-      );
+      this.log([
+        chalk.green.bold('We are creating a'),
+        chalk.yellow.bold(' new '),
+        chalk.green.bold('app in dir '),
+        chalk.yellow.bold(parse(cwd()).base)
+      ].join(''));
     } else {
-      this.log(
-        '\n\n'
-        + chalk.green.bold('We are changing the app base in dir ')
-        + chalk.yellow.bold(parse(cwd()).base)
-        + '\n'
-      );
+      this.log([
+        chalk.green.bold('We are'),
+        chalk.yellow.bold(' updating '),
+        chalk.green.bold('the app base in dir '),
+        chalk.yellow.bold(parse(cwd()).base)
+      ].join(''));
     }
-
-    props.name = specs.app.name || this.pkg.name || process.cwd().split(sep).pop();
-    props.description = specs.app.description || this.pkg.description || `Project ${kebabCase(this.props.name)}`;
-    props.src = specs.app.src || (this.pkg.directories && this.pkg.directories.lib);
+    this.log();
 
     const dependencies = [
       '@feathersjs/feathers',
@@ -63,11 +55,17 @@ module.exports = class AppGenerator extends Generator {
       '@feathersjs/primus'
     ];
 
+    // Define defaults for prompts which may not be displayed
+    props.name = specs.app.name || this.pkg.name || process.cwd().split(sep).pop();
+    props.src = specs.app.src || (this.pkg.directories && this.pkg.directories.lib) || 'src';
+    props.description = specs.app.description || this.pkg.description ||
+      `Project ${kebabCase(this.props.name)}`;
+
     const prompts = [{
       name: 'name',
       message: 'Project name',
-      when: !this.pkg.name,
-      default: this.props.name,
+      when: this._initialGeneration,
+      default: props.name,
       filter: kebabCase,
       validate (input) {
         // The project name can not be the same as any of the dependencies
@@ -89,17 +87,18 @@ module.exports = class AppGenerator extends Generator {
     }, {
       name: 'description',
       message: 'Description',
-      when: !this.pkg.name, // Initial generate if name undefined.
-      default: this.props.description || `Project ${kebabCase(this.props.name)}`,
+      when: this._initialGeneration,
+      default: answers => specs.app.description || this.pkg.description ||
+        `Project ${kebabCase(answers.name)}`
     }, {
       name: 'src',
       message: 'What folder should the source files live in?',
-      default: specs.app.src || 'src',
-      when: !specs.app.src && !(this.pkg.directories && this.pkg.directories.lib)
+      default: props.src,
+      when: this._initialGeneration
     }, {
       name: 'packager',
       type: 'list',
-      message: 'Which package manager are you using (has to be installed globally)?',
+      message: 'Which package manager are you using\n  (has to be installed globally)?',
       default: specs.app.packager || 'npm@>= 3.0.0',
       choices: [{
         name: 'npm',
@@ -111,19 +110,19 @@ module.exports = class AppGenerator extends Generator {
     }, {
       type: 'checkbox',
       name: 'providers',
-      message: 'What type of API are you making?',
+      message: 'What type of API are you making?\n',
       choices: [{
         name: 'REST',
         value: 'rest',
-        checked: specs.app.providers ? specs.app.providers.indexOf('rest') !== -1 : true,
+        checked: specs.app.providers ? specs.app.providers.indexOf('rest') !== -1 : true
       }, {
         name: 'Realtime via Socket.io',
         value: 'socketio',
-        checked: specs.app.providers ? specs.app.providers.indexOf('socketio') !== -1 : true,
+        checked: specs.app.providers ? specs.app.providers.indexOf('socketio') !== -1 : true
       }, {
         name: 'Realtime via Primus',
         value: 'primus',
-        checked: specs.app.providers ? specs.app.providers.indexOf('primus') !== -1 : false,
+        checked: specs.app.providers ? specs.app.providers.indexOf('primus') !== -1 : false
       }],
       validate (input) {
         if (input.indexOf('primus') !== -1 && input.indexOf('socketio') !== -1) {
@@ -134,10 +133,11 @@ module.exports = class AppGenerator extends Generator {
       }
     }];
 
-    return this.prompt(prompts).then(answers => {
-      this.props = Object.assign(this.props, answers);
-      this.logSteps && console.log('>>>>> app generator finished prompting()');
-    });
+    return this.prompt(prompts)
+      .then(answers => {
+        Object.assign(this.props, answers);
+        this.logSteps && console.log('>>>>> app generator finished prompting()');
+      });
   }
 
   writing () {

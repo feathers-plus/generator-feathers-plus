@@ -9,32 +9,30 @@ const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const { initSpecs } = require('../../lib/specs');
 
 module.exports = class ServiceGenerator extends Generator {
-  constructor (args, opts) {
-    super(args, opts);
-  }
-
   async prompting () {
     this.checkDirContainsApp();
     await Generator.asyncInit(this);
-    const { props, _specs: specs } = this;
+    const { _specs: specs } = this;
     this._initialGeneration = !specs.graphql;
     initSpecs('graphql');
 
+    this.log('\n\n');
     if (this._initialGeneration) {
-      this.log(
-        '\n\n'
-        + chalk.green.bold('We are creating the initial GraphQL endpoint in dir ')
-        + chalk.yellow.bold(parse(cwd()).base)
-        + '\n'
-      );
+      this.log([
+        chalk.green.bold('We are'),
+        chalk.yellow.bold(' creating '),
+        chalk.green.bold('the initial GraphQL endpoint in dir '),
+        chalk.yellow.bold(parse(cwd()).base)
+      ].join(''));
     } else {
-      this.log(
-        '\n\n'
-        + chalk.green.bold('We are changing the GraphQL endpoint in dir ')
-        + chalk.yellow.bold(parse(cwd()).base)
-        + '\n'
-      );
+      this.log([
+        chalk.green.bold('We are'),
+        chalk.yellow.bold(' updating '),
+        chalk.green.bold('the GraphQL endpoint in dir '),
+        chalk.yellow.bold(parse(cwd()).base)
+      ].join(''));
     }
+    this.log();
 
     const graphqlSpecs = specs.graphql;
     const { mapping } = serviceSpecsExpand(specs);
@@ -53,66 +51,53 @@ module.exports = class ServiceGenerator extends Generator {
       '',
       'If you want to use several of these modules, you can switch between them',
       'by rerunning "feathers-plus generate graphql" and switching options.',
-      '',
+      ''
     ].join('\n')));
 
-    const prompts = [
-      {
-        type: 'list',
-        name: 'strategy',
-        message: 'How should Queries be completed?.',
-        default() {
-          return graphqlSpecs.strategy ;
-        },
-        choices: [
-          {
-            name: 'Using standalone Feathers service calls.',
-            value: 'services',
-          }, {
-            name: 'Using BatchLoaders.',
-            value: 'batchloaders',
-          }, {
-            name: 'Using dynamic SQL statements.',
-            value: 'sql',
-          }
-        ]
+    const prompts = [{
+      type: 'list',
+      name: 'strategy',
+      message: 'How should Queries be completed?.',
+      default: graphqlSpecs.strategy,
+      choices: [{
+        name: 'Using standalone Feathers service calls.',
+        value: 'services'
       }, {
-        name: 'path',
-        message: 'Which path should the service be registered on?',
-        default(answers) {
-          return graphqlSpecs.path;
-        },
-        validate(input) {
-          if(input.trim() === '') {
-            return 'Service path can not be empty';
-          }
-
-          return true;
-        }
+        name: 'Using BatchLoaders.',
+        value: 'batchloaders'
       }, {
-        name: 'requiresAuth',
-        message: 'Does the service require authentication?',
-        type: 'confirm',
-        default() {
-          return graphqlSpecs.requiresAuth;
-        },
-        when: !!specs.defaultJson.authentication
+        name: 'Using dynamic SQL statements.',
+        value: 'sql'
+      }]
+    }, {
+      name: 'path',
+      message: 'Which path should the service be registered on?',
+      default: graphqlSpecs.path,
+      validate (input) {
+        return input.trim() === '' ? 'Service path can not be empty' : true;
       }
-    ];
+    }, {
+      name: 'requiresAuth',
+      message: 'Does the service require authentication?',
+      type: 'confirm',
+      default: graphqlSpecs.requiresAuth,
+      when: !!specs._defaultJson.authentication
+    }];
 
-    return this.prompt(prompts).then(answers => {
-      this.props = Object.assign(
-        props,
-        answers,
-        { requiresAuth: answers.requiresAuth || false },
-        { snakeName: 'graphql', kebabName: 'graphql', camelName: 'graphql' },
-      );
+    return this.prompt(prompts)
+      .then(answers => {
+        Object.assign(this.props, answers, {
+          requiresAuth: answers.requiresAuth || false,
+          snakeName: 'graphql',
+          kebabName: 'graphql',
+          camelName: 'graphql'
+        });
 
-      this.logSteps && console.log('>>>>> graphql generator finished prompting()');
-    });
+        this.logSteps && console.log('>>>>> graphql generator finished prompting()');
+      });
   }
 
-  writing() {
+  writing () {
     generatorWriting(this, 'graphql');
   }
 };

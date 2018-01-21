@@ -7,80 +7,74 @@ const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
 
 module.exports = class AuthGenerator extends Generator {
-  constructor (args, opts) {
-    super(args, opts);
-  }
-
   async prompting () {
     this.checkDirContainsApp();
     await Generator.asyncInit(this);
-    const { props, _specs: specs } = this;
+    const { _specs: specs } = this;
     this._initialGeneration = !specs.authentication;
     initSpecs('authentication');
 
+    this.log('\n\n');
     if (this._initialGeneration) {
-      this.log(
-        '\n\n'
-        + chalk.green.bold('We are adding initial authentication in dir ')
-        + chalk.yellow.bold(parse(cwd()).base)
-        + '\n'
-      );
+      this.log([
+        chalk.green.bold('We are'),
+        chalk.yellow.bold(' adding '),
+        chalk.green.bold('initial authentication in dir '),
+        chalk.yellow.bold(parse(cwd()).base)
+      ].join(''));
     } else {
-      this.log(
-        '\n\n'
-        + chalk.green.bold('We are changing the authentication in dir ')
-        + chalk.yellow.bold(parse(cwd()).base)
-        + '\n'
-      );
+      this.log([
+        chalk.green.bold('We are'),
+        chalk.yellow.bold(' updating '),
+        chalk.green.bold('the authentication in dir '),
+        chalk.yellow.bold(parse(cwd()).base)
+      ].join(''));
     }
+    this.log();
 
     const ifStrategy = value => specs.authentication && specs.authentication.strategies &&
       specs.authentication.strategies.indexOf(value) !== -1;
 
-    console.log('!specs.authentication.strategies.length', !specs.authentication.strategies.length);
-    console.log('ifStrategy(\'local\')', ifStrategy('local'));
-
     const prompts = [{
       type: 'checkbox',
       name: 'strategies',
-      message: 'What authentication providers do you want to use? Other PassportJS strategies not in this list can still be configured manually.',
-      default: 'providers',
+      message: 'What authentication providers do you want to use?\n  Other PassportJS strategies not in this list can still\n  be configured manually.\n',
       choices: [
         {
           name: 'Username + Password (Local)',
           value: 'local',
-          checked: !specs.authentication.strategies.length || ifStrategy('local'),
+          checked: !specs.authentication.strategies.length || ifStrategy('local')
         }, {
           name: 'Auth0',
           value: 'auth0',
-          checked: ifStrategy('auth0'),
+          checked: ifStrategy('auth0')
         }, {
           name: 'Google',
           value: 'google',
-          checked: ifStrategy('google'),
+          checked: ifStrategy('google')
         }, {
           name: 'Facebook',
           value: 'facebook',
-          checked: ifStrategy('facebook'),
+          checked: ifStrategy('facebook')
         }, {
           name: 'GitHub',
           value: 'github',
-          checked: ifStrategy('github'),
+          checked: ifStrategy('github')
         }]
     }, {
       name: 'entity',
       message: 'What is the name of the user (entity) service?',
-      default: specs.authentication && specs.authentication.entity || 'users',
+      default: (specs.authentication && specs.authentication.entity) || 'users'
     }];
 
-    return this.prompt(prompts).then(props1 => {
-      this.props = Object.assign(props, props1);
-
-      this.logSteps && console.log('>>>>> authentication generator finished prompting()');
-    });
+    return this.prompt(prompts)
+      .then(answers => {
+        Object.assign(this.props, answers);
+        this.logSteps && console.log('>>>>> authentication generator finished prompting()');
+      });
   }
 
-  writing() {
+  writing () {
     generatorWriting(this, 'authentication');
   }
 };

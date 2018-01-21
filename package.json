@@ -32,7 +32,7 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
-    "lint": "semistandard lib/*.js lib/**/*.js test/*.js test/**/*.js --fix",
+    "lint": "semistandard generators/*.js generators/**/*.js lib/*.js lib/**/*.js test/*.js --fix | snazzy",
     "mochax": "mocha --opts mocha.opts",
     "mocha:code": "mocha test/ --timeout 1200000 --exit --bail --grep \"writes code\"",
     "mocha:tests": "mocha test/ --timeout 1200000 --exit --bail --grep \"runs test\"",
@@ -55,6 +55,7 @@
     "glob": "7.1.2",
     "json-schema-deref-sync": "0.4.0",
     "mongoose": "4.13.6",
+    "snazzy": "7.0.0",
     "traverse": "0.6.6",
     "yeoman-generator": "2.0.1"
   },

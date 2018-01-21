@@ -4,7 +4,7 @@ const assert = require('yeoman-assert');
 const fs = require('fs-extra');
 const klawSync = require('klaw-sync');
 const cp = require('child_process');
-const rp = require('request-promise');
+// const rp = require('request-promise');
 
 const { resetForTest: resetSpecs } = require('../lib/specs');
 
@@ -12,19 +12,19 @@ const packageInstaller = 'npm'; // npm measured as faster than yarn for this
 const tests = [
   // t1, z1 Test creation of app scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
-    'app.test',
+  'app.test',
   // t2, z2 (z1 ->) Test service creation without authentication scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-    'service.test',
+  'service.test',
   // t3,z3 (z2 ->) Test middleware creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
   //  generate middleware     # mw1, *
   //  generate middleware     # mw2, mw2
-    'middleware.test',
+  'middleware.test',
   // t4, z4 (z2 ->) Test graphql endpoint creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
@@ -32,35 +32,36 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-    'graphql.test',
+  'graphql.test',
   // t5, z5 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
-    'authentication-1.test',
+  'authentication-1.test',
   // t6, z6 (z5 ->) Test creation of authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
-    'authentication-2.test',
+  'authentication-2.test',
   // t7, z7 (z6 ->) Test creation of non-authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
-    'authentication-2.test',
+  'authentication-3.test'
 ];
 
 let appDir;
 
+/*
 function delay (ms) {
   return function (res) {
     return new Promise(resolve => setTimeout(() => resolve(res), ms));
   };
 }
+*/
 
 describe('create.test.js', function () {
   tests.forEach(testName => {
-
     describe(testName, function () {
       it('writes code expected', () => {
         return configureGenerator(testName, { skipInstall: true })
@@ -81,12 +82,11 @@ describe('create.test.js', function () {
           });
       });
     });
-
   });
 });
 
 // Configure the yeoman test generator
-function configureGenerator(testName, withOptions) {
+function configureGenerator (testName, withOptions) {
   return helpers.run(path.join(__dirname, '..', 'generators', 'all'))
     .inTmpDir(dir => {
       appDir = dir;
@@ -98,7 +98,7 @@ function configureGenerator(testName, withOptions) {
     })
     .withPrompts({
       confirmation: true,
-      action: 'force', // force file overwrites
+      action: 'force' // force file overwrites
     })
     .withOptions(withOptions);
 }
@@ -118,7 +118,7 @@ function runCommand (cmd, args, options, text) {
   return new Promise((resolve, reject) => {
     let buffer = '';
 
-    function addToBuffer(data) {
+    function addToBuffer (data) {
       buffer += data;
 
       if (text && buffer.indexOf(text) !== -1) {
@@ -141,7 +141,7 @@ function runCommand (cmd, args, options, text) {
   });
 }
 
-function compareCode(appDir, testDir) {
+function compareCode (appDir, testDir) {
   const expectedPaths = getFileNames(path.join(__dirname, testDir));
   const actualPaths = getFileNames(appDir);
   assert.deepEqual(actualPaths.relativePaths, expectedPaths.relativePaths, 'Unexpected files in generated dir');
@@ -154,11 +154,11 @@ function compareCode(appDir, testDir) {
   });
 }
 
-function getFileNames(dir) {
+function getFileNames (dir) {
   const paths = klawSync(dir, { nodir: true });
 
   return {
     paths: paths,
-    relativePaths: paths.map(path => path.path.replace(`${dir}/`, '')).sort(),
+    relativePaths: paths.map(path => path.path.replace(`${dir}/`, '')).sort()
   };
 }

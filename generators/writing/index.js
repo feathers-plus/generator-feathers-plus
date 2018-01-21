@@ -25,31 +25,31 @@ const OAUTH2_STRATEGY_MAPPINGS = {
 
 const nativeFuncs = {
   [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
-  [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId',
+  [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId'
 };
 
-function tmpl(src, dest, ifNew, ifSkip, ctx) {
+function tmpl (src, dest, ifNew, ifSkip, ctx) {
   return { type: 'tpl', src, dest, ifNew, ifSkip, ctx };
 }
 
-function copy(src, dest, ifNew, ifSkip, ctx) {
+function copy (src, dest, ifNew, ifSkip, ctx) {
   return { type: 'copy', src, dest, ifNew, ifSkip, ctx };
 }
 
-function json(obj, dest, ifNew, ifSkip, ctx) {
+function json (obj, dest, ifNew, ifSkip, ctx) {
   return { type: 'json', obj, dest, ifNew, ifSkip, ctx };
 }
 
-function stripSlashes(name) {
+function stripSlashes (name) {
   return name.replace(/^(\/*)|(\/*)$/g, '');
 }
 
 let generators;
-function generatorsInclude(name) {
+function generatorsInclude (name) {
   return generators.indexOf(name) !== -1;
 }
 
-module.exports = function generatorWriting(generator, what) {
+module.exports = function generatorWriting (generator, what) {
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator;
   if (what !== 'all') {
@@ -92,7 +92,7 @@ module.exports = function generatorWriting(generator, what) {
 
     deepMerge: deepMerge,
     EOL,
-    stringifyPlus,
+    stringifyPlus
   });
 
   // Generate what is needed.
@@ -140,7 +140,7 @@ module.exports = function generatorWriting(generator, what) {
   generator.logSteps && console.log(`>>>>> ${what} generator finished writing()`);
 
   // ===== app =====================================================================================
-  function app(generator) {
+  function app (generator) {
     generator.logSteps && console.log('>>>>> app generator writing()');
 
     // Custom abbreviations for building 'todos'.
@@ -149,32 +149,32 @@ module.exports = function generatorWriting(generator, what) {
     const configProd = makeConfig.configProduction(generator);
 
     todos = [
-      copy([tpl, '.editorconfig'],              '.editorconfig',               true),
-      copy([tpl, '.eslintrc.json'],             '.eslintrc.json',              true),
+      copy([tpl, '.editorconfig'], '.editorconfig', true),
+      copy([tpl, '.eslintrc.json'], '.eslintrc.json', true),
       // This name hack is necessary because NPM does not publish `.gitignore` files
-      copy([tpl, '_gitignore'],                 '.gitignore',                  true),
-      copy([tpl, 'LICENSE'],                    'LICENSE',                     true),
-      tmpl([tpl, 'README.md.ejs'],              'README.md',                   true),
+      copy([tpl, '_gitignore'], '.gitignore', true),
+      copy([tpl, 'LICENSE'], 'LICENSE', true),
+      tmpl([tpl, 'README.md.ejs'], 'README.md', true),
 
-      json(pkg,                                 'package.json',                true),
-      json(configDefault,                       ['config', 'default.json'],    true),
-      json(configProd,                          ['config', 'production.json'], true),
+      json(pkg, 'package.json', true),
+      json(configDefault, ['config', 'default.json'], true),
+      json(configProd, ['config', 'production.json'], true),
 
-      copy([tpl, 'public', 'favicon.ico'],      ['public', 'favicon.ico'],     true),
-      copy([tpl, 'public', 'index.html'],       ['public', 'index.html'],      true),
+      copy([tpl, 'public', 'favicon.ico'], ['public', 'favicon.ico'], true),
+      copy([tpl, 'public', 'index.html'], ['public', 'index.html'], true),
 
-      tmpl([tpl, 'test', 'app.test.ejs'],        [testDir,  'app.test.js'],     true),
+      tmpl([tpl, 'test', 'app.test.ejs'], [testDir, 'app.test.js'], true),
 
-      copy([tpl, 'src', 'hooks', 'logger.js'],  [src, 'hooks', 'logger.js'],   true),
-      copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'],  true),
+      copy([tpl, 'src', 'hooks', 'logger.js'], [src, 'hooks', 'logger.js'], true),
+      copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], true),
 
-      tmpl([tpl, 'src', 'index.ejs'],           [src, 'index.js']                  ),
-      tmpl([tpl, 'src', 'app.hooks.ejs'],       [src, 'app.hooks.js']              ),
-      tmpl([tpl, 'src', 'channels.ejs'],        [src, 'channels.js']               ), // work todo
+      tmpl([tpl, 'src', 'index.ejs'], [src, 'index.js']),
+      tmpl([tpl, 'src', 'app.hooks.ejs'], [src, 'app.hooks.js']),
+      tmpl([tpl, 'src', 'channels.ejs'], [src, 'channels.js']), // work todo
 
-      tmpl([mwPath,  'index.ejs'],              [src, 'middleware', 'index.js']    ),
-      tmpl([srcPath, 'app.ejs'],                [src, 'app.js']                    ),
-      tmpl([serPath, 'index.ejs'],              [src, 'services', 'index.js']      ),
+      tmpl([mwPath, 'index.ejs'], [src, 'middleware', 'index.js']),
+      tmpl([srcPath, 'app.ejs'], [src, 'app.js']),
+      tmpl([serPath, 'index.ejs'], [src, 'services', 'index.js'])
     ];
 
     // Generate modules
@@ -217,7 +217,7 @@ module.exports = function generatorWriting(generator, what) {
   }
 
   // ===== service =================================================================================
-  function service(generator, name) {
+  function service (generator, name) {
     generator.logSteps && console.log('>>>>> service generator writing()');
 
     const specsService = specs.services[name];
@@ -265,27 +265,27 @@ module.exports = function generatorWriting(generator, what) {
       libDirectory: specs.app.src,
       modelName: hasModel ? `${kebabName}.model` : null,
       serviceModule,
-      mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
+      mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions)
     });
     context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
 
     // Custom abbreviations for building 'todos'.
-    const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.ejs`)) ?
-      [serPath, '_types', `${adapter}.ejs`] : [serPath, 'name', 'name.service.ejs'];
+    const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.ejs`))
+      ? [serPath, '_types', `${adapter}.ejs`] : [serPath, 'name', 'name.service.ejs'];
     const genericFileTpl = generator.hasAsync ? 'name.class-async.js' : 'name.class.js';
     const kn = kebabName;
 
     todos = [
-      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`],           true                        ),
-      tmpl([serPath,  '_model',   modelTpl],        [libDir,  'models',   `${context.modelName}.js`], true, !context.modelName    ),
-      tmpl(mainFileTpl,                             [libDir,  'services', kn, `${kn}.service.js`],    true                        ),
-      tmpl([namePath, genericFileTpl],              [libDir,  'services', kn, `${kn}.class.js`],      true, adapter !== 'generic' ),
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`], true),
+      tmpl([serPath, '_model', modelTpl], [libDir, 'models', `${context.modelName}.js`], true, !context.modelName),
+      tmpl(mainFileTpl, [libDir, 'services', kn, `${kn}.service.js`], true),
+      tmpl([namePath, genericFileTpl], [libDir, 'services', kn, `${kn}.class.js`], true, adapter !== 'generic'),
 
-      tmpl([namePath, 'name.schema.ejs'],           [libDir,  'services', kn, `${kn}.schema.js`]      ),
-      tmpl([namePath, 'name.mongoose.ejs'],         [libDir,  'services', kn, `${kn}.mongoose.js`]    ),
-      tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', kn, `${kn}.validate.js`]    ),
-      tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', kn, `${kn}.hooks.js`]       ),
-      tmpl([serPath,  'index.ejs'],                 [libDir,  'services', 'index.js']                 ),
+      tmpl([namePath, 'name.schema.ejs'], [libDir, 'services', kn, `${kn}.schema.js`]),
+      tmpl([namePath, 'name.mongoose.ejs'], [libDir, 'services', kn, `${kn}.mongoose.js`]),
+      tmpl([namePath, 'name.validate.ejs'], [libDir, 'services', kn, `${kn}.validate.js`]),
+      tmpl([namePath, 'name.hooks.ejs'], [libDir, 'services', kn, `${kn}.hooks.js`]),
+      tmpl([serPath, 'index.ejs'], [libDir, 'services', 'index.js'])
     ];
 
     // Generate modules
@@ -298,7 +298,7 @@ module.exports = function generatorWriting(generator, what) {
   }
 
   // ===== connection ==============================================================================
-  function connection(generator) {
+  function connection (generator) {
     generator.logSteps && console.log('>>>>> connection generator writing()');
 
     if (!specs.connections) return;
@@ -309,13 +309,15 @@ module.exports = function generatorWriting(generator, what) {
     const _adapters = specs._adapters;
 
     const todos = !Object.keys(connections).length ? [] : [
-      json(newConfig,              ['config', 'default.json'] ),
-      tmpl([srcPath, 'app.ejs'],   [libDir, 'app.js']         ),
+      json(newConfig, ['config', 'default.json']),
+      tmpl([srcPath, 'app.ejs'], [libDir, 'app.js'])
     ];
 
-    Object.keys(_adapters).sort().forEach(adapter => { todos.push(
-      copy([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`],  true )
-    ); });
+    Object.keys(_adapters).sort().forEach(adapter => {
+      todos.push(
+      copy([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`], true)
+    );
+    });
 
     // Generate modules
     generatorFs(generator, context, todos);
@@ -330,7 +332,7 @@ module.exports = function generatorWriting(generator, what) {
   }
 
   // ===== authentication ==========================================================================
-  function authentication(generator) {
+  function authentication (generator) {
     generator.logSteps && console.log('>>>>> authentication generator writing()');
 
     if (!specs.authentication) return;
@@ -343,7 +345,7 @@ module.exports = function generatorWriting(generator, what) {
       kebabEntity: kebabCase(entity),
       camelEntity: camelCase(entity),
       oauthProviders: [],
-      strategies,
+      strategies
     });
 
     const dependencies = [
@@ -370,19 +372,12 @@ module.exports = function generatorWriting(generator, what) {
 
     // Create the users (entity) service
     if (!generatorsInclude('all')) {
-      generator.composeWith(require.resolve('../service'), {
-        props: {
-          name: entity,
-          path: `/${context.kebabEntity}`,
-          authentication: context,
-          isAuthEntity: true,
-        }
-      });
+      generator.composeWith(require.resolve('../service'), { props: { name: entity } });
     }
 
     todos = [
-      tmpl([srcPath, 'authentication.ejs'], [libDir, 'authentication.js'] ),
-      tmpl([srcPath, 'app.ejs'],            [src, 'app.js']               ),
+      tmpl([srcPath, 'authentication.ejs'], [libDir, 'authentication.js']),
+      tmpl([srcPath, 'app.ejs'], [src, 'app.js'])
     ];
 
     // Generate modules
@@ -396,19 +391,19 @@ module.exports = function generatorWriting(generator, what) {
   }
 
   // ===== middleware ==============================================================================
-  function middleware(generator) {
+  function middleware (generator) {
     generator.logSteps && console.log('>>>>> middleware generator writing()');
 
     if (!specs.middlewares) return;
 
     todos = [
-      tmpl([mwPath, 'index.ejs'], [src, 'middleware', 'index.js'] ),
+      tmpl([mwPath, 'index.ejs'], [src, 'middleware', 'index.js'])
     ];
 
     Object.keys(specs.middlewares || {}).sort().forEach(mwName => {
       const fileName = specs.middlewares[mwName].kebab;
       todos.push(
-        tmpl([mwPath, 'middleware.ejs'], [libDir, 'middleware', `${fileName}.js`], true, null, { mwName } ),
+        tmpl([mwPath, 'middleware.ejs'], [libDir, 'middleware', `${fileName}.js`], true, null, { mwName })
       );
     });
 
@@ -417,13 +412,13 @@ module.exports = function generatorWriting(generator, what) {
   }
 
   // ===== graphql =================================================================================
-  function graphql(generator) {
+  function graphql (generator) {
     generator.logSteps && console.log('>>>>> graphql generator writing()');
 
     // Custom template context
     context = Object.assign({}, context, {
       name: 'graphql',
-      serviceName : 'graphql',
+      serviceName: 'graphql',
       path: stripSlashes(specs.graphql.path),
       authentication: false,
       isAuthEntityWithAuthentication: false,
@@ -431,21 +426,21 @@ module.exports = function generatorWriting(generator, what) {
 
       strategy: specs.graphql.strategy,
       graphqlSchemas: serviceSpecsToGraphql(feathersSpecs),
-      libDirectory: generator.libDirectory,
+      libDirectory: generator.libDirectory
     });
 
     todos = [
-      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', 'graphql.test.js'],                    true ),
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', 'graphql.test.js'], true),
 
-      tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', 'graphql', 'graphql.hooks.js']              ),
-      tmpl([qlPath,   'graphql.schemas.ejs'],       [libDir,  'services', 'graphql', 'graphql.schemas.js']            ),
-      tmpl([qlPath,   'graphql.service.ejs'],       [libDir,  'services', 'graphql', 'graphql.service.js']            ),
-      tmpl([qlPath,   'batchloader.resolvers.ejs'], [libDir,  'services', 'graphql', 'batchloader.resolvers.js']      ),
-      tmpl([qlPath,   'service.resolvers.ejs'],     [libDir,  'services', 'graphql', 'service.resolvers.js']          ),
-      tmpl([qlPath,   'sql.execute.ejs'],           [libDir,  'services', 'graphql', 'sql.execute.js']                ),
-      tmpl([qlPath,   'sql.metadata.ejs'],          [libDir,  'services', 'graphql', 'sql.metadata.js']               ),
-      tmpl([qlPath,   'sql.resolvers.ejs'],         [libDir,  'services', 'graphql', 'sql.resolvers.js']              ),
-      tmpl([serPath,  'index.ejs'],                 [libDir,  'services', 'index.js'] ),
+      tmpl([namePath, 'name.hooks.ejs'], [libDir, 'services', 'graphql', 'graphql.hooks.js']),
+      tmpl([qlPath, 'graphql.schemas.ejs'], [libDir, 'services', 'graphql', 'graphql.schemas.js']),
+      tmpl([qlPath, 'graphql.service.ejs'], [libDir, 'services', 'graphql', 'graphql.service.js']),
+      tmpl([qlPath, 'batchloader.resolvers.ejs'], [libDir, 'services', 'graphql', 'batchloader.resolvers.js']),
+      tmpl([qlPath, 'service.resolvers.ejs'], [libDir, 'services', 'graphql', 'service.resolvers.js']),
+      tmpl([qlPath, 'sql.execute.ejs'], [libDir, 'services', 'graphql', 'sql.execute.js']),
+      tmpl([qlPath, 'sql.metadata.ejs'], [libDir, 'services', 'graphql', 'sql.metadata.js']),
+      tmpl([qlPath, 'sql.resolvers.ejs'], [libDir, 'services', 'graphql', 'sql.resolvers.js']),
+      tmpl([serPath, 'index.ejs'], [libDir, 'services', 'index.js'])
     ];
 
     // Generate modules
@@ -453,12 +448,12 @@ module.exports = function generatorWriting(generator, what) {
     // Update dependencies
     generator._packagerInstall([
       '@feathers-plus/graphql', // has graphql/graphql as a dependency
-      'merge-graphql-schemas',
+      'merge-graphql-schemas'
     ], { save: true });
   }
 };
 
-function writeAuthenticationConfiguration(generator, context) {
+function writeAuthenticationConfiguration (generator, context) {
   const config = Object.assign({}, generator._specs._defaultJson);
 
   config.authentication = {
@@ -498,7 +493,7 @@ function writeAuthenticationConfiguration(generator, context) {
       };
       includesOAuth = true;
 
-      if(strategy === 'auth0') {
+      if (strategy === 'auth0') {
         strategyConfig.domain = 'mydomain.auth0.com';
       }
 
@@ -530,10 +525,4 @@ function writeAuthenticationConfiguration(generator, context) {
     generator.destinationPath('config', 'default.json'),
     config
   );
-}
-
-const { inspect } = require('util');
-function inspector(desc, obj, depth = 5) {
-  console.log(`\n${desc}`);
-  console.log(inspect(obj, { depth, colors: true }));
 }
