@@ -17,7 +17,6 @@ module.exports = class MiddlewareGenerator extends Generator {
     return this.prompt(prompts)
       .then(answers => {
         if (!answers.confirmation) process.exit(0);
-        this.logSteps && console.log('>>>>> all generator finished prompting()');
       });
   }
 

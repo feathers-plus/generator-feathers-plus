@@ -176,7 +176,6 @@ module.exports = class ServiceGenerator extends Generator {
 
     return this.prompt(prompts).then(answers => {
       Object.assign(this.props, answers);
-      this.logSteps && console.log('>>>>> service generator finished prompting()');
     });
   }
 

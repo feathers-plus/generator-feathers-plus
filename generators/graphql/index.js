@@ -92,8 +92,6 @@ module.exports = class ServiceGenerator extends Generator {
           kebabName: 'graphql',
           camelName: 'graphql'
         });
-
-        this.logSteps && console.log('>>>>> graphql generator finished prompting()');
       });
   }
 

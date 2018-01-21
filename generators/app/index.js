@@ -136,7 +136,6 @@ module.exports = class AppGenerator extends Generator {
     return this.prompt(prompts)
       .then(answers => {
         Object.assign(this.props, answers);
-        this.logSteps && console.log('>>>>> app generator finished prompting()');
       });
   }
 

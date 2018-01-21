@@ -56,7 +56,6 @@ module.exports = class MiddlewareGenerator extends Generator {
         });
 
         initSpecs('middleware', this.props);
-        this.logSteps && console.log('>>>>> middleware generator finished prompting()');
       });
   }
 

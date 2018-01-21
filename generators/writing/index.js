@@ -59,8 +59,6 @@ module.exports = function generatorWriting (generator, what) {
   // Get unique generators which have been run
   generators = [...new Set(specs._generators)].sort();
 
-  generator.logSteps && console.log(`>>>>> ${what} generator started writing(). Generators:`, generators);
-
   // Abbreviations for paths used in building 'todos'.
   const tpl = join(__dirname, 'templates');
   const src = specs.app.src;
@@ -137,12 +135,8 @@ module.exports = function generatorWriting (generator, what) {
       throw new Error(`Unexpected generate ${what}. (writing`);
   }
 
-  generator.logSteps && console.log(`>>>>> ${what} generator finished writing()`);
-
   // ===== app =====================================================================================
   function app (generator) {
-    generator.logSteps && console.log('>>>>> app generator writing()');
-
     // Custom abbreviations for building 'todos'.
     const pkg = generator.pkg = makeConfig.package(generator);
     const configDefault = specs._defaultJson = makeConfig.configDefault(generator);
@@ -218,8 +212,6 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== service =================================================================================
   function service (generator, name) {
-    generator.logSteps && console.log('>>>>> service generator writing()');
-
     const specsService = specs.services[name];
     const kebabName = kebabCase(name);
     const adapter = specsService.adapter;
@@ -299,8 +291,6 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== connection ==============================================================================
   function connection (generator) {
-    generator.logSteps && console.log('>>>>> connection generator writing()');
-
     if (!specs.connections) return;
 
     // Common abbreviations for building 'todos'.
@@ -333,8 +323,6 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== authentication ==========================================================================
   function authentication (generator) {
-    generator.logSteps && console.log('>>>>> authentication generator writing()');
-
     if (!specs.authentication) return;
 
     // Custom template context
@@ -392,8 +380,6 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== middleware ==============================================================================
   function middleware (generator) {
-    generator.logSteps && console.log('>>>>> middleware generator writing()');
-
     if (!specs.middlewares) return;
 
     todos = [
@@ -413,8 +399,6 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== graphql =================================================================================
   function graphql (generator) {
-    generator.logSteps && console.log('>>>>> graphql generator writing()');
-
     // Custom template context
     context = Object.assign({}, context, {
       name: 'graphql',

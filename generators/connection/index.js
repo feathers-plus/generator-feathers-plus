@@ -160,7 +160,6 @@ module.exports = class ConnectionGenerator extends Generator {
 
     return this.prompt(prompts).then(props => {
       this.props = Object.assign(this.props, props);
-      this.logSteps && console.log('>>>>> connection generator finished prompting()');
     });
   }
 

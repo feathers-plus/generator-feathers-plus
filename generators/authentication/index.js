@@ -70,7 +70,6 @@ module.exports = class AuthGenerator extends Generator {
     return this.prompt(prompts)
       .then(answers => {
         Object.assign(this.props, answers);
-        this.logSteps && console.log('>>>>> authentication generator finished prompting()');
       });
   }
 
