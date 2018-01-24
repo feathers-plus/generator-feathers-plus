@@ -97,6 +97,20 @@ Most of the time this'll "just work".
 
 ## Retaining added code
 
+@feathersjs/cli's job ends when it generates the app scaffolding.
+It doesn't know what you do afterwards with it.
+
+Cli-plus is a `round-trip` generator.
+Round-trip generators can take previously generated code,
+identify custom changes made to it,
+and regenerate the code (likely using different responses to the prompts)
+along with those custom changes.
+
+Cli-plus completes the round trip: generate -> customize -> regenerate -> customize => ...
+
+The developer and the round-trip generator are in a more collaborative relationship.
+They can both work on the scaffolding code.
+
 ### Retain developer modifications
 
 You will usually add your own code to the generated modules.
@@ -191,6 +205,7 @@ module.exports = moduleExports;
 All the modules follow the same standards, e.g. starting with `imports` and `init`,
 and ending with `funcs` and `end`.
 Functions tend to end with names like `func_return` so you can add code to them.
+You can replace or mutate the required modules at `init` as well as adding any initialization code.
 You can modify or replace the exported value at `exports`.
 
 Its trivial to add insertion points into the generator.
