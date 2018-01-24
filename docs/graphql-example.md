@@ -34,13 +34,13 @@ The result (or error message) appears in the bottom window after you click `Run 
 
 You can modify any of those queries before running them.
 
-The keys allowed with some of the resolvers are Feathers service-like:
+The keywords allowed with some of the resolvers are Feathers service-like:
 - key: The same as Feathers `id`, numeric or string.
 - query: The same as Feathers `params.query`.
 - params: The same as Feathers `params`.
 
 `$` is a reserved character in GraphQL, so Feathers props such as `$sort` and `$in` will result in GraphQL errors.
-You can instead use a double underscore `__` where ever would use a `$` with Feathers. 
+You can instead use a double underscore `__` where ever you would use a `$` with Feathers. 
 
 ## Database
 
@@ -54,9 +54,13 @@ and contain the same data:
 
 ![database data](./assets/tables.jpg)
 
-## What type of resolvers are being used
+## What type of resolvers are being used?
 
 The repo on Github is (usually) configured to use Feathers service calls alone.
 You can reconfigure it to use either Feathers service calls with
 [BatchLoaders](https://feathers-plus.github.io/v1/batch-loader/guide.html)
 or with raw SQL statements by running @feathers-plus/cli's `generate graphql` command.
+
+Switching the resolvers being used like this is an interesting example of
+the advantages of round-trip regeneration.
+ 
