@@ -1,20 +1,13 @@
 
-// Configure channels. (Can be re-generated.)
-//!code: imports //!end
-//!code: init //!end
-
 module.exports = function(app) {
   if(typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
-    //!code: none //!end
     return;
   }
 
   app.on('connection', connection => {
     // On a new real-time connection, add it to the anonymous channel
-    //!<DEFAULT> code: connection
     app.channel('anonymous').join(connection);
-    //!end
   });
 
   app.on('login', (authResult, { connection }) => {

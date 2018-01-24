@@ -70,6 +70,8 @@ OK - check all prompting that they refer to specs, not to this.props
 OK - add freeze and inspectConflicts options
 OK - remove inspector functions
 OK - remove tracing
+OK - review which modules are regenerated and which are written just once.
+OK - finalize src.channels.ejs
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -81,8 +83,6 @@ TEST - Add "Your hooks should contain ..." to app, service and graphql hooks.ejs
 LATER - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
 LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 
-- review which modules are regenerated and which are written just once.
-- finalize src.channels.ejs
 - create Sequelize schema
 - create fastJoin definitions
 - create for swagger

@@ -1,20 +1,13 @@
 
-// Configure channels. (Can be re-generated.)
-<%- insertFragment('imports') %>
-<%- insertFragment('init') %>
-
 module.exports = function(app) {
   if(typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
-    <%- insertFragment('none') %>
     return;
   }
 
   app.on('connection', connection => {
     // On a new real-time connection, add it to the anonymous channel
-    <%- insertFragment('connection', [
-      '    app.channel(\'anonymous\').join(connection);',
-    ]) %>
+    app.channel('anonymous').join(connection);
   });
 
   app.on('login', (authResult, { connection }) => {

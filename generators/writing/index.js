@@ -161,10 +161,11 @@ module.exports = function generatorWriting (generator, what) {
 
       copy([tpl, 'src', 'hooks', 'logger.js'], [src, 'hooks', 'logger.js'], true),
       copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], true),
+      copy([tpl, 'src', 'channels.js'], [src, 'channels.js'], true),
 
       tmpl([tpl, 'src', 'index.ejs'], [src, 'index.js']),
       tmpl([tpl, 'src', 'app.hooks.ejs'], [src, 'app.hooks.js']),
-      tmpl([tpl, 'src', 'channels.ejs'], [src, 'channels.js']), // work todo
+
 
       tmpl([mwPath, 'index.ejs'], [src, 'middleware', 'index.js']),
       tmpl([srcPath, 'app.ejs'], [src, 'app.js']),
