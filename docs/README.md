@@ -12,3 +12,7 @@ The cli-plus is similar to @feathersjs/cli in that:
 ## [Feathers service models](./feathers-service-models.md)
 
 ## [Writing JSON-schema](./writing-json-schema.md)
+
+## GraphQL
+
+## [GraphQL example](./graphql-example.md)
