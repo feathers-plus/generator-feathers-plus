@@ -8,3 +8,7 @@ The cli-plus is similar to @feathersjs/cli in that:
 ## [Regenerating apps](./regenerating-apps.md)
 
 ## [Retaining custom code](./retaining-custom-code.md)
+
+## [Feathers service models](./feathers-service-models.md)
+
+## [Writing JSON-schema](./writing-json-schema.md)
