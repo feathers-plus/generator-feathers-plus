@@ -6,3 +6,5 @@ The cli-plus is similar to @feathersjs/cli in that:
 - It generates the same modules with pretty much identical code.
 
 ## [Regenerating apps](./regenerating-apps.md)
+
+## [Retaining custom code](./retaining-custom-code.md)
