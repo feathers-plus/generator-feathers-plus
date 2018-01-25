@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const { camelCase, kebabCase, upperFirst } = require('lodash');
 const { EOL } = require('os');
 const { existsSync } = require('fs');
+const { inspect } = require('util');
 const { join } = require('path');
 
 const generatorFs = require('../../lib/generator-fs');
@@ -87,6 +88,7 @@ module.exports = function generatorWriting (generator, what) {
     feathersSpecs,
     mapping,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
+    semicolon: specs.options.semicolon ? ';' : '',
 
     deepMerge: deepMerge,
     EOL,
@@ -245,6 +247,10 @@ module.exports = function generatorWriting (generator, what) {
       }
     }
 
+    // inspector(`\n... specs (generator ${what})`, specs);
+    // inspector('\n...mapping', mapping);
+    // inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
+
     // Custom template context.
     context = Object.assign({}, context, {
       serviceName: name,
@@ -262,6 +268,9 @@ module.exports = function generatorWriting (generator, what) {
     });
     context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
 
+    // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context.mongooseSchema);
+    // inspector(`\n... context (generator ${what})`, context);
+
     // Custom abbreviations for building 'todos'.
     const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.ejs`))
       ? [serPath, '_types', `${adapter}.ejs`] : [serPath, 'name', 'name.service.ejs'];
@@ -269,16 +278,16 @@ module.exports = function generatorWriting (generator, what) {
     const kn = kebabName;
 
     todos = [
-      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`], true),
-      tmpl([serPath, '_model', modelTpl], [libDir, 'models', `${context.modelName}.js`], true, !context.modelName),
-      tmpl(mainFileTpl, [libDir, 'services', kn, `${kn}.service.js`], true),
-      tmpl([namePath, genericFileTpl], [libDir, 'services', kn, `${kn}.class.js`], true, adapter !== 'generic'),
+      tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`],        true ),
+      tmpl([serPath,    '_model', modelTpl],          [libDir, 'models', `${context.modelName}.js`], true, !context.modelName   ),
+      tmpl(mainFileTpl,                               [libDir, 'services', kn, `${kn}.service.js`],  true ),
+      tmpl([namePath,   genericFileTpl],              [libDir, 'services', kn, `${kn}.class.js`],    true, adapter !== 'generic'),
 
-      tmpl([namePath, 'name.schema.ejs'], [libDir, 'services', kn, `${kn}.schema.js`]),
-      tmpl([namePath, 'name.mongoose.ejs'], [libDir, 'services', kn, `${kn}.mongoose.js`]),
-      tmpl([namePath, 'name.validate.ejs'], [libDir, 'services', kn, `${kn}.validate.js`]),
-      tmpl([namePath, 'name.hooks.ejs'], [libDir, 'services', kn, `${kn}.hooks.js`]),
-      tmpl([serPath, 'index.ejs'], [libDir, 'services', 'index.js'])
+      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]   ),
+      tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.js`] ),
+      tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.js`] ),
+      tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.js`]    ),
+      tmpl([serPath,    'index.ejs'],                 [libDir, 'services', 'index.js']              )
     ];
 
     // Generate modules
@@ -510,4 +519,9 @@ function writeAuthenticationConfiguration (generator, context) {
     generator.destinationPath('config', 'default.json'),
     config
   );
+}
+
+function inspector(desc, obj, depth = 5) { // eslint-disable-line no-unused-vars
+  console.log(desc);
+  console.log(inspect(obj, { colors: true, depth }));
 }
