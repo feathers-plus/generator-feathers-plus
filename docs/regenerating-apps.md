@@ -1,7 +1,6 @@
 
 ## Regenerating apps
 
-However the similarities fundamentally end there.
 Cli-plus persists a definition of the app in `project-name/feathers-gen-specs.json`.
 This contains primarily the responses provided to the prompts used to create the app.
 
