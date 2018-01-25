@@ -218,6 +218,7 @@ module.exports = function generatorWriting (generator, what) {
   function service (generator, name) {
     const specsService = specs.services[name];
     const kebabName = kebabCase(name);
+    const camelName = camelCase(name);
     const adapter = specsService.adapter;
     const path = specsService.path;
     const isAuthEntityWithAuthentication = specsService.isAuthEntity ? specs.authentication : undefined;
@@ -256,6 +257,7 @@ module.exports = function generatorWriting (generator, what) {
     context = Object.assign({}, context, {
       serviceName: name,
       kebabName,
+      camelName,
       adapter,
       path: stripSlashes(path),
       authentication: isAuthEntityWithAuthentication,
