@@ -13,6 +13,7 @@ const generatorFs = require('../../lib/generator-fs');
 const makeConfig = require('./templates/_configs');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
+const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
 const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const stringifyPlus = require('../../lib/stringify-plus');
 const { updateSpecs } = require('../../lib/specs');
@@ -264,9 +265,11 @@ module.exports = function generatorWriting (generator, what) {
       libDirectory: specs.app.src,
       modelName: hasModel ? `${kebabName}.model` : null,
       serviceModule,
-      mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions)
+      mongoJsonSchema: serviceSpecsToMongoJsonSchema(feathersSpecs[name], feathersSpecs[name]._extensions),
+      mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
     });
     context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
+    context.mongoJsonSchemaStr = stringifyPlus(context.mongoJsonSchema);
 
     // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context.mongooseSchema);
     // inspector(`\n... context (generator ${what})`, context);
@@ -284,6 +287,7 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([namePath,   genericFileTpl],              [libDir, 'services', kn, `${kn}.class.js`],    true, adapter !== 'generic'),
 
       tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]   ),
+      tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.js`]    ),
       tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.js`] ),
       tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.js`] ),
       tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.js`]    ),

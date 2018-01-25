@@ -1,0 +1,16 @@
+
+// Defines the MongoDB $jsonSchema for service `<%= serviceName %>`. (Can be re-generated.)
+const deepMerge = require('deepmerge');
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+let moduleExports = deepMerge.all([{},
+  <%- insertFragment('model', mongoJsonSchemaStr.split('\n').map(str => `  ${str}`).join('\n') + ',') %>
+  <%- insertFragment('moduleExports') %>
+]);
+
+<%- insertFragment('exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

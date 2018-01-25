@@ -222,3 +222,7 @@ mongooseSchemaStr: stringifyPlus(context.mongooseSchema, { nativeFuncs }),
 tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.js`]  ),
 ```
 - Add the resulting generated modules to the tests in the test/<test name>.test-expected folders.
+
+### MongoDB
+
+- 
