@@ -16,10 +16,10 @@ BTW the contents of folders with names like app.test-copied are initially copied
 before a test is started.
 They always contain feathers-gen-specs.json and may contain service models in files like src/services/nedb-1/nedb-1.schema.js
 
-- `npm run mocha:code` will compare the source produced by the tests. Its very fast
-because it does not install the dependencies.
-- `npm run mocha:tests` will run `npm test` for each test. Its very slow as it has to
-install dependencies.
+- `npm run mocha:code` will compare the source produced by the tests to what it should be.
+Its very fast because it does not install the dependencies.
+- `npm run mocha:tests` will run `npm test` for each generated test app.
+Its very slow as it has to install dependencies.
 - `npm test` runs both of the above.
 
 The tests stop running on the first assertion failure.
