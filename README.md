@@ -17,4 +17,6 @@ The cli-plus is similar to @feathersjs/cli in that:
 
 ## [GraphQL example](./docs/graphql-example.md)
 
+## [Tests](./docs/tests.md)
+
 ## [Database Maintainers](./docs/database-maintainers.md)
