@@ -1,7 +1,7 @@
 {
   "name": "@feathers-x/generator-feathers-plus",
   "description": "A Yeoman generator to (re)generate a FeathersJS application.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/feathers-x/generator-feathers-plus",
   "main": "lib/",
   "keywords": [
@@ -26,7 +26,7 @@
     "node": ">= 6.0.0"
   },
   "scripts": {
-    "publish": "git push origin --tags && npm run changelog && git push origin",
+    "publishxx": "git push origin --tags && npm run changelog && git push origin",
     "release:pre": "npm version prerelease && npm publish --tag pre",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
