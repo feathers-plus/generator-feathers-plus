@@ -1,10 +1,17 @@
+
+// <%= serviceName %>-model.js - A Sequelize model
+//
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
 const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
+<%- insertFragment('sequelize_imports') %>
+<%- insertFragment('sequelize_init') %>
 
-module.exports = function (app) {
-  const sequelizeClient = app.get('sequelizeClient');
+let moduleExports = function (app) {
+  let sequelizeClient = app.get('sequelizeClient');
+  <%- insertFragment('sequelize_func_init') %>
+
   const <%= camelName %> = sequelizeClient.define('<%= snakeName %>', {
     text: {
       type: DataTypes.STRING,
@@ -23,5 +30,13 @@ module.exports = function (app) {
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
 
+  <%- insertFragment('sequelize_func_return') %>
   return <%= camelName %>;
 };
+<%- insertFragment('sequelize_more') %>
+
+<%- insertFragment('sequelize_exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('sequelize_funcs') %>
+<%- insertFragment('sequelize_end') %>

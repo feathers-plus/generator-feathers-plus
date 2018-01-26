@@ -1,4 +1,5 @@
 
+/* eslint quotes: 0 */
 // Defines the MongoDB $jsonSchema for service `users1`. (Can be re-generated.)
 const deepMerge = require('deepmerge');
 //!code: imports //!end

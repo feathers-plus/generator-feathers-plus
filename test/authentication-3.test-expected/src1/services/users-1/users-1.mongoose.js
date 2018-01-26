@@ -1,4 +1,5 @@
 
+/* eslint quotes: 0 */
 // Defines Mongoose model for service `users1`. (Can be re-generated.)
 const deepMerge = require('deepmerge');
 const mongoose = require('mongoose'); // eslint-disable-line no-unused-vars

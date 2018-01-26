@@ -1,12 +1,26 @@
+
+// <%= serviceName %>-model.js - An nedb model
 const NeDB = require('nedb');
 const path = require('path');
+<%- insertFragment('nedb_imports') %>
+<%- insertFragment('nedb_init') %>
 
-module.exports = function (app) {
+let moduleExports = function (app) {
   const dbPath = app.get('nedb');
-  const Model = new NeDB({
-    filename: path.join(dbPath, '<%= kebabName %>.db'),
-    autoload: true
-  });
+  <%- insertFragment('nedb_client', [
+  '  let Model = new NeDB({',
+  `    filename: path.join(dbPath, '${kebabName}.db'),`,
+  '    autoload: true',
+  '  });',
+  ]) %>
 
+  <%- insertFragment('nedb_func_return') %>
   return Model;
 };
+<%- insertFragment('nedb_more') %>
+
+<%- insertFragment('nedb_exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('nedb_funcs') %>
+<%- insertFragment('nedb_end') %>

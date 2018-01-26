@@ -3,7 +3,7 @@
 const crypto = require('crypto');
 const deepMerge = require('deepmerge');
 const mongoose = require('mongoose');
-const { camelCase, kebabCase, upperFirst } = require('lodash');
+const { camelCase, kebabCase, snakeCase, upperFirst } = require('lodash');
 const { EOL } = require('os');
 const { existsSync } = require('fs');
 const { inspect } = require('util');
@@ -219,6 +219,7 @@ module.exports = function generatorWriting (generator, what) {
     const specsService = specs.services[name];
     const kebabName = kebabCase(name);
     const camelName = camelCase(name);
+    const snakeName = snakeCase(name);
     const adapter = specsService.adapter;
     const path = specsService.path;
     const isAuthEntityWithAuthentication = specsService.isAuthEntity ? specs.authentication : undefined;
@@ -256,8 +257,9 @@ module.exports = function generatorWriting (generator, what) {
     // Custom template context.
     context = Object.assign({}, context, {
       serviceName: name,
-      kebabName,
       camelName,
+      kebabName,
+      snakeName,
       adapter,
       path: stripSlashes(path),
       authentication: isAuthEntityWithAuthentication,
@@ -283,17 +285,17 @@ module.exports = function generatorWriting (generator, what) {
     const kn = kebabName;
 
     todos = [
-      tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`],        true ),
-      tmpl([serPath,    '_model', modelTpl],          [libDir, 'models', `${context.modelName}.js`], true, !context.modelName   ),
-      tmpl(mainFileTpl,                               [libDir, 'services', kn, `${kn}.service.js`],  true ),
-      tmpl([namePath,   genericFileTpl],              [libDir, 'services', kn, `${kn}.class.js`],    true, adapter !== 'generic'),
+      tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`],        ),
+      tmpl([serPath,    '_model', modelTpl],          [libDir, 'models', `${context.modelName}.js`], false, !context.modelName    ),
+      tmpl(mainFileTpl,                               [libDir, 'services', kn, `${kn}.service.js`],  ),
+      tmpl([namePath,   genericFileTpl],              [libDir, 'services', kn, `${kn}.class.js`],    false, adapter !== 'generic' ),
 
-      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]   ),
-      tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.js`]    ),
-      tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.js`] ),
-      tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.js`] ),
-      tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.js`]    ),
-      tmpl([serPath,    'index.ejs'],                 [libDir, 'services', 'index.js']              )
+      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]    ),
+      tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.js`]     ),
+      tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.js`]  ),
+      tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.js`]  ),
+      tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.js`]     ),
+      tmpl([serPath,    'index.ejs'],                 [libDir, 'services', 'index.js']               )
     ];
 
     // Generate modules
