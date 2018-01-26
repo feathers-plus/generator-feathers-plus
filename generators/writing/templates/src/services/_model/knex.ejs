@@ -1,12 +1,17 @@
-/* eslint-disable no-console */
 
-// <%= serviceName %>-model.js - A KnexJS
+/* eslint-disable no-console */
+// <%= serviceName %>-model.js - A KnexJS model
 // 
 // See http://knexjs.org/
 // for more of what you can do here.
-module.exports = function (app) {
-  const db = app.get('knexClient');
-  const tableName = '<%= snakeName %>';
+<%- insertFragment('knex_imports') %>
+<%- insertFragment('knex_init') %>
+
+let moduleExports = function (app) {
+  let db = app.get('knexClient');
+  let tableName = '<%= snakeName %>';
+  <%- insertFragment('knex_func_init') %>
+
   db.schema.hasTable(tableName).then(exists => {
     if(!exists) {
       db.schema.createTable(tableName, table => {
@@ -17,7 +22,14 @@ module.exports = function (app) {
         .catch(e => console.error(`Error creating ${tableName} table`, e));
     }
   });
-  
 
+  <%- insertFragment('knex_func_return') %>
   return db;
 };
+<%- insertFragment('knex_more') %>
+
+<%- insertFragment('knex_exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('knex_funcs') %>
+<%- insertFragment('knex_end') %>

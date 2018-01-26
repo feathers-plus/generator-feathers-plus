@@ -1,16 +1,32 @@
 
-// <%= serviceName %>-model.js - A mongoose model
+// <%= serviceName %>-model.js - A Mongoose model
 // 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-module.exports = function (app) {
-  const mongooseClient = app.get('mongooseClient');
-  const { Schema } = mongooseClient;
-  const <%= camelName %> = new Schema({
-    text: { type: String, required: true }
-  }, {
-    timestamps: true
-  });
 
-  return mongooseClient.model('<%= camelName %>', <%= camelName %>);
+<%- insertFragment('mongoose_schema', [
+  `const mongooseSchema = require('../services/${kebabName}/${kebabName}.mongoose');`,
+]) %>
+<%- insertFragment('mongoose_imports') %>
+<%- insertFragment('mongoose_init') %>
+
+let moduleExports = function (app) {
+  let mongooseClient = app.get('mongooseClient');
+  <%- insertFragment('mongoose_func_init') %>
+
+  <%- insertFragment('mongoose_client', [
+    `  const ${camelName} = new mongooseClient.Schema(mongooseSchema, { timestamps: true });`,
+  ]) %>
+
+  let returns = mongooseClient.model('<%= camelName %>', <%= camelName %>);
+
+  <%- insertFragment('mongoose_func_return') %>
+  return returns;
 };
+<%- insertFragment('mongoose_more') %>
+
+<%- insertFragment('mongoose_exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('mongoose_funcs') %>
+<%- insertFragment('mongoose_end') %>

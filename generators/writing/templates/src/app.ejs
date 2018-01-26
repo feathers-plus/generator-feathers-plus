@@ -29,7 +29,7 @@ const authentication = require('./authentication');
   __temp = specs._adapters[__adapter];
   __module = __temp.substring(0, __temp.length - 3);
 -%>
-const <%- __adapter %> = require('<%- __module %>');
+const <%- __adapter %> = require('./<%- __module %>');
 <% }) -%>
 <%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>

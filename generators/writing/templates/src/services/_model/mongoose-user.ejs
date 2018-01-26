@@ -1,21 +1,38 @@
 
-// <%= serviceName %>-model.js - A mongoose model
+// <%= serviceName %>-model.js - A Mongoose model for a user entity
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-module.exports = function (app) {
-  const mongooseClient = app.get('mongooseClient');
-  const <%= camelName %> = new mongooseClient.Schema({
-  <% if(authentication.strategies.indexOf('local') !== -1) { %>
-    email: {type: String, unique: true},
-    password: { type: String },
-  <% } %>
-  <% authentication.oauthProviders.forEach(provider => { %>
-    <%= provider.name %>Id: { type: String },
-  <% }); %>
-  }, {
-    timestamps: true
-  });
 
-  return mongooseClient.model('<%= camelName %>', <%= camelName %>);
+<%- insertFragment('mongoose_schema', [
+  `const mongooseSchema = require('../services/${kebabName}/${kebabName}.mongoose');`,
+]) %>
+<%- insertFragment('mongoose_imports') %>
+<%- insertFragment('mongoose_init') %>
+
+let moduleExports = function (app) {
+  let mongooseClient = app.get('mongooseClient');
+  <%- insertFragment('mongoose_func_init') %>
+
+  <%- insertFragment('mongoose_client', [
+    `  const ${camelName} = new mongooseClient.Schema(mongooseSchema, { timestamps: true });`,
+  ]) %>
+
+  let returns = mongooseClient.model('<%= camelName %>', <%= camelName %>);
+
+  <%- insertFragment('mongoose_func_return') %>
+  return returns;
 };
+<%- insertFragment('mongoose_more') %>
+
+<%- insertFragment('mongoose_exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('mongoose_funcs') %>
+<%- insertFragment('mongoose_end') %>
+
+/*
+<% authentication.oauthProviders.forEach(provider => { %>
+<%= provider.name %>Id: { type: String },
+<% }); %>
+*/
