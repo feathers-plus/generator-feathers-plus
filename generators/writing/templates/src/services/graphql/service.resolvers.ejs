@@ -67,15 +67,15 @@ let moduleExports = function serviceResolvers(app, options) {
   __graphql = feathersSpecs[__serviceName]._extensions.graphql;
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
-    `      get${graphqlName} (parent, args, content, info) {`,
+    `      get${graphqlName} (parent, args, content, ast) {`,
     '        const feathersParams = convertArgsToFeathers(args);',
     `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem);`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
-    `      find${graphqlName}(parent, args, content, info) {`,
+    `      find${graphqlName}(parent, args, content, ast) {`,
     `        const feathersParams = convertArgsToFeathers(args${__graphql.serviceSortParams});`,
-    `        return ${__serviceName}.find(feathersParams).then(extractAllItems);`,
+    `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems);`,
     '      },',
   ];
 -%>
@@ -96,5 +96,16 @@ let moduleExports = function serviceResolvers(app, options) {
 <%- insertFragment('exports') %>
 module.exports = moduleExports;
 
+function paginate(content) {
+  return result => {
+    content.pagination = !result.data ? undefined : {
+      total: result.total,
+      limit: result.limit,
+      skip: result.skip,
+    };
+
+    return result;
+  };
+}
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

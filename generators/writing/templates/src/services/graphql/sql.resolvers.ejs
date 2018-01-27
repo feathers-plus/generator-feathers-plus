@@ -17,10 +17,10 @@ let moduleExports = function sqlResolvers(app, options) {
 <% Object.keys(mapping.graphqlSql).forEach(graphqlName => {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
-    `      get${graphqlName}: (parent, args, content, info) => genRunSql(content, info),`,
+    `      get${graphqlName}: (parent, args, content, ast) => genRunSql(content, ast),`,
     '',
     `      // find${graphqlName}(query: JSON, params: JSON, key: JSON): [${graphqlName}!]`,
-    `      find${graphqlName}: (parent, args, content, info) => genRunSql(content, info),`,
+    `      find${graphqlName}: (parent, args, content, ast) => genRunSql(content, ast),`,
   ];
 -%>
 
