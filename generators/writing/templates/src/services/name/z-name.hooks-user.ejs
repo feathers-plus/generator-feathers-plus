@@ -9,7 +9,8 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 } = require('@feathersjs/authentication-local').hooks;<% } %>
 
 <%- insertFragment('used', [
-  'const { iff } = commonHooks; // eslint-disable-line no-unused-vars'
+  '// eslint-disable-line no-unused-vars',
+  'const { iff } = commonHooks;'
 ]) %>
 <%- insertFragment('init') %>
 

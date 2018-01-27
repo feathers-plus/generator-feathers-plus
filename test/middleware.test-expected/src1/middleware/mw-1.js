@@ -1,6 +1,8 @@
-module.exports = function (options = {}) { // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+module.exports = function (options = {}) {
   return function mw1(req, res, next) {
-    console.log('mw1 middleware is running'); // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    console.log('mw1 middleware is running');
     next();
   };
 };

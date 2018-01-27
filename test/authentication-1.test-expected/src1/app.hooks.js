@@ -6,7 +6,8 @@ const logger = require('./hooks/logger');
 //!end
 
 //!<DEFAULT> code: used
-const { iff } = commonHooks; // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+const { iff } = commonHooks;
 //!end
 //!code: init //!end
 

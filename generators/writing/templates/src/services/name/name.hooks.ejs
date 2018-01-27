@@ -12,14 +12,16 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 <%# --- if-2 starts below. -%>
 <% if (isAuthEntityWithAuthentication && authentication.strategies.indexOf('local') !== -1) { -%>
 const {
-  hashPassword, protect // eslint-disable-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
+  hashPassword, protect
 } = require('@feathersjs/authentication-local').hooks;
 <% } -%>
 <%# --- if-2 ends above. -%>
 <%- insertFragment('imports') %>
 
 <%- insertFragment('used', [
-  'const { iff } = commonHooks; // eslint-disable-line no-unused-vars'
+  '// eslint-disable-next-line no-unused-vars',
+  'const { iff } = commonHooks;'
 ]) %>
 <%- insertFragment('init') %>
 

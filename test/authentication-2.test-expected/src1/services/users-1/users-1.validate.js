@@ -8,7 +8,8 @@ const ajv = require('ajv');
 //!code: init //!end
 
 //!<DEFAULT> code: set_id_type
-const ID = 'string'; // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+const ID = 'string';
 //!end
 
 const base = deepMerge.all([{},

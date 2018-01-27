@@ -83,7 +83,9 @@ TEST - Add "Your hooks should contain ..." to app, service and graphql hooks.ejs
 LATER - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
 LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 
-- First field in schema does not default to type: string
+OK - First field in schema does not default to type: string
+- track David PRs 330, 331 (no-op), 332, 333, 334 (no-op) plus our own esline-disable-next-line
+- update README install: fork @feathers-x/generator-feathers-plus & syslink into @feathers-x/cli
 - should paginate values in default.json be app level options?
 - Why is startup so slow? Are we scanning node_modules?
 - add option for semicolons or not

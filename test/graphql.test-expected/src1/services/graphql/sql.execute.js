@@ -1,7 +1,9 @@
 
 // Execute raw SQL statement for GraphQL. (Can be re-generated.)
-const { cwd } = require('process'); // eslint-disable-line no-unused-vars
-const { join } = require('path'); // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+const { cwd } = require('process');
+// eslint-disable-next-line no-unused-vars
+const { join } = require('path');
 //!code: imports //!end
 //!code: init //!end
 
@@ -17,7 +19,8 @@ let dialect, openDb, executeSql;
 
 // executeSql = sql => sqlite.all(sql)
 //   .catch(err => {
-//     console.log('executeSql error=', err.message); // eslint-disable-line no-console
+//     // eslint-disable-next-line no-console
+//     console.log('executeSql error=', err.message);
 //     throw err;
 //   });
 //!end
