@@ -48,29 +48,29 @@ let moduleExports = function serviceResolvers(app, options) {
 
       //!<DEFAULT> code: query-Nedb1
       // getNedb1(query: JSON, params: JSON, key: JSON): Nedb1
-      getNedb1 (parent, args, content, info) {
+      getNedb1 (parent, args, content, ast) {
         const feathersParams = convertArgsToFeathers(args);
         return nedb1.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findNedb1(query: JSON, params: JSON): [Nedb1!]
-      findNedb1(parent, args, content, info) {
+      findNedb1(parent, args, content, ast) {
         const feathersParams = convertArgsToFeathers(args, { query: { $sort: {   _id: 1 } } });
-        return nedb1.find(feathersParams).then(extractAllItems);
+        return nedb1.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       //!end
 
       //!<DEFAULT> code: query-Nedb2
       // getNedb2(query: JSON, params: JSON, key: JSON): Nedb2
-      getNedb2 (parent, args, content, info) {
+      getNedb2 (parent, args, content, ast) {
         const feathersParams = convertArgsToFeathers(args);
         return nedb2.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findNedb2(query: JSON, params: JSON): [Nedb2!]
-      findNedb2(parent, args, content, info) {
+      findNedb2(parent, args, content, ast) {
         const feathersParams = convertArgsToFeathers(args, { query: { $sort: {   _id: 1 } } });
-        return nedb2.find(feathersParams).then(extractAllItems);
+        return nedb2.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       //!end
       //!code: resolver_query_more //!end
@@ -86,5 +86,16 @@ let moduleExports = function serviceResolvers(app, options) {
 //!code: exports //!end
 module.exports = moduleExports;
 
+function paginate(content) {
+  return result => {
+    content.pagination = !result.data ? undefined : {
+      total: result.total,
+      limit: result.limit,
+      skip: result.skip,
+    };
+
+    return result;
+  };
+}
 //!code: funcs //!end
 //!code: end //!end
