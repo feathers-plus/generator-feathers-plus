@@ -6,7 +6,8 @@ let nedb2 = require('./nedb-2/nedb-2.service');
 //!code: imports //!end
 //!code: init //!end
 
-let moduleExports = function (app) { // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+let moduleExports = function (app) {
   app.configure(nedb1);
   app.configure(nedb2);
   //!code: func_return //!end

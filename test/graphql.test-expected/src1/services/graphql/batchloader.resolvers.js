@@ -6,7 +6,8 @@ const { getByDot, setByDot } = require('feathers-hooks-common');
 //!code: init //!end
 
 let moduleExports = function batchLoaderResolvers(app, options) {
-  let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem, // eslint-disable-line
+  // eslint-disable-next-line
+  let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
     feathersBatchLoader: { feathersBatchLoader } } = options;
 
   //!<DEFAULT> code: services

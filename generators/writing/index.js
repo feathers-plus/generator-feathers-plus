@@ -272,10 +272,11 @@ module.exports = function generatorWriting (generator, what) {
       mongoJsonSchema: serviceSpecsToMongoJsonSchema(feathersSpecs[name], feathersSpecs[name]._extensions),
       mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
     });
-    context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
     context.mongoJsonSchemaStr = stringifyPlus(context.mongoJsonSchema);
+    context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
 
     // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context.mongooseSchema);
+    // inspector(`\n... mongooseSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr);
     // inspector(`\n... context (generator ${what})`, context);
 
     // Custom abbreviations for building 'todos'.
@@ -529,7 +530,8 @@ function writeAuthenticationConfiguration (generator, context) {
   );
 }
 
-function inspector(desc, obj, depth = 5) { // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+function inspector(desc, obj, depth = 5) {
   console.log(desc);
   console.log(inspect(obj, { colors: true, depth }));
 }

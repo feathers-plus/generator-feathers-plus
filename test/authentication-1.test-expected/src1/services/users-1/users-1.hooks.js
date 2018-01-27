@@ -4,12 +4,14 @@ const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
 
 const {
-  hashPassword, protect // eslint-disable-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
+  hashPassword, protect
 } = require('@feathersjs/authentication-local').hooks;
 //!code: imports //!end
 
 //!<DEFAULT> code: used
-const { iff } = commonHooks; // eslint-disable-line no-unused-vars
+// eslint-disable-next-line no-unused-vars
+const { iff } = commonHooks;
 //!end
 //!code: init //!end
 

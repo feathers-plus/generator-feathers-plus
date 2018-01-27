@@ -5,7 +5,8 @@ const commonHooks = require('feathers-hooks-common');
 <%- insertFragment('imports') %>
 
 <%- insertFragment('used', [
-  'const { iff } = commonHooks; // eslint-disable-line no-unused-vars'
+  '// eslint-disable-line no-unused-vars',
+  'const { iff } = commonHooks;'
 ]) %>
 <%- insertFragment('init') %>
 
