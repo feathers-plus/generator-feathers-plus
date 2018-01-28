@@ -75,6 +75,11 @@ OK - finalize src.channels.ejs
 OK - create mongodb $jsonSchema model
 OK - First field in schema does not default to type: string
 OK - track David PRs 330, 331 (no-op), 332, 333, 334 (no-op) plus our own esline-disable-next-line
+OK - update README install: fork @feathers-x/generator-feathers-plus & syslink into @feathers-x/cli
+OK - update README: when attr are allowed for resolvers in schema
+OK - update README: about pagination. top level like Feathers. Lower levels control programatically with __skip and __limit
+OK - update README: remind people to change cli-generator-example/public/serverUrl.js
+OK - update README: doc $ref
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -86,11 +91,8 @@ TEST - Add "Your hooks should contain ..." to app, service and graphql hooks.ejs
 LATER - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
 LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 
-- update README install: fork @feathers-x/generator-feathers-plus & syslink into @feathers-x/cli
-- update README: when attr are allowed for resolvers in schema
-- update README: about pagination. top level like Feathers. Lower levels control programatically with __skip and __limit
-- update README: remind people to change cli-generator-example/public/serverUrl.js
 - GraphQL pagination. (a) in-record fields (b) {total, skip, limit, data} (c) separate pagination object.
+  Maybe specify which resolvers we want to support pagination.
 - should paginate values in default.json be app level options?
 - Why is startup so slow? Are we scanning node_modules?
 - add option for semicolons or not
