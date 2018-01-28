@@ -215,6 +215,68 @@ plugin for validating files against JSON Schema with ajv.
 [`chai-ajv-json-schema`](https://github.com/peon374/chai-ajv-json-schema/blob/master/index.js)
 purports to verify data using the `expect` syntax.
 
+### $ref: Modularizing definitions
+
+The field `createdAt` may be used in several schemas.
+It would be advantageous to define its characteristics
+-- such as its minLength and maxLength --
+in one place rather than everywhere its used.
+
+We can do this with the `$ref` keyword.
+```json
+// src/services/comment/comment.schema.js refers to an external property definition
+{
+  properties: {
+    // ...
+    createdAt: { $ref: 'common.json#/definitions/created_at'}
+  }
+}
+
+// src/refs/common.json contains the definition
+{
+  "description": "Common JSON-schema definitions.",
+  "definitions": {
+    "created_at": {
+      "description": "Creation date-time.",
+      "example": "2018-01-01T01:01:01.001Z",
+      "format": "date-time",
+      "readOnly": true,
+      "type": "string"
+    },
+  }
+}
+
+// src/services/comment/comment.validate.js will be generated with
+const base = deepMerge.all([{},
+  {
+    properties: {
+      createdAt: {
+        description: "Creation date-time.",
+        example: "2018-01-01T01:01:01.001Z",
+        format: "date-time",
+        readOnly: true,
+        type: "string"
+      }
+    }
+  },
+]);
+
+// src/services/comment/comment.mongoose.js will be generated with
+{
+  createdAt: String
+},
+```
+
+The definition of `createdAt` in common.json will be merged into the field in comment.schema.js.
+
+You can create a $ref file like common.json with all the common elements in your app.
+Should the need arise to change some, such as increasing the length of the `address` field,
+you need change it in only one place, and then regenerate the project.
+
+You can read about additional features of $ref in the
+[JSON-schema tutorial](https://code.tutsplus.com/tutorials/validating-data-with-json-schema-part-2--cms-25640).
+
+
 ### Summary
 
 The [online JSON-schema editor](https://jsonschema.net)

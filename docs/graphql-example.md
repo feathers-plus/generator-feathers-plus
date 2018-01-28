@@ -16,7 +16,10 @@ Getting up and running is as easy as 1, 2, 3.
     npm install
     ```
 
-3. Start your app
+3. `cli-generator-example` starts a server listening to port 3030.
+Check that public/serverUrl.js will point to this server.
+
+4. Start your app
 
     ```
     npm start
