@@ -1,11 +1,15 @@
-// Initializes the `<%= name %>` service on path `/<%= path %>`
+
+// Initializes the `<%= serviceName %>` service on path `/<%= path %>`
 const createService = require('feathers-mongodb');
 const hooks = require('./<%= kebabName %>.hooks');
+<%- insertFragment('mongo_imports') %>
+<%- insertFragment('mongo_init') %>
 
-module.exports = function (app) {
-  const paginate = app.get('paginate');
-  const mongoClient = app.get('mongoClient');
-  const options = { paginate };
+let moduleExports = function (app) {
+  let paginate = app.get('paginate');
+  let mongoClient = app.get('mongoClient');
+  let options = { paginate };
+  <%- insertFragment('mongo_func_init') %>
 
   // Initialize our service with any options it requires
   app.use('/<%= path %>', createService(options));
@@ -18,4 +22,12 @@ module.exports = function (app) {
   });
 
   service.hooks(hooks);
+  <%- insertFragment('mongo_func_return') %>
 };
+<%- insertFragment('mongo_more') %>
+
+<%- insertFragment('mongo_exports') %>
+module.exports = moduleExports;
+
+<%- insertFragment('mongo_funcs') %>
+<%- insertFragment('mongo_end') %>
