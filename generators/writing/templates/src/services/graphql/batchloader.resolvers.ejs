@@ -9,6 +9,11 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   // eslint-disable-next-line
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
     feathersBatchLoader: { feathersBatchLoader } } = options;
+  <%- insertFragment('max-batch-size', [
+    '  let defaultPaginate = app.get(\'paginate\');',
+    '  let maxBatchSize = defaultPaginate && typeof defaultPaginate.max === \'number\' ?',
+    '    defaultPaginate.max : undefined;',
+  ]) %>
 
 <% let __temp = Object.keys(mapping.feathers).map(serviceName =>
   `  let ${serviceName} = app.service('${mapping.feathers[serviceName].path}');`
@@ -17,8 +22,8 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
   <%- insertFragment('get-result', [
     '  // Given a fieldName in the parent record, return the result from a BatchLoader',
-    '  // The result will be an object, an array of objects, or null.',
-    '  function getResult(batchLoaderName, fieldName) {',
+    '  // The result will be an object (or null), or an array of objects (possibly empty).',
+    '  function getResult(batchLoaderName, fieldName, isArray) {',
     '    const contentByDot = `batchLoaders.${batchLoaderName}`;',
     '',
     '    // `content.app = app` is the Feathers app object.',
@@ -31,10 +36,13 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     '        setByDot(content, contentByDot, batchLoader);',
     '      }',
     '',
-    '      return batchLoader.load(parent[fieldName]);',
+    '      const returns = batchLoader.load(parent[fieldName]);',
+    '      return !isArray ? returns : returns.then(result => result || []);',
     '    };',
     '  }',
   ]) %>
+<%# -%>
+<%# === BatchLoaders =========================================================================== -%>
 
   // A transient BatchLoader can be created only when (one of) its resolver has been called,
   // as the BatchLoader loading function may require data from the 'args' passed to the resolver.
@@ -77,11 +85,13 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     `    case '${graphqlName}.${fieldName}':`,
     `      return feathersBatchLoader(dataLoaderName, '${__code}', '${__addField.relation.otherTable}',`,
     '        keys => {',
-    '          feathersParams = convertArgsToFeathers(args,',
-    `            { query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined }, populate: false }`,
-    '          );',
+    '          feathersParams = convertArgsToFeathers(args, {',
+    `            query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined },`,
+    '            _populate: \'skip\', paginate: false',
+    '          });',
     `          return ${__addField.serviceName}.find(feathersParams);`,
-    '        }',
+    '        },',
+    '        maxBatchSize // Max #keys in a BatchLoader func call.',
     '      );',
   ];
 -%>
@@ -102,6 +112,8 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       ]) %>
     }
   }
+<%# -%>
+<%# === resolvers ============================================================================== -%>
 
   let returns = {
 <%# -%>
@@ -123,7 +135,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 <%# --- if/else-1 starts below. -%>
 <% if (__addField.serviceName) {
   __temp = [
-    `      ${fieldName}: getResult('${graphqlName}.${fieldName}', '${__addField.relation.ourTable}'),`,
+    `      ${fieldName}: getResult('${graphqlName}.${fieldName}', '${__addField.relation.ourTable}'${__addField.isArray ? ', true' : ''}),`,
   ];
 -%>
       <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
@@ -140,7 +152,8 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 <%# --- forEach-1 ends above. -%>
 
     <%- insertFragment('resolver_field_more') %>
-
+<%# -%>
+<%# === Query resolvers ======================================================================== -%>
     Query: {
 <%# -%>
 <%# --- forEach-3 starts below. Loop thru the schemas of GraphQL enabled services. -%>
