@@ -448,6 +448,7 @@ module.exports = function generatorWriting (generator, what) {
 
     // Generate modules
     generatorFs(generator, context, todos);
+
     // Update dependencies
     generator._packagerInstall([
       '@feathers-plus/graphql', // has graphql/graphql as a dependency
