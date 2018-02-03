@@ -115,3 +115,5 @@ NO  Are we scanning node_modules?
 - create for swagger
 
 Push PR to cli-generator-plus. Regenerated with MongoDB ObjectID processing. Hook is n/a yet.
+Push PR to generator-feathers-plus. Adds ObjectID hook in name.hooks.js for MongoDB services.
+ 
