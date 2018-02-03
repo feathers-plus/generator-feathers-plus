@@ -102,7 +102,9 @@ module.exports = function generatorWriting (generator, what) {
       app(generator);
 
       Object.keys(specs.services || {}).forEach(name => {
-        service(generator, name);
+        if (name !== 'graphql') {
+          service(generator, name);
+        }
       });
 
       authentication(generator);
@@ -250,9 +252,9 @@ module.exports = function generatorWriting (generator, what) {
       }
     }
 
-    // inspector(`\n... specs (generator ${what})`, specs);
-    // inspector('\n...mapping', mapping);
-    // inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
+    //inspector(`\n... specs (generator ${what})`, specs);
+    //inspector('\n...mapping', mapping);
+    //inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
 
     // Custom template context.
     context = Object.assign({}, context, {

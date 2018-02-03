@@ -80,6 +80,9 @@ OK - update README: remind people to change cli-generator-example/public/serverU
 OK - update README: doc $ref
 OK - Convert completely to BatchLoader
 OK - Add "Your hooks should contain ..." to app, service and graphql hooks.ejs
+OK - batchloaders need context.params.paginate = false
+OK - batchloaders meed maximum loads & set equal to default.json#pagination.max
+OK - batchloaders return null rather than []
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -96,13 +99,7 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 - Add deepmerge as a dependency on 'generate service'
 - mongodb requires `new ObjectID(foreign_key)`
 - cannot deepmerge mongo BSON instances
-
-- batchloaders need context.params.paginate = false
-- batchloaders meed maximum loads & set equal to default.json#pagination.max
 - add to batchloader docs that pagination affects $in, so pagination=false needed.
-- batchloaders return null rather than []
-
-
 - why are there blank lines on loading deps between 'skip' and 'force' ?
 - check @f+/graphql is installed on `generate graphql`
   There may be problems finding graphql/graphql in cli-generator-example
@@ -110,25 +107,11 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 - GraphQL pagination. (a) in-record fields (b) {total, skip, limit, data} (c) separate pagination object.
   Maybe specify which resolvers we want to support pagination.
 - should paginate values in default.json be app level options?
-- Why is startup so slow? Are we scanning node_modules?
+- Why is startup so slow?
+NO  Are we scanning node_modules?
 - add option for semicolons or not
 - create Sequelize schema
 - create fastJoin definitions
 - create for swagger
 
-Upgraded generated BatchLoader resolvers for pagination.
-
-- @f+/graphql@1.5.0 is the required dependency for generated apps.
-  This should be installed when a *new* app is generated.
-  PLEASE INFORM IF ITS UPDATED automatically on `generate graphql`.
-  (Not that there's much we can do about it.) 
-- graphql/graphql remains a package.json dependency of @f+/graphql
-- In batchloaders.resolvers.js, the BatchLoader func will be called with
-  no more than `maxBatchSize` keys. maxBatchSize defaults to
-  default.json#paginate.max.
-- maxBatchSize can be customized. undefined or Infinity will call with all
-  keys, as it did previously.
-- `paginate: false` is the default for BatchLoaders, so maxBatchSize
-  controls the pagination.
-- BatchLoaders now return `[]` instead of `null` for an array of results
-  containing no records.
+Push PR to cli-generator-plus. Regenerated with MongoDB ObjectID processing. Hook is n/a yet.
