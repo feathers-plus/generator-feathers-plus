@@ -90,7 +90,7 @@ let moduleExports = {
     //   remove: authenticate('jwt')
     <%- insertFragment('before', [
       '    all: [],',
-      '    find: [ authenticate(\'jwt\') ],',
+      `    find: [ authenticate(\'jwt\')${__mongo ? ', mongoKeys(ObjectID, foreignKeys)' : ''} ],`,
       '    get: [ authenticate(\'jwt\') ],',
       `    create: [${__temp}${__temp ? ' ' : ''}],`,
       `    update: [${__temp}${__temp ? ', ' : ''}authenticate('jwt') ],`,
