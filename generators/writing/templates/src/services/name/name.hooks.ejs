@@ -1,13 +1,19 @@
+<% __mongo = (mapping.feathers[serviceName] || {}).adapter === 'mongodb' -%>
 
 // Hooks for service `<%= serviceName %>`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 <%# -%>
-<%# --- if-1 starts below. -%>
+<%# --- if-0 starts below. -%>
 <% if (requiresAuth || isAuthEntityWithAuthentication) { -%>
 const { authenticate } = require('@feathersjs/authentication').hooks;
 <% } -%>
+<%# --- if-0 ends above. -%>
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (__mongo) { -%>
+const { ObjectID } = require('mongodb');
+<% } -%>
 <%# --- if-1 ends above. -%>
-
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (isAuthEntityWithAuthentication && authentication.strategies.indexOf('local') !== -1) { -%>
@@ -21,25 +27,45 @@ const {
 
 <%- insertFragment('used', [
   '// eslint-disable-next-line no-unused-vars',
-  'const { iff } = commonHooks;'
+  `const { iff${__mongo ? ', mongoKeys' : ''} } = commonHooks;`,
 ]) %>
+<%# -%>
+<%# === Foreign keys =========================================================================== -%>
+<%# -%>
+<%# --- if-3 starts below. (mongodb only) -%>
+<% if (__mongo) { -%>
+<%- insertFragment('foreign_keys', [
+  '// eslint-disable-next-line no-unused-vars',
+  `const foreignKeys = ${stringifyPlus(feathersSpecs[serviceName]._extensions.foreignKeys)};`,
+]) -%>
+<% } -%>
+<%# --- if-3 ends above. -%>
+<%# %>
 <%- insertFragment('init') %>
+<%# === Before ================================================================================= -%>
 
 let moduleExports = {
   before: {
 <%# -%>
-<%# --- if/else-3 starts below. -%>
+<%# --- if-40 starts below. -%>
+<% if (__mongo) { -%>
+    // Your hooks should include:
+    //   find: mongoKeys(ObjectID, foreignKeys)
+<% } -%>
+<%# --- if-40 ends above. -%>
+<%# -%>
+<%# --- if/else-4 starts below. -%>
 <% if (!isAuthEntityWithAuthentication) { -%>
 <%# -%>
-<%# --- if-3a starts below. -%>
+<%# --- if-4a starts below. -%>
 <% if (requiresAuth) { -%>
     // Your hooks should include:
-    //   all: authenticate('jwt')
+    //   all:  authenticate('jwt')
 <% } -%>
-<%# --- if/-3a ends above. -%>
+<%# --- if-4a ends above. -%>
     <%- insertFragment('before', [
       `    all: [${requiresAuth ? " authenticate('jwt') " : ''}],`,
-      '    find: [],',
+      `    find: [${__mongo ? ' mongoKeys(ObjectID, foreignKeys) ' : ''}],`,
       '    get: [],',
       '    create: [],',
       '    update: [],',
@@ -52,12 +78,13 @@ let moduleExports = {
     // Your hooks should include:
     //   find:   authenticate('jwt')
     //   get:    authenticate('jwt')
+<%# --- if-4a ends above. -%>
 <%# -%>
-<%# --- if-3b starts below. -%>
+<%# --- if-4b starts below. -%>
 <% if (__temp) { -%>
     //   create:<%- __temp %>
 <% } -%>
-<%# --- if/-3b ends above. -%>
+<%# --- if-4b ends above. -%>
     //   update: authenticate('jwt')<%- __temp %>
     //   patch:  authenticate('jwt')<%- __temp %>
     //   remove: authenticate('jwt')
@@ -71,12 +98,14 @@ let moduleExports = {
       '    remove: [ authenticate(\'jwt\') ]',
     ]) %>
 <% } -%>
-<%# --- if/else-3 ends above. -%>
+<%# --- if/else-4 ends above. -%>
   },
+<%# -%>
+<%# === After  ================================================================================= -%>
 
   after: {
 <%# -%>
-<%# --- if/else-4 starts below. -%>
+<%# --- if/else-5 starts below. -%>
 <% if (!isAuthEntityWithAuthentication) { -%>
     <%- insertFragment('after', [
       '    all: [],',
@@ -89,12 +118,12 @@ let moduleExports = {
     ]) %>
 <% } else { -%>
 <%# -%>
-<%# --- if-4a starts below. -%>
+<%# --- if-5a starts below. -%>
 <% if (authentication.strategies.indexOf('local') !== -1) { -%>
     // Your hooks should include:
     //   all: protect('password')
 <% } -%>
-<%# --- if-4a ends above. -%>
+<%# --- if-5a ends above. -%>
     <%- insertFragment('after', authentication.strategies.indexOf('local') !== -1
       ? [
         '    all: [',
@@ -120,8 +149,10 @@ let moduleExports = {
       ]
     ) %>
 <% } -%>
-<%# --- if/else-4 ends above. -%>
+<%# --- if/else-5 ends above. -%>
   },
+<%# -%>
+<%# === Error ================================================================================== -%>
 
   error: {
     <%- insertFragment('error', [
