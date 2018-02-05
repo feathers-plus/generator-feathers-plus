@@ -14,11 +14,14 @@
     "url": "git://github.com/feathers-x/generator-feathers-plus.git"
   },
   "author": {
-    "name": "Feathers contributors",
-    "email": "hello@feathersjs.com",
-    "url": "https://feathersjs.com"
+    "name": "John Szwaronek",
+    "email": "johnsz9999@gmail.com",
+    "url": "https://feathers-plus.github.io"
   },
-  "contributors": [],
+  "contributors": [
+    "John Szwaronek <johnsz9999@gmail.com>",
+    "Matt Chewone <mattchewone@gmail.com>"
+  ],
   "bugs": {
     "url": "https://github.com/feathers-x/generator-feathers-plus/issues"
   },

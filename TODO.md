@@ -83,6 +83,13 @@ OK - Add "Your hooks should contain ..." to app, service and graphql hooks.ejs
 OK - batchloaders need context.params.paginate = false
 OK - batchloaders meed maximum loads & set equal to default.json#pagination.max
 OK - batchloaders return null rather than []
+OK - mongodb requires `new ObjectID(foreign_key)`
+OK - cannot deepmerge mongo BSON instances
+OK - check @f+/graphql is installed on `generate graphql`
+OK  There may be problems finding graphql/graphql in cli-generator-example
+OK - GraphQL pagination. (a) in-record fields (b) {total, skip, limit, data} (c) separate pagination object.
+OK   Maybe specify which resolvers we want to support pagination.
+OK - should paginate values in default.json be app level options?
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -92,28 +99,20 @@ NO - in graphql, feathers-batch-loader.js#serializeRecordKey & serializeDataLoad
 NO   feathers-plus-common/object/sortKeys if param is object to organize props in order
 NO   else the two won't be considered "equal".
 NO   --> Let user handle this as we think object keys will be rarely used. 
+NO  Are we scanning node_modules?
 
 LATER - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
 LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 
 - Add deepmerge as a dependency on 'generate service'
-- mongodb requires `new ObjectID(foreign_key)`
-- cannot deepmerge mongo BSON instances
 - add to batchloader docs that pagination affects $in, so pagination=false needed.
+  Point out how batchloader can control max keys in a call.
 - why are there blank lines on loading deps between 'skip' and 'force' ?
-- check @f+/graphql is installed on `generate graphql`
-  There may be problems finding graphql/graphql in cli-generator-example
-
-- GraphQL pagination. (a) in-record fields (b) {total, skip, limit, data} (c) separate pagination object.
-  Maybe specify which resolvers we want to support pagination.
-- should paginate values in default.json be app level options?
+- Let's say we had mongodb services and changed them to NeDB. commentions['mongodb+mongodb'] will
+  remain. This causes, for example, src/mongodb.js to still be generated.
+  Basically, the generator does not remove info in specs that's no longer relavent.
 - Why is startup so slow?
-NO  Are we scanning node_modules?
 - add option for semicolons or not
 - create Sequelize schema
 - create fastJoin definitions
 - create for swagger
-
-Push PR to cli-generator-plus. Regenerated with MongoDB ObjectID processing. Hook is n/a yet.
-Push PR to generator-feathers-plus. Adds ObjectID hook in name.hooks.js for MongoDB services.
- 
