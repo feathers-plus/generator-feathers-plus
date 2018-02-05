@@ -454,6 +454,7 @@ module.exports = function generatorWriting (generator, what) {
     // Update dependencies
     generator._packagerInstall([
       '@feathers-plus/graphql', // has graphql/graphql as a dependency
+      'graphql-resolvers-ast',
       'merge-graphql-schemas'
     ], { save: true });
   }

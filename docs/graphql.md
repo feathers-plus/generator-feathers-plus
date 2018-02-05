@@ -204,17 +204,16 @@ __in, __sort, __skip, etc. instead.
 The `key` argument is used for Feathers' `id`.
 
 The `query` and `params` arguments are merged for the Feathers `params` argument.
-`graphql: true` is added to `params` to indicate the service call is part of a GraphQL query.
+`graphql: <Array>` is added to `params` to indicate the service call is part of a GraphQL query.
+Its contents are described in the following section.
 
 The returned result is Feathers compatible.
 It will contain pagination information if the top level service is configured for pagination.
 
 You will have to programmatically paginate services other than the top level one,
-using __skip and __limit. 
+using __skip and __limit.
 
-### Proposal to support pagination for inner joins
-
-#### Resolver paths
+### Resolver paths
 
 Let's use this as an example:
 ```js
@@ -230,12 +229,6 @@ Let's use this as an example:
    }
 }'
 ```
-
-At present a paginated result is returned if the top-level data-set was paginated.
-The paginated info is only for that data-set, in this case the `user` records from the `findUser` call.
-No information is provided regarding any pagination of the `post` records resulting from the `posts` call.
-
-The following is a proposal to provide the missing pagination information.
 
 We can analyze the AST of the Query string to produce a "resolver path" to identify when and why a resolver
 is being called.
@@ -284,72 +277,7 @@ In sum, these resolver paths would be produced
 // ...
 ```
 
-#### Provide resolver path to service hooks
+### Provide resolver path to service hooks
 
-Feathers service hooks presently see `{ graphql: true }`
-and so only know that the call is part of a GraphQL call.
-This call be changed to `{ graphql: resolverPath }` so that the hook has more information
-about the GraphQL call.
-
-#### Return resolver pagination information
-
-Feathers calls whose top-level is paginated return the result
-```json
-{
-  total: 100,
-  skip: 0,
-  limit: 10,
-  data: [ ]
-}
-```
-This proposal will add a `pagination: [{...}, {...}]` to that.
-
-Feathers calls whose top-level is not paginated return the resulting object.
-This proposal would return the following **only if any inner pagination occurred**.
-```json
-{
-  pagination: pagination: [{...}, {...}],
-  data: [ /* the single resulting object */ ]
-}
-```
-
-In both cases `pagination` would be an array of objects.
-Each object contains pagination information for one resolver route.
-and the elements would be in the order of executed resolvers as in the above example.
-
-> Perhaps this is not the best design as it requires searching the array for desired population info.
-A hash may be better where the prop is the serialized resolver route ?!?
-
-It would look like
-```json
-[
-  { route: [ 'findUser', '[User]!' ],
-    args: query: {uuid: {__lt: 100000}}, 
-    pagination: {
-      total,
-      skip,
-      limit
-    }
-  }
-]
-```
-
-Only resolver calls with paginated results would be included,
-not every resolver call.
-So the amount of information should be manageable.
-
-The app can drill down to the pagination information it is interested in,
-and use that to modify its __limit and __skip values in the GraphQL arguments.
-
-> BatchLoaders cannot return such information.
-In fact, **I'm not sure BatchLoaders** can support pagination without extreme contortion.
-
-..
-
-> **WHAT IS THE POINT OF THIS?**
-Will an app actually rerun the **WHOLE** Query must to scroll on an inner paginated record?
-Would it need another Query just to scroll those records and any joined records?
-
-..
-
-> **We cannot implement pagaination UNTIL WE HAVE AN ANSWER FOR THIS.**
+Feathers service hooks can reference `context.params.graphql = resolverPath }`
+so that the hook has more information about the GraphQL call.

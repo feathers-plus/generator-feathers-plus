@@ -106,6 +106,7 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 
 - Add deepmerge as a dependency on 'generate service'
 - add to batchloader docs that pagination affects $in, so pagination=false needed.
+- Matt: Just fwiw when I do an npm i it removed the git ref’d feathers-hooks-common
   Point out how batchloader can control max keys in a call.
 - why are there blank lines on loading deps between 'skip' and 'force' ?
 - Let's say we had mongodb services and changed them to NeDB. commentions['mongodb+mongodb'] will
