@@ -38,6 +38,8 @@ However the similarities fundamentally end there.
 
 ## [GraphQL example](./docs/graphql-example.md)
 
+## [GraphQL pagination proposal](./docs/graphql-pagination.md)
+
 ## [Tests](./docs/tests.md)
 
 ## [Database Maintainers](./docs/database-maintainers.md)

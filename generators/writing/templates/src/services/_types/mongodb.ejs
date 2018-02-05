@@ -18,8 +18,13 @@ let moduleExports = function (app) {
   const service = app.service('<%= path %>');
 
   mongoClient.then(db => {
-    service.Model = db.collection('<%= kebabName %>');
-  });
+    return db.createCollection('<%= kebabName %>', {
+      // validator: { $jsonSchema: validateSchema }
+    });
+  })
+    .then(serviceModel => {
+      service.Model = serviceModel;
+    });
 
   service.hooks(hooks);
   <%- insertFragment('mongo_func_return') %>
