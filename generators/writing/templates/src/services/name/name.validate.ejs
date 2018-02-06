@@ -13,7 +13,7 @@ const ajv = require('ajv');
 ]) %>
 
 const base = merge({},
-<% __jsonSchema = deepMerge({}, feathersSpecs[serviceName]);
+<% __jsonSchema = merge({}, feathersSpecs[serviceName]);
    delete __jsonSchema._extensions;
    __str = stringifyPlus(__jsonSchema).replace(/"ID"/g, 'ID')
      .split('\n').map(str => `  ${str}`).join('\n');

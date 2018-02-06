@@ -91,7 +91,7 @@ module.exports = function generatorWriting (generator, what) {
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
     semicolon: specs.options.semicolon ? ';' : '',
 
-    deepMerge: deepMerge,
+    merge,
     EOL,
     stringifyPlus
   });
@@ -186,12 +186,13 @@ module.exports = function generatorWriting (generator, what) {
       '@feathersjs/errors',
       '@feathersjs/configuration',
       '@feathersjs/express',
-      'feathers-hooks-common',
-      'serve-favicon',
       'compression',
+      'cors',
+      'feathers-hooks-common',
       'helmet',
+      'lodash.merge',
+      'serve-favicon',
       'winston',
-      'cors'
     ];
 
     generator.devDependencies = [

@@ -169,7 +169,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
     `      find${graphqlName}(parent, args, content, ast) {`,
-    `        const feathersParams = convertArgsToFeathers(args,ast${__graphql.serviceSortParams});`,
+    `        const feathersParams = convertArgsToFeathers(args, ast${__graphql.serviceSortParams});`,
     `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems);`,
     '      },',
   ];
