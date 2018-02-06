@@ -2,7 +2,9 @@
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
 const createService = require('feathers-mongodb');
 const hooks = require('./<%= kebabName %>.hooks');
-<%- insertFragment('mongo_imports') %>
+<%- insertFragment('mongo_imports', [
+  'let $jsonSchema = require(\'./${kebabName}.mongo\');'
+]) %>
 <%- insertFragment('mongo_init') %>
 
 let moduleExports = function (app) {
@@ -19,7 +21,9 @@ let moduleExports = function (app) {
 
   mongoClient.then(db => {
     return db.createCollection('<%= kebabName %>', {
-      // validator: { $jsonSchema: validateSchema }
+      <%- insertFragment('mongo_create_collection', [
+        'validator: { $jsonSchema: $jsonSchema }',
+      ]) %>
     });
   })
     .then(serviceModel => {

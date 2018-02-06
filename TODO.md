@@ -108,7 +108,7 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 - add to batchloader docs that pagination affects $in, so pagination=false needed.
 - Matt: Just fwiw when I do an npm i it removed the git ref’d feathers-hooks-common
   Point out how batchloader can control max keys in a call.
-- why are there blank lines on loading deps between 'skip' and 'force' ?
+- why are there blank lines on loading deps between 'skip' and 'force' ? generate service
 - Let's say we had mongodb services and changed them to NeDB. commentions['mongodb+mongodb'] will
   remain. This causes, for example, src/mongodb.js to still be generated.
   Basically, the generator does not remove info in specs that's no longer relavent.
