@@ -9,10 +9,14 @@ let moduleExports = merge({},
   //!<DEFAULT> code: model
   {
     bsonType: "object",
+    additionalProperties: false,
     required: [],
     properties: {
+      _id: {
+        bsonType: "objectId"
+      },
       nedb1Id: {
-        bsonType: "string"
+        bsonType: "objectId"
       }
     }
   },

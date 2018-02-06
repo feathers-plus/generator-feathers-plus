@@ -54,8 +54,8 @@
   "dependencies": {
     "@feathers-plus/common": "0.1.0",
     "@feathersjs/tools": "0.1.5",
-    "glob": "7.1.2",
     "json-schema-deref-sync": "0.4.0",
+    "lodash": "4.17.5",
     "lodash.merge": "4.6.1",
     "mongoose": "4.13.6",
     "snazzy": "7.0.0",

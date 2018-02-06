@@ -2,19 +2,19 @@
 // Hooks for service `nedb1`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
-
 //!code: imports //!end
 
 //!<DEFAULT> code: used
 // eslint-disable-next-line no-unused-vars
 const { iff } = commonHooks;
 //!end
+
 //!code: init //!end
 
 let moduleExports = {
   before: {
     // Your hooks should include:
-    //   all: authenticate('jwt')
+    //   all:  authenticate('jwt')
     //!<DEFAULT> code: before
     all: [ authenticate('jwt') ],
     find: [],

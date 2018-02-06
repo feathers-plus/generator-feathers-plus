@@ -9,6 +9,11 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   // eslint-disable-next-line
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
     feathersBatchLoader: { feathersBatchLoader } } = options;
+  //!<DEFAULT> code: max-batch-size
+  let defaultPaginate = app.get('paginate');
+  let maxBatchSize = defaultPaginate && typeof defaultPaginate.max === 'number' ?
+    defaultPaginate.max : undefined;
+  //!end
 
   //!<DEFAULT> code: services
   let nedb1 = app.service('/nedb-1');
@@ -17,8 +22,8 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
   //!<DEFAULT> code: get-result
   // Given a fieldName in the parent record, return the result from a BatchLoader
-  // The result will be an object, an array of objects, or null.
-  function getResult(batchLoaderName, fieldName) {
+  // The result will be an object (or null), or an array of objects (possibly empty).
+  function getResult(batchLoaderName, fieldName, isArray) {
     const contentByDot = `batchLoaders.${batchLoaderName}`;
 
     // `content.app = app` is the Feathers app object.
@@ -31,7 +36,8 @@ let moduleExports = function batchLoaderResolvers(app, options) {
         setByDot(content, contentByDot, batchLoader);
       }
 
-      return batchLoader.load(parent[fieldName]);
+      const returns = batchLoader.load(parent[fieldName]);
+      return !isArray ? returns : returns.then(result => result || []);
     };
   }
   //!end
@@ -61,11 +67,13 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     case 'Nedb1.nedb2':
       return feathersBatchLoader(dataLoaderName, '!', '_id',
         keys => {
-          feathersParams = convertArgsToFeathers(args,
-            { query: { _id: { $in: keys }, $sort: undefined }, populate: false }
-          );
+          feathersParams = convertArgsToFeathers(args, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
           return nedb2.find(feathersParams);
-        }
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
       );
     //!end
 
@@ -74,11 +82,13 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     case 'Nedb2.nedb1':
       return feathersBatchLoader(dataLoaderName, '!', '_id',
         keys => {
-          feathersParams = convertArgsToFeathers(args,
-            { query: { _id: { $in: keys }, $sort: undefined }, populate: false }
-          );
+          feathersParams = convertArgsToFeathers(args, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
           return nedb1.find(feathersParams);
-        }
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
       );
     //!end
 
@@ -109,19 +119,18 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     },
 
     //!code: resolver_field_more //!end
-
     Query: {
 
       //!<DEFAULT> code: query-Nedb1
       // getNedb1(query: JSON, params: JSON, key: JSON): Nedb1
       getNedb1 (parent, args, content, ast) {
-        const feathersParams = convertArgsToFeathers(args);
+        const feathersParams = convertArgsToFeathers(args, ast);
         return nedb1.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findNedb1(query: JSON, params: JSON): [Nedb1!]
       findNedb1(parent, args, content, ast) {
-        const feathersParams = convertArgsToFeathers(args, { query: { $sort: {   _id: 1 } } });
+        const feathersParams = convertArgsToFeathers(args, ast, { query: { $sort: {   _id: 1 } } });
         return nedb1.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       //!end
@@ -129,13 +138,13 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       //!<DEFAULT> code: query-Nedb2
       // getNedb2(query: JSON, params: JSON, key: JSON): Nedb2
       getNedb2 (parent, args, content, ast) {
-        const feathersParams = convertArgsToFeathers(args);
+        const feathersParams = convertArgsToFeathers(args, ast);
         return nedb2.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findNedb2(query: JSON, params: JSON): [Nedb2!]
       findNedb2(parent, args, content, ast) {
-        const feathersParams = convertArgsToFeathers(args, { query: { $sort: {   _id: 1 } } });
+        const feathersParams = convertArgsToFeathers(args, ast, { query: { $sort: {   _id: 1 } } });
         return nedb2.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       //!end

@@ -143,7 +143,7 @@ It is also built in lib/service-specs-expand.js.
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
     semicolon: specs.options.semicolon ? ';' : '',
 
-    deepMerge, // require('deepmerge')
+    merge, // require('lodash.merge')
     EOL, // require('os').EOL
     stringifyPlus, // require('./lib/stringify-plus)
     

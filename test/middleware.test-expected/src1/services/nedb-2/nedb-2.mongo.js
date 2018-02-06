@@ -9,8 +9,13 @@ let moduleExports = merge({},
   //!<DEFAULT> code: model
   {
     bsonType: "object",
+    additionalProperties: false,
     required: [],
-    properties: {}
+    properties: {
+      _id: {
+        bsonType: "objectId"
+      }
+    }
   },
   //!end
   //!code: moduleExports //!end
