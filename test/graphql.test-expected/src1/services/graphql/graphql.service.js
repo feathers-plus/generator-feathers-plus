@@ -2,7 +2,7 @@
 // Initializes the `graphql` service on path `/graphql`. (Can be re-generated.)
 const createService = require('@feathers-plus/graphql');
 const { mergeTypes } = require('merge-graphql-schemas');
-const deepMerge = require('deepmerge');
+const merge = require('lodash.merge');
 const generatedSchema = require('./graphql.schemas');
 const generatedResolvers = require('./service.resolvers');
 const hooks = require('./graphql.hooks');
@@ -17,10 +17,10 @@ let schemas = mergeTypes([
   //!code: schemas //!end
 ]);
 
-let resolvers = (app, options) => deepMerge.all([{},
+let resolvers = (app, options) => merge({},
   generatedResolvers(app, options),
   //!code: service_resolvers //!end
-]);
+);
 //!code: init //!end
 
 let moduleExports = function(){

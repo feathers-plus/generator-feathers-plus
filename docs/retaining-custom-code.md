@@ -126,7 +126,7 @@ Cli-plus generates a module for every service named `src/services/service-name/v
 It contains JSON-schema which may be used to validate record contents before create, update and patch calls.
 Part of the code may be similar to:
 ```js
-const base = deepMerge.all([{},
+const base = merge({},
   //!<DEFAULT> code: base
   {
     $schema: "http://json-schema.org/draft-05/schema",
@@ -158,7 +158,7 @@ const base = deepMerge.all([{},
   },
   //!end
   //!code: base_more //!end
-]);
+);
 ```
 
 This 'base' JSON-schema is derived from the `service model`

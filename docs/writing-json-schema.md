@@ -247,7 +247,7 @@ We can do this with the `$ref` keyword.
 }
 
 // src/services/comment/comment.validate.js will be generated with
-const base = deepMerge.all([{},
+const base = merge({},
   {
     properties: {
       createdAt: {
@@ -259,7 +259,7 @@ const base = deepMerge.all([{},
       }
     }
   },
-]);
+);
 
 // src/services/comment/comment.mongoose.js will be generated with
 {

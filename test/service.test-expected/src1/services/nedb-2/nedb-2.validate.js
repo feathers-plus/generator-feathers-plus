@@ -2,7 +2,7 @@
 /* eslint quotes: 0 */
 // Validation definitions for validateSchema hook for service `nedb2`. (Can be re-generated.)
 const { validateSchema } = require('@feathers-plus/feathers-hooks-common');
-const deepMerge = require('deepmerge');
+const merge = require('lodash.merge');
 const ajv = require('ajv');
 //!code: imports //!end
 //!code: init //!end
@@ -12,7 +12,7 @@ const ajv = require('ajv');
 const ID = 'string';
 //!end
 
-const base = deepMerge.all([{},
+const base = merge({},
   //!<DEFAULT> code: base
   {
     $schema: "http://json-schema.org/draft-05/schema",
@@ -23,23 +23,23 @@ const base = deepMerge.all([{},
   },
   //!end
   //!code: base_more //!end
-]);
+);
 
-const create = deepMerge.all([{},
+const create = merge({},
   base,
   //!code: create_more //!end
-]);
+);
 
-const update = deepMerge.all([{},
+const update = merge({},
   base,
   //!code: update_more //!end
-]);
+);
 
-const patch = deepMerge.all([{},
+const patch = merge({},
   base,
   { required: undefined },
   //!code: patch_more //!end
-]);
+);
 
 const validateCreate = options => {
   //!<DEFAULT> code: func_create
