@@ -2,7 +2,7 @@
 /* eslint quotes: 0 */
 // Validation definitions for validateSchema hook for service `<%= serviceName %>`. (Can be re-generated.)
 const { validateSchema } = require('feathers-hooks-common');
-const deepMerge = require('deepmerge');
+const merge = require('lodash.merge');
 const ajv = require('ajv');
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
@@ -12,7 +12,7 @@ const ajv = require('ajv');
   'const ID = \'string\';',
 ]) %>
 
-const base = deepMerge.all([{},
+const base = merge({},
 <% __jsonSchema = deepMerge({}, feathersSpecs[serviceName]);
    delete __jsonSchema._extensions;
    __str = stringifyPlus(__jsonSchema).replace(/"ID"/g, 'ID')
@@ -20,23 +20,23 @@ const base = deepMerge.all([{},
 -%>
   <%- insertFragment('base', Object.keys(__jsonSchema).length === 0 ? undefined : `${__str},`) %>
   <%- insertFragment('base_more') %>
-]);
+);
 
-const create = deepMerge.all([{},
+const create = merge({},
   base,
   <%- insertFragment('create_more') %>
-]);
+);
 
-const update = deepMerge.all([{},
+const update = merge({},
   base,
   <%- insertFragment('update_more') %>
-]);
+);
 
-const patch = deepMerge.all([{},
+const patch = merge({},
   base,
   { required: undefined },
   <%- insertFragment('patch_more') %>
-]);
+);
 
 const validateCreate = options => {
   <%- insertFragment('func_create', [

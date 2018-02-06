@@ -15,8 +15,9 @@ module.exports = class AppGenerator extends Generator {
     this._initialGeneration = !specs.app || !specs.app.src;
     initSpecs('app');
 
-    this.log('\n\n');
     if (this._initialGeneration) {
+      this.log();
+      this.log();
       this.log([
         chalk.green.bold('We are creating a'),
         chalk.yellow.bold(' new '),
@@ -30,8 +31,8 @@ module.exports = class AppGenerator extends Generator {
         chalk.green.bold('the app base in dir '),
         chalk.yellow.bold(parse(cwd()).base)
       ].join(''));
+      this.log();
     }
-    this.log();
 
     const dependencies = [
       '@feathersjs/feathers',

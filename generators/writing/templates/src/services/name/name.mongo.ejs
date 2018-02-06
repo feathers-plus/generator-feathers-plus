@@ -1,14 +1,14 @@
 
 /* eslint quotes: 0 */
 // Defines the MongoDB $jsonSchema for service `<%= serviceName %>`. (Can be re-generated.)
-const deepMerge = require('deepmerge');
+const merge = require('lodash.merge');
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-let moduleExports = deepMerge.all([{},
+let moduleExports = merge({},
   <%- insertFragment('model', mongoJsonSchemaStr.split('\n').map(str => `  ${str}`).join('\n') + ',') %>
   <%- insertFragment('moduleExports') %>
-]);
+);
 
 <%- insertFragment('exports') %>
 module.exports = moduleExports;

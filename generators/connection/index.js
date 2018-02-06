@@ -16,16 +16,16 @@ module.exports = class ConnectionGenerator extends Generator {
     this._initialGeneration = !this._specs.connections;
     initSpecs('connection');
 
-    this.log('\n\n');
     if (this._initialGeneration) {
+      this.log('\n\n');
       this.log([
         chalk.green.bold('We are'),
         chalk.yellow.bold(' adding '),
         chalk.green.bold('the first connection in dir '),
         chalk.yellow.bold(parse(cwd()).base)
       ].join(''));
+      this.log();
     }
-    this.log();
 
     const generator = this;
     this.dependencies = [];

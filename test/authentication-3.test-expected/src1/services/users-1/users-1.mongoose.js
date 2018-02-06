@@ -1,18 +1,18 @@
 
 /* eslint quotes: 0 */
 // Defines Mongoose model for service `users1`. (Can be re-generated.)
-const deepMerge = require('deepmerge');
+const merge = require('lodash.merge');
 // eslint-disable-next-line no-unused-vars
 const mongoose = require('mongoose');
 //!code: imports //!end
 //!code: init //!end
 
-let moduleExports = deepMerge.all([{},
+let moduleExports = merge.all({},
   //!<DEFAULT> code: model
   {},
   //!end
   //!code: moduleExports //!end
-]);
+);
 
 //!code: exports //!end
 module.exports = moduleExports;

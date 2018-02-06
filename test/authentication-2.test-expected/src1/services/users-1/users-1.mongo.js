@@ -1,11 +1,11 @@
 
 /* eslint quotes: 0 */
 // Defines the MongoDB $jsonSchema for service `users1`. (Can be re-generated.)
-const deepMerge = require('deepmerge');
+const merge = require('lodash.merge');
 //!code: imports //!end
 //!code: init //!end
 
-let moduleExports = deepMerge.all([{},
+let moduleExports = merge({},
   //!<DEFAULT> code: model
   {
     bsonType: "object",
@@ -14,7 +14,7 @@ let moduleExports = deepMerge.all([{},
   },
   //!end
   //!code: moduleExports //!end
-]);
+);
 
 //!code: exports //!end
 module.exports = moduleExports;

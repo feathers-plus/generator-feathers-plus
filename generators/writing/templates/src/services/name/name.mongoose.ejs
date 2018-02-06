@@ -1,16 +1,16 @@
 
 /* eslint quotes: 0 */
 // Defines Mongoose model for service `<%= serviceName %>`. (Can be re-generated.)
-const deepMerge = require('deepmerge');
+const merge = require('lodash.merge');
 // eslint-disable-next-line no-unused-vars
 const mongoose = require('mongoose');
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-let moduleExports = deepMerge.all([{},
+let moduleExports = merge({},
   <%- insertFragment('model', mongooseSchemaStr.split('\n').map(str => `  ${str}`).join('\n') + ',') %>
   <%- insertFragment('moduleExports') %>
-]);
+);
 
 <%- insertFragment('exports') %>
 module.exports = moduleExports;

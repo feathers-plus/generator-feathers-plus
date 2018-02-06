@@ -90,6 +90,13 @@ OK  There may be problems finding graphql/graphql in cli-generator-example
 OK - GraphQL pagination. (a) in-record fields (b) {total, skip, limit, data} (c) separate pagination object.
 OK   Maybe specify which resolvers we want to support pagination.
 OK - should paginate values in default.json be app level options?
+OK - add to batchloader docs that pagination affects $in, so pagination=false needed.
+
+OK - Added validationLevel & validationAction to mongodb name.services.js
+OK - why are there blank lines on loading deps between 'skip' and 'force' ? generate service
+OK   These were caused by the prompt modules for composeWith generators.
+OK - generator-feathers-plus: Changed deepmerge to lodash.merge
+OK - f+/graphql: Changed lodash.mergeWith to lodash.merge
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -105,11 +112,10 @@ LATER - findUser & findPost produce with batchloader "null" found at char 681 ne
 LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 
 - Add deepmerge as a dependency on 'generate service'
-- add to batchloader docs that pagination affects $in, so pagination=false needed.
-- Matt: Just fwiw when I do an npm i it removed the git ref’d feathers-hooks-common
+- do we switch to lodash.merge everywhere?
+- Matt wrote: Just fwiw when I do an npm i it removed the git ref’d feathers-hooks-common
   Point out how batchloader can control max keys in a call.
-- why are there blank lines on loading deps between 'skip' and 'force' ? generate service
-- Let's say we had mongodb services and changed them to NeDB. commentions['mongodb+mongodb'] will
+- Let's say we had mongodb services and changed them to NeDB. connentions['mongodb+mongodb'] will
   remain. This causes, for example, src/mongodb.js to still be generated.
   Basically, the generator does not remove info in specs that's no longer relavent.
 - Why is startup so slow?
@@ -117,3 +123,4 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 - create Sequelize schema
 - create fastJoin definitions
 - create for swagger
+- bring dependencies up to date

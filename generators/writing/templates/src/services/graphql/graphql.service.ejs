@@ -2,7 +2,7 @@
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`. (Can be re-generated.)
 const createService = require('@feathers-plus/graphql');
 const { mergeTypes } = require('merge-graphql-schemas');
-const deepMerge = require('deepmerge');
+const merge = require('lodash.merge');
 const generatedSchema = require('./graphql.schemas');
 <%# -%>
 <%# --- if-1 starts below. -%>
@@ -39,33 +39,33 @@ let schemas = mergeTypes([
 <%# -%>
 <%# --- if-4 starts below. -%>
 <% if (strategy === 'services') { -%>
-let resolvers = (app, options) => deepMerge.all([{},
+let resolvers = (app, options) => merge({},
   generatedResolvers(app, options),
   <%- insertFragment('service_resolvers') %>
-]);
+);
 <% } -%>
 <%# --- if-4 ends above. -%>
 <%# -%>
 <%# --- if-5 starts below. -%>
 <% if (strategy === 'batchloaders') { -%>
-let resolvers = (app, options) => deepMerge.all([{},
+let resolvers = (app, options) => merge({},
   generatedResolvers(app, options),
   <%- insertFragment('batchloader_resolvers') %>
-]);
+);
 <% } -%>
 <%# --- if-5 ends above. -%>
 <%# -%>
 <%# --- if-6 starts below. -%>
 <% if (strategy === 'sql') { -%>
-let resolvers = (app, options) => deepMerge.all([{},
+let resolvers = (app, options) => merge({},
   generatedResolvers(app, options),
   <%- insertFragment('sql_resolvers') %>
-]);
+);
 
-let sqlJoins = (app, options) => deepMerge.all([{},
+let sqlJoins = (app, options) => merge({},
   generatedMetadata(app, options),
   <%- insertFragment('sql_metadata') %>
-]);
+);
 
 if (!dialect) {
   throw new Error('services/graphql/sql.execute.js has not been configured.');

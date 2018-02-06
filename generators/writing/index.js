@@ -1,7 +1,7 @@
 
 /* eslint-disable no-console */
 const crypto = require('crypto');
-const deepMerge = require('deepmerge');
+const merge = require('lodash.merge');
 const mongoose = require('mongoose');
 const { camelCase, kebabCase, snakeCase, upperFirst } = require('lodash');
 const { EOL } = require('os');

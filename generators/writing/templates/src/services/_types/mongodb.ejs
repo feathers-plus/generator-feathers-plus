@@ -22,7 +22,9 @@ let moduleExports = function (app) {
   mongoClient.then(db => {
     return db.createCollection('<%= kebabName %>', {
       <%- insertFragment('mongo_create_collection', [
-        'validator: { $jsonSchema: $jsonSchema }',
+        'validator: { $jsonSchema: $jsonSchema },',
+        'validationLevel: \'strict\', // The MongoDB default',
+        'validationAction: \'error\', // The MongoDB default',
       ]) %>
     });
   })
