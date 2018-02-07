@@ -89,7 +89,7 @@ module.exports = function generatorWriting (generator, what) {
     feathersSpecs,
     mapping,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
-    semicolon: specs.options.semicolon ? ';' : '',
+    sc: ';', // specs.options.semicolon ? ';' : '',
 
     merge,
     EOL,
@@ -253,6 +253,96 @@ module.exports = function generatorWriting (generator, what) {
       }
     }
 
+    const hooks = getHookInfo(name);
+
+    function getHookInfo(name) {
+      const sc = context.sc;
+      const isMongo = (mapping.feathers[name] || {}).adapter === 'mongodb';
+      const requiresAuth = specsService.requiresAuth;
+
+      const hooks = [ 'iff' ];
+      const imports = [
+        'const commonHooks = require(\'feathers-hooks-common\');'
+      ];
+
+      const comments = {
+        before: [],
+        after: [],
+        error: [],
+      };
+
+      const code = {
+        before: {
+          all: [], find: [], get: [], create: [], update: [], patch: [], remove: []
+        },
+        after: {
+          all: [], find: [], get: [], create: [], update: [], patch: [], remove: []
+        },
+        error: {
+          all: [], find: [], get: [], create: [], update: [], patch: [], remove: []
+        },
+      };
+
+      if (requiresAuth || isAuthEntityWithAuthentication) {
+        imports.push(`const { authenticate } = require('@feathersjs/authentication').hooks${sc}`);
+      }
+
+      if (!isAuthEntityWithAuthentication) {
+        if (requiresAuth) {
+          code.before.all.push('authenticate(\'jwt\')');
+        }
+      } else {
+        // The order of the hooks is important
+        if (isAuthEntityWithAuthentication.strategies.indexOf('local') !== -1) {
+          imports.push('// eslint-disable-next-line no-unused-vars');
+          imports.push(`const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks${sc}`);
+          code.before.create.push('hashPassword()');
+          code.before.update.push('hashPassword()');
+          code.before.patch.push('hashPassword()');
+          code.after.all.push('protect(\'password\') /* Must always be the last hook */');
+        }
+
+        code.before.find.push('authenticate(\'jwt\')');
+        code.before.get.push('authenticate(\'jwt\')');
+        code.before.update.push('authenticate(\'jwt\')');
+        code.before.patch.push('authenticate(\'jwt\')');
+        code.before.remove.push('authenticate(\'jwt\')');
+      }
+
+      if (isMongo) {
+        imports.push(`const { ObjectID } = require('mongodb')${sc}`);
+        hooks.push('mongoKeys');
+        code.before.find.push('mongoKeys(ObjectID, foreignKeys)');
+      }
+
+      // Form comments summarizing the hooks
+      Object.keys(code).forEach(type => {
+        const typeHooks = [];
+
+        Object.keys(code[type]).forEach(method => {
+          const str = code[type][method].join(', ');
+
+          if (str) {
+            typeHooks.push(`//   ${method.padEnd(6)}: ${str}`);
+          }
+        });
+
+        if (typeHooks.length) {
+          typeHooks.unshift('// Your hooks should include:');
+        }
+
+        comments[type] = typeHooks;
+      });
+
+      return {
+        imports,
+        hooks: hooks.filter((val, i) => hooks.indexOf(val) === i), // unique
+        comments,
+        code,
+        make: hooks => `${hooks.length ? ' ' : ''}${hooks.join(', ')}${hooks.length ? ' ' : ''}`
+      };
+    }
+
     //inspector(`\n... specs (generator ${what})`, specs);
     //inspector('\n...mapping', mapping);
     //inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
@@ -268,6 +358,7 @@ module.exports = function generatorWriting (generator, what) {
       authentication: isAuthEntityWithAuthentication,
       isAuthEntityWithAuthentication,
       requiresAuth: specsService.requiresAuth,
+      hooks,
 
       libDirectory: specs.app.src,
       modelName: hasModel ? `${kebabName}.model` : null,

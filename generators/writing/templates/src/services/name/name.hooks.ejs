@@ -1,39 +1,17 @@
-<% __mongo = (mapping.feathers[serviceName] || {}).adapter === 'mongodb' -%>
 
 // Hooks for service `<%= serviceName %>`. (Can be re-generated.)
-const commonHooks = require('feathers-hooks-common');
-<%# -%>
-<%# --- if-0 starts below. -%>
-<% if (requiresAuth || isAuthEntityWithAuthentication) { -%>
-const { authenticate } = require('@feathersjs/authentication').hooks;
-<% } -%>
-<%# --- if-0 ends above. -%>
-<%# -%>
-<%# --- if-1 starts below. -%>
-<% if (__mongo) { -%>
-const { ObjectID } = require('mongodb');
-<% } -%>
-<%# --- if-1 ends above. -%>
-<%# -%>
-<%# --- if-2 starts below. -%>
-<% if (isAuthEntityWithAuthentication && authentication.strategies.indexOf('local') !== -1) { -%>
-const {
-  // eslint-disable-next-line no-unused-vars
-  hashPassword, protect
-} = require('@feathersjs/authentication-local').hooks;
-<% } -%>
-<%# --- if-2 ends above. -%>
+<%- hooks.imports.join(EOL) %>
 <%- insertFragment('imports') %>
 
 <%- insertFragment('used', [
   '// eslint-disable-next-line no-unused-vars',
-  `const { iff${__mongo ? ', mongoKeys' : ''} } = commonHooks;`,
+  `const { ${hooks.hooks.join(', ')} } = commonHooks;`,
 ]) %>
 <%# -%>
 <%# === Foreign keys =========================================================================== -%>
 <%# -%>
 <%# --- if-3 starts below. (mongodb only) -%>
-<% if (__mongo) { -%>
+<% if ((mapping.feathers[serviceName] || {}).adapter === 'mongodb') { -%>
 <%- insertFragment('foreign_keys', [
   '// eslint-disable-next-line no-unused-vars',
   `const foreignKeys = ${stringifyPlus(feathersSpecs[serviceName]._extensions.foreignKeys)};`,
@@ -46,123 +24,51 @@ const {
 
 let moduleExports = {
   before: {
-<%# -%>
-<%# --- if-40 starts below. -%>
-<% if (__mongo) { -%>
-    // Your hooks should include:
-    //   find: mongoKeys(ObjectID, foreignKeys)
+<% if (hooks.comments.before.length) { -%>
+<%- hooks.comments.before.map(str => `    ${str}`).join(EOL) %>
 <% } -%>
-<%# --- if-40 ends above. -%>
-<%# -%>
-<%# --- if/else-4 starts below. -%>
-<% if (!isAuthEntityWithAuthentication) { -%>
-<%# -%>
-<%# --- if-4a starts below. -%>
-<% if (requiresAuth) { -%>
-    // Your hooks should include:
-    //   all:  authenticate('jwt')
-<% } -%>
-<%# --- if-4a ends above. -%>
     <%- insertFragment('before', [
-      `    all: [${requiresAuth ? " authenticate('jwt') " : ''}],`,
-      `    find: [${__mongo ? ' mongoKeys(ObjectID, foreignKeys) ' : ''}],`,
-      '    get: [],',
-      '    create: [],',
-      '    update: [],',
-      '    patch: [],',
-      '    remove: []',
+      `    all: [${hooks.make(hooks.code.before.all)}],`,
+      `    find: [${hooks.make(hooks.code.before.find)}],`,
+      `    get: [${hooks.make(hooks.code.before.get)}],`,
+      `    create: [${hooks.make(hooks.code.before.create)}],`,
+      `    update: [${hooks.make(hooks.code.before.update)}],`,
+      `    patch: [${hooks.make(hooks.code.before.patch)}],`,
+      `    remove: [${hooks.make(hooks.code.before.remove)}]`,
     ]) %>
-<% } else {
-  __temp = authentication.strategies.indexOf('local') !== -1 ? ' hashPassword()' : '';
--%>
-    // Your hooks should include:
-    //   find:   authenticate('jwt')
-    //   get:    authenticate('jwt')
-<%# --- if-4a ends above. -%>
-<%# -%>
-<%# --- if-4b starts below. -%>
-<% if (__temp) { -%>
-    //   create:<%- __temp %>
-<% } -%>
-<%# --- if-4b ends above. -%>
-    //   update: authenticate('jwt')<%- __temp %>
-    //   patch:  authenticate('jwt')<%- __temp %>
-    //   remove: authenticate('jwt')
-    <%- insertFragment('before', [
-      '    all: [],',
-      `    find: [ authenticate(\'jwt\')${__mongo ? ', mongoKeys(ObjectID, foreignKeys)' : ''} ],`,
-      '    get: [ authenticate(\'jwt\') ],',
-      `    create: [${__temp}${__temp ? ' ' : ''}],`,
-      `    update: [${__temp}${__temp ? ', ' : ''}authenticate('jwt') ],`,
-      `    patch: [${__temp}${__temp ? ', ' : ''}authenticate('jwt') ],`,
-      '    remove: [ authenticate(\'jwt\') ]',
-    ]) %>
-<% } -%>
-<%# --- if/else-4 ends above. -%>
   },
 <%# -%>
 <%# === After  ================================================================================= -%>
 
   after: {
-<%# -%>
-<%# --- if/else-5 starts below. -%>
-<% if (!isAuthEntityWithAuthentication) { -%>
+<% if (hooks.comments.after.length) { -%>
+<%- hooks.comments.after.map(str => `    ${str}`).join(EOL) %>
+<% } -%>
     <%- insertFragment('after', [
-      '    all: [],',
-      '    find: [],',
-      '    get: [],',
-      '    create: [],',
-      '    update: [],',
-      '    patch: [],',
-      '    remove: []',
+        `    all: [${hooks.make(hooks.code.after.all)}],`,
+        `    find: [${hooks.make(hooks.code.after.find)}],`,
+        `    get: [${hooks.make(hooks.code.after.get)}],`,
+        `    create: [${hooks.make(hooks.code.after.create)}],`,
+        `    update: [${hooks.make(hooks.code.after.update)}],`,
+        `    patch: [${hooks.make(hooks.code.after.patch)}],`,
+        `    remove: [${hooks.make(hooks.code.after.remove)}]`,
     ]) %>
-<% } else { -%>
-<%# -%>
-<%# --- if-5a starts below. -%>
-<% if (authentication.strategies.indexOf('local') !== -1) { -%>
-    // Your hooks should include:
-    //   all: protect('password')
-<% } -%>
-<%# --- if-5a ends above. -%>
-    <%- insertFragment('after', authentication.strategies.indexOf('local') !== -1
-      ? [
-        '    all: [',
-        '      // Make sure the password field is never sent to the client',
-        '      // Always must be the last hook',
-        '      protect(\'password\')',
-        '    ],',
-        '    find: [],',
-        '    get: [],',
-        '    create: [],',
-        '    update: [],',
-        '    patch: [],',
-        '    remove: []',
-      ]
-      : [
-        `    all: [],`,
-        '    find: [],',
-        '    get: [],',
-        '    create: [],',
-        '    update: [],',
-        '    patch: [],',
-        '    remove: []',
-      ]
-    ) %>
-<% } -%>
-<%# --- if/else-5 ends above. -%>
   },
 <%# -%>
 <%# === Error ================================================================================== -%>
 
   error: {
+<% if (hooks.comments.error.length) { -%>
+<%- hooks.comments.error.map(str => `    ${str}`).join(EOL) %>
+<% } -%>
     <%- insertFragment('error', [
-      '    all: [],',
-      '    find: [],',
-      '    get: [],',
-      '    create: [],',
-      '    update: [],',
-      '    patch: [],',
-      '    remove: []',
+        `    all: [${hooks.make(hooks.code.error.all)}],`,
+        `    find: [${hooks.make(hooks.code.error.find)}],`,
+        `    get: [${hooks.make(hooks.code.error.get)}],`,
+        `    create: [${hooks.make(hooks.code.error.create)}],`,
+        `    update: [${hooks.make(hooks.code.error.update)}],`,
+        `    patch: [${hooks.make(hooks.code.error.patch)}],`,
+        `    remove: [${hooks.make(hooks.code.error.remove)}]`,
     ]) %>
   },
   <%- insertFragment('moduleExports') %>

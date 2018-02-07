@@ -86,17 +86,22 @@ OK - batchloaders return null rather than []
 OK - mongodb requires `new ObjectID(foreign_key)`
 OK - cannot deepmerge mongo BSON instances
 OK - check @f+/graphql is installed on `generate graphql`
-OK  There may be problems finding graphql/graphql in cli-generator-example
+OK - There may be problems finding graphql/graphql in cli-generator-example
 OK - GraphQL pagination. (a) in-record fields (b) {total, skip, limit, data} (c) separate pagination object.
 OK   Maybe specify which resolvers we want to support pagination.
 OK - should paginate values in default.json be app level options?
 OK - add to batchloader docs that pagination affects $in, so pagination=false needed.
-
+OK   Point out how batchloader can control max keys in a call.
 OK - Added validationLevel & validationAction to mongodb name.services.js
 OK - why are there blank lines on loading deps between 'skip' and 'force' ? generate service
 OK   These were caused by the prompt modules for composeWith generators.
 OK - generator-feathers-plus: Changed deepmerge to lodash.merge
 OK - f+/graphql: Changed lodash.mergeWith to lodash.merge
+OK - Add deepmerge as a dependency on 'generate service'
+OK - do we switch to lodash.merge everywhere?
+OK - Matt wrote: Just fwiw when I do an npm i it removed the git ref’d feathers-hooks-common
+OK   The generator installs dependencies. It replaces your github one with the latest version on npm.
+OK   On the `npm i` the package.json was probably already overridden.
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -111,15 +116,25 @@ NO  Are we scanning node_modules?
 LATER - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
 LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 
-- Add deepmerge as a dependency on 'generate service'
-- do we switch to lodash.merge everywhere?
-- Matt wrote: Just fwiw when I do an npm i it removed the git ref’d feathers-hooks-common
-  Point out how batchloader can control max keys in a call.
+
+- Why is startup so slow?
+- add option for semicolons or not
+- what is feathersjs/cli/lib/shell.js
+
 - Let's say we had mongodb services and changed them to NeDB. connentions['mongodb+mongodb'] will
   remain. This causes, for example, src/mongodb.js to still be generated.
   Basically, the generator does not remove info in specs that's no longer relavent.
-- Why is startup so slow?
-- add option for semicolons or not
+- If we gen an NeDB service & add custom code to name.service.js. Then we regen to mongo. Then we
+  regen back to NeDB. We do not include the previous custom code for NeDB. We could have
+  diff insertion point names for each adapter, nedb_import, mongo_import. We could write a
+  module (not called from anywhere) containing all scanned custom code that has not been used in
+  the current regen. That module is basically a container for custom code we no longer use.\
+  It can be scanned every regen. So it we regen from mongo to nedb, we'd pick up the custom
+  code that was stashed away before.
+  Main problem: If we regen a service, we have to know which modules contain custom code we have
+  to consider for stashing. Basically, if we regen middleware, we won't be regennning graphql, so
+  scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
+  
 - create Sequelize schema
 - create fastJoin definitions
 - create for swagger

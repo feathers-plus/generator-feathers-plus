@@ -78,7 +78,7 @@ function delay (ms) {
 }
 */
 
-describe('create.test.js', function () {
+describe('writing.test.js', function () {
   tests.forEach(testName => {
     describe(testName, function () {
       it('writes code expected', () => {

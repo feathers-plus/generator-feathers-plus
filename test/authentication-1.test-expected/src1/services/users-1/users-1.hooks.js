@@ -2,10 +2,8 @@
 // Hooks for service `users1`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
-const {
-  // eslint-disable-next-line no-unused-vars
-  hashPassword, protect
-} = require('@feathersjs/authentication-local').hooks;
+// eslint-disable-next-line no-unused-vars
+const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
 //!code: imports //!end
 
 //!<DEFAULT> code: used
@@ -18,11 +16,11 @@ const { iff } = commonHooks;
 let moduleExports = {
   before: {
     // Your hooks should include:
-    //   find:   authenticate('jwt')
-    //   get:    authenticate('jwt')
+    //   find  : authenticate('jwt')
+    //   get   : authenticate('jwt')
     //   create: hashPassword()
-    //   update: authenticate('jwt') hashPassword()
-    //   patch:  authenticate('jwt') hashPassword()
+    //   update: hashPassword(), authenticate('jwt')
+    //   patch : hashPassword(), authenticate('jwt')
     //   remove: authenticate('jwt')
     //!<DEFAULT> code: before
     all: [],
@@ -37,13 +35,9 @@ let moduleExports = {
 
   after: {
     // Your hooks should include:
-    //   all: protect('password')
+    //   all   : protect('password') /* Must always be the last hook */
     //!<DEFAULT> code: after
-    all: [
-      // Make sure the password field is never sent to the client
-      // Always must be the last hook
-      protect('password')
-    ],
+    all: [ protect('password') /* Must always be the last hook */ ],
     find: [],
     get: [],
     create: [],
