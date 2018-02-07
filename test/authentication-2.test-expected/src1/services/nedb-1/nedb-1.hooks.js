@@ -14,7 +14,7 @@ const { iff } = commonHooks;
 let moduleExports = {
   before: {
     // Your hooks should include:
-    //   all:  authenticate('jwt')
+    //   all   : authenticate('jwt')
     //!<DEFAULT> code: before
     all: [ authenticate('jwt') ],
     find: [],
