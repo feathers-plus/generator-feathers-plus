@@ -47,6 +47,7 @@ const tests = [
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
+  // z4 only
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
@@ -65,7 +66,20 @@ const tests = [
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
-  'authentication-3.test'
+  'authentication-3.test',
+  // t8, z8 Test everything together. Mainly used to test different adapters.
+  //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
+  //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
+  //                            users1, Nedb, /users-1, nedb://../data, auth Y, graphql N
+  //  generate service        # NeDB, nedb1, /nedb-1, auth Y, graphql Y
+  //  generate service        # NeDB, nedb2, /nedb-2, auth N, graphql Y
+  //  generate middleware     # mw1, *
+  //  generate middleware     # mw2, mw2
+  // z8 only
+  //  Add schemas for users1, nedb1 and nedb2
+  //  Regenerate users1, nedb1 and nedb2
+  //  generate graphql        # service calls, /graphql,
+    // 'cumulative-1.test',
 ];
 
 let appDir;
