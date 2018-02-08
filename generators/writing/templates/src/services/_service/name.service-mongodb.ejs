@@ -3,7 +3,7 @@
 const createService = require('feathers-mongodb');
 const hooks = require('./<%= kebabName %>.hooks');
 <%- insertFragment('mongo_imports', [
-  'let $jsonSchema = require(\'./${kebabName}.mongo\');'
+  `let $jsonSchema = require('./${kebabName}.mongo');`
 ]) %>
 <%- insertFragment('mongo_init') %>
 
