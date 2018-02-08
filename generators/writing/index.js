@@ -286,14 +286,14 @@ module.exports = function generatorWriting (generator, what) {
     // Custom abbreviations for building 'todos'.
     const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))
       ? `name.service-${adapter}.ejs` : 'name.service.ejs';
-    const genericFileTpl = generator.hasAsync ? 'name.class-async.js' : 'name.class.js';
+    const genericServiceTpl = generator.hasAsync ? 'name.class-async.js' : 'name.class.js';
     const kn = kebabName;
 
     todos = [
       tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`],        ),
       tmpl([serPath,    '_model',   modelTpl],        [libDir, 'models', `${context.modelName}.js`], false, !context.modelName    ),
       tmpl([serPath,    '_service', serviceTpl],      [libDir, 'services', kn, `${kn}.service.js`],  ),
-      tmpl([namePath,   genericFileTpl],              [libDir, 'services', kn, `${kn}.class.js`],    false, adapter !== 'generic' ),
+      tmpl([namePath,   genericServiceTpl],           [libDir, 'services', kn, `${kn}.class.js`],    false, adapter !== 'generic' ),
 
       tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]    ),
       tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.js`]     ),
@@ -518,6 +518,7 @@ module.exports = function generatorWriting (generator, what) {
       authentication: false,
       isAuthEntityWithAuthentication: false,
       requiresAuth: specs.graphql.requiresAuth,
+      hooks: getHookInfo('graphql'),
 
       strategy: specs.graphql.strategy,
       graphqlSchemas: serviceSpecsToGraphql(feathersSpecs),
@@ -547,6 +548,69 @@ module.exports = function generatorWriting (generator, what) {
       'graphql-resolvers-ast',
       'merge-graphql-schemas'
     ], { save: true });
+
+    function getHookInfo(name) {
+      const sc = context.sc;
+      const requiresAuth = specs.graphql.requiresAuth;
+
+      const hooks = [ 'iff' ];
+      const imports = [
+        'const commonHooks = require(\'feathers-hooks-common\');'
+      ];
+
+      const comments = {
+        before: [],
+        after: [],
+        error: [],
+      };
+
+      const code = {
+        before: {
+          all: [], find: [], get: [], create: [], update: [], patch: [], remove: []
+        },
+        after: {
+          all: [], find: [], get: [], create: [], update: [], patch: [], remove: []
+        },
+        error: {
+          all: [], find: [], get: [], create: [], update: [], patch: [], remove: []
+        },
+      };
+
+      if (requiresAuth) {
+        imports.push(`const { authenticate } = require('@feathersjs/authentication').hooks${sc}`);
+      }
+
+      if (requiresAuth) {
+        code.before.all.push('authenticate(\'jwt\')');
+      }
+
+      // Form comments summarizing the hooks
+      Object.keys(code).forEach(type => {
+        const typeHooks = [];
+
+        Object.keys(code[type]).forEach(method => {
+          const str = code[type][method].join(', ');
+
+          if (str) {
+            typeHooks.push(`//   ${method.padEnd(6)}: ${str}`);
+          }
+        });
+
+        if (typeHooks.length) {
+          typeHooks.unshift('// Your hooks should include:');
+        }
+
+        comments[type] = typeHooks;
+      });
+
+      return {
+        imports,
+        hooks: hooks.filter((val, i) => hooks.indexOf(val) === i), // unique
+        comments,
+        code,
+        make: hooks => `${hooks.length ? ' ' : ''}${hooks.join(', ')}${hooks.length ? ' ' : ''}`
+      };
+    }
   }
 };
 
