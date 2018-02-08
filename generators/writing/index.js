@@ -253,7 +253,63 @@ module.exports = function generatorWriting (generator, what) {
       }
     }
 
-    const hooks = getHookInfo(name);
+    //inspector(`\n... specs (generator ${what})`, specs);
+    //inspector('\n...mapping', mapping);
+    //inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
+
+    // Custom template context.
+    context = Object.assign({}, context, {
+      serviceName: name,
+      camelName,
+      kebabName,
+      snakeName,
+      adapter,
+      path: stripSlashes(path),
+      authentication: isAuthEntityWithAuthentication,
+      isAuthEntityWithAuthentication,
+      requiresAuth: specsService.requiresAuth,
+      hooks: getHookInfo(name),
+
+      libDirectory: specs.app.src,
+      modelName: hasModel ? `${kebabName}.model` : null,
+      serviceModule,
+      mongoJsonSchema: serviceSpecsToMongoJsonSchema(feathersSpecs[name], feathersSpecs[name]._extensions),
+      mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
+    });
+    context.mongoJsonSchemaStr = stringifyPlus(context.mongoJsonSchema);
+    context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
+
+    // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context.mongooseSchema);
+    // inspector(`\n... mongooseSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr);
+    // inspector(`\n... context (generator ${what})`, context);
+
+    // Custom abbreviations for building 'todos'.
+    const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))
+      ? `name.service-${adapter}.ejs` : 'name.service.ejs';
+    const genericFileTpl = generator.hasAsync ? 'name.class-async.js' : 'name.class.js';
+    const kn = kebabName;
+
+    todos = [
+      tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`],        ),
+      tmpl([serPath,    '_model',   modelTpl],        [libDir, 'models', `${context.modelName}.js`], false, !context.modelName    ),
+      tmpl([serPath,    '_service', serviceTpl],      [libDir, 'services', kn, `${kn}.service.js`],  ),
+      tmpl([namePath,   genericFileTpl],              [libDir, 'services', kn, `${kn}.class.js`],    false, adapter !== 'generic' ),
+
+      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]    ),
+      tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.js`]     ),
+      tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.js`]  ),
+      tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.js`]  ),
+      tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.js`]     ),
+      tmpl([serPath,    'index.ejs'],                 [libDir, 'services', 'index.js']               )
+    ];
+
+    // Generate modules
+    generatorFs(generator, context, todos);
+
+    // Update dependencies
+    if (serviceModule.charAt(0) !== '.') {
+      generator._packagerInstall([ serviceModule ], { save: true });
+    }
 
     function getHookInfo(name) {
       const sc = context.sc;
@@ -342,64 +398,6 @@ module.exports = function generatorWriting (generator, what) {
         make: hooks => `${hooks.length ? ' ' : ''}${hooks.join(', ')}${hooks.length ? ' ' : ''}`
       };
     }
-
-    //inspector(`\n... specs (generator ${what})`, specs);
-    //inspector('\n...mapping', mapping);
-    //inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
-
-    // Custom template context.
-    context = Object.assign({}, context, {
-      serviceName: name,
-      camelName,
-      kebabName,
-      snakeName,
-      adapter,
-      path: stripSlashes(path),
-      authentication: isAuthEntityWithAuthentication,
-      isAuthEntityWithAuthentication,
-      requiresAuth: specsService.requiresAuth,
-      hooks,
-
-      libDirectory: specs.app.src,
-      modelName: hasModel ? `${kebabName}.model` : null,
-      serviceModule,
-      mongoJsonSchema: serviceSpecsToMongoJsonSchema(feathersSpecs[name], feathersSpecs[name]._extensions),
-      mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
-    });
-    context.mongoJsonSchemaStr = stringifyPlus(context.mongoJsonSchema);
-    context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
-
-    // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context.mongooseSchema);
-    // inspector(`\n... mongooseSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr);
-    // inspector(`\n... context (generator ${what})`, context);
-
-    // Custom abbreviations for building 'todos'.
-    const mainFileTpl = existsSync(join(serPath, '_types', `${adapter}.ejs`))
-      ? [serPath, '_types', `${adapter}.ejs`] : [serPath, 'name', 'name.service.ejs'];
-    const genericFileTpl = generator.hasAsync ? 'name.class-async.js' : 'name.class.js';
-    const kn = kebabName;
-
-    todos = [
-      tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`],        ),
-      tmpl([serPath,    '_model', modelTpl],          [libDir, 'models', `${context.modelName}.js`], false, !context.modelName    ),
-      tmpl(mainFileTpl,                               [libDir, 'services', kn, `${kn}.service.js`],  ),
-      tmpl([namePath,   genericFileTpl],              [libDir, 'services', kn, `${kn}.class.js`],    false, adapter !== 'generic' ),
-
-      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]    ),
-      tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.js`]     ),
-      tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.js`]  ),
-      tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.js`]  ),
-      tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.js`]     ),
-      tmpl([serPath,    'index.ejs'],                 [libDir, 'services', 'index.js']               )
-    ];
-
-    // Generate modules
-    generatorFs(generator, context, todos);
-
-    // Update dependencies
-    if (serviceModule.charAt(0) !== '.') {
-      generator._packagerInstall([ serviceModule ], { save: true });
-    }
   }
 
   // ===== connection ==============================================================================
@@ -418,8 +416,8 @@ module.exports = function generatorWriting (generator, what) {
 
     Object.keys(_adapters).sort().forEach(adapter => {
       todos.push(
-      copy([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`], true)
-    );
+        copy([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`], true)
+      );
     });
 
     // Generate modules
