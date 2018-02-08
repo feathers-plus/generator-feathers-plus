@@ -175,7 +175,9 @@ module.exports = class ServiceGenerator extends Generator {
     }];
 
     return this.prompt(prompts).then(answers => {
-      Object.assign(this.props, answers);
+      Object.assign(this.props, answers, {
+        isAuthEntity: specs._generators.indexOf('authentication') !== -1
+      });
     });
   }
 
