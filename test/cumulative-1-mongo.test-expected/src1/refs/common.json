@@ -1,0 +1,20 @@
+{
+  "description": "Common JSON-schema definitions.",
+  "type": "object",
+  "definitions": {
+    "created_at": {
+      "description": "Creation date-time.",
+      "example": "2018-01-01T01:01:01.001Z",
+      "format": "date-time",
+      "readOnly": true,
+      "type": "string"
+    },
+    "updated_at": {
+      "description": "Last updated date-time.",
+      "example": "2018-01-01T01:01:01.001Z",
+      "format": "date-time",
+      "readOnly": false,
+      "type": "string"
+    }
+  }
+}

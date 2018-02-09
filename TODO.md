@@ -102,6 +102,12 @@ OK - do we switch to lodash.merge everywhere?
 OK - Matt wrote: Just fwiw when I do an npm i it removed the git ref’d feathers-hooks-common
 OK   The generator installs dependencies. It replaces your github one with the latest version on npm.
 OK   On the `npm i` the package.json was probably already overridden.
+OK - fixed bug that crashed `generate authentication`.
+OK - fixed bug that crashed on `generate all` when `generate graphql` had not yet been run.
+OK - fixed bug where user-entity lost its user-entity flag when it was regenerated.
+OK - wrote cumulative test for @f/memory
+OK - wrote cumulative test for @f/mongo
+OK - wrote cumulative test for @f/mongoose
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -142,8 +148,3 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 - create fastJoin definitions
 - create for swagger
 - bring dependencies up to date
-
-- fixed bug that crashed `generate authentication`.
-- fixed bug that crashed on `generate all` when `generate graphql` had not yet been run.
-- fixed bug where user-entity lost its user-entity flag when it was regenerated.
-- wrote cumulative test for @f/memory

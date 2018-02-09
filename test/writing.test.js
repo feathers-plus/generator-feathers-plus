@@ -30,19 +30,19 @@ const tests = [
   //
   // t1, z1 Test creation of app scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
-    //'app.test',
+  { testName: 'app.test', execute: true },
   // t2, z2 (z1 ->) Test service creation without authentication scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-    //'service.test',
+  { testName: 'service.test', execute: true },
   // t3,z3 (z2 ->) Test middleware creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
   //  generate middleware     # mw1, *
   //  generate middleware     # mw2, mw2
-    //'middleware.test',
+  { testName: 'middleware.test', execute: true },
   // t4, z4 (z2 ->) Test graphql endpoint creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
@@ -51,22 +51,22 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-    //'graphql.test',
+  { testName: 'graphql.test', execute: true },
   // t5, z5 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
-    //'authentication-1.test',
+  { testName: 'authentication-1.test', execute: true },
   // t6, z6 (z5 ->) Test creation of authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
-    //'authentication-2.test',
+  { testName: 'authentication-2.test', execute: true },
   // t7, z7 (z6 ->) Test creation of non-authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
-    //'authentication-3.test',
+  { testName: 'authentication-3.test', execute: true },
   // t8, z8 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
@@ -79,9 +79,16 @@ const tests = [
   //  Add schemas for users1, nedb1 and nedb2 --> ADD BOTH schema.properties AND extensions <--
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
-  //'cumulative-1.test',
-  // t8-memory, z8-memory The same as t8 & z8 but using @f/memory. Service names remain nedb1 & nedb2.
-  'cumulative-1-memory.test'
+  { testName: 'cumulative-1.test', execute: true },
+  // t8-memory, z8-memory The same as t8 & z8 but using @f/memory.
+  // Service names remain nedb1 & nedb2.
+  { testName: 'cumulative-1-memory.test', execute: true },
+  // t8-mongo, z8-mongo The same as t8 & z8 but using @f/mongodb.
+  // Service names remain nedb1 & nedb2; use default connection string.
+  { testName: 'cumulative-1-mongo.test', execute: false },
+  // t8-mongoose, z8-mongoose The same as t8 & z8 but using @f/mongoosedb.
+  // Service names remain nedb1 & nedb2; use default connection string.
+  { testName: 'cumulative-1-mongoose.test', execute: false },
 ];
 
 let appDir;
@@ -95,7 +102,7 @@ function delay (ms) {
 */
 
 describe('writing.test.js', function () {
-  tests.forEach(testName => {
+  tests.forEach(({ testName, execute }) => {
     describe(testName, function () {
       it('writes code expected', () => {
         return configureGenerator(testName, { skipInstall: true })
@@ -104,17 +111,19 @@ describe('writing.test.js', function () {
           });
       });
 
-      it('runs test generated', () => {
-        return configureGenerator(testName, { skipInstall: false })
-          .then(dir => {
-            return runGeneratedTests('starts and shows the index page')
-              .then(() => {
-                const pkg = require(path.join(dir, 'package.json'));
+      if (execute) {
+        it('runs test generated', () => {
+          return configureGenerator(testName, { skipInstall: false })
+            .then(dir => {
+              return runGeneratedTests('starts and shows the index page')
+                .then(() => {
+                  const pkg = require(path.join(dir, 'package.json'));
 
-                assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
-              });
-          });
-      });
+                  assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
+                });
+            });
+        });
+      }
     });
   });
 });
