@@ -79,7 +79,7 @@ const tests = [
   //  Add schemas for users1, nedb1 and nedb2
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-    // 'cumulative-1.test',
+  'cumulative-1.test',
 ];
 
 let appDir;

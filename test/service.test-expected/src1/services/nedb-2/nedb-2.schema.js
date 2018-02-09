@@ -4,7 +4,6 @@
 //!code: init //!end
 
 let schema = {
-  $schema: 'http://json-schema.org/draft-05/schema',
   //!<DEFAULT> code: schema_header
   title: 'Nedb2',
   description: 'Nedb2 database.',

@@ -45,15 +45,25 @@ const validateCreate = options => {
 };
 
 const validateUpdate = options => {
-<%- insertFragment('func_update', [
+  <%- insertFragment('func_update', [
     '  return validateSchema(update, ajv, options);',
   ]) %>
 };
 
 const validatePatch = options => {
-<%- insertFragment('func_patch', [
+  <%- insertFragment('func_patch', [
     '  return validateSchema(patch, ajv, options);',
   ]) %>
+};
+
+const quickValidate = (method, data, options) => {
+  try {
+    if (method === 'create') validateCreate(options)({ type: 'before', method: 'create', data });
+    if (method === 'update') validateCreate(options)({ type: 'before', method: 'update', data });
+    if (method === 'patch') validateCreate(options)({ type: 'before', method: 'patch', data });
+  } catch (err) {
+    return err;
+  }
 };
 
 let moduleExports = {
@@ -63,6 +73,7 @@ let moduleExports = {
   validateCreate,
   validateUpdate,
   validatePatch,
+  quickValidate,
   <%- insertFragment('moduleExports') %>
 };
 

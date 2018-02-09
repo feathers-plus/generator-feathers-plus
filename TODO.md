@@ -116,6 +116,9 @@ NO  Are we scanning node_modules?
 LATER - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
 LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 
+- ajv is likely a dependency for generate service.
+- add quickCheckCreate(data, options) inside $name$.validate.js.
+- remove $schema from name.validate.js and from name.mongo.js
 
 - Why is startup so slow?
 - add option for semicolons or not
@@ -139,3 +142,5 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 - create fastJoin definitions
 - create for swagger
 - bring dependencies up to date
+
+- removed $schema prop from schemas

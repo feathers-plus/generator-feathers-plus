@@ -10,7 +10,6 @@ let moduleExports = merge({},
   {
     bsonType: "object",
     additionalProperties: false,
-    required: [],
     properties: {
       _id: {
         bsonType: "objectId"

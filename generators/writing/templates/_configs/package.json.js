@@ -32,7 +32,7 @@ module.exports = function(generator) {
       test: `${packager} run eslint && ${packager} run mocha`,
       eslint: `eslint ${specs.app.src}/. test/. --config .eslintrc.json`,
       start: `node ${specs.app.src}/`,
-      mocha: 'mocha test/ --recursive --exit'
+      mocha: 'mocha test/ --recursive --exit --timeout 10000'
     }
   };
 

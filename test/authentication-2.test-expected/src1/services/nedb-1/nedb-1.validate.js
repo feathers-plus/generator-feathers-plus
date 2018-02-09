@@ -15,7 +15,6 @@ const ID = 'string';
 const base = merge({},
   //!<DEFAULT> code: base
   {
-    $schema: "http://json-schema.org/draft-05/schema",
     title: "Nedb1",
     description: "Nedb1 database.",
     required: [],
@@ -48,15 +47,25 @@ const validateCreate = options => {
 };
 
 const validateUpdate = options => {
-//!<DEFAULT> code: func_update
+  //!<DEFAULT> code: func_update
   return validateSchema(update, ajv, options);
   //!end
 };
 
 const validatePatch = options => {
-//!<DEFAULT> code: func_patch
+  //!<DEFAULT> code: func_patch
   return validateSchema(patch, ajv, options);
   //!end
+};
+
+const quickValidate = (method, data, options) => {
+  try {
+    if (method === 'create') validateCreate(options)({ type: 'before', method: 'create', data });
+    if (method === 'update') validateCreate(options)({ type: 'before', method: 'update', data });
+    if (method === 'patch') validateCreate(options)({ type: 'before', method: 'patch', data });
+  } catch (err) {
+    return err;
+  }
 };
 
 let moduleExports = {
@@ -66,6 +75,7 @@ let moduleExports = {
   validateCreate,
   validateUpdate,
   validatePatch,
+  quickValidate,
   //!code: moduleExports //!end
 };
 

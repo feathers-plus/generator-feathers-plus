@@ -5,7 +5,6 @@
 <%- insertFragment('init') %>
 
 let schema = {
-  $schema: 'http://json-schema.org/draft-05/schema',
   <%- insertFragment('schema_header', [
     `  title: '${__defaultGraphqlName}',`,
     `  description: '${__defaultGraphqlName} database.',`,

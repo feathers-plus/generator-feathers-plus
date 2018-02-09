@@ -25,6 +25,6 @@
     "test": "npm run eslint && npm run mocha",
     "eslint": "eslint src1/. test/. --config .eslintrc.json",
     "start": "node src1/",
-    "mocha": "mocha test/ --recursive --exit"
+    "mocha": "mocha test/ --recursive --exit --timeout 10000"
   }
 }
