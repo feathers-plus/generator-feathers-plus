@@ -143,4 +143,7 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
 - create for swagger
 - bring dependencies up to date
 
-- removed $schema prop from schemas
+- fixed bug that crashed `generate authentication`.
+- fixed bug that crashed on `generate all` when `generate graphql` had not yet been run.
+- fixed bug where user-entity lost its user-entity flag when it was regenerated.
+- wrote cumulative test for @f/memory

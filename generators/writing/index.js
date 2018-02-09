@@ -113,7 +113,10 @@ module.exports = function generatorWriting (generator, what) {
 
       middleware(generator);
 
-      if (Object.keys(mapping.graphqlService).length || Object.keys(mapping.graphqlSql).length) {
+      if (
+        specs.graphql &&
+        (Object.keys(mapping.graphqlService).length || Object.keys(mapping.graphqlSql).length)
+      ) {
         graphql(generator);
       }
 
@@ -549,7 +552,7 @@ module.exports = function generatorWriting (generator, what) {
       'merge-graphql-schemas'
     ], { save: true });
 
-    function getHookInfo(name) {
+    function getHookInfo() {
       const sc = context.sc;
       const requiresAuth = specs.graphql.requiresAuth;
 
