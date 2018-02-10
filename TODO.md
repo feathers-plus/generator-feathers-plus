@@ -108,6 +108,11 @@ OK - fixed bug where user-entity lost its user-entity flag when it was regenerat
 OK - wrote cumulative test for @f/memory
 OK - wrote cumulative test for @f/mongo
 OK - wrote cumulative test for @f/mongoose
+OK - Individual tests can now call the generator multiple times, changing the app specs each time.
+OK - A `generate all` is run on each call, regenerating the app.
+OK - A code compare is done on the final result, as well as `npm test` or `yarn test`
+OK - We can now start adding regeneration tests to the test suite.
+OK - Added a test to test this multi-call scaffolding.
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?

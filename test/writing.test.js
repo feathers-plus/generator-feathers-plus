@@ -1,48 +1,61 @@
-const path = require('path');
-const helpers = require('yeoman-test');
+
 const assert = require('yeoman-assert');
-const fs = require('fs-extra');
-const klawSync = require('klaw-sync');
 const cp = require('child_process');
+const fs = require('fs-extra');
+const helpers = require('yeoman-test');
+const klawSync = require('klaw-sync');
+const merge = require('lodash.merge');
+const path = require('path');
+const { inspect } = require('util');
 // const rp = require('request-promise');
 
 const { resetForTest: resetSpecs } = require('../lib/specs');
 
 const packageInstaller = 'npm'; // npm measured as faster than yarn for this
 const tests = [
-  // Repo generator-old-vs-new contains app's generated with the same prompts
-  // using David's generator and the new generator. You can use various tools to compare the source
-  // between these to identify differences in the generated code.
-  //
-  // The `t#` were generated using David's generator. The `z#` using the new one.
-  // Matching app's have the same number, i.e. t1 and z1 were generated using the same prompts.
-  //
-  // The `z#` are copied to this test dir under names like app.test-expected.
-  // This test compares the currently generated source to e.g. app.test-expected which
-  // essentially is a comparision with the source produced by David's generator.
-  //
-  // `npm run mocha:code` will compare the source produced by the tests. Its very fast
-  // because it does not install the dependencies.
-  // `npm run mocha:tests` will run `npm test` for each test. Its very slow as it has to
-  // install dependencies.
-  // `npm test` runs both of the above.
-  // The tests stop running on the first assertion failure.
-  //
+  /*
+   Repo generator-old-vs-new contains app's generated with the same prompts
+   using David's generator and the new generator. You can use various tools to compare the source
+   between these to identify differences in the generated code.
+
+   The `t#` were generated using David's generator. The `z#` using the new one.
+   Matching app's have the same number, i.e. t1 and z1 were generated using the same prompts.
+
+   The `z#` are copied to this test dir under names like app.test-expected.
+   This test compares the currently generated source to e.g. app.test-expected which
+   essentially is a comparision with the source produced by David's generator.
+
+   `npm run mocha:code` will compare the source produced by the tests. Its very fast
+   because it does not install the dependencies.
+   `npm run mocha:tests` will run `npm test` for each test. Its very slow as it has to
+   install dependencies.
+   `npm test` runs both of the above.
+   The tests stop running on the first assertion failure.
+   */
+
+  // t0, z0 Test scaffolding will execute multiple generate calls and compare final result.
+  //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
+  { testName: 'scaffolding.test', execute: true, specsChanges: [
+    [specs => { delete specs.app.providers }, { app: { providers: ['primus'] } }],
+    [specs => { delete specs.app.providers }, { app: { providers: ['rest'] } }],
+    [specs => { delete specs.app.providers }, { app: { providers: ['rest', 'socketio'] } }],
+  ] },
+
   // t1, z1 Test creation of app scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
-  { testName: 'app.test', execute: true },
+    { testName: 'app.test', execute: true },
   // t2, z2 (z1 ->) Test service creation without authentication scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-  { testName: 'service.test', execute: true },
+    //{ testName: 'service.test', execute: true },
   // t3,z3 (z2 ->) Test middleware creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
   //  generate middleware     # mw1, *
   //  generate middleware     # mw2, mw2
-  { testName: 'middleware.test', execute: true },
+    //{ testName: 'middleware.test', execute: true },
   // t4, z4 (z2 ->) Test graphql endpoint creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
@@ -51,22 +64,22 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-  { testName: 'graphql.test', execute: true },
+    //{ testName: 'graphql.test', execute: true },
   // t5, z5 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
-  { testName: 'authentication-1.test', execute: true },
+    //{ testName: 'authentication-1.test', execute: true },
   // t6, z6 (z5 ->) Test creation of authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
-  { testName: 'authentication-2.test', execute: true },
+    //{ testName: 'authentication-2.test', execute: true },
   // t7, z7 (z6 ->) Test creation of non-authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
-  { testName: 'authentication-3.test', execute: true },
+    //{ testName: 'authentication-3.test', execute: true },
   // t8, z8 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
@@ -79,16 +92,16 @@ const tests = [
   //  Add schemas for users1, nedb1 and nedb2 --> ADD BOTH schema.properties AND extensions <--
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
-  { testName: 'cumulative-1.test', execute: true },
+    //{ testName: 'cumulative-1.test', execute: true },
   // t8-memory, z8-memory The same as t8 & z8 but using @f/memory.
   // Service names remain nedb1 & nedb2.
-  { testName: 'cumulative-1-memory.test', execute: true },
+    //{ testName: 'cumulative-1-memory.test', execute: true },
   // t8-mongo, z8-mongo The same as t8 & z8 but using @f/mongodb.
   // Service names remain nedb1 & nedb2; use default connection string.
-  { testName: 'cumulative-1-mongo.test', execute: false },
+    //{ testName: 'cumulative-1-mongo.test', execute: false },
   // t8-mongoose, z8-mongoose The same as t8 & z8 but using @f/mongoosedb.
   // Service names remain nedb1 & nedb2; use default connection string.
-  { testName: 'cumulative-1-mongoose.test', execute: false },
+    //{ testName: 'cumulative-1-mongoose.test', execute: false },
 ];
 
 let appDir;
@@ -102,25 +115,47 @@ function delay (ms) {
 */
 
 describe('writing.test.js', function () {
-  tests.forEach(({ testName, execute }) => {
+  tests.forEach(({ testName, execute, specsChanges = [] }) => {
     describe(testName, function () {
       it('writes code expected', () => {
-        return configureGenerator(testName, { skipInstall: true })
+        return runFirstGeneration(testName, { skipInstall: true })
           .then(dir => {
-            compareCode(dir, `${testName}-expected`);
+
+            // There is no second generation step
+            if (!specsChanges.length) {
+              return compareCode(dir, `${testName}-expected`);
+            }
+
+            // Generate on top of contents of working directory
+            return runNextGenerator(dir, specsChanges, { skipInstall: true })
+              .then(dir => {
+                return compareCode(dir, `${testName}-expected`);
+              });
           });
       });
 
       if (execute) {
         it('runs test generated', () => {
-          return configureGenerator(testName, { skipInstall: false })
+          return runFirstGeneration(testName, { skipInstall: false })
             .then(dir => {
-              return runGeneratedTests('starts and shows the index page')
-                .then(() => {
-                  const pkg = require(path.join(dir, 'package.json'));
 
-                  assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
-                });
+              // There is no second generation step
+              if (!specsChanges.length) {
+                return runExecute(dir);
+              }
+
+              // Generate on top of contents of working directory
+              return runNextGenerator(dir, specsChanges, { skipInstall: false })
+                .then(dir => runExecute(dir));
+
+              function runExecute(dir) {
+                return runGeneratedTests('starts and shows the index page')
+                  .then(() => {
+                    const pkg = require(path.join(dir, 'package.json'));
+
+                    assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
+                  });
+              }
             });
         });
       }
@@ -128,8 +163,8 @@ describe('writing.test.js', function () {
   });
 });
 
-// Configure the yeoman test generator
-function configureGenerator (testName, withOptions) {
+// Run the first generator
+function runFirstGeneration (testName, withOptions) {
   return helpers.run(path.join(__dirname, '..', 'generators', 'all'))
     .inTmpDir(dir => {
       appDir = dir;
@@ -144,6 +179,44 @@ function configureGenerator (testName, withOptions) {
       action: 'force' // force file overwrites
     })
     .withOptions(withOptions);
+}
+
+// Run subsequent generators
+function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
+  if (!specsChanges.length) return;
+  const specsChg1 = specsChanges.shift();
+  const specsChg = Array.isArray(specsChg1) ? specsChg1 : [() => {}, specsChg1];
+
+  return helpers.run(path.join(__dirname, '..', 'generators', 'all'))
+    .inTmpDir(dirNext => {
+      let nextJson;
+
+      appDir = dirNext;
+      console.log(`      specs change ${index}`, inspect(specsChg, { colors: true, depth: 3 }));
+
+      fs.copySync(dir, dirNext);
+
+      const prevJson = fs.readJsonSync(path.join(dir, 'feathers-gen-specs.json'));
+      specsChg[0](prevJson);
+      nextJson = merge(prevJson, specsChg[1]);
+
+      fs.writeFileSync(path.join(dirNext, 'feathers-gen-specs.json'), JSON.stringify(nextJson, null, 2));
+
+      resetSpecs();
+    })
+    .withPrompts({
+      confirmation: true,
+      action: 'force' // force file overwrites
+    })
+    .withOptions(withOptions)
+    .then(dir => {
+      // There are no more generation steps
+      if (!specsChanges.length) {
+        return dir;
+      }
+
+      return runNextGenerator(dir, specsChanges, withOptions, ++index);
+    });
 }
 
 // Run the 'test' script in package.json
