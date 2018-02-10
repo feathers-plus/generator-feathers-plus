@@ -7,7 +7,6 @@ const klawSync = require('klaw-sync');
 const merge = require('lodash.merge');
 const path = require('path');
 const { inspect } = require('util');
-// const rp = require('request-promise');
 
 const { resetForTest: resetSpecs } = require('../lib/specs');
 
@@ -33,22 +32,26 @@ const tests = [
    The tests stop running on the first assertion failure.
    */
 
-  // t0, z0 Test scaffolding will execute multiple generate calls and compare final result.
+  // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
+  /*
   { testName: 'scaffolding.test', execute: true, specsChanges: [
     [specs => { delete specs.app.providers }, { app: { providers: ['primus'] } }],
     [specs => { delete specs.app.providers }, { app: { providers: ['rest'] } }],
     [specs => { delete specs.app.providers }, { app: { providers: ['rest', 'socketio'] } }],
   ] },
+  */
 
   // t1, z1 Test creation of app scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
-    { testName: 'app.test', execute: true },
+    //{ testName: 'app.test', execute: true },
+
   // t2, z2 (z1 ->) Test service creation without authentication scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
     //{ testName: 'service.test', execute: true },
+
   // t3,z3 (z2 ->) Test middleware creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
@@ -56,6 +59,7 @@ const tests = [
   //  generate middleware     # mw1, *
   //  generate middleware     # mw2, mw2
     //{ testName: 'middleware.test', execute: true },
+
   // t4, z4 (z2 ->) Test graphql endpoint creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
@@ -65,21 +69,25 @@ const tests = [
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
     //{ testName: 'graphql.test', execute: true },
+
   // t5, z5 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
     //{ testName: 'authentication-1.test', execute: true },
+
   // t6, z6 (z5 ->) Test creation of authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
     //{ testName: 'authentication-2.test', execute: true },
+
   // t7, z7 (z6 ->) Test creation of non-authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
     //{ testName: 'authentication-3.test', execute: true },
+
   // t8, z8 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
@@ -93,26 +101,50 @@ const tests = [
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
     //{ testName: 'cumulative-1.test', execute: true },
+
   // t8-memory, z8-memory The same as t8 & z8 but using @f/memory.
   // Service names remain nedb1 & nedb2.
     //{ testName: 'cumulative-1-memory.test', execute: true },
+
   // t8-mongo, z8-mongo The same as t8 & z8 but using @f/mongodb.
   // Service names remain nedb1 & nedb2; use default connection string.
     //{ testName: 'cumulative-1-mongo.test', execute: false },
+
   // t8-mongoose, z8-mongoose The same as t8 & z8 but using @f/mongoosedb.
   // Service names remain nedb1 & nedb2; use default connection string.
     //{ testName: 'cumulative-1-mongoose.test', execute: false },
+
+  // t21, z21 Test switching the user-entity
+  // t21
+  //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
+  //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
+  //                            users1, Nedb, /users-1, nedb://../data, auth Y, graphql N
+  //  generate service        # NeDB, nedb1, /nedb-1, auth Y
+  // z21
+  //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
+  //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
+  //                            nedb1, Nedb, /nedb-1, nedb://../data, auth Y, graphql Y
+  //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
+  //                            users1, Nedb, /users-1, nedb://../data, auth Y, graphql N
+  //  generate service        # NeDB, nedb1, /nedb-1, auth Y (line not needed in test as test regens whole app)
+  { testName: 'regen-user-entity.test', execute: true, specsChanges: [{
+    authentication: { entity: 'users1' },
+    services: {
+      nedb1: { isAuthEntity: false },
+      users1: {
+        name: 'users1',
+        fileName: 'users-1',
+        adapter: 'nedb',
+        path: '/users-1',
+        isAuthEntity: true,
+        requiresAuth: true,
+        graphql: false
+      },
+    }},
+  ] },
 ];
 
 let appDir;
-
-/*
-function delay (ms) {
-  return function (res) {
-    return new Promise(resolve => setTimeout(() => resolve(res), ms));
-  };
-}
-*/
 
 describe('writing.test.js', function () {
   tests.forEach(({ testName, execute, specsChanges = [] }) => {

@@ -113,6 +113,10 @@ OK - A `generate all` is run on each call, regenerating the app.
 OK - A code compare is done on the final result, as well as `npm test` or `yarn test`
 OK - We can now start adding regeneration tests to the test suite.
 OK - Added a test to test this multi-call scaffolding.
+OK - When `generate authentication` is being used to change the user-entity, a message is now
+OK   displayed reminding people to `generate service` the old user-entity as hooks need to change.
+OK - Added test to regen using `generate authentication` and create a new user-entity service,
+OK   thus making the previous user-entity a normal service.
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
