@@ -1,0 +1,40 @@
+{
+  "options": {
+    "ver": "1.0.0",
+    "inspectConflicts": false,
+    "freeze": []
+  },
+  "app": {
+    "name": "z-1",
+    "description": "Project z-1",
+    "src": "src1",
+    "packager": "npm@>= 3.0.0",
+    "providers": [
+      "rest",
+      "socketio"
+    ]
+  },
+  "services": {
+    "nedb1": {
+      "name": "nedb1",
+      "fileName": "nedb-1",
+      "adapter": "nedb",
+      "path": "/nedb-1",
+      "isAuthEntity": false,
+      "requiresAuth": false,
+      "graphql": true
+    }
+  },
+  "connections": {
+    "mongodb+mongodb": {
+      "database": "mongodb",
+      "adapter": "mongodb",
+      "connectionString": "mongodb://localhost:27017/z_1"
+    },
+    "nedb+nedb": {
+      "database": "nedb",
+      "adapter": "nedb",
+      "connectionString": "nedb://../data"
+    }
+  }
+}

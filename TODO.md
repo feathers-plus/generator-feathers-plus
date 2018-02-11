@@ -117,6 +117,14 @@ OK - When `generate authentication` is being used to change the user-entity, a m
 OK   displayed reminding people to `generate service` the old user-entity as hooks need to change.
 OK - Added test to regen using `generate authentication` and create a new user-entity service,
 OK   thus making the previous user-entity a normal service.
+OK - add quickValidate(method, data, options) inside $name$.validate.js.
+OK - remove $schema from name.validate.js and from name.mongo.js
+OK - Adapters such as mongodb.js are generated and required by app.js. However if services are
+OK   regenerated to use other adapters, these previously generated adapters may not longer still
+OK   be used. Their generated modules, such as mongodb.js, can remain. However app.js
+OK   should no longer require them.
+
+Test that app.js does not require templates/src/_adapters/* unless they are currently being used.
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -132,8 +140,9 @@ LATER - findUser & findPost produce with batchloader "null" found at char 681 ne
 LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 
 - ajv is likely a dependency for generate service.
-- add quickCheckCreate(data, options) inside $name$.validate.js.
-- remove $schema from name.validate.js and from name.mongo.js
+- `generate app` creates a new default.json. It cannot do that on regens.
+  Test regen-adapters-1.test-copy will need config/default.json with "mongodb": "mongodb://localhost:27017/z_1"
+  and add that to -expected as well.
 
 - Why is startup so slow?
 - add option for semicolons or not
@@ -152,7 +161,9 @@ LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return 
   Main problem: If we regen a service, we have to know which modules contain custom code we have
   to consider for stashing. Basically, if we regen middleware, we won't be regennning graphql, so
   scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
-  
+
+- error checking pass over specs (plus some custom code),
+  e.g. email/password exists in schema of user-entity when local auth selected.  
 - create Sequelize schema
 - create fastJoin definitions
 - create for swagger
