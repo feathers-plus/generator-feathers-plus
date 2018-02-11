@@ -123,6 +123,9 @@ OK - Adapters such as mongodb.js are generated and required by app.js. However i
 OK   regenerated to use other adapters, these previously generated adapters may not longer still
 OK   be used. Their generated modules, such as mongodb.js, can remain. However app.js
 OK   should no longer require them.
+OK - `generate app` creates a new default.json. It cannot do that on regens.
+OK   Test regen-adapters-1.test-copy will need config/default.json with "mongodb": "mongodb://localhost:27017/z_1"
+OK   and add that to -expected as well.
 
 Test that app.js does not require templates/src/_adapters/* unless they are currently being used.
 
@@ -140,9 +143,7 @@ LATER - findUser & findPost produce with batchloader "null" found at char 681 ne
 LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
 
 - ajv is likely a dependency for generate service.
-- `generate app` creates a new default.json. It cannot do that on regens.
-  Test regen-adapters-1.test-copy will need config/default.json with "mongodb": "mongodb://localhost:27017/z_1"
-  and add that to -expected as well.
+
 
 - Why is startup so slow?
 - add option for semicolons or not

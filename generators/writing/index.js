@@ -30,6 +30,14 @@ const nativeFuncs = {
   [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId'
 };
 
+// type:   'tpl' - expand template, 'copy' - copy file, 'json' - write JSON as file.
+// src:    path & file of template or source file. Array of folder names or str.
+// obj:    Object to write as JSON.
+// dest:   path & file of destination. Array to .join() or str.
+// ifNew:  true: Write file only if it does not yet exist, false: always write it.
+// ifSkip: true: Do not write this file, false: write it.
+// ctx:    Extra content to call template with.
+// Note that frozen files are never written.
 function tmpl (src, dest, ifNew, ifSkip, ctx) {
   return { type: 'tpl', src, dest, ifNew, ifSkip, ctx };
 }
@@ -146,9 +154,15 @@ module.exports = function generatorWriting (generator, what) {
   // ===== app =====================================================================================
   function app (generator) {
     // Custom abbreviations for building 'todos'.
-    const pkg = generator.pkg = makeConfig.package(generator);
-    const configDefault = specs._defaultJson = makeConfig.configDefault(generator);
-    const configProd = makeConfig.configProduction(generator);
+    const pkg = generator.pkg = generator.fs.readJSON(
+      generator.destinationPath('package.json'), makeConfig.package(generator)
+    );
+    const configDefault = specs._defaultJson = generator.fs.readJSON(
+      generator.destinationPath('config/default.json'), makeConfig.configDefault(generator)
+    );
+    const configProd = generator.fs.readJSON(
+      generator.destinationPath('config/production.json'), makeConfig.configProduction(generator)
+    );
 
     todos = [
       copy([tpl, '.editorconfig'], '.editorconfig', true),
@@ -157,10 +171,6 @@ module.exports = function generatorWriting (generator, what) {
       copy([tpl, '_gitignore'], '.gitignore', true),
       copy([tpl, 'LICENSE'], 'LICENSE', true),
       tmpl([tpl, 'README.md.ejs'], 'README.md', true),
-
-      json(pkg, 'package.json', true),
-      json(configDefault, ['config', 'default.json'], true),
-      json(configProd, ['config', 'production.json'], true),
 
       copy([tpl, 'public', 'favicon.ico'], ['public', 'favicon.ico'], true),
       copy([tpl, 'public', 'index.html'], ['public', 'index.html'], true),
@@ -171,9 +181,12 @@ module.exports = function generatorWriting (generator, what) {
       copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], true),
       copy([tpl, 'src', 'channels.js'], [src, 'channels.js'], true),
 
+      json(pkg, 'package.json'),
+      json(configDefault, ['config', 'default.json']),
+      json(configProd, ['config', 'production.json']),
+
       tmpl([tpl, 'src', 'index.ejs'], [src, 'index.js']),
       tmpl([tpl, 'src', 'app.hooks.ejs'], [src, 'app.hooks.js']),
-
 
       tmpl([mwPath, 'index.ejs'], [src, 'middleware', 'index.js']),
       tmpl([srcPath, 'app.ejs'], [src, 'app.js']),
