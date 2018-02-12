@@ -139,29 +139,29 @@ OK - Generator comments out lines referring to $jsonSchema in name.service.js fo
 OK - ajv is a dependency in name.validate.js and has been added to package.json.
 OK - add option for semicolons or not
 OK - Temporarily display timer to show source scan is not slowing the startup.
+OK - Are we scanning node_modules? No.
 OK   Elapsed time is m ainly due to Yeoman.
 
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
 NO - lib/generator.js defaultConfig needs to change if config/default.js is to be used
-NO - add initial/updating for connections
+NO - add initial/updating for connections. Right now we just mention first ever connection.
 NO - in graphql, feathers-batch-loader.js#serializeRecordKey & serializeDataLoaderKey should use
 NO   feathers-plus-common/object/sortKeys if param is object to organize props in order
 NO   else the two won't be considered "equal".
 NO   --> Let user handle this as we think object keys will be rarely used. 
-NO  Are we scanning node_modules?
+NO - Let's say we had mongodb services and changed them to NeDB. connentions['mongodb+mongodb'] will
+NO   remain. This causes, for example, src/mongodb.js to still be generated.
+NO   Basically, the generator does not remove info in specs that's no longer relavent.
 
 
 - test name.mongo.js
 - test name.validate.js
 
--
 - what is feathersjs/cli/lib/shell.js
+- Check node version is 8+ in feathers-plus/cli
 
-- Let's say we had mongodb services and changed them to NeDB. connentions['mongodb+mongodb'] will
-  remain. This causes, for example, src/mongodb.js to still be generated.
-  Basically, the generator does not remove info in specs that's no longer relavent.
 - If we gen an NeDB service & add custom code to name.service.js. Then we regen to mongo. Then we
   regen back to NeDB. We do not include the previous custom code for NeDB. We could have
   diff insertion point names for each adapter, nedb_import, mongo_import. We could write a
