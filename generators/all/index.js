@@ -9,7 +9,7 @@ const { initSpecs } = require('../../lib/specs');
 
 module.exports = class MiddlewareGenerator extends Generator {
   async prompting () {
-    Generator.asyncInit(this);
+    await Generator.asyncInit(this);
     initSpecs('all');
 
     this.log();

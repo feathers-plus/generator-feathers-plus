@@ -141,6 +141,8 @@ OK - add option for semicolons or not
 OK - Temporarily display timer to show source scan is not slowing the startup.
 OK - Are we scanning node_modules? No.
 OK   Elapsed time is m ainly due to Yeoman.
+OK - Implemented >generate options<.
+OK - Fixed `all` generator to `await Generator.asyncInit(this)`
 
 
 NO - hooks modules should be ifNew: true
@@ -160,7 +162,7 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
 - test name.validate.js
 
 - what is feathersjs/cli/lib/shell.js
-- Check node version is 8+ in feathers-plus/cli
+- Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/generator.js
 
 - If we gen an NeDB service & add custom code to name.service.js. Then we regen to mongo. Then we
   regen back to NeDB. We do not include the previous custom code for NeDB. We could have

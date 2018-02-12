@@ -64,6 +64,8 @@ module.exports = function generatorWriting (generator, what) {
   let { props, _specs: specs } = generator;
   updateSpecs(what, props, `${what} generator`);
 
+  if (what === 'options') return;
+
   // Get unique generators which have been run
   generators = [...new Set(specs._generators)].sort();
 
