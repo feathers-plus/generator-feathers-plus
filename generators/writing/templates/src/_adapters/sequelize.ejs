@@ -1,6 +1,5 @@
-const url = require('url');
-const Sequelize = require('sequelize');
-const { Op } = Sequelize;
+const Sequelize = require('sequelize')<%- sc %>
+const { Op } = Sequelize<%- sc %>
 const operatorsAliases = {
   $eq: Op.eq,
   $ne: Op.ne,
@@ -36,46 +35,36 @@ const operatorsAliases = {
   $all: Op.all,
   $values: Op.values,
   $col: Op.col
-};
+}<%- sc %>
 
 module.exports = function (app) {
-  const connectionString = app.get('mssql');
-  const connection = url.parse(connectionString);
-  const database = connection.path.substring(1, connection.path.length);
-  const { port, hostname } = connection;
-  const [ username, password ] = (connection.auth || ':').split(':');
-  const sequelize = new Sequelize(database, username, password, {
-    dialect: 'mssql',
-    host: hostname,
+  const connectionString = app.get('<%= database %>')<%- sc %>
+  const sequelize = new Sequelize(connectionString, {
+    dialect: '<%= database %>',
     logging: false,
     operatorsAliases,
     define: {
       freezeTableName: true
-    },
-    dialectOptions: {
-      port,
-      instanceName: 'NameOfTheMSSQLInstance'
     }
-  });
+  })<%- sc %>
+  const oldSetup = app.setup<%- sc %>
 
-  const oldSetup = app.setup;
-
-  app.set('sequelizeClient', sequelize);
+  app.set('sequelizeClient', sequelize)<%- sc %>
 
   app.setup = function (...args) {
-    const result = oldSetup.apply(this, args);
+    const result = oldSetup.apply(this, args)<%- sc %>
 
     // Set up data relationships
-    const models = sequelize.models;
+    const models = sequelize.models<%- sc %>
     Object.keys(models).forEach(name => {
       if ('associate' in models[name]) {
-        models[name].associate(models);
+        models[name].associate(models)<%- sc %>
       }
-    });
+    })<%- sc %>
 
     // Sync to the database
-    sequelize.sync();
+    sequelize.sync()<%- sc %>
 
-    return result;
-  };
-};
+    return result<%- sc %>
+  }<%- sc %>
+}<%- sc %>

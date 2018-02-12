@@ -5,8 +5,8 @@
 <%- insertFragment('init') %>
 
 let moduleExports = function sqlResolvers(app, options) {
-  let { dialect, executeSql, genAndRunSql } = options;
-  let genRunSql = genAndRunSql(executeSql, { dialect }, options);
+  let { dialect, executeSql, genAndRunSql } = options<%- sc %>
+  let genRunSql = genAndRunSql(executeSql, { dialect }, options)<%- sc %>
 
   const returns = {
     <%- insertFragment('resolver_field_more') %>
@@ -30,16 +30,16 @@ let moduleExports = function sqlResolvers(app, options) {
 
       <%- insertFragment('resolver_query_more') %>
     },
-  };
+  }<%- sc %>
 
   //!code: func_return //!end
-  return returns;
-};
+  return returns<%- sc %>
+}<%- sc %>
 
 <%- insertFragment('more') %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

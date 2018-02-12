@@ -5,7 +5,7 @@
 
 <%- insertFragment('used', [
   '// eslint-disable-next-line no-unused-vars',
-  `const { ${hooks.hooks.join(', ')} } = commonHooks;`,
+  `const { ${hooks.hooks.join(', ')} } = commonHooks${sc}`,
 ]) %>
 <%# -%>
 <%# === Foreign keys =========================================================================== -%>
@@ -14,7 +14,7 @@
 <% if ((mapping.feathers[serviceName] || {}).adapter === 'mongodb') { -%>
 <%- insertFragment('foreign_keys', [
   '// eslint-disable-next-line no-unused-vars',
-  `const foreignKeys = ${stringifyPlus(feathersSpecs[serviceName]._extensions.foreignKeys)};`,
+  `const foreignKeys = ${stringifyPlus(feathersSpecs[serviceName]._extensions.foreignKeys)}${sc}`,
 ]) -%>
 <% } -%>
 <%# --- if-3 ends above. -%>
@@ -72,10 +72,10 @@ let moduleExports = {
     ]) %>
   },
   <%- insertFragment('moduleExports') %>
-};
+}<%- sc %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

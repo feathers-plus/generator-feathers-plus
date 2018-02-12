@@ -2,42 +2,42 @@
 /* eslint-disable no-unused-vars */
 class Service {
   constructor (options) {
-    this.options = options || {};
+    this.options = options || {}<%- sc %>
   }
 
   async find (params) {
-    return [];
+    return []<%- sc %>
   }
 
   async get (id, params) {
     return {
       id, text: `A new message with ID: ${id}!`
-    };
+    }<%- sc %>
   }
 
   async create (data, params) {
     if (Array.isArray(data)) {
-      return await Promise.all(data.map(current => this.create(current)));
+      return await Promise.all(data.map(current => this.create(current)))<%- sc %>
     }
 
-    return data;
+    return data<%- sc %>
   }
 
   async update (id, data, params) {
-    return data;
+    return data<%- sc %>
   }
 
   async patch (id, data, params) {
-    return data;
+    return data<%- sc %>
   }
 
   async remove (id, params) {
-    return { id };
+    return { id }<%- sc %>
   }
 }
 
 module.exports = function (options) {
-  return new Service(options);
-};
+  return new Service(options)<%- sc %>
+}<%- sc %>
 
-module.exports.Service = Service;
+module.exports.Service = Service<%- sc %>

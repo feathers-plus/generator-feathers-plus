@@ -1,40 +1,40 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`. (Can be re-generated.)
-const createService = require('@feathers-plus/graphql');
-const { mergeTypes } = require('merge-graphql-schemas');
-const merge = require('lodash.merge');
-const generatedSchema = require('./graphql.schemas');
+const createService = require('@feathers-plus/graphql')<%- sc %>
+const { mergeTypes } = require('merge-graphql-schemas')<%- sc %>
+const merge = require('lodash.merge')<%- sc %>
+const generatedSchema = require('./graphql.schemas')<%- sc %>
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if (strategy === 'services') { -%>
-const generatedResolvers = require('./service.resolvers');
+const generatedResolvers = require('./service.resolvers')<%- sc %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (strategy === 'batchloaders') { -%>
-const generatedResolvers = require('./batchloader.resolvers');
+const generatedResolvers = require('./batchloader.resolvers')<%- sc %>
 <% } -%>
 <%# --- if-2 ends above. -%>
 <%# -%>
 <%# --- if-3 starts below. -%>
 <% if (strategy === 'sql') { -%>
-const generatedResolvers = require('./sql.resolvers');
-const generatedMetadata = require('./sql.metadata');
-const { dialect, executeSql, openDb } = require('./sql.execute');
+const generatedResolvers = require('./sql.resolvers')<%- sc %>
+const generatedMetadata = require('./sql.metadata')<%- sc %>
+const { dialect, executeSql, openDb } = require('./sql.execute')<%- sc %>
 <% } -%>
 <%# --- if-3 ends above. -%>
-const hooks = require('./graphql.hooks');
+const hooks = require('./graphql.hooks')<%- sc %>
 <%- insertFragment('imports') %>
 
-const strategy = '<%- strategy %>';
+const strategy = '<%- strategy %>'<%- sc %>
 // eslint-disable-next-line no-console
-console.log(`\n===== configuring graphql service for ${strategy}.\n`);
+console.log(`\n===== configuring graphql service for ${strategy}.\n`)<%- sc %>
 
 let schemas = mergeTypes([
   generatedSchema,
   <%- insertFragment('schemas') %>
-]);
+])<%- sc %>
 
 <%# -%>
 <%# --- if-4 starts below. -%>
@@ -42,7 +42,7 @@ let schemas = mergeTypes([
 let resolvers = (app, options) => merge({},
   generatedResolvers(app, options),
   <%- insertFragment('service_resolvers') %>
-);
+)<%- sc %>
 <% } -%>
 <%# --- if-4 ends above. -%>
 <%# -%>
@@ -51,7 +51,7 @@ let resolvers = (app, options) => merge({},
 let resolvers = (app, options) => merge({},
   generatedResolvers(app, options),
   <%- insertFragment('batchloader_resolvers') %>
-);
+)<%- sc %>
 <% } -%>
 <%# --- if-5 ends above. -%>
 <%# -%>
@@ -60,22 +60,22 @@ let resolvers = (app, options) => merge({},
 let resolvers = (app, options) => merge({},
   generatedResolvers(app, options),
   <%- insertFragment('sql_resolvers') %>
-);
+)<%- sc %>
 
 let sqlJoins = (app, options) => merge({},
   generatedMetadata(app, options),
   <%- insertFragment('sql_metadata') %>
-);
+)<%- sc %>
 
 if (!dialect) {
-  throw new Error('services/graphql/sql.execute.js has not been configured.');
+  throw new Error('services/graphql/sql.execute.js has not been configured.')<%- sc %>
 }
 <% } -%>
 <%# --- if-6 ends above. -%>
 <%- insertFragment('init') %>
 
 let moduleExports = function(){
-  const app = this;
+  const app = this<%- sc %>
   <%- insertFragment('func_init') %>
 
   let options = {
@@ -91,22 +91,22 @@ let moduleExports = function(){
     logSql: false,
 <% } -%>
 <%# --- if-7 ends above. -%>
-  };
+  }<%- sc %>
   <%- insertFragment('func_options') %>
 
   // Initialize our service with any options it requires.
-  const createdService = createService(options);
-  app.use('/graphql', createdService);
+  const createdService = createService(options)<%- sc %>
+  app.use('/graphql', createdService)<%- sc %>
 
   // Get our initialized service so that we can register hooks and filters
-  const service = app.service('/graphql');
+  const service = app.service('/graphql')<%- sc %>
 
-  service.hooks(hooks);
+  service.hooks(hooks)<%- sc %>
   //!code: func_return //!end
-};
+}<%- sc %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

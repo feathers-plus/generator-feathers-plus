@@ -1,0 +1,8 @@
+const mongoose = require('mongoose')<%- sc %>
+
+module.exports = function (app) {
+  mongoose.connect(app.get('mongodb'), {})<%- sc %>
+  mongoose.Promise = global.Promise<%- sc %>
+
+  app.set('mongooseClient', mongoose)<%- sc %>
+}<%- sc %>

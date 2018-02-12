@@ -1,30 +1,30 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`. (Can be re-generated.)
-const createService = require('<%= serviceModule %>');
+const createService = require('<%= serviceModule %>')<%- sc %>
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if(modelName) { -%>
-const createModel = require('../../models/<%= modelName %>');
+const createModel = require('../../models/<%= modelName %>')<%- sc %>
 <% } -%>
 <%# --- if-1 ends above. -%>
-const hooks = require('./<%= kebabName %>.hooks');
+const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
 
 module.exports = function (app) {
-  <% if (modelName) { %>const Model = createModel(app);<% } %>
-  const paginate = app.get('paginate');
+  <% if (modelName) { %>const Model = createModel(app)<%- sc %><% } %>
+  const paginate = app.get('paginate')<%- sc %>
 
   const options = {
     name: '<%= kebabName %>',<% if (modelName) { %>
     Model,<% } %>
     paginate,
     <%- insertFragment('options_more') %>
-  };
+  }<%- sc %>
 
   // Initialize our service with any options it requires
-  app.use('/<%= path %>', createService(options));
+  app.use('/<%= path %>', createService(options))<%- sc %>
 
   // Get our initialized service so that we can register hooks and filters
-  const service = app.service('<%= path %>');
+  const service = app.service('<%= path %>')<%- sc %>
 
-  service.hooks(hooks);
-};
+  service.hooks(hooks)<%- sc %>
+}<%- sc %>

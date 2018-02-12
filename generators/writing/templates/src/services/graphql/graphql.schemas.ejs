@@ -5,10 +5,10 @@
 
 let moduleExports = `
 <%- graphqlSchemas %>
-`;
+`<%- sc %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

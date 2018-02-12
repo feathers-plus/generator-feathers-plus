@@ -1,23 +1,23 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
-const createService = require('feathers-mongodb');
-const hooks = require('./<%= kebabName %>.hooks');
+const createService = require('feathers-mongodb')<%- sc %>
+const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
 <%- insertFragment('mongo_imports', [
-  `let $jsonSchema = require('./${kebabName}.mongo');`
+  `let $jsonSchema = require('./${kebabName}.mongo')${sc}`
 ]) %>
 <%- insertFragment('mongo_init') %>
 
 let moduleExports = function (app) {
-  let paginate = app.get('paginate');
-  let mongoClient = app.get('mongoClient');
-  let options = { paginate };
+  let paginate = app.get('paginate')<%- sc %>
+  let mongoClient = app.get('mongoClient')<%- sc %>
+  let options = { paginate }<%- sc %>
   <%- insertFragment('mongo_func_init') %>
 
   // Initialize our service with any options it requires
-  app.use('/<%= path %>', createService(options));
+  app.use('/<%= path %>', createService(options))<%- sc %>
 
   // Get our initialized service so that we can register hooks and filters
-  const service = app.service('<%= path %>');
+  const service = app.service('<%= path %>')<%- sc %>
 
   mongoClient.then(db => {
     return db.createCollection('<%= kebabName %>', {
@@ -26,19 +26,19 @@ let moduleExports = function (app) {
         '      validationLevel: \'strict\', // The MongoDB default',
         '      validationAction: \'error\', // The MongoDB default',
       ]) %>
-    });
+    })<%- sc %>
   })
     .then(serviceModel => {
-      service.Model = serviceModel;
-    });
+      service.Model = serviceModel<%- sc %>
+    })<%- sc %>
 
-  service.hooks(hooks);
+  service.hooks(hooks)<%- sc %>
   <%- insertFragment('mongo_func_return') %>
-};
+}<%- sc %>
 <%- insertFragment('mongo_more') %>
 
 <%- insertFragment('mongo_exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('mongo_funcs') %>
 <%- insertFragment('mongo_end') %>

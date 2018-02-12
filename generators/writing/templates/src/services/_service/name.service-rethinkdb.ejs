@@ -1,34 +1,34 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
-const createService = require('feathers-rethinkdb');
-const hooks = require('./<%= kebabName %>.hooks');
+const createService = require('feathers-rethinkdb')<%- sc %>
+const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
 <%- insertFragment('mongo_imports') %>
 <%- insertFragment('mongo_init') %>
 
 let moduleExports = function (app) {
-  let Model = app.get('rethinkdbClient');
-  let paginate = app.get('paginate');
+  let Model = app.get('rethinkdbClient')<%- sc %>
+  let paginate = app.get('paginate')<%- sc %>
   <%- insertFragment('mongo_func_init') %>
 
   const options = {
     name: '<%= snakeName %>',
     Model,
     paginate
-  };
+  }<%- sc %>
 
   // Initialize our service with any options it requires
-  app.use('/<%= path %>', createService(options));
+  app.use('/<%= path %>', createService(options))<%- sc %>
 
   // Get our initialized service so that we can register hooks and filters
-  const service = app.service('<%= path %>');
+  const service = app.service('<%= path %>')<%- sc %>
 
-  service.hooks(hooks);
+  service.hooks(hooks)<%- sc %>
   <%- insertFragment('mongo_func_return') %>
-};
+}<%- sc %>
 <%- insertFragment('mongo_more') %>
 
 <%- insertFragment('mongo_exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('mongo_funcs') %>
 <%- insertFragment('mongo_end') %>

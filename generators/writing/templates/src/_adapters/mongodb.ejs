@@ -1,0 +1,17 @@
+const url = require('url')<%- sc %>
+const MongoClient = require('mongodb').MongoClient<%- sc %>
+
+module.exports = function (app) {
+  const config = app.get('mongodb')<%- sc %>
+  const dbName = url.parse(config).path.substring(1)<%- sc %>
+  const promise = MongoClient.connect(config).then(client => {
+    // For mongodb <= 2.2
+    if (client.collection) {
+      return client<%- sc %>
+    }
+
+    return client.db(dbName)<%- sc %>
+  })<%- sc %>
+
+  app.set('mongoClient', promise)<%- sc %>
+}<%- sc %>

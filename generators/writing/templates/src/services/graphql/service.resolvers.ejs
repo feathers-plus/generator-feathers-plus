@@ -5,10 +5,10 @@
 <%- insertFragment('init') %>
 
 let moduleExports = function serviceResolvers(app, options) {
-  const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options;
+  const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options<%- sc %>
 
 <% let __temp = Object.keys(mapping.feathers).map(serviceName =>
-  `  let ${serviceName} = app.service('${mapping.feathers[serviceName].path}');`
+  `  let ${serviceName} = app.service('${mapping.feathers[serviceName].path}')${sc}`
 ); -%>
   <%- insertFragment('services', __temp) %>
 
@@ -39,15 +39,15 @@ let moduleExports = function serviceResolvers(app, options) {
             + `${__addField.ourTableIsArray ? '{ $in: ' : ''}parent.${__addField.relation.ourTable}${__addField.ourTableIsArray ? ' }' : ''}`
             + `${__addField.isArray ? `, $sort: undefined` : ''} }`
             + ', paginate: false',
-        '          });',
-        `          return ${__addField.serviceName}.find(feathersParams).then(${__addField.isArray ? "extractAllItems" : "extractFirstItem"});`,
+        `          })${sc}`,
+        `          return ${__addField.serviceName}.find(feathersParams).then(${__addField.isArray ? "extractAllItems" : "extractFirstItem"})${sc}`,
         '        },'
   ];
 -%>
         <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
 <% } else { -%>
         <%- insertFragment(`resolver-${graphqlName}-${fieldName}-non`,
-          `        (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.'); },`
+          `        (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.')${sc} },`
         ) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>
@@ -68,14 +68,14 @@ let moduleExports = function serviceResolvers(app, options) {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
     `      get${graphqlName} (parent, args, content, ast) {`,
-    '        const feathersParams = convertArgsToFeathers(args, ast);',
-    `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem);`,
+    `        const feathersParams = convertArgsToFeathers(args, ast)${sc}`,
+    `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem)${sc}`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
     `      find${graphqlName}(parent, args, content, ast) {`,
-    `        const feathersParams = convertArgsToFeathers(args, ast${__graphql.serviceSortParams});`,
-    `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems);`,
+    `        const feathersParams = convertArgsToFeathers(args, ast${__graphql.serviceSortParams})${sc}`,
+    `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems)${sc}`,
     '      },',
   ];
 -%>
@@ -85,16 +85,16 @@ let moduleExports = function serviceResolvers(app, options) {
 <%# --- forEach-3 ends above. -%>
       <%- insertFragment('resolver_query_more') %>
     },
-  };
+  }<%- sc %>
 
   //!code: func_return //!end
-  return returns;
-};
+  return returns<%- sc %>
+}<%- sc %>
 
 <%- insertFragment('more') %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 function paginate(content) {
   return result => {
@@ -102,10 +102,10 @@ function paginate(content) {
       total: result.total,
       limit: result.limit,
       skip: result.skip,
-    };
+    }<%- sc %>
 
-    return result;
-  };
+    return result<%- sc %>
+  }<%- sc %>
 }
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

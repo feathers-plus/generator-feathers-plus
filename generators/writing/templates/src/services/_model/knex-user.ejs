@@ -5,24 +5,24 @@
 // See http://knexjs.org/
 // for more of what you can do here.
 module.exports = function (app) {
-  const db = app.get('knexClient');
+  const db = app.get('knexClient')<%- sc %>
   const tableName = '<%= snakeName %>'
   db.schema.hasTable(tableName).then(exists => {
     if(!exists) {
       db.schema.createTable(tableName, table => {
-        table.increments('id');
+        table.increments('id')<%- sc %>
       <% if(authentication.strategies.indexOf('local') !== -1) { %>
-        table.string('email').unique();
-        table.string('password');
+        table.string('email').unique()<%- sc %>
+        table.string('password')<%- sc %>
       <% } %>
       <% authentication.oauthProviders.forEach(provider => { %>
-        table.string('<%= provider.name %>Id');
-      <% }); %>
+        table.string('<%= provider.name %>Id')<%- sc %>
+      <% })<%- sc %> %>
       })
         .then(() => console.log(`Created ${tableName} table`))
-        .catch(e => console.error(`Error creating ${tableName} table`, e));
+        .catch(e => console.error(`Error creating ${tableName} table`, e))<%- sc %>
     }
-  });
+  })<%- sc %>
 
-  return db;
-};
+  return db<%- sc %>
+}<%- sc %>

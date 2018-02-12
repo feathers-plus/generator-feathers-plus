@@ -1,22 +1,22 @@
 
 /* eslint-disable no-unused-vars */
 // Define GraphQL resolvers using Feathers services and BatchLoaders. (Can be re-generated.)
-const { getByDot, setByDot } = require('feathers-hooks-common');
+const { getByDot, setByDot } = require('feathers-hooks-common')<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
 let moduleExports = function batchLoaderResolvers(app, options) {
   // eslint-disable-next-line
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
-    feathersBatchLoader: { feathersBatchLoader } } = options;
+    feathersBatchLoader: { feathersBatchLoader } } = options<%- sc %>
   <%- insertFragment('max-batch-size', [
-    '  let defaultPaginate = app.get(\'paginate\');',
+    `  let defaultPaginate = app.get(\'paginate\')${sc}`,
     '  let maxBatchSize = defaultPaginate && typeof defaultPaginate.max === \'number\' ?',
-    '    defaultPaginate.max : undefined;',
+    `    defaultPaginate.max : undefined${sc}`,
   ]) %>
 
 <% let __temp = Object.keys(mapping.feathers).map(serviceName =>
-  `  let ${serviceName} = app.service('${mapping.feathers[serviceName].path}');`
+  `  let ${serviceName} = app.service('${mapping.feathers[serviceName].path}')${sc}`
 ); -%>
   <%- insertFragment('services', __temp) %>
 
@@ -24,21 +24,21 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     '  // Given a fieldName in the parent record, return the result from a BatchLoader',
     '  // The result will be an object (or null), or an array of objects (possibly empty).',
     '  function getResult(batchLoaderName, fieldName, isArray) {',
-    '    const contentByDot = `batchLoaders.${batchLoaderName}`;',
+    '    const contentByDot = `batchLoaders.${batchLoaderName}`' + `${sc}`,
     '',
     '    // `content.app = app` is the Feathers app object.',
     '    // `content.batchLoaders = {}` is where the BatchLoaders for a request are stored.',
     '    return (parent, args, content, ast) => {',
-    '      let batchLoader = getByDot(content, contentByDot);',
+    `      let batchLoader = getByDot(content, contentByDot)${sc}`,
     '',
     '      if (!batchLoader) {',
-    '        batchLoader = getBatchLoader(batchLoaderName, parent, args, content, ast);',
-    '        setByDot(content, contentByDot, batchLoader);',
+    `        batchLoader = getBatchLoader(batchLoaderName, parent, args, content, ast)${sc}`,
+    `        setByDot(content, contentByDot, batchLoader)${sc}`,
     '      }',
     '',
-    '      const returns = batchLoader.load(parent[fieldName]);',
-    '      return !isArray ? returns : returns.then(result => result || []);',
-    '    };',
+    `      const returns = batchLoader.load(parent[fieldName])${sc}`,
+    `      return !isArray ? returns : returns.then(result => result || [])${sc}`,
+    `    }${sc}`,
     '  }',
   ]) %>
 <%# -%>
@@ -48,7 +48,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   // as the BatchLoader loading function may require data from the 'args' passed to the resolver.
   // Note that each resolver's 'args' are static throughout a GraphQL call.
   function getBatchLoader(dataLoaderName, parent, args, content, ast) {
-    let feathersParams;
+    let feathersParams<%- sc %>
 
     switch (dataLoaderName) {
     /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
@@ -88,11 +88,11 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     '          feathersParams = convertArgsToFeathers(args, null, {',
     `            query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined },`,
     '            _populate: \'skip\', paginate: false',
-    '          });',
-    `          return ${__addField.serviceName}.find(feathersParams);`,
+    `          })${sc}`,
+    `          return ${__addField.serviceName}.find(feathersParams)${sc}`,
     '        },',
     '        maxBatchSize // Max #keys in a BatchLoader func call.',
-    '      );',
+    `      )${sc}`,
   ];
 -%>
 
@@ -108,7 +108,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     /* Throw on unknown BatchLoader name. */
     default:
       <%- insertFragment('bl-default', [
-        '      throw new Error(`GraphQL query requires BatchLoader named \'${dataLoaderName}\' but no definition exists for it.`);',
+        '      throw new Error(`GraphQL query requires BatchLoader named \'${dataLoaderName}\' but no definition exists for it.`)' + `${sc}`,
       ]) %>
     }
   }
@@ -141,7 +141,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
 <% } else { -%>
       <%- insertFragment(`resolver-${graphqlName}-${fieldName}-non`, [
-        `      ${fieldName}: (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.'); },`,
+        `      ${fieldName}: (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.')${sc} },`,
       ]) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>
@@ -163,14 +163,14 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
     `      get${graphqlName} (parent, args, content, ast) {`,
-    '        const feathersParams = convertArgsToFeathers(args, ast);',
-    `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem);`,
+    `        const feathersParams = convertArgsToFeathers(args, ast)${sc}`,
+    `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem)${sc}`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
     `      find${graphqlName}(parent, args, content, ast) {`,
-    `        const feathersParams = convertArgsToFeathers(args, ast${__graphql.serviceSortParams});`,
-    `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems);`,
+    `        const feathersParams = convertArgsToFeathers(args, ast${__graphql.serviceSortParams})${sc}`,
+    `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems)${sc}`,
     '      },',
   ];
 -%>
@@ -180,16 +180,16 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 <%# --- forEach-3 ends above. -%>
       <%- insertFragment('resolver_query_more') %>
     },
-  };
+  }<%- sc %>
 
   //!code: func_return //!end
-  return returns;
-};
+  return returns<%- sc %>
+}<%- sc %>
 
 <%- insertFragment('more') %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 function paginate(content) {
   return result => {
@@ -197,10 +197,10 @@ function paginate(content) {
       total: result.total,
       limit: result.limit,
       skip: result.skip,
-    };
+    }<%- sc %>
 
-    return result;
-  };
+    return result<%- sc %>
+  }<%- sc %>
 }
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

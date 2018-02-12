@@ -17,7 +17,7 @@ let schema = {
     <%- insertFragment('schema_properties') %>
   },
   <%- insertFragment('schema_more') %>
-};
+}<%- sc %>
 
 let extensions = {
   graphql: {
@@ -44,7 +44,7 @@ let extensions = {
     },
     <%- insertFragment('graphql_more') %>
   },
-};
+}<%- sc %>
 
 <%- insertFragment('more') %>
 
@@ -52,10 +52,10 @@ let moduleExports = {
   schema,
   extensions,
   <%- insertFragment('moduleExports') %>
-};
+}<%- sc %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

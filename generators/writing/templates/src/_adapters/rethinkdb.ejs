@@ -1,0 +1,29 @@
+const rethinkdbdash = require('rethinkdbdash')<%- sc %>
+
+module.exports = function (app) {
+  const config = app.get('rethinkdb')<%- sc %>
+  const r = rethinkdbdash(config)<%- sc %>
+  const oldSetup = app.setup<%- sc %>
+
+  app.set('rethinkdbClient', r)<%- sc %>
+
+  app.setup = function (...args) {
+    let promise = Promise.resolve()<%- sc %>
+
+    // Go through all services and call the RethinkDB `init`
+    // which creates the database and tables if they do not exist
+    Object.keys(app.services).forEach(path => {
+      const service = app.service(path)<%- sc %>
+
+      if (typeof service.init === 'function') {
+        promise = promise.then(() => service.init())<%- sc %>
+      }
+    })<%- sc %>
+
+    // Access the initialization if you want to run queries
+    // right away that depend on the database and tables being created
+    this.set('rethinkInit', promise)<%- sc %>
+
+    return oldSetup.apply(this, args)<%- sc %>
+  }<%- sc %>
+}<%- sc %>

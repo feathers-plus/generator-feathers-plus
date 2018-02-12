@@ -3,13 +3,13 @@
 //
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
-const Sequelize = require('sequelize');
-const DataTypes = Sequelize.DataTypes;
+const Sequelize = require('sequelize')<%- sc %>
+const DataTypes = Sequelize.DataTypes<%- sc %>
 <%- insertFragment('sequelize_imports') %>
 <%- insertFragment('sequelize_init') %>
 
 let moduleExports = function (app) {
-  let sequelizeClient = app.get('sequelizeClient');
+  let sequelizeClient = app.get('sequelizeClient')<%- sc %>
   <%- insertFragment('sequelize_func_init') %>
 
   const <%= camelName %> = sequelizeClient.define('<%= snakeName %>', {
@@ -20,24 +20,24 @@ let moduleExports = function (app) {
   }, {
     hooks: {
       beforeCount(options) {
-        options.raw = true;
+        options.raw = true<%- sc %>
       }
     }
-  });
+  })<%- sc %>
 
   // eslint-disable-next-line no-unused-vars
   <%= camelName %>.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-  };
+  }<%- sc %>
 
   <%- insertFragment('sequelize_func_return') %>
-  return <%= camelName %>;
-};
+  return <%= camelName %><%- sc %>
+}<%- sc %>
 <%- insertFragment('sequelize_more') %>
 
 <%- insertFragment('sequelize_exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('sequelize_funcs') %>
 <%- insertFragment('sequelize_end') %>

@@ -5,7 +5,7 @@
 <% Object.keys(specs.middlewares || {}).sort().forEach(name => {
   __temp = specs.middlewares[name];
 -%>
-const <%- __temp.camel %> = require('./<%- __temp.kebab %>');
+const <%- __temp.camel %> = require('./<%- __temp.kebab %>')<%- sc %>
 <% }) -%>
 <%# --- forEach-1 ends above. -%>
 
@@ -24,7 +24,7 @@ module.exports = function (app) {
 <% Object.keys(specs.middlewares || {}).forEach(name => {
   __temp = specs.middlewares[name];
   __temp0.push(
-    `  app.use(${__temp.path !== '*' ? `'${__temp.path}', ` : ''}${__temp.camel}());`
+    `  app.use(${__temp.path !== '*' ? `'${__temp.path}', ` : ''}${__temp.camel}())${sc}`
   );
 }) -%>
 <%# --- forEach-2 ends above. -%>
@@ -41,4 +41,4 @@ module.exports = function (app) {
 <% } -%>
 <%# --- if-2 ends above. -%>
   <%- insertFragment('middleware', __temp0.length ? __temp0 : null) %>
-};
+}<%- sc %>

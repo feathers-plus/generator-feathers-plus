@@ -8,28 +8,28 @@
 <%- insertFragment('knex_init') %>
 
 let moduleExports = function (app) {
-  let db = app.get('knexClient');
-  let tableName = '<%= snakeName %>';
+  let db = app.get('knexClient')<%- sc %>
+  let tableName = '<%= snakeName %>'<%- sc %>
   <%- insertFragment('knex_func_init') %>
 
   db.schema.hasTable(tableName).then(exists => {
     if(!exists) {
       db.schema.createTable(tableName, table => {
-        table.increments('id');
-        table.string('text');
+        table.increments('id')<%- sc %>
+        table.string('text')<%- sc %>
       })
         .then(() => console.log(`Created ${tableName} table`))
-        .catch(e => console.error(`Error creating ${tableName} table`, e));
+        .catch(e => console.error(`Error creating ${tableName} table`, e))<%- sc %>
     }
-  });
+  })<%- sc %>
 
   <%- insertFragment('knex_func_return') %>
-  return db;
-};
+  return db<%- sc %>
+}<%- sc %>
 <%- insertFragment('knex_more') %>
 
 <%- insertFragment('knex_exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('knex_funcs') %>
 <%- insertFragment('knex_end') %>

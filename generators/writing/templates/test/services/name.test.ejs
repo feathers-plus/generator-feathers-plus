@@ -1,10 +1,10 @@
-const assert = require('assert');
-const app = require('../../<%= libDirectory %>/app');
+const assert = require('assert')<%- sc %>
+const app = require('../../<%= libDirectory %>/app')<%- sc %>
 
 describe('\'<%= serviceName %>\' service', () => {
   it('registered the service', () => {
-    const service = app.service('<%= path %>');
+    const service = app.service('<%= path %>')<%- sc %>
 
-    assert.ok(service, 'Registered the service');
-  });
-});
+    assert.ok(service, 'Registered the service')<%- sc %>
+  })<%- sc %>
+})<%- sc %>

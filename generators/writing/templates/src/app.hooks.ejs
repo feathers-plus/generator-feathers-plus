@@ -1,13 +1,13 @@
 
 // Application hooks that run for every service. (Can be re-generated.)
-const commonHooks = require('feathers-hooks-common');
+const commonHooks = require('feathers-hooks-common')<%- sc %>
 <%- insertFragment('imports', [
-  'const logger = require(\'./hooks/logger\');',
+  `const logger = require(\'./hooks/logger\')${sc}`,
 ]) %>
 
 <%- insertFragment('used', [
   '// eslint-disable-next-line no-unused-vars',
-  'const { iff } = commonHooks;'
+  `const { iff } = commonHooks${sc}`
 ]) %>
 <%- insertFragment('init') %>
 
@@ -48,10 +48,10 @@ let moduleExports = {
     ]) %>
   },
   <%- insertFragment('moduleExports') %>
-};
+}<%- sc %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

@@ -2,7 +2,7 @@
 module.exports = function (options = {}) {
   return function <%= specs.middlewares[mwName].camel %>(req, res, next) {
     // eslint-disable-next-line no-console
-    console.log('<%= mwName %> middleware is running');
-    next();
-  };
-};
+    console.log('<%= mwName %> middleware is running')<%- sc %>
+    next()<%- sc %>
+  }<%- sc %>
+}<%- sc %>

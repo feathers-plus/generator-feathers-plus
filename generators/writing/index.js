@@ -62,9 +62,7 @@ function generatorsInclude (name) {
 module.exports = function generatorWriting (generator, what) {
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator;
-  if (what !== 'all') {
-    updateSpecs(what, props, `${what} generator`);
-  }
+  updateSpecs(what, props, `${what} generator`);
 
   // Get unique generators which have been run
   generators = [...new Set(specs._generators)].sort();
@@ -97,7 +95,7 @@ module.exports = function generatorWriting (generator, what) {
     feathersSpecs,
     mapping,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
-    sc: ';', // specs.options.semicolon ? ';' : '',
+    sc: specs.options.semicolons ? ';' : '',
 
     merge,
     EOL,
@@ -177,9 +175,9 @@ module.exports = function generatorWriting (generator, what) {
 
       tmpl([tpl, 'test', 'app.test.ejs'], [testDir, 'app.test.js'], true),
 
-      copy([tpl, 'src', 'hooks', 'logger.js'], [src, 'hooks', 'logger.js'], true),
+      tmpl([tpl, 'src', 'hooks', 'logger.ejs'], [src, 'hooks', 'logger.js'], true),
       copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], true),
-      copy([tpl, 'src', 'channels.js'], [src, 'channels.js'], true),
+      tmpl([tpl, 'src', 'channels.ejs'], [src, 'channels.js'], true),
 
       json(pkg, 'package.json'),
       json(configDefault, ['config', 'default.json']),
@@ -302,7 +300,7 @@ module.exports = function generatorWriting (generator, what) {
     // Custom abbreviations for building 'todos'.
     const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))
       ? `name.service-${adapter}.ejs` : 'name.service.ejs';
-    const genericServiceTpl = generator.hasAsync ? 'name.class-async.js' : 'name.class.js';
+    const genericServiceTpl = generator.hasAsync ? 'name.class-async.ejs' : 'name.class.ejs';
     const kn = kebabName;
 
     todos = [
@@ -432,7 +430,7 @@ module.exports = function generatorWriting (generator, what) {
 
     Object.keys(_adapters).sort().forEach(adapter => {
       todos.push(
-        copy([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`], true)
+        tmpl([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`], true)
       );
     });
 

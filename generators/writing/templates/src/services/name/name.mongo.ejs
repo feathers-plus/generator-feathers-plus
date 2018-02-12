@@ -1,17 +1,17 @@
 
 /* eslint quotes: 0 */
 // Defines the MongoDB $jsonSchema for service `<%= serviceName %>`. (Can be re-generated.)
-const merge = require('lodash.merge');
+const merge = require('lodash.merge')<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
 let moduleExports = merge({},
   <%- insertFragment('model', mongoJsonSchemaStr.split('\n').map(str => `  ${str}`).join('\n') + ',') %>
   <%- insertFragment('moduleExports') %>
-);
+)<%- sc %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

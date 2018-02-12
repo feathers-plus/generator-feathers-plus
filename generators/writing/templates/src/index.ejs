@@ -1,28 +1,28 @@
 
 /* eslint-disable no-console */
 // Start the server. (Can be re-generated.)
-const logger = require('winston');
-const app = require('./app');
+const logger = require('winston')<%- sc %>
+const app = require('./app')<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-const port = app.get('port');
-const server = app.listen(port);
+const port = app.get('port')<%- sc %>
+const server = app.listen(port)<%- sc %>
 <%- insertFragment('init2') %>
 
 process.on('unhandledRejection', (reason, p) => {
   <%- insertFragment('unhandled_rejection_log', [
-    '  logger.error(\'Unhandled Rejection at: Promise \', p, reason);',
+    `  logger.error(\'Unhandled Rejection at: Promise \', p, reason)${sc}`,
   ]) %>
   <%- insertFragment('unhandled_rejection') %>
-});
+})<%- sc %>
 
 server.on('listening', () => {
   <%- insertFragment('listening_log', [
-    '  logger.info(\'Feathers application started on http://%s:%d\', app.get(\'host\'), port);',
+    `  logger.info(\'Feathers application started on http://%s:%d\', app.get(\'host\'), port)${sc}`,
   ]) %>
   <%- insertFragment('listening') %>
-});
+})<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

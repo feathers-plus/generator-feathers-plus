@@ -1,15 +1,15 @@
 
 /* eslint quotes: 0 */
 // Validation definitions for validateSchema hook for service `<%= serviceName %>`. (Can be re-generated.)
-const { validateSchema } = require('feathers-hooks-common');
-const merge = require('lodash.merge');
-const ajv = require('ajv');
+const { validateSchema } = require('feathers-hooks-common')<%- sc %>
+const merge = require('lodash.merge')<%- sc %>
+const ajv = require('ajv')<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
 <%- insertFragment('set_id_type', [
   '// eslint-disable-next-line no-unused-vars',
-  'const ID = \'string\';',
+  `const ID = 'string'${sc}`,
 ]) %>
 
 const base = merge({},
@@ -20,51 +20,51 @@ const base = merge({},
 -%>
   <%- insertFragment('base', Object.keys(__jsonSchema).length === 0 ? undefined : `${__str},`) %>
   <%- insertFragment('base_more') %>
-);
+)<%- sc %>
 
 const create = merge({},
   base,
   <%- insertFragment('create_more') %>
-);
+)<%- sc %>
 
 const update = merge({},
   base,
   <%- insertFragment('update_more') %>
-);
+)<%- sc %>
 
 const patch = merge({},
   base,
   { required: undefined },
   <%- insertFragment('patch_more') %>
-);
+)<%- sc %>
 
 const validateCreate = options => {
   <%- insertFragment('func_create', [
-    '  return validateSchema(create, ajv, options);',
+    `  return validateSchema(create, ajv, options)${sc}`,
   ]) %>
-};
+}<%- sc %>
 
 const validateUpdate = options => {
   <%- insertFragment('func_update', [
-    '  return validateSchema(update, ajv, options);',
+    `  return validateSchema(update, ajv, options)${sc}`,
   ]) %>
-};
+}<%- sc %>
 
 const validatePatch = options => {
   <%- insertFragment('func_patch', [
-    '  return validateSchema(patch, ajv, options);',
+    `  return validateSchema(patch, ajv, options)${sc}`,
   ]) %>
-};
+}<%- sc %>
 
 const quickValidate = (method, data, options) => {
   try {
-    if (method === 'create') validateCreate(options)({ type: 'before', method: 'create', data });
-    if (method === 'update') validateCreate(options)({ type: 'before', method: 'update', data });
-    if (method === 'patch') validateCreate(options)({ type: 'before', method: 'patch', data });
+    if (method === 'create') validateCreate(options)({ type: 'before', method: 'create', data })<%- sc %>
+    if (method === 'update') validateCreate(options)({ type: 'before', method: 'update', data })<%- sc %>
+    if (method === 'patch') validateCreate(options)({ type: 'before', method: 'patch', data })<%- sc %>
   } catch (err) {
-    return err;
+    return err<%- sc %>
   }
-};
+}<%- sc %>
 
 let moduleExports = {
   create,
@@ -75,10 +75,10 @@ let moduleExports = {
   validatePatch,
   quickValidate,
   <%- insertFragment('moduleExports') %>
-};
+}<%- sc %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

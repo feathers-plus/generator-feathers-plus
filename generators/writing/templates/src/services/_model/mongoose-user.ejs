@@ -5,28 +5,28 @@
 // for more of what you can do here.
 
 <%- insertFragment('mongoose_schema', [
-  `const mongooseSchema = require('../services/${kebabName}/${kebabName}.mongoose');`,
+  `const mongooseSchema = require('../services/${kebabName}/${kebabName}.mongoose')${sc}`,
 ]) %>
 <%- insertFragment('mongoose_imports') %>
 <%- insertFragment('mongoose_init') %>
 
 let moduleExports = function (app) {
-  let mongooseClient = app.get('mongooseClient');
+  let mongooseClient = app.get('mongooseClient')<%- sc %>
   <%- insertFragment('mongoose_func_init') %>
 
   <%- insertFragment('mongoose_client', [
-    `  const ${camelName} = new mongooseClient.Schema(mongooseSchema, { timestamps: true });`,
+    `  const ${camelName} = new mongooseClient.Schema(mongooseSchema, { timestamps: true })${sc}`,
   ]) %>
 
-  let returns = mongooseClient.model('<%= camelName %>', <%= camelName %>);
+  let returns = mongooseClient.model('<%= camelName %>', <%= camelName %>)<%- sc %>
 
   <%- insertFragment('mongoose_func_return') %>
-  return returns;
-};
+  return returns<%- sc %>
+}<%- sc %>
 <%- insertFragment('mongoose_more') %>
 
 <%- insertFragment('mongoose_exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('mongoose_funcs') %>
 <%- insertFragment('mongoose_end') %>

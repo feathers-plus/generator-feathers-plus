@@ -1,0 +1,8 @@
+const knex = require('knex')<%- sc %>
+
+module.exports = function (app) {
+  const { client, connection } = app.get('<%= database %>')<%- sc %>
+  const db = knex({ client, connection })<%- sc %>
+
+  app.set('knexClient', db)<%- sc %>
+}<%- sc %>

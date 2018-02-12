@@ -5,9 +5,9 @@
 <%- insertFragment('init') %>
 
 let moduleExports = function sqlMetadata(app, options) {
-  let { convertArgsToFeathers, convertArgsToOrderBy, convertArgsToWhere } = options;
-  let makeOrderBy = convertArgsToOrderBy(options);
-  let makeWhere = convertArgsToWhere(options);
+  let { convertArgsToFeathers, convertArgsToOrderBy, convertArgsToWhere } = options<%- sc %>
+  let makeOrderBy = convertArgsToOrderBy(options)<%- sc %>
+  let makeWhere = convertArgsToWhere(options)<%- sc %>
   <%- insertFragment('func_init') %>
 
   let returns = {
@@ -48,15 +48,15 @@ let moduleExports = function sqlMetadata(app, options) {
             + __addField.relation.ourTableSql
             + ' = ${otherTable}.'
             + __addField.relation.otherTableSql
-            + '`; },',
-        '          orderBy(args, content) { return makeOrderBy(args, null); },',
-        `          where(table, args) { return makeWhere(table, args, '${__addField.relation.ourTableSql}', undefined); },`,
+            + '`' + sc + ' },',
+        `          orderBy(args, content) { return makeOrderBy(args, null)${sc} },`,
+        `          where(table, args) { return makeWhere(table, args, '${__addField.relation.ourTableSql}', undefined)${sc} },`,
     ];
 -%>
           <%- insertFragment(`fields-${graphqlName}-${fieldName}`, __temp) %>
 <% } else { -%>
           <%- insertFragment(`fields-${graphqlName}-${fieldName}-non`, [
-            '          sqlExpr: (tableName, args) => { throw Error(\'GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.\'); },',
+            `          sqlExpr: (tableName, args) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.')${sc} },`,
 ]) %>
 <%# --- if/else-1 ends above. -%>
 <% } -%>
@@ -101,16 +101,16 @@ let moduleExports = function sqlMetadata(app, options) {
       <%- insertFragment('metadata_query_more') %>
     },
   <%- insertFragment('metadata_more') %>
-  };
+  }<%- sc %>
 
   //!code: func_return //!end
-  return returns;
-};
+  return returns<%- sc %>
+}<%- sc %>
 
 <%- insertFragment('more') %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

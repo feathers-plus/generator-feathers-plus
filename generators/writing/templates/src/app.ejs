@@ -1,25 +1,25 @@
 
 // Configure Feathers app. (Can be re-generated.)
-const path = require('path');
-const favicon = require('serve-favicon');
-const compress = require('compression');
-const cors = require('cors');
-const helmet = require('helmet');
-const logger = require('winston');
+const path = require('path')<%- sc %>
+const favicon = require('serve-favicon')<%- sc %>
+const compress = require('compression')<%- sc %>
+const cors = require('cors')<%- sc %>
+const helmet = require('helmet')<%- sc %>
+const logger = require('winston')<%- sc %>
 
-const feathers = require('@feathersjs/feathers');
-const configuration = require('@feathersjs/configuration');
-const express = require('@feathersjs/express');
-<% if (hasProvider('socketio')) { %>const socketio = require('@feathersjs/socketio');<% } %>
-<% if (hasProvider('primus')) { %>const primus = require('@feathersjs/primus');<% } %>
-const middleware = require('./middleware');
-const services = require('./services');
-const appHooks = require('./app.hooks');
-const channels = require('./channels');
+const feathers = require('@feathersjs/feathers')<%- sc %>
+const configuration = require('@feathersjs/configuration')<%- sc %>
+const express = require('@feathersjs/express')<%- sc %>
+<% if (hasProvider('socketio')) { %>const socketio = require('@feathersjs/socketio')<%- sc %><% } %>
+<% if (hasProvider('primus')) { %>const primus = require('@feathersjs/primus')<%- sc %><% } %>
+const middleware = require('./middleware')<%- sc %>
+const services = require('./services')<%- sc %>
+const appHooks = require('./app.hooks')<%- sc %>
+const channels = require('./channels')<%- sc %>
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if (specs.authentication) { -%>
-const authentication = require('./authentication');
+const authentication = require('./authentication')<%- sc %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 
@@ -27,67 +27,67 @@ const authentication = require('./authentication');
 <%# --- forEach-1 starts below. -%>
 <% Object.keys(specs._adapters || []).sort().forEach(__adapter => {
   __temp = specs._adapters[__adapter];
-  __module = __temp.substring(0, __temp.length - 3);
+  __module = __temp.substring(0, __temp.length - 4);
 -%>
-const <%- __adapter %> = require('./<%- __module %>');
+const <%- __adapter %> = require('./<%- __module %>')<%- sc %>
 <% }) -%>
 <%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-const app = express(feathers());
+const app = express(feathers())<%- sc %>
 <%- insertFragment('use_start') %>
 
 // Load app configuration
-app.configure(configuration());
+app.configure(configuration())<%- sc %>
 // Enable CORS, security, compression, favicon and body parsing
-app.use(cors());
-app.use(helmet());
-app.use(compress());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
+app.use(cors())<%- sc %>
+app.use(helmet())<%- sc %>
+app.use(compress())<%- sc %>
+app.use(express.json())<%- sc %>
+app.use(express.urlencoded({ extended: true }))<%- sc %>
+app.use(favicon(path.join(app.get('public'), 'favicon.ico')))<%- sc %>
 // Host the public folder
-app.use('/', express.static(app.get('public')));
+app.use('/', express.static(app.get('public')))<%- sc %>
 <%- insertFragment('use_end') %>
 
 // Set up Plugins and providers
 <%- insertFragment('config_start') %>
-<% if (hasProvider('rest')) { %>app.configure(express.rest());<% } %>
-<% if (hasProvider('socketio')) { %>app.configure(socketio());<% } %>
-<% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }));<% } %>
+<% if (hasProvider('rest')) { %>app.configure(express.rest())<%- sc %><% } %>
+<% if (hasProvider('socketio')) { %>app.configure(socketio())<%- sc %><% } %>
+<% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }))<%- sc %><% } %>
 <%# --- forEach-3 starts below. -%>
 <% Object.keys(specs._adapters || []).sort().forEach((__adapter, __i) => { -%>
 <%- __i === 0 ? '// Configure database adapters\n' : '' -%>
-app.configure(<%- __adapter %>);
+app.configure(<%- __adapter %>)<%- sc %>
 <% }) -%>
 <%# --- forEach-3 ends above. -%>
 
 // Configure other middleware (see `middleware/index.js`)
-app.configure(middleware);
+app.configure(middleware)<%- sc %>
 // Set up our services (see `services/index.js`)
-app.configure(services);
+app.configure(services)<%- sc %>
 // Set up event channels (see channels.js)
-app.configure(channels);
+app.configure(channels)<%- sc %>
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (specs.authentication) { -%>
 // Configure authentication (see `authentication.js`)
-app.configure(authentication);
+app.configure(authentication)<%- sc %>
 <% } -%>
 <%# --- if-2 ends above. -%>
 <%- insertFragment('config_middle') %>
 
 // Configure a middleware for 404s and the error handler
-app.use(express.notFound());
-app.use(express.errorHandler({ logger }));
+app.use(express.notFound())<%- sc %>
+app.use(express.errorHandler({ logger }))<%- sc %>
 <%- insertFragment('config_end') %>
 
-app.hooks(appHooks);
+app.hooks(appHooks)<%- sc %>
 
-const moduleExports = app;
+const moduleExports = app<%- sc %>
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

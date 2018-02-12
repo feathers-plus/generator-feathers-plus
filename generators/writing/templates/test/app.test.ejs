@@ -1,32 +1,32 @@
 
-const assert = require('assert');
-const rp = require('request-promise');
-const url = require('url');
-const app = require('../<%= specs.app.src %>/app');
+const assert = require('assert')<%- sc %>
+const rp = require('request-promise')<%- sc %>
+const url = require('url')<%- sc %>
+const app = require('../<%= specs.app.src %>/app')<%- sc %>
 
-const port = app.get('port') || 3030;
+const port = app.get('port') || 3030<%- sc %>
 const getUrl = pathname => url.format({
   hostname: app.get('host') || 'localhost',
   protocol: 'http',
   port,
   pathname
-});
+})<%- sc %>
 
 describe('Feathers application tests', () => {
   before(function(done) {
-    this.server = app.listen(port);
-    this.server.once('listening', () => done());
-  });
+    this.server = app.listen(port)<%- sc %>
+    this.server.once('listening', () => done())<%- sc %>
+  })<%- sc %>
 
   after(function(done) {
-    this.server.close(done);
-  });
+    this.server.close(done)<%- sc %>
+  })<%- sc %>
 
   it('starts and shows the index page', () => {
     return rp(getUrl()).then(body =>
       assert.ok(body.indexOf('<html>') !== -1)
-    );
-  });
+    )<%- sc %>
+  })<%- sc %>
 
   describe('404', function() {
     it('shows a 404 HTML page', () => {
@@ -36,21 +36,21 @@ describe('Feathers application tests', () => {
           'Accept': 'text/html'
         }
       }).catch(res => {
-        assert.equal(res.statusCode, 404);
-        assert.ok(res.error.indexOf('<html>') !== -1);
-      });
-    });
+        assert.equal(res.statusCode, 404)<%- sc %>
+        assert.ok(res.error.indexOf('<html>') !== -1)<%- sc %>
+      })<%- sc %>
+    })<%- sc %>
 
     it('shows a 404 JSON error without stack trace', () => {
       return rp({
         url: getUrl('path/to/nowhere'),
         json: true
       }).catch(res => {
-        assert.equal(res.statusCode, 404);
-        assert.equal(res.error.code, 404);
-        assert.equal(res.error.message, 'Page not found');
-        assert.equal(res.error.name, 'NotFound');
-      });
-    });
-  });
-});
+        assert.equal(res.statusCode, 404)<%- sc %>
+        assert.equal(res.error.code, 404)<%- sc %>
+        assert.equal(res.error.message, 'Page not found')<%- sc %>
+        assert.equal(res.error.name, 'NotFound')<%- sc %>
+      })<%- sc %>
+    })<%- sc %>
+  })<%- sc %>
+})<%- sc %>

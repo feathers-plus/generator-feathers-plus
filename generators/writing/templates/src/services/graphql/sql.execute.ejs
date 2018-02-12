@@ -1,28 +1,28 @@
 
 // Execute raw SQL statement for GraphQL. (Can be re-generated.)
 // eslint-disable-next-line no-unused-vars
-const { cwd } = require('process');
+const { cwd } = require('process')<%- sc %>
 // eslint-disable-next-line no-unused-vars
-const { join } = require('path');
+const { join } = require('path')<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
 <%- insertFragment('main', [
-  'let dialect, openDb, executeSql;',
-  '// const sqlite = require(\'sqlite\');',
-  '// dialect = \'sqlite3\';',
+  `let dialect, openDb, executeSql${sc}`,
+  `// const sqlite = require('sqlite')${sc}`,
+  `// dialect = 'sqlite3'${sc}`,
   '',
   '// openDb = () => {',
-  '//   sqlite.open(join(cwd(), \'data\', \'sqlite3.db\'));',
-  '//   return sqlite;',
-  '// };',
+  `//   sqlite.open(join(cwd(), 'data', 'sqlite3.db'))${sc}`,
+  `//   return sqlite${sc}`,
+  `// }${sc}`,
   '',
   '// executeSql = sql => sqlite.all(sql)',
   '//   .catch(err => {',
   '//     // eslint-disable-next-line no-console',
-  '//     console.log(\'executeSql error=\', err.message);',
-  '//     throw err;',
-  '//   });',
+  `//     console.log('executeSql error=', err.message)${sc}`,
+  `//     throw err${sc}`,
+  `//   })${sc}`,
 ]) %>
 
 let moduleExports = {
@@ -30,12 +30,12 @@ let moduleExports = {
   executeSql,
   openDb,
   <%- insertFragment('moduleExports') %>
-};
+}<%- sc %>
 
 <%- insertFragment('more') %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports;
+module.exports = moduleExports<%- sc %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
