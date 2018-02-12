@@ -325,6 +325,11 @@ module.exports = function generatorWriting (generator, what) {
       generator._packagerInstall([ serviceModule ], { save: true });
     }
 
+    // Update dependencies
+    generator.dependencies = serviceModule.charAt(0) !== '.' ? ['ajv', serviceModule] : ['ajv'];
+    generator._packagerInstall(generator.dependencies, { save: true });
+
+    // Determine which hooks are needed
     function getHookInfo(name) {
       const sc = context.sc;
       const isMongo = (mapping.feathers[name] || {}).adapter === 'mongodb';
@@ -563,6 +568,7 @@ module.exports = function generatorWriting (generator, what) {
       'merge-graphql-schemas'
     ], { save: true });
 
+    // Determine which hooks are needed
     function getHookInfo() {
       const sc = context.sc;
       const requiresAuth = specs.graphql.requiresAuth;
