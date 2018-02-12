@@ -135,6 +135,8 @@ OK   This option can be changed manually in feathers-gen-specs.json.
 OK   true HAS BEEN TESTED. false IS LEFT FOR MATT & MARSHALL TO TEST.
 OK - Change copuright year from 2017 to 2018
 OK - Remove templates we're now sure will not used.
+OK - Generator comments out lines referring to $jsonSchema in name.service.js for mongodb services.
+
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?

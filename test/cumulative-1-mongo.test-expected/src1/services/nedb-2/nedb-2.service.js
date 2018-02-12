@@ -3,7 +3,7 @@
 const createService = require('feathers-mongodb');
 const hooks = require('./nedb-2.hooks');
 //!<DEFAULT> code: mongo_imports
-let $jsonSchema = require('./nedb-2.mongo');
+// let $jsonSchema = require('./nedb-2.mongo');
 //!end
 //!code: mongo_init //!end
 
@@ -22,9 +22,9 @@ let moduleExports = function (app) {
   mongoClient.then(db => {
     return db.createCollection('nedb-2', {
       //!<DEFAULT> code: mongo_create_collection
-      validator: { $jsonSchema: $jsonSchema },
-      validationLevel: 'strict', // The MongoDB default
-      validationAction: 'error', // The MongoDB default
+      // validator: { $jsonSchema: $jsonSchema },
+      // validationLevel: 'strict', // The MongoDB default
+      // validationAction: 'error', // The MongoDB default
       //!end
     });
   })

@@ -3,7 +3,7 @@
 const createService = require('feathers-mongodb');
 const hooks = require('./users-1.hooks');
 //!<DEFAULT> code: mongo_imports
-let $jsonSchema = require('./users-1.mongo');
+// let $jsonSchema = require('./users-1.mongo');
 //!end
 //!code: mongo_init //!end
 
@@ -22,9 +22,9 @@ let moduleExports = function (app) {
   mongoClient.then(db => {
     return db.createCollection('users-1', {
       //!<DEFAULT> code: mongo_create_collection
-      validator: { $jsonSchema: $jsonSchema },
-      validationLevel: 'strict', // The MongoDB default
-      validationAction: 'error', // The MongoDB default
+      // validator: { $jsonSchema: $jsonSchema },
+      // validationLevel: 'strict', // The MongoDB default
+      // validationAction: 'error', // The MongoDB default
       //!end
     });
   })
