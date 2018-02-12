@@ -141,7 +141,7 @@ It is also built in lib/service-specs-expand.js.
     feathersSpecs,
     mapping,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
-    sc: specs.options.semicolon ? ';' : '',
+    sc: specs.options.semicolons ? ';' : '',
 
     merge, // require('lodash.merge')
     EOL, // require('os').EOL

@@ -126,8 +126,15 @@ OK   should no longer require them.
 OK - `generate app` creates a new default.json. It cannot do that on regens.
 OK   Test regen-adapters-1.test-copy will need config/default.json with "mongodb": "mongodb://localhost:27017/z_1"
 OK   and add that to -expected as well.
-
-Test that app.js does not require templates/src/_adapters/* unless they are currently being used.
+OK - Test that app.js does not require templates/src/_adapters/* unless they are currently being used.
+OK - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
+OK   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
+OK - Default specs.options.semicolons = true
+OK - Include semicolons in generated code only is specs.options.semicolons === true
+OK   This option can be changed manually in feathers-gen-specs.json.
+OK   true HAS BEEN TESTED. false IS LEFT FOR MATT & MARSHALL TO TEST.
+OK - Change copuright year from 2017 to 2018
+OK - Remove templates we're now sure will not used.
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -139,11 +146,12 @@ NO   else the two won't be considered "equal".
 NO   --> Let user handle this as we think object keys will be rarely used. 
 NO  Are we scanning node_modules?
 
-LATER - findUser & findPost produce with batchloader "null" found at char 681 near: "followed_by": null, "followi
-LATER   graphql/lib/run-time/feathers/extract-items.js#extractAllItems : return [] instead of null x2.
+
 
 - ajv is likely a dependency for generate service.
 
+- test name.mongo.js
+- test name.validate.js
 
 - Why is startup so slow?
 - add option for semicolons or not

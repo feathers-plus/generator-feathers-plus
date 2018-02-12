@@ -32,24 +32,24 @@ const tests = [
    */
 
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
+  // Also test a missing specs.options is created.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
-  /*
   { testName: 'scaffolding.test', execute: true, specsChanges: [
     [specs => { delete specs.app.providers }, { app: { providers: ['primus'] } }],
     [specs => { delete specs.app.providers }, { app: { providers: ['rest'] } }],
     [specs => { delete specs.app.providers }, { app: { providers: ['rest', 'socketio'] } }],
   ] },
-  */
 
-  // t1, z1 Test creation of app scaffolding.
+  // t1, z1 Test creation of app.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
-    //{ testName: 'app.test', execute: true },
+    { testName: 'app.test', execute: true },
 
   // t2, z2 (z1 ->) Test service creation without authentication scaffolding.
+  // Also test any missing specs.options props are created.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-    //{ testName: 'service.test', execute: true },
+    { testName: 'service.test', execute: true },
 
   // t3,z3 (z2 ->) Test middleware creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -57,7 +57,7 @@ const tests = [
   //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
   //  generate middleware     # mw1, *
   //  generate middleware     # mw2, mw2
-    //{ testName: 'middleware.test', execute: true },
+    { testName: 'middleware.test', execute: true },
 
   // t4, z4 (z2 ->) Test graphql endpoint creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -67,25 +67,25 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-    //{ testName: 'graphql.test', execute: true },
+    { testName: 'graphql.test', execute: true },
 
   // t5, z5 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
-    //{ testName: 'authentication-1.test', execute: true },
+    { testName: 'authentication-1.test', execute: true },
 
   // t6, z6 (z5 ->) Test creation of authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
-    //{ testName: 'authentication-2.test', execute: true },
+    { testName: 'authentication-2.test', execute: true },
 
   // t7, z7 (z6 ->) Test creation of non-authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
-    //{ testName: 'authentication-3.test', execute: true },
+    { testName: 'authentication-3.test', execute: true },
 
   // t8, z8 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -99,19 +99,19 @@ const tests = [
   //  Add schemas for users1, nedb1 and nedb2 --> ADD BOTH schema.properties AND extensions <--
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
-    //{ testName: 'cumulative-1.test', execute: true },
+    { testName: 'cumulative-1.test', execute: true },
 
   // t8-memory, z8-memory The same as t8 & z8 but using @f/memory.
   // Service names remain nedb1 & nedb2.
-    //{ testName: 'cumulative-1-memory.test', execute: true },
+    { testName: 'cumulative-1-memory.test', execute: true },
 
   // t8-mongo, z8-mongo The same as t8 & z8 but using @f/mongodb.
   // Service names remain nedb1 & nedb2; use default connection string.
-    //{ testName: 'cumulative-1-mongo.test', execute: false },
+    { testName: 'cumulative-1-mongo.test', execute: false },
 
   // t8-mongoose, z8-mongoose The same as t8 & z8 but using @f/mongoosedb.
   // Service names remain nedb1 & nedb2; use default connection string.
-    //{ testName: 'cumulative-1-mongoose.test', execute: false },
+    { testName: 'cumulative-1-mongoose.test', execute: false },
 
   // t21, z21 Test switching the user-entity
   // t21
@@ -126,7 +126,6 @@ const tests = [
   //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
   //                            users1, Nedb, /users-1, nedb://../data, auth Y, graphql N
   //  generate service        # NeDB, nedb1, /nedb-1, auth Y (line not needed in test as test regens whole app)
-  /*
   { testName: 'regen-user-entity.test', execute: true, specsChanges: [{
     authentication: { entity: 'users1' },
     services: {
@@ -142,7 +141,6 @@ const tests = [
       },
     }},
   ] },
-  */
 
   // z22 Test that app.js does not require templates/src/_adapters/* unless they are currently being used.
   // Also tests that existing package.json, config/default.json & config/production.json contents are retained.

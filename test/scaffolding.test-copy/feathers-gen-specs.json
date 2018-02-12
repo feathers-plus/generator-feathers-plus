@@ -1,9 +1,5 @@
 {
-  "options": {
-    "ver": "1.0.0",
-    "inspectConflicts": false,
-    "freeze": []
-  },
+  "options": {},
   "app": {
     "name": "z-1",
     "description": "Project z-1",
