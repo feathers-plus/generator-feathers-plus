@@ -136,6 +136,10 @@ OK   true HAS BEEN TESTED. false IS LEFT FOR MATT & MARSHALL TO TEST.
 OK - Change copuright year from 2017 to 2018
 OK - Remove templates we're now sure will not used.
 OK - Generator comments out lines referring to $jsonSchema in name.service.js for mongodb services.
+OK - ajv is a dependency in name.validate.js and has been added to package.json.
+OK - add option for semicolons or not
+OK - Temporarily display timer to show source scan is not slowing the startup.
+OK   Elapsed time is m ainly due to Yeoman.
 
 
 NO - hooks modules should be ifNew: true
@@ -149,14 +153,10 @@ NO   --> Let user handle this as we think object keys will be rarely used.
 NO  Are we scanning node_modules?
 
 
-
-- ajv is likely a dependency for generate service.
-
 - test name.mongo.js
 - test name.validate.js
 
-- Why is startup so slow?
-- add option for semicolons or not
+-
 - what is feathersjs/cli/lib/shell.js
 
 - Let's say we had mongodb services and changed them to NeDB. connentions['mongodb+mongodb'] will
