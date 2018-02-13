@@ -164,9 +164,36 @@ module.exports = function generatorWriting (generator, what) {
       generator.destinationPath('config/production.json'), makeConfig.configProduction(generator)
     );
 
+    // Modify .eslintrc for semicolon option
+    let eslintrcExists = true;
+    let eslintrcChanged = false;
+    let eslintrc = generator.fs.readJSON(join(process.cwd(), '.eslintrc.json'), {});
+
+    if (!Object.keys(eslintrc).length) {
+      eslintrcExists = false;
+      eslintrc = generator.fs.readJSON(join(tpl, '.eslintrc.json'), {});
+    }
+
+    const rules = eslintrc.rules = eslintrc.rules || {};
+    const rulesSemi = rules.semi;
+
+    if (context.sc) {
+      // semicolons used
+      if (!Array.isArray(rulesSemi) || rulesSemi[0] !== 'error') {
+        eslintrc.rules.semi = ['error', 'always'];
+        eslintrcChanged = true;
+      }
+    } else {
+      // semicolons not used
+      if (rulesSemi) {
+        delete rules.semi;
+        eslintrcChanged = true;
+      }
+    }
+
+    // Modules to generate
     todos = [
       copy([tpl, '.editorconfig'], '.editorconfig', true),
-      copy([tpl, '.eslintrc.json'], '.eslintrc.json', true),
       // This name hack is necessary because NPM does not publish `.gitignore` files
       copy([tpl, '_gitignore'], '.gitignore', true),
       copy([tpl, 'LICENSE'], 'LICENSE', true),
@@ -182,6 +209,7 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([tpl, 'src', 'channels.ejs'], [src, 'channels.js'], true),
 
       json(pkg, 'package.json'),
+      json(eslintrc, '.eslintrc.json', null, eslintrcExists && !eslintrcChanged),
       json(configDefault, ['config', 'default.json']),
       json(configProd, ['config', 'production.json']),
 

@@ -143,6 +143,7 @@ OK - Are we scanning node_modules? No.
 OK   Elapsed time is m ainly due to Yeoman.
 OK - Implemented >generate options<.
 OK - Fixed `all` generator to `await Generator.asyncInit(this)`
+OK - Generated .eslintrc.json now respects specs.options.semicolons.
 
 
 NO - hooks modules should be ifNew: true
@@ -157,12 +158,15 @@ NO - Let's say we had mongodb services and changed them to NeDB. connentions['mo
 NO   remain. This causes, for example, src/mongodb.js to still be generated.
 NO   Basically, the generator does not remove info in specs that's no longer relavent.
 
-
+- .eslintrc.jon must handle the semicolon option.
 - test name.mongo.js
 - test name.validate.js
 
+- add comment in hooks regarding context.params.graphql for services included in graphql
 - what is feathersjs/cli/lib/shell.js
 - Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/generator.js
+
+- prompt and inert feathers-authentication-management. Need to handle arrays for SQL servers.
 
 - If we gen an NeDB service & add custom code to name.service.js. Then we regen to mongo. Then we
   regen back to NeDB. We do not include the previous custom code for NeDB. We could have
@@ -176,7 +180,9 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
   scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
 
 - error checking pass over specs (plus some custom code),
-  e.g. email/password exists in schema of user-entity when local auth selected.  
+  e.g. email/password exists in schema of user-entity when local auth selected.
+- what can we do with feathers-sync?  
+- create deployment    
 - create Sequelize schema
 - create fastJoin definitions
 - create for swagger

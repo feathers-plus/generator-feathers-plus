@@ -113,6 +113,9 @@ const tests = [
   // Service names remain nedb1 & nedb2; use default connection string.
     { testName: 'cumulative-1-mongoose.test', execute: false },
 
+  // The same as t8 & z8 but using options: { semicolons: false }
+    { testName: 'cumulative-1-no-semicolons.test', execute: true },
+
   // t21, z21 Test switching the user-entity
   // t21
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
