@@ -8,17 +8,21 @@ const createModel = require('../../models/<%= modelName %>')<%- sc %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
-module.exports = function (app) {
-  <% if (modelName) { %>const Model = createModel(app)<%- sc %><% } %>
-  const paginate = app.get('paginate')<%- sc %>
+let moduleExports = function (app) {
+<% if (modelName) { %>  let Model = createModel(app)<%- sc %><% } %>
+  let paginate = app.get('paginate')<%- sc %>
+  <%- insertFragment('func_init') %>
 
-  const options = {
+  let options = {
     name: '<%= kebabName %>',<% if (modelName) { %>
     Model,<% } %>
     paginate,
     <%- insertFragment('options_more') %>
   }<%- sc %>
+  <%- insertFragment('options_change') %>
 
   // Initialize our service with any options it requires
   app.use('/<%= path %>', createService(options))<%- sc %>
@@ -27,4 +31,11 @@ module.exports = function (app) {
   const service = app.service('<%= path %>')<%- sc %>
 
   service.hooks(hooks)<%- sc %>
+  <%- insertFragment('func_return') %>
 }<%- sc %>
+
+<%- insertFragment('exports') %>
+module.exports = moduleExports<%- sc %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

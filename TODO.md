@@ -144,9 +144,13 @@ OK   Elapsed time is m ainly due to Yeoman.
 OK - Implemented >generate options<.
 OK - Fixed `all` generator to `await Generator.asyncInit(this)`
 OK - Generated .eslintrc.json now respects specs.options.semicolons.
-
 OK - Tracking David's generator. PRs 338-339 regarding typos.
 OK - Made name.validate.js more customizable: added insert points, changed some const to let.
+OK - .eslintrc.jon must handle the semicolon option.
+
+OK - Added insertion points to src/authentication.js
+OK - Fixed names of insertion points in name.service.js fort RethinkDB
+OK - Added insertion points to name.service.js for non-mongodb, non-rethinkdb
 
 
 NO - hooks modules should be ifNew: true
@@ -161,7 +165,30 @@ NO - Let's say we had mongodb services and changed them to NeDB. connentions['mo
 NO   remain. This causes, for example, src/mongodb.js to still be generated.
 NO   Basically, the generator does not remove info in specs that's no longer relavent.
 
-- .eslintrc.jon must handle the semicolon option.
+
+- files without standard insertion points
+    src
+        hooks
+            logger.ejs
+        middleware
+            index.ejs   
+            middleware.ejs 
+        services
+            _model
+                knex-user.ejs (combine with knex.ejs?)
+                sequelize-user.ejs (combine with sequelize.ejs?)
+            _service
+                name.service.ejs    
+                OK name.service-rethinkdb.ejs (badly named insertion points)
+        OK authentication.ejs
+        channels.ejs
+    test
+        services
+            name.test.ejs
+        app.test.ejs
+
+
+
 - test name.mongo.js
 - test name.validate.js
 

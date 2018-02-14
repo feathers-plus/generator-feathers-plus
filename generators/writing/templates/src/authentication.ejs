@@ -6,19 +6,28 @@ const jwt = require('@feathersjs/authentication-jwt')<%- sc %>
 <% if(oauthProviders.length){ %>const oauth2 = require('@feathersjs/authentication-oauth2')<%- sc %><% } %>
 <% oauthProviders.forEach(provider => { %>const <%= provider.strategyName %> = require('<%= provider.module %>')<%- sc %>
 <% }); %>
-module.exports = function (app) {
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+let moduleExports = function (app) {
   const config = app.get('authentication')<%- sc %>
 
   // Set up authentication with the secret
   app.configure(authentication(config))<%- sc %>
   app.configure(jwt())<%- sc %><% if(specs.authentication.strategies.indexOf('local') !== -1) { %>
   app.configure(local())<%- sc %><% } %>
+  <%- insertFragment('loc_1') %>
+<%# -%>
+<%# --- forEach-1 starts below. -%>
 <% oauthProviders.forEach(provider => { %>
   app.configure(oauth2(Object.assign({
     name: '<%= provider.name %>',
     Strategy: <%= provider.strategyName %>
   }, config.<%= provider.name %>)))<%- sc %>
 <% }); %>
+<%# --- forEach-1 ends above. -%>
+  <%- insertFragment('loc_2') %>
+
   // The `authentication` service is used to create a JWT.
   // The before `create` hook registers strategies that can be used
   // to create a new valid JWT (e.g. local or oauth2)
@@ -32,4 +41,11 @@ module.exports = function (app) {
       ]
     }
   })<%- sc %>
+  <%- insertFragment('func_return') %>
 }<%- sc %>
+
+<%- insertFragment('exports') %>
+module.exports = moduleExports<%- sc %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

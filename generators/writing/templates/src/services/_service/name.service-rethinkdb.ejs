@@ -2,13 +2,13 @@
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
 const createService = require('feathers-rethinkdb')<%- sc %>
 const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
-<%- insertFragment('mongo_imports') %>
-<%- insertFragment('mongo_init') %>
+<%- insertFragment('rethink_imports') %>
+<%- insertFragment('rethink_init') %>
 
 let moduleExports = function (app) {
   let Model = app.get('rethinkdbClient')<%- sc %>
   let paginate = app.get('paginate')<%- sc %>
-  <%- insertFragment('mongo_func_init') %>
+  <%- insertFragment('rethink_func_init') %>
 
   const options = {
     name: '<%= snakeName %>',
@@ -23,12 +23,12 @@ let moduleExports = function (app) {
   const service = app.service('<%= path %>')<%- sc %>
 
   service.hooks(hooks)<%- sc %>
-  <%- insertFragment('mongo_func_return') %>
+  <%- insertFragment('rethink_func_return') %>
 }<%- sc %>
-<%- insertFragment('mongo_more') %>
+<%- insertFragment('rethink_more') %>
 
-<%- insertFragment('mongo_exports') %>
+<%- insertFragment('rethink_exports') %>
 module.exports = moduleExports<%- sc %>
 
-<%- insertFragment('mongo_funcs') %>
-<%- insertFragment('mongo_end') %>
+<%- insertFragment('rethink_funcs') %>
+<%- insertFragment('rethink_end') %>
