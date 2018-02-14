@@ -145,6 +145,9 @@ OK - Implemented >generate options<.
 OK - Fixed `all` generator to `await Generator.asyncInit(this)`
 OK - Generated .eslintrc.json now respects specs.options.semicolons.
 
+OK - Tracking David's generator. PRs 338-339 regarding typos.
+OK - Made name.validate.js more customizable: added insert points, changed some const to let.
+
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -176,7 +179,7 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
   It can be scanned every regen. So it we regen from mongo to nedb, we'd pick up the custom
   code that was stashed away before.
   Main problem: If we regen a service, we have to know which modules contain custom code we have
-  to consider for stashing. Basically, if we regen middleware, we won't be regennning graphql, so
+  to consider for stashing. Basically, if we regen middleware, we won't be regen'ing graphql, so
   scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
 
 - error checking pass over specs (plus some custom code),

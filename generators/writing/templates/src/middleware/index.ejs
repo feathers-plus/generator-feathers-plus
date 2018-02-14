@@ -11,13 +11,8 @@ const <%- __temp.camel %> = require('./<%- __temp.kebab %>')<%- sc %>
 
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
-<%# -%>
-<%# --- if-1 starts below. -%>
-<% if (!Object.keys(specs.middlewares || {}).length) { -%>
-  // Add your custom middleware here. Remember, that
-  // in Express the order matters
-<% } -%>
-<%# --- if-1 ends above. -%>
+  // Add your custom middleware here. Remember that
+  // in Express, the order matters.
 <%# -%>
 <%# --- forEach-2 starts below. -%>
 <% __temp0 = [];-%>

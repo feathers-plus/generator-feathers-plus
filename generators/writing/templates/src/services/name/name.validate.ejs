@@ -12,7 +12,7 @@ const ajv = require('ajv')<%- sc %>
   `const ID = 'string'${sc}`,
 ]) %>
 
-const base = merge({},
+let base = merge({},
 <% __jsonSchema = merge({}, feathersSpecs[serviceName]);
    delete __jsonSchema._extensions;
    __str = stringifyPlus(__jsonSchema).replace(/"ID"/g, 'ID')
@@ -21,42 +21,44 @@ const base = merge({},
   <%- insertFragment('base', Object.keys(__jsonSchema).length === 0 ? undefined : `${__str},`) %>
   <%- insertFragment('base_more') %>
 )<%- sc %>
+<%- insertFragment('base_change') %>
 
-const create = merge({},
+let create = merge({},
   base,
   <%- insertFragment('create_more') %>
 )<%- sc %>
 
-const update = merge({},
+let update = merge({},
   base,
   <%- insertFragment('update_more') %>
 )<%- sc %>
 
-const patch = merge({},
+let patch = merge({},
   base,
   { required: undefined },
   <%- insertFragment('patch_more') %>
 )<%- sc %>
+<%- insertFragment('all_change') %>
 
-const validateCreate = options => {
+let validateCreate = options => {
   <%- insertFragment('func_create', [
     `  return validateSchema(create, ajv, options)${sc}`,
   ]) %>
 }<%- sc %>
 
-const validateUpdate = options => {
+let validateUpdate = options => {
   <%- insertFragment('func_update', [
     `  return validateSchema(update, ajv, options)${sc}`,
   ]) %>
 }<%- sc %>
 
-const validatePatch = options => {
+let validatePatch = options => {
   <%- insertFragment('func_patch', [
     `  return validateSchema(patch, ajv, options)${sc}`,
   ]) %>
 }<%- sc %>
 
-const quickValidate = (method, data, options) => {
+let quickValidate = (method, data, options) => {
   try {
     if (method === 'create') validateCreate(options)({ type: 'before', method: 'create', data })<%- sc %>
     if (method === 'update') validateCreate(options)({ type: 'before', method: 'update', data })<%- sc %>
@@ -65,6 +67,7 @@ const quickValidate = (method, data, options) => {
     return err<%- sc %>
   }
 }<%- sc %>
+<%- insertFragment('validate_change') %>
 
 let moduleExports = {
   create,
