@@ -8,9 +8,12 @@
 const <%- __temp.camel %> = require('./<%- __temp.kebab %>')<%- sc %>
 <% }) -%>
 <%# --- forEach-1 ends above. -%>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 // eslint-disable-next-line no-unused-vars
-module.exports = function (app) {
+let moduleExports = function (app) {
+  <%- insertFragment('func_init') %>
   // Add your custom middleware here. Remember that
   // in Express, the order matters.
 <%# -%>
@@ -36,4 +39,11 @@ module.exports = function (app) {
 <% } -%>
 <%# --- if-2 ends above. -%>
   <%- insertFragment('middleware', __temp0.length ? __temp0 : null) %>
+  <%- insertFragment('func_return') %>
 }<%- sc %>
+
+<%- insertFragment('exports') %>
+module.exports = moduleExports<%- sc %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

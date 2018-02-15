@@ -147,10 +147,15 @@ OK - Generated .eslintrc.json now respects specs.options.semicolons.
 OK - Tracking David's generator. PRs 338-339 regarding typos.
 OK - Made name.validate.js more customizable: added insert points, changed some const to let.
 OK - .eslintrc.jon must handle the semicolon option.
-
 OK - Added insertion points to src/authentication.js
 OK - Fixed names of insertion points in name.service.js fort RethinkDB
 OK - Added insertion points to name.service.js for non-mongodb, non-rethinkdb
+
+OK - Added insertion points to src/middleware/index.js
+OK   Not that the middleware modules themselves are never overridden once created.
+OK - Added insertion points to knex-user.ejs
+OK - Added insertion points to sequelize-user.ejs
+OK - `generate options` now lists modules generator never rewritese.g. README.md.
 
 
 NO - hooks modules should be ifNew: true
@@ -169,23 +174,23 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
 - files without standard insertion points
     src
         hooks
-            logger.ejs
+            NO logger.js
         middleware
-            index.ejs   
-            middleware.ejs 
+            OK index.ejs   
+            NO middleware.ejs 
         services
             _model
-                knex-user.ejs (combine with knex.ejs?)
-                sequelize-user.ejs (combine with sequelize.ejs?)
+                OK knex-user.ejs (combine with knex.ejs?)
+                OK sequelize-user.ejs (combine with sequelize.ejs?)
             _service
-                name.service.ejs    
+                OK name.service.ejs    
                 OK name.service-rethinkdb.ejs (badly named insertion points)
         OK authentication.ejs
-        channels.ejs
+        NO channels.ejs
     test
         services
-            name.test.ejs
-        app.test.ejs
+            NO name.test.ejs
+        NO app.test.ejs
 
 
 
@@ -197,6 +202,10 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
 - Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/generator.js
 
 - prompt and inert feathers-authentication-management. Need to handle arrays for SQL servers.
+  - Will need to update feathersjs/authentication to check some extra fields
+  - Figure out how to define schema for extra fields in Sequelize/PSQL,... and Knex/...
+  - Handle outstanding issue with repo.
+  - Write sample emails.
 
 - If we gen an NeDB service & add custom code to name.service.js. Then we regen to mongo. Then we
   regen back to NeDB. We do not include the previous custom code for NeDB. We could have
