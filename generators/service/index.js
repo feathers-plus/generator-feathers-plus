@@ -164,7 +164,7 @@ module.exports = class ServiceGenerator extends Generator {
       default () {
         return !!serviceSpecs.requiresAuth;
       },
-      when: specs.authentication && !ifCalledByAuthentication
+      when: !!specs.authentication && !ifCalledByAuthentication
     }, {
       name: 'graphql',
       message: 'Should this be served by GraphQL?',

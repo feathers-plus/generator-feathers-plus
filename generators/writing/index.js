@@ -628,9 +628,6 @@ module.exports = function generatorWriting (generator, what) {
 
       if (requiresAuth) {
         imports.push(`const { authenticate } = require('@feathersjs/authentication').hooks${sc}`);
-      }
-
-      if (requiresAuth) {
         code.before.all.push('authenticate(\'jwt\')');
       }
 

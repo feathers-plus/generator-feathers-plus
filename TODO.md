@@ -150,13 +150,31 @@ OK - .eslintrc.jon must handle the semicolon option.
 OK - Added insertion points to src/authentication.js
 OK - Fixed names of insertion points in name.service.js fort RethinkDB
 OK - Added insertion points to name.service.js for non-mongodb, non-rethinkdb
-
 OK - Added insertion points to src/middleware/index.js
 OK   Not that the middleware modules themselves are never overridden once created.
 OK - Added insertion points to knex-user.ejs
 OK - Added insertion points to sequelize-user.ejs
 OK - `generate options` now lists modules generator never rewritese.g. README.md.
-
+OK - files without standard insertion points
+       src
+           hooks
+               NO logger.js
+           middleware
+               OK index.ejs   
+               NO middleware.ejs 
+           services
+               _model
+                   OK knex-user.ejs (combine with knex.ejs?)
+                   OK sequelize-user.ejs (combine with sequelize.ejs?)
+               _service
+                   OK name.service.ejs    
+                   OK name.service-rethinkdb.ejs (badly named insertion points)
+           OK authentication.ejs
+           NO channels.ejs
+       test
+           services
+               NO name.test.ejs
+           NO app.test.ejs
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -170,34 +188,15 @@ NO - Let's say we had mongodb services and changed them to NeDB. connentions['mo
 NO   remain. This causes, for example, src/mongodb.js to still be generated.
 NO   Basically, the generator does not remove info in specs that's no longer relavent.
 
-
-- files without standard insertion points
-    src
-        hooks
-            NO logger.js
-        middleware
-            OK index.ejs   
-            NO middleware.ejs 
-        services
-            _model
-                OK knex-user.ejs (combine with knex.ejs?)
-                OK sequelize-user.ejs (combine with sequelize.ejs?)
-            _service
-                OK name.service.ejs    
-                OK name.service-rethinkdb.ejs (badly named insertion points)
-        OK authentication.ejs
-        NO channels.ejs
-    test
-        services
-            NO name.test.ejs
-        NO app.test.ejs
-
-
+- PUT BACK f+/graphql in package.json for fx/cli-gen-ex
 
 - test name.mongo.js
 - test name.validate.js
 
+- add f-auth-mgnt fields to graphql auth
+
 - add comment in hooks regarding context.params.graphql for services included in graphql
+- add sort one 1 prop in array of objects, sort on multiple prop names to BatchLoader. See f-x/common-utils
 - what is feathersjs/cli/lib/shell.js
 - Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/generator.js
 

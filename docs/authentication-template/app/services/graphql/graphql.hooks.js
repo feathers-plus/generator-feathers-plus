@@ -1,32 +1,23 @@
 
-// Hooks for service `nedb1`. (Can be re-generated.)
+// Hooks for service `graphql`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
-const { ObjectID } = require('mongodb');
 //!code: imports //!end
 
 //!<DEFAULT> code: used
 // eslint-disable-next-line no-unused-vars
-const { iff, mongoKeys } = commonHooks;
+const { iff } = commonHooks;
 //!end
-//!<DEFAULT> code: foreign_keys
-// eslint-disable-next-line no-unused-vars
-const foreignKeys = [
-  'id',
-  '_id',
-  'nedb2Id'
-];
-//!end
+
 //!code: init //!end
 
 let moduleExports = {
   before: {
     // Your hooks should include:
     //   all   : authenticate('jwt')
-    //   find  : mongoKeys(ObjectID, foreignKeys)
     //!<DEFAULT> code: before
     all: [ authenticate('jwt') ],
-    find: [ mongoKeys(ObjectID, foreignKeys) ],
+    find: [],
     get: [],
     create: [],
     update: [],

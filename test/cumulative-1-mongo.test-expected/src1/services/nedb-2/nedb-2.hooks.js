@@ -11,9 +11,9 @@ const { iff, mongoKeys } = commonHooks;
 //!<DEFAULT> code: foreign_keys
 // eslint-disable-next-line no-unused-vars
 const foreignKeys = [
-  "id",
-  "_id",
-  "nedb1Id"
+  'id',
+  '_id',
+  'nedb1Id'
 ];
 //!end
 //!code: init //!end

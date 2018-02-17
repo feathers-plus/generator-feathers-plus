@@ -14,7 +14,7 @@
 <% if ((mapping.feathers[serviceName] || {}).adapter === 'mongodb') { -%>
 <%- insertFragment('foreign_keys', [
   '// eslint-disable-next-line no-unused-vars',
-  `const foreignKeys = ${stringifyPlus(feathersSpecs[serviceName]._extensions.foreignKeys)}${sc}`,
+  `const foreignKeys = ${stringifyPlus(feathersSpecs[serviceName]._extensions.foreignKeys).replace(/"/g, '\'')}${sc}`,
 ]) -%>
 <% } -%>
 <%# --- if-3 ends above. -%>

@@ -81,7 +81,7 @@ module.exports = class ServiceGenerator extends Generator {
       message: 'Does the service require authentication?',
       type: 'confirm',
       default: graphqlSpecs.requiresAuth,
-      when: !!specs._defaultJson.authentication
+      when: !!specs.authentication
     }];
 
     return this.prompt(prompts)
