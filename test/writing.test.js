@@ -176,7 +176,7 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = 'graphql-auth.test'; // null
+const runJustThisTest = null;
 
 describe('writing.test.js', function () {
   tests.forEach(({ testName, execute = true, specsChanges = [] }) => {

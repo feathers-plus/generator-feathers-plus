@@ -4,7 +4,7 @@
 const { getByDot, setByDot } = require('feathers-hooks-common')<%- sc %>
 <%- insertFragment('imports') %>
 
-let graphqlContent; // Our handle to the 'content' param in GraphQL resolvers.
+let graphqlContent<%- sc %> // Our handle to the 'content' param in GraphQL resolvers.
 <%- insertFragment('init') %>
 
 let moduleExports = function batchLoaderResolvers(app, options) {

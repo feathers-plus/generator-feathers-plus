@@ -3,16 +3,23 @@
 // Define GraphQL resolvers using Feathers services and BatchLoaders. (Can be re-generated.)
 const { getByDot, setByDot } = require('feathers-hooks-common')
 //!code: imports //!end
+
+let graphqlContent // Our handle to the 'content' param in GraphQL resolvers.
 //!code: init //!end
 
 let moduleExports = function batchLoaderResolvers(app, options) {
   // eslint-disable-next-line
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
     feathersBatchLoader: { feathersBatchLoader } } = options
+
   //!<DEFAULT> code: max-batch-size
   let defaultPaginate = app.get('paginate')
   let maxBatchSize = defaultPaginate && typeof defaultPaginate.max === 'number' ?
     defaultPaginate.max : undefined
+  //!end
+
+  //!<DEFAULT> code: extra_auth_props
+  const convertArgs = convertArgsToFeathers([])
   //!end
 
   //!<DEFAULT> code: services
@@ -67,7 +74,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     case 'Nedb1.nedb2':
       return feathersBatchLoader(dataLoaderName, '!', '_id',
         keys => {
-          feathersParams = convertArgsToFeathers(args, null, {
+          feathersParams = convertArgs(args, graphqlContent, null, {
             query: { _id: { $in: keys }, $sort: undefined },
             _populate: 'skip', paginate: false
           })
@@ -82,7 +89,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     case 'Nedb2.nedb1':
       return feathersBatchLoader(dataLoaderName, '!', '_id',
         keys => {
-          feathersParams = convertArgsToFeathers(args, null, {
+          feathersParams = convertArgs(args, graphqlContent, null, {
             query: { _id: { $in: keys }, $sort: undefined },
             _populate: 'skip', paginate: false
           })
@@ -124,13 +131,15 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       //!<DEFAULT> code: query-Nedb1
       // getNedb1(query: JSON, params: JSON, key: JSON): Nedb1
       getNedb1 (parent, args, content, ast) {
-        const feathersParams = convertArgsToFeathers(args, ast)
+        graphqlContent = content
+        const feathersParams = convertArgs(args, content, ast)
         return nedb1.get(args.key, feathersParams).then(extractFirstItem)
       },
 
       // findNedb1(query: JSON, params: JSON): [Nedb1!]
       findNedb1(parent, args, content, ast) {
-        const feathersParams = convertArgsToFeathers(args, ast, { query: { $sort: {   _id: 1 } } })
+        graphqlContent = content
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } })
         return nedb1.find(feathersParams).then(paginate(content)).then(extractAllItems)
       },
       //!end
@@ -138,13 +147,15 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       //!<DEFAULT> code: query-Nedb2
       // getNedb2(query: JSON, params: JSON, key: JSON): Nedb2
       getNedb2 (parent, args, content, ast) {
-        const feathersParams = convertArgsToFeathers(args, ast)
+        graphqlContent = content
+        const feathersParams = convertArgs(args, content, ast)
         return nedb2.get(args.key, feathersParams).then(extractFirstItem)
       },
 
       // findNedb2(query: JSON, params: JSON): [Nedb2!]
       findNedb2(parent, args, content, ast) {
-        const feathersParams = convertArgsToFeathers(args, ast, { query: { $sort: {   _id: 1 } } })
+        graphqlContent = content
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } })
         return nedb2.find(feathersParams).then(paginate(content)).then(extractAllItems)
       },
       //!end
