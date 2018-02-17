@@ -34,24 +34,26 @@ const tests = [
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
+  /*
   { testName: 'scaffolding.test', specsChanges: [
     [specs => { delete specs.app.providers }, { app: { providers: ['primus'] } }],
     [specs => { delete specs.app.providers }, { app: { providers: ['rest'] } }],
     [specs => { delete specs.app.providers }, { app: { providers: ['rest', 'socketio'] } }],
   ] },
+  */
 
-  // t1, z1 Test creation of app.
+  // t01, z01 Test creation of app.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
     { testName: 'app.test' },
 
-  // t2, z2 (z1 ->) Test service creation without authentication scaffolding.
+  // t02, z02 (z01 ->) Test service creation without authentication scaffolding.
   // Also test any missing specs.options props are created.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
     { testName: 'service.test' },
 
-  // t3,z3 (z2 ->) Test middleware creation.
+  // t03, z03 (z02 ->) Test middleware creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
@@ -59,35 +61,46 @@ const tests = [
   //  generate middleware     # mw2, mw2
     { testName: 'middleware.test' },
 
-  // t4, z4 (z2 ->) Test graphql endpoint creation.
+  // t04, z04 (z02 ->) Test graphql endpoint creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-  // z4 only
+  // z04 only
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
     { testName: 'graphql.test' },
 
-  // t5, z5 Test authentication scaffolding.
+  // (z04 ->) Test graphql endpoint creation with authentication.
+  //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
+  //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
+  //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
+  //* generate service        # NeDB, nedb2, /nedb-2,                 auth Y, graphql Y
+  // z04 only
+  //  Add schemas for nedb1 and nedb2
+  //  Regenerate nedb1 and nedb2
+  //  generate graphql        # service calls, /graphql,
+  { testName: 'graphql-auth.test' },
+
+  // t05, z05 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
     { testName: 'authentication-1.test' },
 
-  // t6, z6 (z5 ->) Test creation of authenticated service with auth scaffolding.
+  // t06, z06 (z05 ->) Test creation of authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
     { testName: 'authentication-2.test' },
 
-  // t7, z7 (z6 ->) Test creation of non-authenticated service with auth scaffolding.
+  // t07, z07 (z06 ->) Test creation of non-authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
     { testName: 'authentication-3.test' },
 
-  // t8, z8 Test everything together. Mainly used to test different adapters.
+  // t08, z08 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
   //                            users1, Nedb, /users-1, nedb://../data, auth Y, graphql N
@@ -95,25 +108,25 @@ const tests = [
   //  generate service        # NeDB, nedb2, /nedb-2, auth N, graphql Y
   //  generate middleware     # mw1, *
   //  generate middleware     # mw2, mw2
-  // z8 only
+  // z08 only
   //  Add schemas for users1, nedb1 and nedb2 --> ADD BOTH schema.properties AND extensions <--
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
     { testName: 'cumulative-1.test' },
 
-  // t8-memory, z8-memory The same as t8 & z8 but using @f/memory.
+  // t08-memory, z08-memory The same as t08 & z08 but using @f/memory.
   // Service names remain nedb1 & nedb2.
     { testName: 'cumulative-1-memory.test' },
 
-  // t8-mongo, z8-mongo The same as t8 & z8 but using @f/mongodb.
+  // t08-mongo, z08-mongo The same as t08 & z08 but using @f/mongodb.
   // Service names remain nedb1 & nedb2; use default connection string.
     { testName: 'cumulative-1-mongo.test' },
 
-  // t8-mongoose, z8-mongoose The same as t8 & z8 but using @f/mongoosedb.
+  // t08-mongoose, z08-mongoose The same as t08 & z08 but using @f/mongoosedb.
   // Service names remain nedb1 & nedb2; use default connection string.
     { testName: 'cumulative-1-mongoose.test' },
 
-  // The same as t8 & z8 but using options: { semicolons: false }
+  // The same as t08 & z08 but using options: { semicolons: false }
     { testName: 'cumulative-1-no-semicolons.test' },
 
   // t21, z21 Test switching the user-entity
@@ -163,9 +176,12 @@ const tests = [
 ];
 
 let appDir;
+const runJustThisTest = 'graphql-auth.test'; // null
 
 describe('writing.test.js', function () {
   tests.forEach(({ testName, execute = true, specsChanges = [] }) => {
+    if (runJustThisTest && runJustThisTest !== testName) return;
+
     describe(testName, function () {
       it('writes code expected', () => {
         return runFirstGeneration(testName, { skipInstall: true })

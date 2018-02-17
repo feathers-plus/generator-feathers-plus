@@ -3,16 +3,23 @@
 // Define GraphQL resolvers using Feathers services and BatchLoaders. (Can be re-generated.)
 const { getByDot, setByDot } = require('feathers-hooks-common')<%- sc %>
 <%- insertFragment('imports') %>
+
+let graphqlContent; // Our handle to the 'content' param in GraphQL resolvers.
 <%- insertFragment('init') %>
 
 let moduleExports = function batchLoaderResolvers(app, options) {
   // eslint-disable-next-line
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
     feathersBatchLoader: { feathersBatchLoader } } = options<%- sc %>
+
   <%- insertFragment('max-batch-size', [
     `  let defaultPaginate = app.get(\'paginate\')${sc}`,
     '  let maxBatchSize = defaultPaginate && typeof defaultPaginate.max === \'number\' ?',
     `    defaultPaginate.max : undefined${sc}`,
+  ]) %>
+
+  <%- insertFragment('extra_auth_props', [
+    `  const convertArgs = convertArgsToFeathers([])${sc}`,
   ]) %>
 
 <% let __temp = Object.keys(mapping.feathers).map(serviceName =>
@@ -85,7 +92,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     `    case '${graphqlName}.${fieldName}':`,
     `      return feathersBatchLoader(dataLoaderName, '${__code}', '${__addField.relation.otherTable}',`,
     '        keys => {',
-    '          feathersParams = convertArgsToFeathers(args, null, {',
+    '          feathersParams = convertArgs(args, graphqlContent, null, {',
     `            query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined },`,
     '            _populate: \'skip\', paginate: false',
     `          })${sc}`,
@@ -163,13 +170,15 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
     `      get${graphqlName} (parent, args, content, ast) {`,
-    `        const feathersParams = convertArgsToFeathers(args, ast)${sc}`,
+    `        graphqlContent = content${sc}`,
+    `        const feathersParams = convertArgs(args, content, ast)${sc}`,
     `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem)${sc}`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
     `      find${graphqlName}(parent, args, content, ast) {`,
-    `        const feathersParams = convertArgsToFeathers(args, ast${__graphql.serviceSortParams})${sc}`,
+    `        graphqlContent = content${sc}`,
+    `        const feathersParams = convertArgs(args, content, ast${__graphql.serviceSortParams})${sc}`,
     `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems)${sc}`,
     '      },',
   ];

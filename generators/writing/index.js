@@ -110,9 +110,7 @@ module.exports = function generatorWriting (generator, what) {
       app(generator);
 
       Object.keys(specs.services || {}).forEach(name => {
-        if (name !== 'graphql') {
-          service(generator, name);
-        }
+        service(generator, name);
       });
 
       authentication(generator);

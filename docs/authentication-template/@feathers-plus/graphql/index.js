@@ -12,6 +12,9 @@ class Service {
   constructor (options = {}) {
     this._options = Object.assign({}, options, runTime); // Define options & convenience methods.
     this.sqlDb = undefined;
+
+    const props = this._options.extraAuthProps || [];
+    this._extraAuthProps = Array.isArray(props) ? props : [props];
   }
 
   setup (app) {
@@ -51,8 +54,15 @@ class Service {
       provider: params.provider,
       user: params.user,
       authenticated: params.authenticated,
-      // ********************* make configurable
     }
+
+    const props = this._options.extraAuthProps || [];
+
+    (Array.isArray(props) ? props : [props]).forEach(name => {
+      if (name in params && !(name in content)) {
+        content[name] = params[name];
+      }
+    });
 
     // Execute GraphQL request.
     /*

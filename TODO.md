@@ -175,6 +175,9 @@ OK - files without standard insertion points
            services
                NO name.test.ejs
            NO app.test.ejs
+           
+Eanabled auth for
+         
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?

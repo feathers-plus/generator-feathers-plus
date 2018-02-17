@@ -6,6 +6,9 @@
 
 let moduleExports = function serviceResolvers(app, options) {
   const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options<%- sc %>
+  <%- insertFragment('extra_auth_props', [
+    `  const convertArgs = convertArgsToFeathers([])${sc}`,
+  ]) %>
 
 <% let __temp = Object.keys(mapping.feathers).map(serviceName =>
   `  let ${serviceName} = app.service('${mapping.feathers[serviceName].path}')${sc}`
@@ -34,7 +37,7 @@ let moduleExports = function serviceResolvers(app, options) {
 <% if (__addField.serviceName) {
     __temp = [
         '        (parent, args, content, ast) => {',
-        '          const feathersParams = convertArgsToFeathers(args, ast, {',
+        '          const feathersParams = convertArgs(args, content, ast, {',
         `            query: { ${__addField.relation.otherTable}: `
             + `${__addField.ourTableIsArray ? '{ $in: ' : ''}parent.${__addField.relation.ourTable}${__addField.ourTableIsArray ? ' }' : ''}`
             + `${__addField.isArray ? `, $sort: undefined` : ''} }`
@@ -68,13 +71,13 @@ let moduleExports = function serviceResolvers(app, options) {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
     `      get${graphqlName} (parent, args, content, ast) {`,
-    `        const feathersParams = convertArgsToFeathers(args, ast)${sc}`,
+    `        const feathersParams = convertArgs(args, content, ast)${sc}`,
     `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem)${sc}`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
     `      find${graphqlName}(parent, args, content, ast) {`,
-    `        const feathersParams = convertArgsToFeathers(args, ast${__graphql.serviceSortParams})${sc}`,
+    `        const feathersParams = convertArgs(args, content, ast${__graphql.serviceSortParams})${sc}`,
     `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems)${sc}`,
     '      },',
   ];
