@@ -80,7 +80,7 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-  { testName: 'graphql-auth.test' },
+    { testName: 'graphql-auth.test', execute: false },
 
   // t05, z05 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio

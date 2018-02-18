@@ -3,8 +3,6 @@
 // Define GraphQL resolvers using Feathers services and BatchLoaders. (Can be re-generated.)
 const { getByDot, setByDot } = require('feathers-hooks-common');
 //!code: imports //!end
-
-let graphqlContent; // Our handle to the 'content' param in GraphQL resolvers.
 //!code: init //!end
 
 let moduleExports = function batchLoaderResolvers(app, options) {
@@ -74,7 +72,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     case 'Nedb1.nedb2':
       return feathersBatchLoader(dataLoaderName, '!', '_id',
         keys => {
-          feathersParams = convertArgs(args, graphqlContent, null, {
+          feathersParams = convertArgs(args, content, null, {
             query: { _id: { $in: keys }, $sort: undefined },
             _populate: 'skip', paginate: false
           });
@@ -89,7 +87,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     case 'Nedb2.nedb1':
       return feathersBatchLoader(dataLoaderName, '!', '_id',
         keys => {
-          feathersParams = convertArgs(args, graphqlContent, null, {
+          feathersParams = convertArgs(args, content, null, {
             query: { _id: { $in: keys }, $sort: undefined },
             _populate: 'skip', paginate: false
           });
@@ -131,14 +129,12 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       //!<DEFAULT> code: query-Nedb1
       // getNedb1(query: JSON, params: JSON, key: JSON): Nedb1
       getNedb1 (parent, args, content, ast) {
-        graphqlContent = content;
         const feathersParams = convertArgs(args, content, ast);
         return nedb1.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findNedb1(query: JSON, params: JSON): [Nedb1!]
       findNedb1(parent, args, content, ast) {
-        graphqlContent = content;
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
         return nedb1.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
@@ -147,14 +143,12 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       //!<DEFAULT> code: query-Nedb2
       // getNedb2(query: JSON, params: JSON, key: JSON): Nedb2
       getNedb2 (parent, args, content, ast) {
-        graphqlContent = content;
         const feathersParams = convertArgs(args, content, ast);
         return nedb2.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findNedb2(query: JSON, params: JSON): [Nedb2!]
       findNedb2(parent, args, content, ast) {
-        graphqlContent = content;
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
         return nedb2.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },

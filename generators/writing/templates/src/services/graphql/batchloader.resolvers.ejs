@@ -3,8 +3,6 @@
 // Define GraphQL resolvers using Feathers services and BatchLoaders. (Can be re-generated.)
 const { getByDot, setByDot } = require('feathers-hooks-common')<%- sc %>
 <%- insertFragment('imports') %>
-
-let graphqlContent<%- sc %> // Our handle to the 'content' param in GraphQL resolvers.
 <%- insertFragment('init') %>
 
 let moduleExports = function batchLoaderResolvers(app, options) {
@@ -92,7 +90,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     `    case '${graphqlName}.${fieldName}':`,
     `      return feathersBatchLoader(dataLoaderName, '${__code}', '${__addField.relation.otherTable}',`,
     '        keys => {',
-    '          feathersParams = convertArgs(args, graphqlContent, null, {',
+    '          feathersParams = convertArgs(args, content, null, {',
     `            query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined },`,
     '            _populate: \'skip\', paginate: false',
     `          })${sc}`,
@@ -170,14 +168,12 @@ let moduleExports = function batchLoaderResolvers(app, options) {
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
     `      get${graphqlName} (parent, args, content, ast) {`,
-    `        graphqlContent = content${sc}`,
     `        const feathersParams = convertArgs(args, content, ast)${sc}`,
     `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem)${sc}`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
     `      find${graphqlName}(parent, args, content, ast) {`,
-    `        graphqlContent = content${sc}`,
     `        const feathersParams = convertArgs(args, content, ast${__graphql.serviceSortParams})${sc}`,
     `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems)${sc}`,
     '      },',
