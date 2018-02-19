@@ -3,15 +3,24 @@
 // !code: imports // !end
 // !code: init // !end
 
+// Define the model using JSON-schema
 let schema = {
   // !<DEFAULT> code: schema_header
   title: 'Nedb1',
   description: 'Nedb1 database.',
   // !end
   // !code: schema_definitions // !end
+
+  // Required fields.
   required: [
     // !code: schema_required // !end
   ],
+  // Fields with unique values.
+  uniqueItemProperties: [
+    // !code: schema_unique // !end
+  ],
+
+  // Fields in the model.
   properties: {
     // !code: schema_properties
     id: { type: 'ID' },
@@ -22,7 +31,9 @@ let schema = {
   // !code: schema_more // !end
 };
 
+// Define optional, non-JSON-schema extensions.
 let extensions = {
+  // GraphQL generation.
   graphql: {
     // !code: graphql_header
     name: 'Nedb1',

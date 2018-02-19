@@ -174,7 +174,7 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = 'cumulative-1.test' //null;
+const runJustThisTest = null;
 
 describe('writing.test.js', function () {
   tests.forEach(({ testName, execute = true, specsChanges = [] }) => {

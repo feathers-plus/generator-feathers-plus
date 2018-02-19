@@ -209,6 +209,11 @@ OK - Custom code is recognized when it starts with: ['// !code:', '// !<> code:'
 OK   '//!code:', '// ! code:'];
 OK - Custom code is recognized when it ends with: ['// !end', '//!end'];
 OK - Changed test suite in 7,500+ places.
+OK - Added comments to name.schema.js so people feel more comfortable adding models.
+OK - Added uniqueItemProperties (name borrowed from Ajv extensions)
+OK   to name.schema.js to identify fields with unique values in collection.
+OK - Mongoose model now adds `required: true` for required props.
+OK - Mongoose model now adds `unique: true` for uniqueItemProperties props.
          
 
 NO - hooks modules should be ifNew: true
@@ -225,11 +230,6 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
 
 - PUT BACK f+/graphql in package.json for fx/cli-gen-ex
 
-- add comment name.schema.js that its a JSON-schema schema.
-- Perhaps we should have `unique: []` for unique-in-file fields in service.schema.js.
-- Support `// !code`, `// !<> code`, `//! end`
-
-- Allow `//! code` and `//! <DEFAULT>`
 - test name.mongo.js
 - test name.validate.js
 
