@@ -18,11 +18,11 @@ const appHooks = require('./app.hooks')
 const channels = require('./channels')
 const authentication = require('./authentication')
 
-//!code: imports //!end
-//!code: init //!end
+// !code: imports // !end
+// !code: init // !end
 
 const app = express(feathers())
-//!code: use_start //!end
+// !code: use_start // !end
 
 // Load app configuration
 app.configure(configuration())
@@ -35,10 +35,10 @@ app.use(express.urlencoded({ extended: true }))
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')))
 // Host the public folder
 app.use('/', express.static(app.get('public')))
-//!code: use_end //!end
+// !code: use_end // !end
 
 // Set up Plugins and providers
-//!code: config_start //!end
+// !code: config_start // !end
 app.configure(express.rest())
 app.configure(socketio())
 
@@ -51,18 +51,18 @@ app.configure(services)
 app.configure(channels)
 // Configure authentication (see `authentication.js`)
 app.configure(authentication)
-//!code: config_middle //!end
+// !code: config_middle // !end
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound())
 app.use(express.errorHandler({ logger }))
-//!code: config_end //!end
+// !code: config_end // !end
 
 app.hooks(appHooks)
 
 const moduleExports = app
-//!code: exports //!end
+// !code: exports // !end
 module.exports = moduleExports
 
-//!code: funcs //!end
-//!code: end //!end
+// !code: funcs // !end
+// !code: end // !end

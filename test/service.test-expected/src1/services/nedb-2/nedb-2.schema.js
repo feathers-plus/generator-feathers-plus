@@ -1,26 +1,26 @@
 
 // Define the Feathers schema for service `nedb2`. (Can be re-generated.)
-//!code: imports //!end
-//!code: init //!end
+// !code: imports // !end
+// !code: init // !end
 
 let schema = {
-  //!<DEFAULT> code: schema_header
+  // !<DEFAULT> code: schema_header
   title: 'Nedb2',
   description: 'Nedb2 database.',
-  //!end
-  //!code: schema_definitions //!end
+  // !end
+  // !code: schema_definitions // !end
   required: [
-    //!code: schema_required //!end
+    // !code: schema_required // !end
   ],
   properties: {
-    //!code: schema_properties //!end
+    // !code: schema_properties // !end
   },
-  //!code: schema_more //!end
+  // !code: schema_more // !end
 };
 
 let extensions = {
   graphql: {
-    //!<DEFAULT> code: graphql_header
+    // !<DEFAULT> code: graphql_header
     // name: 'Nedb2',
     // service: {
     //   sort: { __id__: 1 },
@@ -32,29 +32,29 @@ let extensions = {
     //     __authorId__: '__author_id__',
     //   },
     // },
-    //!end
+    // !end
     discard: [
-      //!code: graphql_discard //!end
+      // !code: graphql_discard // !end
     ],
     add: {
-      //!<DEFAULT> code: graphql_add
+      // !<DEFAULT> code: graphql_add
       // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: '__id__' } },
-      //!end
+      // !end
     },
-    //!code: graphql_more //!end
+    // !code: graphql_more // !end
   },
 };
 
-//!code: more //!end
+// !code: more // !end
 
 let moduleExports = {
   schema,
   extensions,
-  //!code: moduleExports //!end
+  // !code: moduleExports // !end
 };
 
-//!code: exports //!end
+// !code: exports // !end
 module.exports = moduleExports;
 
-//!code: funcs //!end
-//!code: end //!end
+// !code: funcs // !end
+// !code: end // !end

@@ -34,13 +34,11 @@ const tests = [
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
-  /*
   { testName: 'scaffolding.test', specsChanges: [
-    [specs => { delete specs.app.providers }, { app: { providers: ['primus'] } }],
-    [specs => { delete specs.app.providers }, { app: { providers: ['rest'] } }],
-    [specs => { delete specs.app.providers }, { app: { providers: ['rest', 'socketio'] } }],
+    [specs => { delete specs.app.providers; }, { app: { providers: ['primus'] } }],
+    [specs => { delete specs.app.providers; }, { app: { providers: ['rest'] } }],
+    [specs => { delete specs.app.providers; }, { app: { providers: ['rest', 'socketio'] } }],
   ] },
-  */
 
   // t01, z01 Test creation of app.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -176,7 +174,7 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = null;
+const runJustThisTest = 'cumulative-1.test' //null;
 
 describe('writing.test.js', function () {
   tests.forEach(({ testName, execute = true, specsChanges = [] }) => {

@@ -4,16 +4,16 @@
 const { validateSchema } = require('feathers-hooks-common')
 const merge = require('lodash.merge')
 const ajv = require('ajv')
-//!code: imports //!end
-//!code: init //!end
+// !code: imports // !end
+// !code: init // !end
 
-//!<DEFAULT> code: set_id_type
+// !<DEFAULT> code: set_id_type
 // eslint-disable-next-line no-unused-vars
 const ID = 'string'
-//!end
+// !end
 
 let base = merge({},
-  //!<DEFAULT> code: base
+  // !<DEFAULT> code: base
   {
     title: "Nedb1",
     description: "Nedb1 database.",
@@ -30,44 +30,44 @@ let base = merge({},
       }
     }
   },
-  //!end
-  //!code: base_more //!end
+  // !end
+  // !code: base_more // !end
 )
-//!code: base_change //!end
+// !code: base_change // !end
 
 let create = merge({},
   base,
-  //!code: create_more //!end
+  // !code: create_more // !end
 )
 
 let update = merge({},
   base,
-  //!code: update_more //!end
+  // !code: update_more // !end
 )
 
 let patch = merge({},
   base,
   { required: undefined },
-  //!code: patch_more //!end
+  // !code: patch_more // !end
 )
-//!code: all_change //!end
+// !code: all_change // !end
 
 let validateCreate = options => {
-  //!<DEFAULT> code: func_create
+  // !<DEFAULT> code: func_create
   return validateSchema(create, ajv, options)
-  //!end
+  // !end
 }
 
 let validateUpdate = options => {
-  //!<DEFAULT> code: func_update
+  // !<DEFAULT> code: func_update
   return validateSchema(update, ajv, options)
-  //!end
+  // !end
 }
 
 let validatePatch = options => {
-  //!<DEFAULT> code: func_patch
+  // !<DEFAULT> code: func_patch
   return validateSchema(patch, ajv, options)
-  //!end
+  // !end
 }
 
 let quickValidate = (method, data, options) => {
@@ -79,7 +79,7 @@ let quickValidate = (method, data, options) => {
     return err
   }
 }
-//!code: validate_change //!end
+// !code: validate_change // !end
 
 let moduleExports = {
   create,
@@ -89,11 +89,11 @@ let moduleExports = {
   validateUpdate,
   validatePatch,
   quickValidate,
-  //!code: moduleExports //!end
+  // !code: moduleExports // !end
 }
 
-//!code: exports //!end
+// !code: exports // !end
 module.exports = moduleExports
 
-//!code: funcs //!end
-//!code: end //!end
+// !code: funcs // !end
+// !code: end // !end

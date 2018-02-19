@@ -102,7 +102,7 @@ let moduleExports = function(){
   const service = app.service('/graphql')<%- sc %>
 
   service.hooks(hooks)<%- sc %>
-  //!code: func_return //!end
+  <%- insertFragment('func_return') %>
 }<%- sc %>
 
 <%- insertFragment('exports') %>

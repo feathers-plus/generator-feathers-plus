@@ -3,28 +3,28 @@
 const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { ObjectID } = require('mongodb');
-//!code: imports //!end
+// !code: imports // !end
 
-//!<DEFAULT> code: used
+// !<DEFAULT> code: used
 // eslint-disable-next-line no-unused-vars
 const { iff, mongoKeys } = commonHooks;
-//!end
-//!<DEFAULT> code: foreign_keys
+// !end
+// !<DEFAULT> code: foreign_keys
 // eslint-disable-next-line no-unused-vars
 const foreignKeys = [
   'id',
   '_id',
   'nedb2Id'
 ];
-//!end
-//!code: init //!end
+// !end
+// !code: init // !end
 
 let moduleExports = {
   before: {
     // Your hooks should include:
     //   all   : authenticate('jwt')
     //   find  : mongoKeys(ObjectID, foreignKeys)
-    //!<DEFAULT> code: before
+    // !<DEFAULT> code: before
     all: [ authenticate('jwt') ],
     find: [ mongoKeys(ObjectID, foreignKeys) ],
     get: [],
@@ -32,11 +32,11 @@ let moduleExports = {
     update: [],
     patch: [],
     remove: []
-    //!end
+    // !end
   },
 
   after: {
-    //!<DEFAULT> code: after
+    // !<DEFAULT> code: after
     all: [],
     find: [],
     get: [],
@@ -44,11 +44,11 @@ let moduleExports = {
     update: [],
     patch: [],
     remove: []
-    //!end
+    // !end
   },
 
   error: {
-    //!<DEFAULT> code: error
+    // !<DEFAULT> code: error
     all: [],
     find: [],
     get: [],
@@ -56,13 +56,13 @@ let moduleExports = {
     update: [],
     patch: [],
     remove: []
-    //!end
+    // !end
   },
-  //!code: moduleExports //!end
+  // !code: moduleExports // !end
 };
 
-//!code: exports //!end
+// !code: exports // !end
 module.exports = moduleExports;
 
-//!code: funcs //!end
-//!code: end //!end
+// !code: funcs // !end
+// !code: end // !end

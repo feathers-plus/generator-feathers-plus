@@ -175,8 +175,40 @@ OK - files without standard insertion points
            services
                NO name.test.ejs
            NO app.test.ejs
-           
-Eanabled auth for
+OK - Enabled Feathers authentication on services for services called in
+     GraphQL resolver functions.
+     Combined changes for graphql and generator-feathers-plus
+     - Summary:
+     - params.provider, user & authenticated are copied from the
+       graphql service call into the params for every Feathers service call
+       in a resolver or BatchLoader.
+     - If you need additional props to be copied over, include their names in
+       `options.extraAuthProps` and `convertArgsToFeathers`. See below.
+     - For custom resolvers or BatchLoaders, you need to record the
+       `convertArgsToFeathers()` call as explained in the details.
+     - Note you can enable authentication on a Feathers service or graphql
+       only if you've run `generate authentication` first.
+     - Details:
+     - 'content' param in resolver calls now contains
+       provider: params.provider, user: params.user &
+       authenticated: params.authenticated (if any) from the /graphql call.
+     - In `const createdService = createService(options);`
+       options.extraAuthProps can pass an array of additional prop names
+       to be copied from params to content.
+       This allows other auth-related props to be copied into content.
+     - The previous `convertArgsToFeathers(args, ast, {...})` is recoded to
+       `const convertArgs = convertArgsToFeathers([/* prop names */]);`
+       `...`
+       `convertArgs(args, content, ast, {...})`
+       where the `pop names` would normally be the same names used in
+       `options.extraAuthProps`. These are additional props to copy into parms
+       for the Feathers service call being made in the resolver function.  
+OK - Custom code eye-catchers changed to avoid issues with linters.    
+OK - The generated code use/converts to: '// !code:', '// !end', '// !<DEFAULT> code:'            
+OK - Custom code is recognized when it starts with: ['// !code:', '// !<> code:',
+OK   '//!code:', '// ! code:'];
+OK - Custom code is recognized when it ends with: ['// !end', '//!end'];
+OK - Changed test suite in 7,500+ places.
          
 
 NO - hooks modules should be ifNew: true
@@ -193,6 +225,11 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
 
 - PUT BACK f+/graphql in package.json for fx/cli-gen-ex
 
+- add comment name.schema.js that its a JSON-schema schema.
+- Perhaps we should have `unique: []` for unique-in-file fields in service.schema.js.
+- Support `// !code`, `// !<> code`, `//! end`
+
+- Allow `//! code` and `//! <DEFAULT>`
 - test name.mongo.js
 - test name.validate.js
 
@@ -208,6 +245,7 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
   - Figure out how to define schema for extra fields in Sequelize/PSQL,... and Knex/...
   - Handle outstanding issue with repo.
   - Write sample emails.
+- prompt for i18n support  
 
 - If we gen an NeDB service & add custom code to name.service.js. Then we regen to mongo. Then we
   regen back to NeDB. We do not include the previous custom code for NeDB. We could have

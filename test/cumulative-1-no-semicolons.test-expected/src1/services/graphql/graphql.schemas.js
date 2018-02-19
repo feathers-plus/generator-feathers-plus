@@ -1,7 +1,7 @@
 
 // Define the combined GraphQL schema. (Can be re-generated.)
-//!code: imports //!end
-//!code: init //!end
+// !code: imports // !end
+// !code: init // !end
 
 let moduleExports = `
 type Nedb1 {
@@ -27,8 +27,8 @@ type Query {
 }
 `
 
-//!code: exports //!end
+// !code: exports // !end
 module.exports = moduleExports
 
-//!code: funcs //!end
-//!code: end //!end
+// !code: funcs // !end
+// !code: end // !end

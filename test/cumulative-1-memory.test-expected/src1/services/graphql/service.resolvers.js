@@ -1,19 +1,19 @@
 
 /* eslint-disable no-unused-vars, indent */
 // Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
-//!code: imports //!end
-//!code: init //!end
+// !code: imports // !end
+// !code: init // !end
 
 let moduleExports = function serviceResolvers(app, options) {
   const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options;
-  //!<DEFAULT> code: extra_auth_props
+  // !<DEFAULT> code: extra_auth_props
   const convertArgs = convertArgsToFeathers([]);
-  //!end
+  // !end
 
-  //!<DEFAULT> code: services
+  // !<DEFAULT> code: services
   let nedb1 = app.service('/nedb-1');
   let nedb2 = app.service('/nedb-2');
-  //!end
+  // !end
 
   let returns = {
 
@@ -21,35 +21,35 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // nedb2: Nedb2!
       nedb2:
-        //!<DEFAULT> code: resolver-Nedb1-nedb2
+        // !<DEFAULT> code: resolver-Nedb1-nedb2
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
             query: { _id: parent.nedb2Id }, paginate: false
           });
           return nedb2.find(feathersParams).then(extractFirstItem);
         },
-        //!end
+        // !end
     },
 
     Nedb2: {
 
       // nedb1: Nedb1!
       nedb1:
-        //!<DEFAULT> code: resolver-Nedb2-nedb1
+        // !<DEFAULT> code: resolver-Nedb2-nedb1
         (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
             query: { _id: parent.nedb1Id }, paginate: false
           });
           return nedb1.find(feathersParams).then(extractFirstItem);
         },
-        //!end
+        // !end
     },
 
-    //!code: resolver_field_more //!end
+    // !code: resolver_field_more // !end
 
     Query: {
 
-      //!<DEFAULT> code: query-Nedb1
+      // !<DEFAULT> code: query-Nedb1
       // getNedb1(query: JSON, params: JSON, key: JSON): Nedb1
       getNedb1 (parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast);
@@ -61,9 +61,9 @@ let moduleExports = function serviceResolvers(app, options) {
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
         return nedb1.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
-      //!end
+      // !end
 
-      //!<DEFAULT> code: query-Nedb2
+      // !<DEFAULT> code: query-Nedb2
       // getNedb2(query: JSON, params: JSON, key: JSON): Nedb2
       getNedb2 (parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast);
@@ -75,18 +75,18 @@ let moduleExports = function serviceResolvers(app, options) {
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
         return nedb2.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
-      //!end
-      //!code: resolver_query_more //!end
+      // !end
+      // !code: resolver_query_more // !end
     },
   };
 
-  //!code: func_return //!end
+  // !code: func_return // !end
   return returns;
 };
 
-//!code: more //!end
+// !code: more // !end
 
-//!code: exports //!end
+// !code: exports // !end
 module.exports = moduleExports;
 
 function paginate(content) {
@@ -100,5 +100,5 @@ function paginate(content) {
     return result;
   };
 }
-//!code: funcs //!end
-//!code: end //!end
+// !code: funcs // !end
+// !code: end // !end

@@ -2,20 +2,20 @@
 // Initializes the `nedb2` service on path `/nedb-2`. (Can be re-generated.)
 const createService = require('feathers-memory');
 const hooks = require('./nedb-2.hooks');
-//!code: imports //!end
-//!code: init //!end
+// !code: imports // !end
+// !code: init // !end
 
 let moduleExports = function (app) {
 
   let paginate = app.get('paginate');
-  //!code: func_init //!end
+  // !code: func_init // !end
 
   let options = {
     name: 'nedb-2',
     paginate,
-    //!code: options_more //!end
+    // !code: options_more // !end
   };
-  //!code: options_change //!end
+  // !code: options_change // !end
 
   // Initialize our service with any options it requires
   app.use('/nedb-2', createService(options));
@@ -24,11 +24,11 @@ let moduleExports = function (app) {
   const service = app.service('nedb-2');
 
   service.hooks(hooks);
-  //!code: func_return //!end
+  // !code: func_return // !end
 };
 
-//!code: exports //!end
+// !code: exports // !end
 module.exports = moduleExports;
 
-//!code: funcs //!end
-//!code: end //!end
+// !code: funcs // !end
+// !code: end // !end

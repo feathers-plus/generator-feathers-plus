@@ -6,8 +6,8 @@ const local = require('@feathersjs/authentication-local');
 const oauth2 = require('@feathersjs/authentication-oauth2');
 const Auth0Strategy = require('passport-auth0');
 
-//!code: imports //!end
-//!code: init //!end
+// !code: imports // !end
+// !code: init // !end
 
 let moduleExports = function (app) {
   const config = app.get('authentication');
@@ -16,14 +16,14 @@ let moduleExports = function (app) {
   app.configure(authentication(config));
   app.configure(jwt());
   app.configure(local());
-  //!code: loc_1 //!end
+  // !code: loc_1 // !end
 
   app.configure(oauth2(Object.assign({
     name: 'auth0',
     Strategy: Auth0Strategy
   }, config.auth0)));
 
-  //!code: loc_2 //!end
+  // !code: loc_2 // !end
 
   // The `authentication` service is used to create a JWT.
   // The before `create` hook registers strategies that can be used
@@ -38,11 +38,11 @@ let moduleExports = function (app) {
       ]
     }
   });
-  //!code: func_return //!end
+  // !code: func_return // !end
 };
 
-//!code: exports //!end
+// !code: exports // !end
 module.exports = moduleExports;
 
-//!code: funcs //!end
-//!code: end //!end
+// !code: funcs // !end
+// !code: end // !end

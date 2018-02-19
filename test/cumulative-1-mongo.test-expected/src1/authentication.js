@@ -9,8 +9,8 @@ const GoogleStrategy = require('passport-google-oauth20');
 const FacebookStrategy = require('passport-facebook');
 const GithubStrategy = require('passport-github');
 
-//!code: imports //!end
-//!code: init //!end
+// !code: imports // !end
+// !code: init // !end
 
 let moduleExports = function (app) {
   const config = app.get('authentication');
@@ -19,7 +19,7 @@ let moduleExports = function (app) {
   app.configure(authentication(config));
   app.configure(jwt());
   app.configure(local());
-  //!code: loc_1 //!end
+  // !code: loc_1 // !end
 
   app.configure(oauth2(Object.assign({
     name: 'auth0',
@@ -41,7 +41,7 @@ let moduleExports = function (app) {
     Strategy: GithubStrategy
   }, config.github)));
 
-  //!code: loc_2 //!end
+  // !code: loc_2 // !end
 
   // The `authentication` service is used to create a JWT.
   // The before `create` hook registers strategies that can be used
@@ -56,11 +56,11 @@ let moduleExports = function (app) {
       ]
     }
   });
-  //!code: func_return //!end
+  // !code: func_return // !end
 };
 
-//!code: exports //!end
+// !code: exports // !end
 module.exports = moduleExports;
 
-//!code: funcs //!end
-//!code: end //!end
+// !code: funcs // !end
+// !code: end // !end
