@@ -455,6 +455,13 @@ module.exports = function generatorWriting (generator, what) {
     const newConfig = specs._defaultJson = Object.assign({}, specs._defaultJson, specs._dbConfigs);
     const connections = specs.connections;
     const _adapters = specs._adapters;
+    //console.log('_adapters', _adapters);
+    //console.log('connections', connections);
+
+    // Custom template context.
+    context = Object.assign({}, context, {
+
+    });
 
     const todos = !Object.keys(connections).length ? [] : [
       json(newConfig, ['config', 'default.json']),
@@ -462,9 +469,19 @@ module.exports = function generatorWriting (generator, what) {
     ];
 
     Object.keys(_adapters).sort().forEach(adapter => {
-      todos.push(
-        tmpl([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`], true)
-      );
+      //console.log('1', adapter);
+
+      Object.keys(connections).forEach(key => {
+        const connection = connections[key];
+        if (connection.adapter === adapter) {
+          todos.push(
+            tmpl([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`], true, false, { database: connection.database } )
+          );
+        }
+      });
+
+
+
     });
 
     // Generate modules

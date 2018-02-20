@@ -1,6 +1,6 @@
 
 const chalk = require('chalk');
-const { kebabCase } = require('lodash');
+const { camelCase, kebabCase } = require('lodash');
 const { cwd } = require('process');
 const { parse } = require('path');
 
@@ -37,12 +37,14 @@ module.exports = class ServiceGenerator extends Generator {
       props.requiresAuth = false;
     }
 
-    function addingService () {
+    function addingService (name) {
       generator.log('\n');
       generator.log([
         chalk.green.bold('We are'),
         chalk.yellow.bold(' adding '),
-        chalk.green.bold('a new service in dir '),
+        chalk.green.bold('the new service '),
+        chalk.yellow.bold(name),
+        chalk.green.bold(' in dir '),
         chalk.yellow.bold(parse(cwd()).base),
         ''
       ].join(''));
@@ -62,6 +64,9 @@ module.exports = class ServiceGenerator extends Generator {
     const prompts = [{
       name: 'name',
       message: 'What is the name of the service?',
+      filter (input) {
+        return camelCase(input);
+      },
       validate (input) {
         if (input.trim() === '') {
           return 'Service name can not be empty';
@@ -85,7 +90,7 @@ module.exports = class ServiceGenerator extends Generator {
               ''
             ].join('\n')));
           } else {
-            addingService();
+            addingService(input);
             generator.log(chalk.green([
               '',
               'Once this generation is complete, define the JSON-schema for the data in module',
