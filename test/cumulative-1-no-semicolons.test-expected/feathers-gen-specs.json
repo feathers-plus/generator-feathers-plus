@@ -54,7 +54,7 @@
     "entity": "users1"
   },
   "connections": {
-    "nedb+nedb": {
+    "nedb": {
       "database": "nedb",
       "adapter": "nedb",
       "connectionString": "../data"

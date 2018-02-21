@@ -12,7 +12,7 @@ module.exports = class ConnectionGenerator extends Generator {
   async prompting () {
     this.checkDirContainsApp();
     await Generator.asyncInit(this);
-    const { _specs: specs } = this;
+    const { props, _specs: specs } = this;
     this._initialGeneration = !this._specs.connections;
     initSpecs('connection');
 
@@ -33,14 +33,21 @@ module.exports = class ConnectionGenerator extends Generator {
     const databaseName = snakeCase(this.pkg.name);
     const defaultJson = specs._defaultJson;
 
-    const combineProps = answers => Object.assign({}, this.props, answers);
+    const combineProps = answers => Object.assign({}, props, answers);
+    const isSqlAdapter = props.adapter === 'sequelize' || props.adapter === 'knex';
 
     const prompts = [{
       type: 'list',
       name: 'database',
       message: 'Which database are you connecting to?',
-      default: 'nedb',
-      choices: [
+      default: () => isSqlAdapter ? 'postgres' : 'nedb',
+      choices: () => isSqlAdapter ? [
+        { name: 'MySQL (MariaDB)', value: 'mysql' },
+        // { name: 'Oracle', value: 'oracle' },
+        { name: 'PostgreSQL', value: 'postgres' },
+        { name: 'SQLite', value: 'sqlite' },
+        { name: 'SQL Server', value: 'mssql' }
+      ] : [
         { name: 'Memory', value: 'memory' }, // no adapter to choose
         { name: 'MongoDB', value: 'mongodb' },
         { name: 'MySQL (MariaDB)', value: 'mysql' },

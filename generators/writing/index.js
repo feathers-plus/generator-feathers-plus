@@ -284,14 +284,18 @@ module.exports = function generatorWriting (generator, what) {
     const modelTpl = `${adapter}${isAuthEntityWithAuthentication ? '-user' : ''}.ejs`;
     const hasModel = existsSync(join(serPath, '_model', modelTpl));
 
-    // Run the `connection` generator for the selected database
-    // It will not do anything if the db has been set up already
+    // Run `generate connection` for the selected adapter
     if (!generatorsInclude('all')) {
       if (adapter !== 'generic' && adapter !== 'memory') {
-        generator.composeWith(require.resolve('../connection'), { props: {
-          adapter,
-          service: name
-        } });
+
+        // Do not `generate connection` on `generate service` if adapter already exists
+        // You can change that connection by running `generate connection`.
+        if (!specs.connections || !specs.connections[adapter]) {
+          generator.composeWith(require.resolve('../connection'), { props: {
+            adapter,
+            service: name
+          } });
+        }
       }
     }
 
@@ -455,13 +459,7 @@ module.exports = function generatorWriting (generator, what) {
     const newConfig = specs._defaultJson = Object.assign({}, specs._defaultJson, specs._dbConfigs);
     const connections = specs.connections;
     const _adapters = specs._adapters;
-    //console.log('_adapters', _adapters);
-    //console.log('connections', connections);
-
-    // Custom template context.
-    context = Object.assign({}, context, {
-
-    });
+    const isGenerateConnection = generatorsInclude('connection') && !generatorsInclude('service');
 
     const todos = !Object.keys(connections).length ? [] : [
       json(newConfig, ['config', 'default.json']),
@@ -469,19 +467,17 @@ module.exports = function generatorWriting (generator, what) {
     ];
 
     Object.keys(_adapters).sort().forEach(adapter => {
-      //console.log('1', adapter);
+      if (connections[adapter]) {
+        // Force a regen for the adapter selected using `generate connection`.
+        const forceWrite = isGenerateConnection && props.adapter === adapter;
 
-      Object.keys(connections).forEach(key => {
-        const connection = connections[key];
-        if (connection.adapter === adapter) {
-          todos.push(
-            tmpl([srcPath, '_adapters', _adapters[adapter]], [libDir, `${adapter}.js`], true, false, { database: connection.database } )
-          );
-        }
-      });
-
-
-
+        todos.push(
+          tmpl(
+            [srcPath, '_adapters', _adapters[adapter]],
+            [libDir, `${adapter}.js`],
+            !forceWrite, false, { database: connections[adapter].database } )
+        );
+      }
     });
 
     // Generate modules

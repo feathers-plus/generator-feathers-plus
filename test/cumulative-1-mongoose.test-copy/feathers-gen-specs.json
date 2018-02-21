@@ -55,7 +55,7 @@
     "entity": "users1"
   },
   "connections": {
-    "mongodb+mongoose": {
+    "mongoose": {
       "database": "mongodb",
       "adapter": "mongoose",
       "connectionString": "mongodb://localhost:27017/z_1"

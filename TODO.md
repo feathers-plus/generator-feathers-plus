@@ -215,6 +215,30 @@ OK   to name.schema.js to identify fields with unique values in collection.
 OK - Mongoose model now adds `required: true` for required props.
 OK - Mongoose model now adds `unique: true` for uniqueItemProperties props.
          
+OK - Changed design of feathers-gen-specs.json##connections to work with Sequelize
+OK - ***** READ THIS **************************************************************
+OK - You need to MANUALLY change the prop names in feathers-gen-specs.json##connections
+OK   from something like 'postgres+sequelize' to 'sequelize' alone. More likely you'll
+OK   be changing 'mongodb+mongodb' to 'mongodb'.  
+OK - ******************************************************************************       
+- Sequelize
+  - Sequelize works with Postgres, MySQL, SQLite and MS SQL server only.  
+  - David's generator creates one instance of Sequelize.
+  - A Sequelize instance can connect to one database.
+  - So a Sequelize instance can connect to one PostgreSQL, or SQLite, etc.
+- David's generator, when the Sequelize adapter is selected for a service
+  - You are asked to select the DB.
+  - The choices include NeDB, memory, etc which would be invalid.
+  - You are asked for the DB for every service, even though only 1 DB can be used.
+  - src/sequelize.js is written customized for the first DB selected.
+  - It is not rewritten on `generate service` effectively making the DB choice meaningless.
+  - It is rewritten on `generate connection`, which is how you can reset the DB selected.
+- New generator, when a service is being created/changed for Sequelize or Knex
+  - Does not ask for a DB if a Sequelize connection already exists.
+  - Displays only Postgres, MySQL, SQLite and MSSQL as DB choices.
+  - It is rewritten on `generate connection`, which is how you can reset the DB selected. 
+
+
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -229,6 +253,10 @@ NO   remain. This causes, for example, src/mongodb.js to still be generated.
 NO   Basically, the generator does not remove info in specs that's no longer relavent.
 
 - PUT BACK f+/graphql in package.json for fx/cli-gen-ex
+- code-fragments.js does a `require` on name.schema.js. This gets the default schema merged with
+  custom changes. Only the default schema is wanted. This will mess up the regenerated module.
+- Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
+  for `uniqueItemProperties`? In say name.mongo.js?
 
 - test name.mongo.js
 - test name.validate.js
@@ -265,4 +293,6 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
 - create Sequelize schema
 - create fastJoin definitions
 - create for swagger
+- create rate limiter for socxket.io. luc.claustres asked about on eon Slack
+- create workflow. luc.claustres asked about one on Slack.
 - bring dependencies up to date

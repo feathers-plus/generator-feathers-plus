@@ -27,12 +27,12 @@
     }
   },
   "connections": {
-    "mongodb+mongodb": {
+    "mongodb": {
       "database": "mongodb",
       "adapter": "mongodb",
       "connectionString": "mongodb://localhost:27017/z_1"
     },
-    "nedb+nedb": {
+    "nedb": {
       "database": "nedb",
       "adapter": "nedb",
       "connectionString": "nedb://../data"

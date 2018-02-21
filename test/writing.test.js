@@ -164,7 +164,7 @@ const tests = [
   { testName: 'regen-adapters-1.test', specsChanges: [{
     services: { nedb1: { adapter: 'nedb' } },
     connections: {
-      'nedb+nedb': {
+      'nedb': {
         database: 'nedb',
         adapter: 'nedb',
         connectionString: 'nedb://../data'

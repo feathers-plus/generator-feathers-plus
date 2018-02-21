@@ -35,7 +35,7 @@
     }
   },
   "connections": {
-    "nedb+nedb": {
+    "nedb": {
       "database": "nedb",
       "adapter": "nedb",
       "connectionString": "../data"
