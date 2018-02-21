@@ -214,7 +214,6 @@ OK - Added uniqueItemProperties (name borrowed from Ajv extensions)
 OK   to name.schema.js to identify fields with unique values in collection.
 OK - Mongoose model now adds `required: true` for required props.
 OK - Mongoose model now adds `unique: true` for uniqueItemProperties props.
-         
 OK - Changed design of feathers-gen-specs.json##connections to work with Sequelize
 OK - ***** READ THIS **************************************************************
 OK - You need to MANUALLY change the prop names in feathers-gen-specs.json##connections
@@ -237,7 +236,8 @@ OK - ***************************************************************************
   - Does not ask for a DB if a Sequelize connection already exists.
   - Displays only Postgres, MySQL, SQLite and MSSQL as DB choices.
   - It is rewritten on `generate connection`, which is how you can reset the DB selected. 
-
+OK - Compare David's Sequelize src to ours
+OK - Write Sequelize test.
 
 
 NO - hooks modules should be ifNew: true
@@ -252,6 +252,7 @@ NO - Let's say we had mongodb services and changed them to NeDB. connentions['mo
 NO   remain. This causes, for example, src/mongodb.js to still be generated.
 NO   Basically, the generator does not remove info in specs that's no longer relavent.
 
+- duplicate oauthProvider code in service and connection
 - PUT BACK f+/graphql in package.json for fx/cli-gen-ex
 - code-fragments.js does a `require` on name.schema.js. This gets the default schema merged with
   custom changes. Only the default schema is wanted. This will mess up the regenerated module.

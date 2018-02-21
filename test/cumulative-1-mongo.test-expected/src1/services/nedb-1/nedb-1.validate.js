@@ -28,7 +28,8 @@ let base = merge({},
       nedb2Id: {
         type: ID
       }
-    }
+    },
+    uniqueItemProperties: []
   },
   // !end
   // !code: base_more // !end

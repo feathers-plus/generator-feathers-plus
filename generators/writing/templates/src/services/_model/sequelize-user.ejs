@@ -13,7 +13,7 @@ let moduleExports = function (app) {
   <%- insertFragment('sequelize_func_init') %>
 
   const <%= camelName %> = sequelizeClient.define('<%= snakeName %>', {
-  <% if(authentication.strategies.indexOf('local') !== -1) { %>
+  <% if (authentication.strategies.indexOf('local') !== -1) { %>
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -24,7 +24,7 @@ let moduleExports = function (app) {
       allowNull: false
     },
   <% } %>
-  <% authentication.oauthProviders.forEach(provider => { %>
+  <% oauthProviders.forEach(provider => { %>
     <%= provider.name %>Id: { type: Sequelize.STRING },
   <% }); %>
   }, {
@@ -41,7 +41,7 @@ let moduleExports = function (app) {
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   }<%- sc %>
 
-<%- insertFragment('sequelize_func_return') %>
+  <%- insertFragment('sequelize_func_return') %>
   return <%= camelName %><%- sc %>
 }<%- sc %>
 <%- insertFragment('sequelize_more') %>

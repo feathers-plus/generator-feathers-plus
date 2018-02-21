@@ -283,6 +283,7 @@ module.exports = function generatorWriting (generator, what) {
     const serviceModule = moduleMappings[adapter];
     const modelTpl = `${adapter}${isAuthEntityWithAuthentication ? '-user' : ''}.ejs`;
     const hasModel = existsSync(join(serPath, '_model', modelTpl));
+    const strategies = (specs.authentication || {}).strategies || [];
 
     // Run `generate connection` for the selected adapter
     if (!generatorsInclude('all')) {
@@ -314,6 +315,7 @@ module.exports = function generatorWriting (generator, what) {
       authentication: isAuthEntityWithAuthentication,
       isAuthEntityWithAuthentication,
       requiresAuth: specsService.requiresAuth,
+      oauthProviders: [],
       hooks: getHookInfo(name),
 
       libDirectory: specs.app.src,
@@ -328,6 +330,26 @@ module.exports = function generatorWriting (generator, what) {
     // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context.mongooseSchema);
     // inspector(`\n... mongooseSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr);
     // inspector(`\n... context (generator ${what})`, context);
+
+    const dependencies = ['ajv'];
+
+    // Set up strategies and add dependencies
+    strategies.forEach(strategy => {
+      const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
+
+      if (oauthProvider) {
+        dependencies.push('@feathersjs/authentication-oauth2');
+        dependencies.push(oauthProvider);
+        context.oauthProviders.push({
+          name: strategy,
+          strategyName: `${upperFirst(strategy)}Strategy`,
+          module: oauthProvider
+        });
+
+      } else {
+        dependencies.push(`@feathersjs/authentication-${strategy}`);
+      }
+    });
 
     // Custom abbreviations for building 'todos'.
     const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))
@@ -358,8 +380,11 @@ module.exports = function generatorWriting (generator, what) {
     }
 
     // Update dependencies
-    generator.dependencies = serviceModule.charAt(0) !== '.' ? ['ajv', serviceModule] : ['ajv'];
-    generator._packagerInstall(generator.dependencies, { save: true });
+    if (serviceModule.charAt(0) !== '.') {
+      dependencies.push(serviceModule);
+    }
+
+    generator._packagerInstall(dependencies, { save: true });
 
     // Determine which hooks are needed
     function getHookInfo(name) {
@@ -524,6 +549,7 @@ module.exports = function generatorWriting (generator, what) {
           strategyName: `${upperFirst(strategy)}Strategy`,
           module: oauthProvider
         });
+
       } else {
         dependencies.push(`@feathersjs/authentication-${strategy}`);
       }

@@ -26,7 +26,7 @@ module.exports = class ServiceGenerator extends Generator {
       if (specs.services && specs.services[props.name]) {
         updatingService();
       } else {
-        addingService();
+        addingService(props.name);
       }
 
       initSpecs('service', { name: props.name });

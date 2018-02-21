@@ -18,6 +18,7 @@ let base = merge({},
     title: "Nedb1",
     description: "Nedb1 database.",
     required: [],
+    uniqueItemProperties: [],
     properties: {}
   },
   // !end

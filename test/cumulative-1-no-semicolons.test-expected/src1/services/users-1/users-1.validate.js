@@ -18,6 +18,7 @@ let base = merge({},
     title: "Users1",
     description: "Users1 database.",
     required: [],
+    uniqueItemProperties: [],
     properties: {}
   },
   // !end
