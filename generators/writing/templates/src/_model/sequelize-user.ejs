@@ -3,9 +3,11 @@
 //
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
-
 <%- insertFragment('sequelize_schema', [
-    `const sequelizeSchema = require('../services/${kebabName}/${kebabName}.sequelize')${sc}`,
+  '// const Sequelize = require(\'sequelize\');',
+  '// const DataTypes = Sequelize.DataTypes;',
+  '',
+  `const sequelizeSchema = require('../services/${kebabName}/${kebabName}.sequelize')${sc}`,
 ]) %>
 <%- insertFragment('sequelize_imports') %>
 <%- insertFragment('sequelize_init') %>
@@ -31,7 +33,7 @@ let moduleExports = function (app) {
   // eslint-disable-next-line no-unused-vars
   <%= camelName %>.associate = function (models) {
     // Define associations here for foreign keys
-    //   [<%- sequelizeFks %>]
+    //   <%- sequelizeFks.length ? `- ${sequelizeFks}` : '- No foreign keys defined.' %>
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
     <%- insertFragment('sequelize_associations') %>
   }<%- sc %>
