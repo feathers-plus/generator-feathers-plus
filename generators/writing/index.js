@@ -3,6 +3,8 @@
 const crypto = require('crypto');
 const merge = require('lodash.merge');
 const mongoose = require('mongoose');
+const Sequelize = require('sequelize');
+
 const { camelCase, kebabCase, snakeCase, upperFirst } = require('lodash');
 const { EOL } = require('os');
 const { existsSync } = require('fs');
@@ -15,7 +17,9 @@ const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
 const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
+const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
 const stringifyPlus = require('../../lib/stringify-plus');
+
 const { updateSpecs } = require('../../lib/specs');
 
 const OAUTH2_STRATEGY_MAPPINGS = {
@@ -25,9 +29,19 @@ const OAUTH2_STRATEGY_MAPPINGS = {
   github: 'passport-github'
 };
 
-const nativeFuncs = {
+const mongooseNativeFuncs = {
   [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
   [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId'
+};
+
+const sequelizeNativeFuncs = {
+  [Sequelize.BOOLEAN]: 'DataTypes.BOOLEAN',
+  [Sequelize.ENUM]: 'DataTypes.ENUM',
+  [Sequelize.INTEGER]: 'DataTypes.INTEGER',
+  [Sequelize.JSONB]: 'DataTypes.JSONB',
+  [Sequelize.REAL]: 'DataTypes.REAL',
+  [Sequelize.STRING]: 'DataTypes.STRING',
+  [Sequelize.TEXT]: 'DataTypes.TEXT',
 };
 
 // type:   'tpl' - expand template, 'copy' - copy file, 'json' - write JSON as file.
@@ -282,7 +296,7 @@ module.exports = function generatorWriting (generator, what) {
 
     const serviceModule = moduleMappings[adapter];
     const modelTpl = `${adapter}${isAuthEntityWithAuthentication ? '-user' : ''}.ejs`;
-    const hasModel = existsSync(join(serPath, '_model', modelTpl));
+    const hasModel = existsSync(join(srcPath, '_model', modelTpl));
     const strategies = (specs.authentication || {}).strategies || [];
 
     // Run `generate connection` for the selected adapter
@@ -300,9 +314,9 @@ module.exports = function generatorWriting (generator, what) {
       }
     }
 
-    //inspector(`\n... specs (generator ${what})`, specs);
-    //inspector('\n...mapping', mapping);
-    //inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
+    // inspector(`\n... specs (generator ${what})`, specs);
+    // inspector('\n...mapping', mapping);
+    // inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
 
     // Custom template context.
     context = Object.assign({}, context, {
@@ -325,10 +339,18 @@ module.exports = function generatorWriting (generator, what) {
       mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
     });
     context.mongoJsonSchemaStr = stringifyPlus(context.mongoJsonSchema);
-    context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs });
+    context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs: mongooseNativeFuncs });
+
+    const { seqModel, seqFks } = serviceSpecsToSequelize(feathersSpecs[name], feathersSpecs[name]._extensions);
+    context.sequelizeSchema = seqModel;
+    context.sequelizeFks = seqFks;
+    context.sequelizeSchemaStr = stringifyPlus(context.sequelizeSchema, { nativeFuncs: sequelizeNativeFuncs });
 
     // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context.mongooseSchema);
-    // inspector(`\n... mongooseSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr);
+    // inspector(`\n... mongooseSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr.split('\n'));
+    // inspector(`\n... sequelizeSchema ${name} (generator ${what})`, context.sequelizeSchema);
+    // inspector(`\n... sequelizeSchemaStr ${name} (generator ${what})`, context.sequelizeSchemaStr.split('\n'));
+    // inspector(`\n... sequelizeFks ${name} (generator ${what})`, context.sequelizeFks);
     // inspector(`\n... context (generator ${what})`, context);
 
     const dependencies = ['ajv'];
@@ -359,13 +381,14 @@ module.exports = function generatorWriting (generator, what) {
 
     todos = [
       tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.js`],        ),
-      tmpl([serPath,    '_model',   modelTpl],        [libDir, 'models', `${context.modelName}.js`], false, !context.modelName    ),
+      tmpl([srcPath,    '_model',   modelTpl],        [libDir, 'models', `${context.modelName}.js`], false, !context.modelName    ),
       tmpl([serPath,    '_service', serviceTpl],      [libDir, 'services', kn, `${kn}.service.js`],  ),
       tmpl([namePath,   genericServiceTpl],           [libDir, 'services', kn, `${kn}.class.js`],    false, adapter !== 'generic' ),
 
       tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]    ),
       tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.js`]     ),
       tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.js`]  ),
+      tmpl([namePath,   'name.sequelize.ejs'],        [libDir, 'services', kn, `${kn}.sequelize.js`] ),
       tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.js`]  ),
       tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.js`]     ),
       tmpl([serPath,    'index.ejs'],                 [libDir, 'services', 'index.js']               )

@@ -1,0 +1,41 @@
+
+/* eslint quotes: 0 */
+// Defines Sequelize model for service `<%= serviceName %>`. (Can be re-generated.)
+const merge = require('lodash.merge')<%- sc %>
+const Sequelize = require('sequelize');
+// eslint-disable-next-line no-unused-vars
+const DataTypes = Sequelize.DataTypes;
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (isAuthEntityWithAuthentication) { -%>
+// Your model may need the following fields:
+<%# -%>
+<%# --- if-1a starts below. -%>
+<% if (authentication.strategies.indexOf('local') !== -1) { -%>
+//   email:      { type: DataTypes.STRING, allowNull: false, unique: true },
+//   password:   { type: DataTypes.STRING, allowNull: false },
+<% } -%>
+<%# --- if-1a ends above. -%>
+<%# -%>
+<%# --- forEach-1b starts below. -%>
+<% oauthProviders.forEach(provider => { -%>
+//   <%= `${provider.name}Id:`.padEnd(11) %> { type: DataTypes.STRING },
+<% }); -%>
+<%# --- forEach-1b ends above. -%>
+<% } -%>
+<%# --- if-1 ends above. -%>
+let moduleExports = merge({},
+  <%- insertFragment('sequelize_model',
+    sequelizeSchemaStr.split('\n').map(str => `  ${str}`).join('\n') + ',')
+  %>
+  <%- insertFragment('moduleExports') %>
+)<%- sc %>
+
+<%- insertFragment('exports') %>
+module.exports = moduleExports<%- sc %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

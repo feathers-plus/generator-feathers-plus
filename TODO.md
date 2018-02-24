@@ -238,6 +238,10 @@ OK - ***************************************************************************
   - It is rewritten on `generate connection`, which is how you can reset the DB selected. 
 OK - Compare David's Sequelize src to ours
 OK - Write Sequelize test.
+OK - create src/services/name/name.sequelize.js
+OK - create src/models/name.model.js for sequelize
+OK - create src/models/name.model.js for sequelize user-entity with authentication
+OK - moved model templates under templates/src/_model
 
 
 NO - hooks modules should be ifNew: true
@@ -252,6 +256,7 @@ NO - Let's say we had mongodb services and changed them to NeDB. connentions['mo
 NO   remain. This causes, for example, src/mongodb.js to still be generated.
 NO   Basically, the generator does not remove info in specs that's no longer relavent.
 
+- add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
 - duplicate oauthProvider code in service and connection
 - PUT BACK f+/graphql in package.json for fx/cli-gen-ex
 - code-fragments.js does a `require` on name.schema.js. This gets the default schema merged with
@@ -289,9 +294,11 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
 
 - error checking pass over specs (plus some custom code),
   e.g. email/password exists in schema of user-entity when local auth selected.
-- what can we do with feathers-sync?  
+- what can we do with feathers-sync? 
+
+- add async init https://github.com/feathersjs/feathers/issues/509#issuecomment-358039365
 - create deployment    
-- create Sequelize schema
+- create Knex schema
 - create fastJoin definitions
 - create for swagger
 - create rate limiter for socxket.io. luc.claustres asked about on eon Slack
