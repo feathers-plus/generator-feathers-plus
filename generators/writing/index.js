@@ -74,23 +74,30 @@ function abstractTs(specs) {
   const sc = specs.options.semicolons ? ';' : '';
 
   return {
+    tplJsOrTs: (value, valueTs) => ifTs ? valueTs : value,
     tplTsOnly: lines => {
       lines = Array.isArray(lines) ? lines : [lines];
-      return ifTs ? lines.join(EOL) : ''
+
+      return ifTs ? lines.join(EOL) : '';
     },
     tplImports: (vars, module, format) => {
-      if (ifTs) {
-        if (format === 'req') return `import ${vars} = require('${module || vars}')${sc}`;
-        if (format === 'as') return `import * as ${vars} from '${module || vars}'${sc}`;
-        return `import ${vars} from '${module || vars}'${sc}`;
-      } else {
-        return `const ${vars} = require('${module || vars}')${sc}`;
-      }
+      if (!ifTs) return `const ${vars} = require('${module || vars}')${sc}`;
+
+      if (format === 'req') return `import ${vars} = require('${module || vars}')${sc}`;
+      if (format === 'as') return `import * as ${vars} from '${module || vars}'${sc}`;
+      return `import ${vars} from '${module || vars}'${sc}`;
     },
-    tplModuleExports: (type, value = '{', valueTs) => ifTs ?
-      `let moduleExports: ${type} = ${valueTs || value}` : `let moduleExports = ${value}`,
-    tplExport: (value, valueTs) => ifTs ?
-      `export default ${valueTs || value}` : `module.exports = ${value}`,
+    tplModuleExports: (type, value = '{', valueTs) => {
+      if (!ifTs) return `let moduleExports = ${value}`;
+
+      if (type) return `let moduleExports: ${type} = ${valueTs || value}`;
+      return `let moduleExports = ${valueTs || value}`;
+    },
+    tplExport: (value, valueTs) => {
+      if (!ifTs) return `module.exports = ${value}`;
+
+      return `export default ${valueTs || value}`;
+    },
   };
 }
 
@@ -122,7 +129,7 @@ module.exports = function generatorWriting (generator, what) {
 
   const js = specs.options.ts ? 'ts' : 'js';
   const isJs = !specs.options.ts;
-  const { tplTsOnly, tplImports, tplModuleExports, tplExport } = abstractTs(specs);
+  const { tplJsOrTs, tplTsOnly, tplImports, tplModuleExports, tplExport } = abstractTs(specs);
 
   // Other abbreviations using in building 'todos'.
   const libDir = specs.app.src;
@@ -151,6 +158,7 @@ module.exports = function generatorWriting (generator, what) {
     lintRule: isJs ? 'eslint ' : 'tslint:',
     lintDisable: isJs ?  'eslint-disable' : 'tslint:disable',
     lintDisableNextLine: isJs ?  'eslint-disable-next-line' : 'tslint:disable-next-line',
+    tplJsOrTs,
     tplTsOnly,
     tplImports,
     tplModuleExports,

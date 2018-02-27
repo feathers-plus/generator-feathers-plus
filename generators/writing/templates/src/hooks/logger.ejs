@@ -2,18 +2,19 @@
 // A hook that logs service method before, after and error
 // See https://github.com/winstonjs/winston for documentation
 // about the logger.
-const logger = require('winston')<%- sc %>
+<%- tplTsOnly(`import { HookContext } from '@feathersjs/feathers'${sc}${EOL}`) -%>
+<%- tplImports('logger', 'winston', 'req') %>
 
 // To see more detailed messages, uncomment the following line:
 // logger.level = 'debug'<%- sc %>
 
-module.exports = function () {
-  return context => {
+<%- tplExport('function () {') %>
+  return <%- tplJsOrTs('context', '(context: HookContext<any>)') -%> => {
     // This debugs the service call and a stringified version of the hook context
     // You can customize the message (and logger) to your needs
     logger.debug(`${context.type} app.service('${context.path}').${context.method}()`)<%- sc %>
     
-    if(typeof context.toJSON === 'function') {
+    if(typeof <%- tplJsOrTs('context', '(context as any)') -%>.toJSON === 'function') {
       logger.debug('Hook Context', JSON.stringify(context, null, '  '))<%- sc %>
     }
     
