@@ -36,7 +36,7 @@ class Service {
   }
 }
 
-module.exports = function (options) {
+<%- tplExport('function (options) {') %>
   return new Service(options)<%- sc %>
 }<%- sc %>
 

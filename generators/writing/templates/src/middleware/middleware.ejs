@@ -1,5 +1,6 @@
+<%- tplTsOnly([`import { RequestHandler } from 'express'${sc}`, '']) -%>
 // <%- lintDisableNextLine -%> no-unused-vars
-module.exports = function (options = {}) {
+<%- tplExport('function (options = {}) {', 'function(options: any = {}): RequestHandler {') %>
   return function <%= specs.middlewares[mwName].camel %>(req, res, next) {
     // <%- lintDisableNextLine -%> no-console
     console.log('<%= mwName %> middleware is running')<%- sc %>

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')<%- sc %>
 
-module.exports = function (app) {
+<%- tplExport('function (app) {', 'function (app: App) {') %>
   mongoose.connect(app.get('mongodb'), {})<%- sc %>
   mongoose.Promise = global.Promise<%- sc %>
 

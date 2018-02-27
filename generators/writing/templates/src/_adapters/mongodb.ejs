@@ -1,7 +1,7 @@
 const url = require('url')<%- sc %>
 const MongoClient = require('mongodb').MongoClient<%- sc %>
 
-module.exports = function (app) {
+<%- tplExport('function (app) {', 'function (app: App) {') %>
   const config = app.get('mongodb')<%- sc %>
   const dbName = url.parse(config).path.substring(1)<%- sc %>
   const promise = MongoClient.connect(config).then(client => {
