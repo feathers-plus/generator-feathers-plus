@@ -35,7 +35,7 @@ let moduleExports = function (app) {
 <%- insertFragment('knex_more') %>
 
 <%- insertFragment('knex_exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('knex_funcs') %>
 <%- insertFragment('knex_end') %>

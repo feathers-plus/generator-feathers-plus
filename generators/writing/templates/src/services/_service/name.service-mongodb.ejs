@@ -38,7 +38,7 @@ let moduleExports = function (app) {
 <%- insertFragment('mongo_more') %>
 
 <%- insertFragment('mongo_exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('mongo_funcs') %>
 <%- insertFragment('mongo_end') %>

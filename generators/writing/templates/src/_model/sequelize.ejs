@@ -44,7 +44,7 @@ let moduleExports = function (app) {
 <%- insertFragment('sequelize_more') %>
 
 <%- insertFragment('sequelize_exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('sequelize_funcs') %>
 <%- insertFragment('sequelize_end') %>

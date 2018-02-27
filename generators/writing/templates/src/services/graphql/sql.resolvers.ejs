@@ -39,7 +39,7 @@ let moduleExports = function sqlResolvers(app, options) {
 <%- insertFragment('more') %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

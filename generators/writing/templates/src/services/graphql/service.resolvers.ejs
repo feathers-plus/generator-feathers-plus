@@ -97,7 +97,7 @@ let moduleExports = function serviceResolvers(app, options) {
 <%- insertFragment('more') %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 function paginate(content) {
   return result => {

@@ -20,7 +20,7 @@ let moduleExports = function (app) {
 <%- insertFragment('nedb_more') %>
 
 <%- insertFragment('nedb_exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('nedb_funcs') %>
 <%- insertFragment('nedb_end') %>

@@ -26,7 +26,7 @@ let moduleExports = function (app) {
 <%- insertFragment('mongoose_more') %>
 
 <%- insertFragment('mongoose_exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('mongoose_funcs') %>
 <%- insertFragment('mongoose_end') %>

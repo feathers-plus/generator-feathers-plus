@@ -28,7 +28,7 @@ let moduleExports = function (app) {
 <%- insertFragment('rethink_more') %>
 
 <%- insertFragment('rethink_exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('rethink_funcs') %>
 <%- insertFragment('rethink_end') %>
