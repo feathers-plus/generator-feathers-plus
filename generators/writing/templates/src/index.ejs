@@ -1,8 +1,8 @@
 
-/* eslint-disable no-console */
+/* <%- lintDisable %> no-console */
 // Start the server. (Can be re-generated.)
-const logger = require('winston')<%- sc %>
-const app = require('./app')<%- sc %>
+<%- tplImports('logger', 'winston', 'req') %>
+<%- tplImports('app', './app') %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 

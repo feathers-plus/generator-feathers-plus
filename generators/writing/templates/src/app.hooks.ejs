@@ -1,17 +1,18 @@
 
 // Application hooks that run for every service. (Can be re-generated.)
-const commonHooks = require('feathers-hooks-common')<%- sc %>
+<%- tplTsOnly(`import { HookMap, HooksObject } from '@feathersjs/feathers'${sc}${EOL}`) -%>
+<%- tplImports('commonHooks', 'feathers-hooks-common') %>
 <%- insertFragment('imports', [
-  `const logger = require(\'./hooks/logger\')${sc}`,
+  tplImports('logger', './hooks/logger'),
 ]) %>
 
 <%- insertFragment('used', [
-  '// eslint-disable-next-line no-unused-vars',
+  `// ${lintDisableNextLine} no-unused-vars`,
   `const { iff } = commonHooks${sc}`
 ]) %>
 <%- insertFragment('init') %>
 
-let moduleExports = {
+<%- tplModuleExports('HooksObject') %>
   before: {
     <%- insertFragment('before', [
       '    all: [ logger() ],',
@@ -51,7 +52,7 @@ let moduleExports = {
 }<%- sc %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

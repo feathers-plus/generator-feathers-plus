@@ -68,7 +68,7 @@ let sqlJoins = (app, options) => merge({},
 )<%- sc %>
 
 if (!dialect) {
-  throw new Error('services/graphql/sql.execute.js has not been configured.')<%- sc %>
+  throw new Error('services/graphql/sql.execute.<%- js %> has not been configured.')<%- sc %>
 }
 <% } -%>
 <%# --- if-6 ends above. -%>

@@ -1,25 +1,25 @@
 
 // Configure Feathers app. (Can be re-generated.)
-const path = require('path')<%- sc %>
-const favicon = require('serve-favicon')<%- sc %>
-const compress = require('compression')<%- sc %>
-const cors = require('cors')<%- sc %>
-const helmet = require('helmet')<%- sc %>
-const logger = require('winston')<%- sc %>
+<%- tplImports('path', 'path', 'as') %>
+<%- tplImports('favicon', 'serve-favicon', 'req') %>
+<%- tplImports('compress', 'compression', 'req') %>
+<%- tplImports('cors', null, 'req') %>
+<%- tplImports('helmet', null, 'req') %>
+<%- tplImports('logger', 'winston', 'req') %>
 
-const feathers = require('@feathersjs/feathers')<%- sc %>
-const configuration = require('@feathersjs/configuration')<%- sc %>
-const express = require('@feathersjs/express')<%- sc %>
-<% if (hasProvider('socketio')) { %>const socketio = require('@feathersjs/socketio')<%- sc %><% } %>
-<% if (hasProvider('primus')) { %>const primus = require('@feathersjs/primus')<%- sc %><% } %>
-const middleware = require('./middleware')<%- sc %>
-const services = require('./services')<%- sc %>
-const appHooks = require('./app.hooks')<%- sc %>
-const channels = require('./channels')<%- sc %>
+<%- tplImports('feathers', '@feathersjs/feathers') %>
+<%- tplImports('configuration', '@feathersjs/configuration') %>
+<%- tplImports('express', '@feathersjs/express', 'as') %>
+<%- hasProvider('socketio') ? tplImports('socketio', '@feathersjs/socketio') : '' %>
+<%- hasProvider('primus') ? tplImports('primus', '@feathersjs/primus') : '' %>
+<%- tplImports('middleware', './middleware') %>
+<%- tplImports('services', './services') %>
+<%- tplImports('appHooks', './app.hooks') %>
+<%- tplImports('channels', './channels') %>
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if (specs.authentication) { -%>
-const authentication = require('./authentication')<%- sc %>
+<%- tplImports('authentication', './authentication') %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 
@@ -35,7 +35,7 @@ const <%- __adapter %> = require('./<%- __module %>')<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-const app = express(feathers())<%- sc %>
+const app = express<%- !isJs ? '.default' : '' -%>(feathers())<%- sc %>
 <%- insertFragment('use_start') %>
 
 // Load app configuration
@@ -53,9 +53,9 @@ app.use('/', express.static(app.get('public')))<%- sc %>
 
 // Set up Plugins and providers
 <%- insertFragment('config_start') %>
-<% if (hasProvider('rest')) { %>app.configure(express.rest())<%- sc %><% } %>
-<% if (hasProvider('socketio')) { %>app.configure(socketio())<%- sc %><% } %>
-<% if(hasProvider('primus')) { %>app.configure(primus({ transformer: 'websockets' }))<%- sc %><% } %>
+<%- hasProvider('rest') ? `app.configure(express.rest())${sc}` : '' %>
+<%- hasProvider('socketio') ? `app.configure(${isJs ? 'socketio' : '(socketio as () => any)'}())${sc}` : '' %>
+<%- hasProvider('primus') ? `app.configure(${isJs ? 'primus' : '(primus as () => any)'}({ transformer: 'websockets' }))${sc}` : '' %>
 <%# --- forEach-3 starts below. -%>
 <% Object.keys(specs._adapters || []).sort().forEach((__adapter, __i) => { -%>
 <%- __i === 0 ? '// Configure database adapters\n' : '' -%>
@@ -63,16 +63,16 @@ app.configure(<%- __adapter %>)<%- sc %>
 <% }) -%>
 <%# --- forEach-3 ends above. -%>
 
-// Configure other middleware (see `middleware/index.js`)
+// Configure other middleware (see `middleware/index.<%- js %>`)
 app.configure(middleware)<%- sc %>
-// Set up our services (see `services/index.js`)
+// Set up our services (see `services/index.<%- js %>`)
 app.configure(services)<%- sc %>
-// Set up event channels (see channels.js)
+// Set up event channels (see channels.<%- js %>)
 app.configure(channels)<%- sc %>
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (specs.authentication) { -%>
-// Configure authentication (see `authentication.js`)
+// Configure authentication (see `authentication.<%- js %>`)
 app.configure(authentication)<%- sc %>
 <% } -%>
 <%# --- if-2 ends above. -%>
@@ -87,7 +87,7 @@ app.hooks(appHooks)<%- sc %>
 
 const moduleExports = app<%- sc %>
 <%- insertFragment('exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

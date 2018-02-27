@@ -40,6 +40,13 @@ module.exports = class MiddlewareGenerator extends Generator {
     this.log();
 
     const prompts = [{
+      name: 'ts',
+      message: 'Generate TypeScript code?',
+      type: 'confirm',
+      default () {
+        return !!specs.options.ts;
+      },
+    }, {
       name: 'semicolons',
       message: 'Use semicolons?',
       type: 'confirm',
