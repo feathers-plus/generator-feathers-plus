@@ -55,7 +55,7 @@ app.use('/', express.static(app.get('public')))<%- sc %>
 <%- insertFragment('config_start') %>
 <%- hasProvider('rest') ? `app.configure(express.rest())${sc}` : '' %>
 <%- hasProvider('socketio') ? `app.configure(${isJs ? 'socketio' : '(socketio as () => any)'}())${sc}` : '' %>
-<%- hasProvider('primus') ? `app.configure(${isJs ? 'primus' : '(primus as () => any)'}({ transformer: 'websockets' }))${sc}` : '' %>
+<%- hasProvider('primus') ? `app.configure(primus({ transformer: 'websockets' }))${sc}` : '' %>
 <%# --- forEach-3 starts below. -%>
 <% Object.keys(specs._adapters || []).sort().forEach((__adapter, __i) => { -%>
 <%- __i === 0 ? '// Configure database adapters\n' : '' -%>
