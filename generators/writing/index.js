@@ -148,6 +148,7 @@ module.exports = function generatorWriting (generator, what) {
     js,
     isJs,
     sc: specs.options.semicolons ? ';' : '',
+    lintRule: isJs ? 'eslint ' : 'tslint:',
     lintDisable: isJs ?  'eslint-disable' : 'tslint:disable',
     lintDisableNextLine: isJs ?  'eslint-disable-next-line' : 'tslint:disable-next-line',
     tplTsOnly,
