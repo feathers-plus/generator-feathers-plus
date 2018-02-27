@@ -30,7 +30,7 @@ let moduleExports = function (app) {
     <%- insertFragment('sequelize_define') %>
   )<%- sc %>
 
-  // eslint-disable-next-line no-unused-vars
+  // <%- lintDisableNextLine -%> no-unused-vars
   <%= camelName %>.associate = function (models) {
     // Define associations here for foreign keys
     //   <%- sequelizeFks.length ? `- ${sequelizeFks}` : '- No foreign keys defined.' %>

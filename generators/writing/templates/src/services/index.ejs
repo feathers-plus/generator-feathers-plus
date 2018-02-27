@@ -18,7 +18,7 @@ let <%- specs.graphql.name %> = require('./<%- specs.graphql.name %>/<%- specs.g
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-// eslint-disable-next-line no-unused-vars
+// <%- lintDisableNextLine -%> no-unused-vars
 let moduleExports = function (app) {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the services. -%>

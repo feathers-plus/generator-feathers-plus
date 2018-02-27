@@ -1,8 +1,8 @@
 
 // Execute raw SQL statement for GraphQL. (Can be re-generated.)
-// eslint-disable-next-line no-unused-vars
+// <%- lintDisableNextLine -%> no-unused-vars
 const { cwd } = require('process')<%- sc %>
-// eslint-disable-next-line no-unused-vars
+// <%- lintDisableNextLine -%> no-unused-vars
 const { join } = require('path')<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
@@ -19,7 +19,7 @@ const { join } = require('path')<%- sc %>
   '',
   '// executeSql = sql => sqlite.all(sql)',
   '//   .catch(err => {',
-  '//     // eslint-disable-next-line no-console',
+  `//     // ${lintDisableNextLine} no-console`,
   `//     console.log('executeSql error=', err.message)${sc}`,
   `//     throw err${sc}`,
   `//   })${sc}`,

@@ -6,7 +6,7 @@ const { getByDot, setByDot } = require('feathers-hooks-common')<%- sc %>
 <%- insertFragment('init') %>
 
 let moduleExports = function batchLoaderResolvers(app, options) {
-  // eslint-disable-next-line
+  // <%- lintDisableNextLine %>
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
     feathersBatchLoader: { feathersBatchLoader } } = options<%- sc %>
 

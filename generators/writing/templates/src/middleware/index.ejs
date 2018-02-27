@@ -11,7 +11,7 @@ const <%- __temp.camel %> = require('./<%- __temp.kebab %>')<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-// eslint-disable-next-line no-unused-vars
+// <%- lintDisableNextLine -%> no-unused-vars
 let moduleExports = function (app) {
   <%- insertFragment('func_init') %>
   // Add your custom middleware here. Remember that

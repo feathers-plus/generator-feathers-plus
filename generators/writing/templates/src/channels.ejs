@@ -37,12 +37,12 @@
     }
   })<%- sc %>
 
-  // eslint-disable-next-line no-unused-vars
+  // <%- lintDisableNextLine -%> no-unused-vars
   app.publish((data, hook) => {
     // Here you can add event publishers to channels set up in `channels.<%- js %>`
     // To publish only for a specific event use `app.publish(eventname, () => {})`
 
-    // eslint-disable-next-line
+    // <%- lintDisableNextLine %>
     console.log('Publishing all events to all authenticated users. See `channels.<%- js %>` and https://docs.feathersjs.com/api/channels.html for more information.')<%- sc %>
 
     // e.g. to publish all service events to all authenticated users use
