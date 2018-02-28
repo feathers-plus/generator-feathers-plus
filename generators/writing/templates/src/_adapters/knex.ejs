@@ -1,4 +1,5 @@
 const knex = require('knex')<%- sc %>
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 
 <%- tplExport('function(app) {', 'function(app: App) {') %>
   const { client, connection } = app.get('<%= database %>')<%- sc %>

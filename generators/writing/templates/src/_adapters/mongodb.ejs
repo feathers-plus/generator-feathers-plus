@@ -1,5 +1,6 @@
 const url = require('url')<%- sc %>
 const MongoClient = require('mongodb').MongoClient<%- sc %>
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
   const config = app.get('mongodb')<%- sc %>

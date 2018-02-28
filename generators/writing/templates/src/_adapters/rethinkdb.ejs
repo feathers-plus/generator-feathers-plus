@@ -1,4 +1,5 @@
 const rethinkdbdash = require('rethinkdbdash')<%- sc %>
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
   const config = app.get('rethinkdb')<%- sc %>

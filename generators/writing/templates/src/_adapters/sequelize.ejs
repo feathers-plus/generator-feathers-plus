@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize')<%- sc %>
 const { Op } = Sequelize<%- sc %>
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
+
 const operatorsAliases = {
   $eq: Op.eq,
   $ne: Op.ne,
