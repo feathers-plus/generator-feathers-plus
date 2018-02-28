@@ -2,10 +2,11 @@
 // <%= serviceName %>-model.<%- js %> - An nedb model for user entity
 const NeDB = require('nedb')<%- sc %>
 const path = require('path')<%- sc %>
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- insertFragment('nedb_imports') %>
 <%- insertFragment('nedb_init') %>
 
-let moduleExports = function (app) {
+<%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   const dbPath = app.get('nedb')<%- sc %>
   <%- insertFragment('nedb_client', [
   '  let Model = new NeDB({',

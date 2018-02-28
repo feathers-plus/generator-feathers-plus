@@ -6,10 +6,11 @@ const jwt = require('@feathersjs/authentication-jwt')<%- sc %>
 <% if(oauthProviders.length){ %>const oauth2 = require('@feathersjs/authentication-oauth2')<%- sc %><% } %>
 <% oauthProviders.forEach(provider => { %>const <%= provider.strategyName %> = require('<%= provider.module %>')<%- sc %>
 <% }); %>
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-let moduleExports = function (app) {
+<%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   const config = app.get('authentication')<%- sc %>
 
   // Set up authentication with the secret

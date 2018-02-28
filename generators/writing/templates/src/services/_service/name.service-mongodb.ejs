@@ -5,9 +5,10 @@ const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
 <%- insertFragment('mongo_imports', [
   `// let $jsonSchema = require('./${kebabName}.mongo')${sc}`
 ]) %>
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
 <%- insertFragment('mongo_init') %>
 
-let moduleExports = function (app) {
+<%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   let paginate = app.get('paginate')<%- sc %>
   let mongoClient = app.get('mongoClient')<%- sc %>
   let options = { paginate }<%- sc %>

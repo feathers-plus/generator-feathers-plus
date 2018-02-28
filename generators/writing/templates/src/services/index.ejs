@@ -1,5 +1,6 @@
 
 // Configure the Feathers services. (Can be re-generated.)
+<%- tplTsOnly([`import { App } from '../app.interface'${sc}`, '']) -%>
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => {
@@ -19,7 +20,7 @@ let <%- specs.graphql.name %> = require('./<%- specs.graphql.name %>/<%- specs.g
 <%- insertFragment('init') %>
 
 // <%- lintDisableNextLine -%> no-unused-vars
-let moduleExports = function (app) {
+<%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => { -%>

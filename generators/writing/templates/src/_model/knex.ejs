@@ -4,10 +4,11 @@
 // 
 // See http://knexjs.org/
 // for more of what you can do here.
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- insertFragment('knex_imports') %>
 <%- insertFragment('knex_init') %>
 
-let moduleExports = function (app) {
+<%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   let db = app.get('knexClient')<%- sc %>
   let tableName = '<%= snakeName %>'<%- sc %>
   <%- insertFragment('knex_func_init') %>

@@ -9,10 +9,11 @@
   '',
   `const sequelizeSchema = require('../services/${kebabName}/${kebabName}.sequelize')${sc}`,
 ]) %>
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- insertFragment('sequelize_imports') %>
 <%- insertFragment('sequelize_init') %>
 
-let moduleExports = function (app) {
+<%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   let sequelizeClient = app.get('sequelizeClient')<%- sc %>
   <%- insertFragment('sequelize_func_init') %>
 

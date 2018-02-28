@@ -7,10 +7,11 @@
 <%- insertFragment('mongoose_schema', [
   `const mongooseSchema = require('../services/${kebabName}/${kebabName}.mongoose')${sc}`,
 ]) %>
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- insertFragment('mongoose_imports') %>
 <%- insertFragment('mongoose_init') %>
 
-let moduleExports = function (app) {
+<%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   let mongooseClient = app.get('mongooseClient')<%- sc %>
   <%- insertFragment('mongoose_func_init') %>
 
