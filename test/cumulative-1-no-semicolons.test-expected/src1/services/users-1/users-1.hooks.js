@@ -1,6 +1,6 @@
 
 // Hooks for service `users1`. (Can be re-generated.)
-const commonHooks = require('feathers-hooks-common');
+const commonHooks = require('feathers-hooks-common')
 const { authenticate } = require('@feathersjs/authentication').hooks
 // eslint-disable-next-line no-unused-vars
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks

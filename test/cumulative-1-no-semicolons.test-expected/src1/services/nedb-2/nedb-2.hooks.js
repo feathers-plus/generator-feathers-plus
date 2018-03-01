@@ -1,6 +1,6 @@
 
 // Hooks for service `nedb2`. (Can be re-generated.)
-const commonHooks = require('feathers-hooks-common');
+const commonHooks = require('feathers-hooks-common')
 // !code: imports // !end
 
 // !<DEFAULT> code: used

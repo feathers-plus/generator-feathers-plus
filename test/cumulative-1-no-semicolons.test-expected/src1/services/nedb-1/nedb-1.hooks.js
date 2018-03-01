@@ -1,6 +1,6 @@
 
 // Hooks for service `nedb1`. (Can be re-generated.)
-const commonHooks = require('feathers-hooks-common');
+const commonHooks = require('feathers-hooks-common')
 const { authenticate } = require('@feathersjs/authentication').hooks
 // !code: imports // !end
 

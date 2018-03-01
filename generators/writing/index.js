@@ -469,7 +469,9 @@ module.exports = function generatorWriting (generator, what) {
 
       const hooks = [ 'iff' ];
       const imports = [
-        'const commonHooks = require(\'feathers-hooks-common\');'
+        isJs ?
+          `const commonHooks = require('feathers-hooks-common')${sc}` :
+          `import * as commonHooks from 'feathers-hooks-common'${sc}`
       ];
 
       const comments = {
@@ -491,7 +493,12 @@ module.exports = function generatorWriting (generator, what) {
       };
 
       if (requiresAuth || isAuthEntityWithAuthentication) {
-        imports.push(`const { authenticate } = require('@feathersjs/authentication').hooks${sc}`);
+        if (isJs) {
+          imports.push(`const { authenticate } = require('@feathersjs/authentication').hooks${sc}`);
+        } else {
+          imports.push(`import { hooks as authHooks } from '@feathersjs/authentication'${sc}`);
+          imports.push(`const { authenticate } = authHooks${sc}`);
+        }
       }
 
       if (!isAuthEntityWithAuthentication) {
@@ -502,7 +509,14 @@ module.exports = function generatorWriting (generator, what) {
         // The order of the hooks is important
         if (isAuthEntityWithAuthentication.strategies.indexOf('local') !== -1) {
           imports.push('// eslint-disable-next-line no-unused-vars');
-          imports.push(`const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks${sc}`);
+
+          if (isJs) {
+            imports.push(`const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks${sc}`);
+          } else {
+            imports.push(`import { hooks as localAuthHooks } from '@feathersjs/authentication-local'${sc}`);
+            imports.push(`const { hashPassword, protect } = localAuthHooks${sc}`);
+          }
+
           code.before.create.push('hashPassword()');
           code.before.update.push('hashPassword()');
           code.before.patch.push('hashPassword()');
