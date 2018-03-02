@@ -10,7 +10,7 @@ const { initSpecs } = require('../../lib/specs');
 module.exports = class MiddlewareGenerator extends Generator {
   async prompting () {
     await Generator.asyncInit(this);
-    const { props, _specs: specs } = this;
+    const { _specs: specs } = this;
     initSpecs('options');
 
     this.log();
@@ -28,6 +28,7 @@ module.exports = class MiddlewareGenerator extends Generator {
       '    services/*.test.js\n',
       '    app.test.js\n',
       '  .editorconfig, .gitignore, LICENSE, README.md\n',
+      '  tslint.json, tsconfig.json, tsconfig.test.json',
       '\n',
       chalk.green.bold('You have additionally prevented the following modules from being changed.\n'),
       chalk.green.bold('You can modify this list by manually changing it in\n'),

@@ -5,11 +5,18 @@
 <%- tplImports('compress', 'compression', 'req') %>
 <%- tplImports('cors', null, 'req') %>
 <%- tplImports('helmet', null, 'req') %>
-<%- tplImports('logger', 'winston', 'req') %>
+<%- tplImports('logger', 'winston', 'as') %>
 
 <%- tplImports('feathers', '@feathersjs/feathers') %>
 <%- tplImports('configuration', '@feathersjs/configuration') %>
-<%- tplImports('express', '@feathersjs/express', 'as') %>
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (isJs) { -%>
+const express = require('@feathersjs/express')<%- sc %>
+<% } else {%>
+import express, { json, errorHandler, notFound, rest, static as _static, urlencoded } from '@feathersjs/express'<%- sc %>
+<% } -%>
+<%# --- if-1 ends above. -%>
 <%- hasProvider('socketio') ? tplImports('socketio', '@feathersjs/socketio') : '' %>
 <%- hasProvider('primus') ? tplImports('primus', '@feathersjs/primus') : '' %>
 <%- tplImports('middleware', './middleware') %>
@@ -17,11 +24,11 @@
 <%- tplImports('appHooks', './app.hooks') %>
 <%- tplImports('channels', './channels') %>
 <%# -%>
-<%# --- if-1 starts below. -%>
+<%# --- if-2 starts below. -%>
 <% if (specs.authentication) { -%>
 <%- tplImports('authentication', './authentication') %>
 <% } -%>
-<%# --- if-1 ends above. -%>
+<%# --- if-2 ends above. -%>
 
 <%# -%>
 <%# --- forEach-1 starts below. -%>
@@ -35,7 +42,7 @@ const <%- __adapter %> = require('./<%- __module %>')<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-const app = express<%- !isJs ? '.default' : '' -%>(feathers())<%- sc %>
+const app = express(feathers())<%- sc %>
 <%- insertFragment('use_start') %>
 
 // Load app configuration
@@ -44,17 +51,17 @@ app.configure(configuration())<%- sc %>
 app.use(cors())<%- sc %>
 app.use(helmet())<%- sc %>
 app.use(compress())<%- sc %>
-app.use(express.json())<%- sc %>
-app.use(express.urlencoded({ extended: true }))<%- sc %>
+app.use(<%- isJs ? 'express.' : '' -%>json())<%- sc %>
+app.use(<%- isJs ? 'express.' : '' -%>urlencoded({ extended: true }))<%- sc %>
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')))<%- sc %>
 // Host the public folder
-app.use('/', express.static(app.get('public')))<%- sc %>
+app.use('/', <%- isJs ? 'express.static' : '_static' -%>(app.get('public')))<%- sc %>
 <%- insertFragment('use_end') %>
 
 // Set up Plugins and providers
 <%- insertFragment('config_start') %>
-<%- hasProvider('rest') ? `app.configure(express.rest())${sc}` : '' %>
-<%- hasProvider('socketio') ? `app.configure(${isJs ? 'socketio' : '(socketio as () => any)'}())${sc}` : '' %>
+<%- hasProvider('rest') ? `app.configure(${isJs ? 'express.' : '' }rest())${sc}` : '' %>
+<%- hasProvider('socketio') ? `app.configure(socketio())${sc}` : '' %>
 <%- hasProvider('primus') ? `app.configure(primus({ transformer: 'websockets' }))${sc}` : '' %>
 <%# --- forEach-3 starts below. -%>
 <% Object.keys(specs._adapters || []).sort().forEach((__adapter, __i) => { -%>
@@ -79,8 +86,8 @@ app.configure(authentication)<%- sc %>
 <%- insertFragment('config_middle') %>
 
 // Configure a middleware for 404s and the error handler
-app.use(express.notFound())<%- sc %>
-app.use(express.errorHandler({ logger }))<%- sc %>
+app.use(<%- isJs ? 'express.' : '' -%>notFound())<%- sc %>
+app.use(<%- isJs ? 'express.' : '' -%>errorHandler({ logger }))<%- sc %>
 <%- insertFragment('config_end') %>
 
 app.hooks(appHooks)<%- sc %>

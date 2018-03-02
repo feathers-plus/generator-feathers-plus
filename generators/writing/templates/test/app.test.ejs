@@ -1,11 +1,11 @@
-
-const assert = require('assert')<%- sc %>
-const rp = require('request-promise')<%- sc %>
-const url = require('url')<%- sc %>
-const app = require('../<%= specs.app.src %>/app')<%- sc %>
+<%- tplTsOnly(['/// <reference types="mocha"/>', '']) %>
+<%- tplImports('assert', null, 'req') %>
+<%- tplImports('rp', 'request-promise', 'req') %>
+<%- tplImports('url', null, 'req') %>
+<%- tplImports('app', `../${specs.app.src}/app`) %>
 
 const port = app.get('port') || 3030<%- sc %>
-const getUrl = pathname => url.format({
+const getUrl = <%- tplJsOrTs('pathname', '(pathname?: string)') %> => url.format({
   hostname: app.get('host') || 'localhost',
   protocol: 'http',
   port,
@@ -23,7 +23,7 @@ describe('Feathers application tests', () => {
   })<%- sc %>
 
   it('starts and shows the index page', () => {
-    return rp(getUrl()).then(body =>
+    return rp(getUrl()).then(<%- tplJsOrTs('body', '(body: string)') %> =>
       assert.ok(body.indexOf('<html>') !== -1)
     )<%- sc %>
   })<%- sc %>

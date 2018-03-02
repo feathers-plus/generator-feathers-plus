@@ -29,6 +29,14 @@ const OAUTH2_STRATEGY_MAPPINGS = {
   github: 'passport-github'
 };
 
+const STRATEGY_TYPES = {
+  local: '@types/feathersjs__authenticaltion-local',
+  auth0: '@types/feathersjs__authenticaltion-oauth2',
+  google: '@types/feathersjs__authenticaltion-google',
+  facebook: '@types/feathersjs__authenticaltion-facebook',
+  github: '@types/feathersjs__authenticaltion-github',
+};
+
 const mongooseNativeFuncs = {
   [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
   [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId'
@@ -218,9 +226,12 @@ module.exports = function generatorWriting (generator, what) {
   // ===== app =====================================================================================
   function app (generator) {
     // Custom abbreviations for building 'todos'.
+
+    // Configurations
     const pkg = generator.pkg = generator.fs.readJSON(
       generator.destinationPath('package.json'), makeConfig.package(generator)
     );
+
     const configDefault = specs._defaultJson = generator.fs.readJSON(
       generator.destinationPath('config/default.json'), makeConfig.configDefault(generator)
     );
@@ -273,17 +284,30 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([tpl, 'src', 'channels.ejs'], [src, `channels.${js}`], true),
 
       json(pkg, 'package.json'),
-      json(eslintrc, '.eslintrc.json', null, eslintrcExists && !eslintrcChanged),
       json(configDefault, ['config', 'default.json']),
       json(configProd, ['config', 'production.json']),
 
       tmpl([tpl, 'src', 'index.ejs'], [src, `index.${js}`]),
       tmpl([tpl, 'src', 'app.hooks.ejs'], [src, `app.hooks.${js}`]),
 
-      tmpl([mwPath, 'index.ejs'], [src, 'middleware', `index.${js}`]),
-      tmpl([srcPath, 'app.ejs'], [src, `app.${js}`]),
-      tmpl([serPath, 'index.ejs'], [src, 'services', `index.${js}`])
+      tmpl([mwPath, 'index.ejs'],             [src, 'middleware', `index.${js}`]            ),
+      tmpl([srcPath, 'app.ejs'],              [src, `app.${js}`]                            ),
+      tmpl([serPath, 'index.ejs'],            [src, 'services', `index.${js}`]              ),
+      tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
+      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
     ];
+
+    if (isJs) {
+      todos = todos.concat(
+        json(eslintrc, '.eslintrc.json', null, eslintrcExists && !eslintrcChanged),
+      );
+    } else {
+      todos = todos.concat(
+        copy([tpl, 'tslint.json'], 'tslint.json', true),
+        copy([tpl, 'tsconfig.json'], 'tsconfig.json', true),
+        copy([tpl, 'tsconfig.test.json'], 'tsconfig.test.json', true),
+      );
+    }
 
     // Generate modules
     generatorFs(generator, context, todos);
@@ -304,11 +328,44 @@ module.exports = function generatorWriting (generator, what) {
     ];
 
     generator.devDependencies = [
-      'eslint',
-      'mocha',
       'request',
       'request-promise'
     ];
+
+    if (isJs) {
+      generator.devDependencies = generator.devDependencies.concat([
+        'eslint',
+        'mocha',
+      ]);
+    } else {
+      generator.devDependencies = generator.devDependencies.concat([
+        'ts-mocha',
+        'ts-node',
+        'tslint',
+        'typescript',
+        '@types/feathersjs__configuration',
+        '@types/feathersjs__errors',
+        '@types/feathersjs__feathers',
+        '@types/winston',
+        '@types/mocha',
+        '@types/request-promise',
+        // with express
+        '@types/feathersjs__express',
+        '@types/compression',
+        '@types/cors',
+        '@types/helmet',
+        '@types/serve-favicon',
+        '@types/lodash.merge',
+      ]);
+
+      if (specs.app.providers.indexOf('socketio') !== -1) {
+        generator.devDependencies.push('@types/feathersjs__socketio');
+      }
+
+      if (specs.app.providers.indexOf('primus') !== -1) {
+        generator.devDependencies.push('@types/feathersjs__primus');
+      }
+    }
 
     specs.app.providers.forEach(provider => {
       const type = provider === 'rest' ? 'express' : provider;
@@ -437,7 +494,8 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([serPath,    '_service', serviceTpl],      [libDir, 'services', kn, `${kn}.service.${js}`],  ),
       tmpl([namePath,   genericServiceTpl],           [libDir, 'services', kn, `${kn}.class.${js}`],    false, adapter !== 'generic' ),
 
-      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.${js}`]    ),
+      // lib/service-specs-combine.js runs a `require` on src/services/name/name.schema.js
+      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]       ),
       tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.${js}`]     ),
       tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.${js}`]  ),
       //tmpl([namePath,   'name.sequelize.ejs'],        [libDir, 'services', kn, `${kn}.sequelize.${js}`] ),
@@ -626,6 +684,11 @@ module.exports = function generatorWriting (generator, what) {
       '@feathersjs/authentication-jwt'
     ];
 
+    const devDependencies = [
+      '@types/feathersjs__authentication',
+      '@types/feathersjs__authentication-jwt',
+    ];
+
     // Set up strategies and add dependencies
     strategies.forEach(strategy => {
       const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
@@ -640,8 +703,10 @@ module.exports = function generatorWriting (generator, what) {
         });
 
       } else {
-        dependencies.push(`@feathersjs/authentication-${strategy}`);
+        dependencies.push(`@feathersjs/authentication-${strategy}`); // usually `local`
       }
+
+      devDependencies.push(STRATEGY_TYPES[strategy]);
     });
 
     // Create the users (entity) service
@@ -659,8 +724,13 @@ module.exports = function generatorWriting (generator, what) {
 
     // Update dependencies
     writeAuthenticationConfiguration(generator, context);
+
     generator._packagerInstall(dependencies, {
       save: true
+    });
+
+    generator._packagerInstall(devDependencies, {
+      saveDev: true
     });
   }
 
@@ -731,7 +801,7 @@ module.exports = function generatorWriting (generator, what) {
 
       const hooks = [ 'iff' ];
       const imports = [
-        'const commonHooks = require(\'feathers-hooks-common\');'
+        `const commonHooks = require(\'feathers-hooks-common\')${sc}`
       ];
 
       const comments = {

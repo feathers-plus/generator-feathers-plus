@@ -28,7 +28,7 @@ node_modules
 .lock-wscript
 
 # IDEs and editors (shamelessly copied from @angular/cli's .gitignore)
-/.idea
+.idea/
 .project
 .classpath
 .c9/
@@ -106,6 +106,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+### Language ###
+# TypeScript
+compiled/
 
 # Others
 lib/

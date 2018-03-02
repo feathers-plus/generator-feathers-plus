@@ -5,6 +5,7 @@ module.exports = function(generator) {
   const { props, _specs: specs } = generator;
   const lib = props.src;
   const [ packager, version ] = specs.app.packager.split('@');
+
   const pkg = {
     name: specs.app.name,
     description: specs.app.description,
@@ -28,13 +29,21 @@ module.exports = function(generator) {
       node: `^${major}.0.0`,
       [packager]: version
     },
-    'scripts': {
-      test: `${packager} run eslint && ${packager} run mocha`,
-      eslint: `eslint ${specs.app.src}/. test/. --config .eslintrc.json`,
-      start: `node ${specs.app.src}/`,
-      mocha: 'mocha test/ --recursive --exit --timeout 10000'
-    }
+    scripts: {}
   };
+
+  pkg.scripts = Object.assign(pkg.scripts, specs.options.ts ? {
+    test: 'npm run tslint && npm run mocha',
+    tslint: 'tslint -p tsconfig.json -c tslint.json',
+    start: 'ts-node src/',
+    mocha: 'ts-mocha -p tsconfig.test.json test/**/*.test.ts --timeout 10000 --exit',
+    compile: 'tsc -p tsconfig.json',
+  } : {
+    test: `${packager} run eslint && ${packager} run mocha`,
+    eslint: `eslint ${specs.app.src}/. test/. --config .eslintrc.json`,
+    start: `node ${specs.app.src}/`,
+    mocha: 'mocha test/ --recursive --exit --timeout 10000'
+  });
 
   return pkg;
 };

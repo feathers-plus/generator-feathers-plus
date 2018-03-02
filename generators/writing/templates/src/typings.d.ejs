@@ -1,0 +1,16 @@
+
+// Typings. (Can be re-generated.)
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+declare module 'feathers-hooks-common'<%- sc %>
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (specs.app.providers.indexOf('primus') !== -1) { -%>
+declare module 'primus'<%- sc %>
+<% } -%>
+<%# --- if-1 ends above. -%>
+<%- insertFragment('more') %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

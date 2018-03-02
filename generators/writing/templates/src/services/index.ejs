@@ -6,14 +6,14 @@
 <% Object.keys(specs.services || {}).sort().forEach(__name => {
   __fileName = specs.services[__name].fileName || __name;
 -%>
-let <%- __name %> = require('./<%- __fileName %>/<%- __fileName %>.service');
+let <%- __name %> = require('./<%- __fileName %>/<%- __fileName %>.service')<%- sc %>
 <% }); -%>
 <%# --- forEach-1 ends above. -%>
 
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if (specs.graphql && specs.graphql.path) { -%>
-let <%- specs.graphql.name %> = require('./<%- specs.graphql.name %>/<%- specs.graphql.name %>.service');
+let <%- specs.graphql.name %> = require('./<%- specs.graphql.name %>/<%- specs.graphql.name %>.service')<%- sc %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 <%- insertFragment('imports') %>
@@ -24,21 +24,20 @@ let <%- specs.graphql.name %> = require('./<%- specs.graphql.name %>/<%- specs.g
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
-  app.configure(<%- __name %>);
+  app.configure(<%- __name %>)<%- sc %>
 <% }); -%>
 <%# --- forEach-2 ends above. -%>
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (specs.graphql && specs.graphql.name) { %>
-  app.configure(<%- specs.graphql.name %>);
+  app.configure(<%- specs.graphql.name %>)<%- sc %>
 <% } -%>
 <%# --- if-2 ends above. -%>
   <%- insertFragment('func_return') %>
-};
+}<%- sc %>
 
 <%- insertFragment('exports') %>
-<%# --- ????????????????????????????????????????????????????????? change ; to sc ?????????????????????????????????????. -%>
-<%- `${tplExport('moduleExports')};` %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
