@@ -1,5 +1,6 @@
-const assert = require('assert')<%- sc %>
-const app = require('../../<%= libDirectory %>/app')<%- sc %>
+<%- tplTsOnly(['/// <reference types="mocha"/>', '']) -%>
+<%- tplImports('assert', null, 'req') %>
+<%- tplImports('app', `../../${libDirectory}/app`) %>
 
 describe('\'<%= serviceName %>\' service', () => {
   it('registered the service', () => {

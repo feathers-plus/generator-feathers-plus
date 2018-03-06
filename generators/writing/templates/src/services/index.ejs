@@ -6,7 +6,10 @@
 <% Object.keys(specs.services || {}).sort().forEach(__name => {
   __fileName = specs.services[__name].fileName || __name;
 -%>
-let <%- __name %> = require('./<%- __fileName %>/<%- __fileName %>.service')<%- sc %>
+<%- tplJsOrTs(
+  `let ${__name} = require('./${__fileName}/${__fileName}.service')${sc}`,
+  `import ${__name} from './${__fileName}/${__fileName}.service'${sc}`,
+) %>
 <% }); -%>
 <%# --- forEach-1 ends above. -%>
 
@@ -19,7 +22,7 @@ let <%- specs.graphql.name %> = require('./<%- specs.graphql.name %>/<%- specs.g
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-// <%- lintDisableNextLine -%> no-unused-vars
+// <%- lintDisableNextLineUnused %>
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the services. -%>

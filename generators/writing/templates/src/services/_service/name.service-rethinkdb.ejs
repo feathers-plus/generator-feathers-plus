@@ -1,8 +1,8 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
 const createService = require('feathers-rethinkdb')<%- sc %>
 const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
-<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
 <%- insertFragment('rethink_imports') %>
 <%- insertFragment('rethink_init') %>
 

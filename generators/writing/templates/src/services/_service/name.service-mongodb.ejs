@@ -1,11 +1,11 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
 const createService = require('feathers-mongodb')<%- sc %>
 const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
 <%- insertFragment('mongo_imports', [
   `// let $jsonSchema = require('./${kebabName}.mongo')${sc}`
 ]) %>
-<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
 <%- insertFragment('mongo_init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>

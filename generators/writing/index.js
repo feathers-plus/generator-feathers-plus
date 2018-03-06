@@ -18,6 +18,7 @@ const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
 const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
+const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript');
 const stringifyPlus = require('../../lib/stringify-plus');
 
 const { updateSpecs } = require('../../lib/specs');
@@ -29,12 +30,12 @@ const OAUTH2_STRATEGY_MAPPINGS = {
   github: 'passport-github'
 };
 
-const STRATEGY_TYPES = {
-  local: '@types/feathersjs__authenticaltion-local',
-  auth0: '@types/feathersjs__authenticaltion-oauth2',
-  google: '@types/feathersjs__authenticaltion-google',
-  facebook: '@types/feathersjs__authenticaltion-facebook',
-  github: '@types/feathersjs__authenticaltion-github',
+const AUTH_TYPES = {
+  local: '@types/feathersjs__authentication-local',
+  auth0: '@types/feathersjs__authentication-oauth2',
+  // google:
+  facebook: '@types/passport-facebook',
+  github: '@types/passport-github',
 };
 
 const mongooseNativeFuncs = {
@@ -83,6 +84,11 @@ function abstractTs(specs) {
 
   return {
     tplJsOrTs: (value, valueTs) => ifTs ? valueTs : value,
+    tplJsOnly: lines => {
+      lines = Array.isArray(lines) ? lines : [lines];
+
+      return !ifTs ? lines.join(EOL) : '';
+    },
     tplTsOnly: lines => {
       lines = Array.isArray(lines) ? lines : [lines];
 
@@ -137,7 +143,7 @@ module.exports = function generatorWriting (generator, what) {
 
   const js = specs.options.ts ? 'ts' : 'js';
   const isJs = !specs.options.ts;
-  const { tplJsOrTs, tplTsOnly, tplImports, tplModuleExports, tplExport } = abstractTs(specs);
+  const { tplJsOrTs, tplJsOnly, tplTsOnly, tplImports, tplModuleExports, tplExport } = abstractTs(specs);
 
   // Other abbreviations using in building 'todos'.
   const libDir = specs.app.src;
@@ -165,14 +171,22 @@ module.exports = function generatorWriting (generator, what) {
     sc: specs.options.semicolons ? ';' : '',
     lintRule: isJs ? 'eslint ' : 'tslint:',
     lintDisable: isJs ?  'eslint-disable' : 'tslint:disable',
+    lintDisableUnused: isJs ? 'eslint-disable no-unused-vars' : 'tslint:disable no-unused-variable',
     lintDisableNextLine: isJs ?  'eslint-disable-next-line' : 'tslint:disable-next-line',
+    lintDisableNextLineUnused: isJs ?
+      'eslint-disable-next-line no-unused-vars' : 'tslint:disable-next-line no-unused-variable',
     tplJsOrTs,
+    tplJsOnly,
     tplTsOnly,
     tplImports,
     tplModuleExports,
     tplExport,
 
     // Utilities.
+    camelCase,
+    kebabCase,
+    snakeCase,
+    upperFirst,
     merge,
     EOL,
     stringifyPlus
@@ -314,10 +328,9 @@ module.exports = function generatorWriting (generator, what) {
 
     // Update dependencies
     generator.dependencies = [
-      '@feathersjs/feathers',
-      '@feathersjs/errors',
       '@feathersjs/configuration',
-      '@feathersjs/express',
+      '@feathersjs/errors',
+      '@feathersjs/feathers',
       'compression',
       'cors',
       'feathers-hooks-common',
@@ -339,24 +352,28 @@ module.exports = function generatorWriting (generator, what) {
       ]);
     } else {
       generator.devDependencies = generator.devDependencies.concat([
+        '@types/feathersjs__configuration',
+        '@types/feathersjs__errors',
+        '@types/feathersjs__feathers',
+        '@types/lodash.merge',
+        '@types/mocha',
+        '@types/request-promise',
+        '@types/winston',
         'ts-mocha',
         'ts-node',
         'tslint',
         'typescript',
-        '@types/feathersjs__configuration',
-        '@types/feathersjs__errors',
-        '@types/feathersjs__feathers',
-        '@types/winston',
-        '@types/mocha',
-        '@types/request-promise',
-        // with express
-        '@types/feathersjs__express',
-        '@types/compression',
-        '@types/cors',
-        '@types/helmet',
-        '@types/serve-favicon',
-        '@types/lodash.merge',
       ]);
+
+      if (specs.app.providers.indexOf('rest') !== -1) {
+        generator.devDependencies = generator.devDependencies.concat([
+          '@types/feathersjs__express',
+          '@types/compression',
+          '@types/cors',
+          '@types/helmet',
+          '@types/serve-favicon',
+        ]);
+      }
 
       if (specs.app.providers.indexOf('socketio') !== -1) {
         generator.devDependencies.push('@types/feathersjs__socketio');
@@ -373,13 +390,8 @@ module.exports = function generatorWriting (generator, what) {
       generator.dependencies.push(`@feathersjs/${type}`);
     });
 
-    generator._packagerInstall(generator.dependencies, {
-      save: true
-    });
-
-    generator._packagerInstall(generator.devDependencies, {
-      saveDev: true
-    });
+    generator._packagerInstall(generator.dependencies, { save: true });
+    generator._packagerInstall(generator.devDependencies, { saveDev: true });
   }
 
   // ===== service =================================================================================
@@ -406,7 +418,6 @@ module.exports = function generatorWriting (generator, what) {
     const serviceModule = moduleMappings[adapter];
     const modelTpl = `${adapter}${isAuthEntityWithAuthentication ? '-user' : ''}.ejs`;
     const hasModel = existsSync(join(srcPath, '_model', modelTpl));
-    const strategies = (specs.authentication || {}).strategies || [];
 
     // Run `generate connection` for the selected adapter
     if (!generatorsInclude('all')) {
@@ -446,25 +457,46 @@ module.exports = function generatorWriting (generator, what) {
       serviceModule,
       mongoJsonSchema: serviceSpecsToMongoJsonSchema(feathersSpecs[name], feathersSpecs[name]._extensions),
       mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
+      typescriptTypes: serviceSpecsToTypescript(specsService, feathersSpecs[name], feathersSpecs[name]._extensions),
     });
     context.mongoJsonSchemaStr = stringifyPlus(context.mongoJsonSchema);
     context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs: mongooseNativeFuncs });
+    context.typescriptTypesStr = context.typescriptTypes.map(str => `  ${str}`).join(`${context.sc}${EOL}`) +
+      (context.typescriptTypes.length ? `${context.sc}` : '');
 
     const { seqModel, seqFks } = serviceSpecsToSequelize(feathersSpecs[name], feathersSpecs[name]._extensions);
     context.sequelizeSchema = seqModel;
     context.sequelizeFks = seqFks;
     context.sequelizeSchemaStr = stringifyPlus(context.sequelizeSchema, { nativeFuncs: sequelizeNativeFuncs });
 
+    // inspector(`\n... mongoJsonSchema ${name} (generator ${what})`, context.mongooseSchema);
+    // inspector(`\n... mongoJsonSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr.split('\n'));
     // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context.mongooseSchema);
     // inspector(`\n... mongooseSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr.split('\n'));
     // inspector(`\n... sequelizeSchema ${name} (generator ${what})`, context.sequelizeSchema);
     // inspector(`\n... sequelizeSchemaStr ${name} (generator ${what})`, context.sequelizeSchemaStr.split('\n'));
     // inspector(`\n... sequelizeFks ${name} (generator ${what})`, context.sequelizeFks);
+    // inspector(`\n... typescriptTypes ${name} (generator ${what})`, context.typescriptTypes);
+    // inspector(`\n... typescriptTypesStr ${name} (generator ${what})`, context.typescriptTypesStr.split('\n'));
     // inspector(`\n... context (generator ${what})`, context);
 
     const dependencies = ['ajv'];
+    const devDependencies = [];
+
+    switch (adapter) {
+      case 'nedb':
+        devDependencies.push('@types/nedb');
+        break;
+      case 'mongoose':
+        devDependencies.push('@types/mongoose');
+        break;
+      case 'sequelize':
+        devDependencies.push('@types/sequelize');
+        break;
+    }
 
     // Set up strategies and add dependencies
+    /*
     strategies.forEach(strategy => {
       const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
 
@@ -481,6 +513,7 @@ module.exports = function generatorWriting (generator, what) {
         dependencies.push(`@feathersjs/authentication-${strategy}`);
       }
     });
+    */
 
     // Custom abbreviations for building 'todos'.
     const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))
@@ -509,15 +542,11 @@ module.exports = function generatorWriting (generator, what) {
 
     // Update dependencies
     if (serviceModule.charAt(0) !== '.') {
-      generator._packagerInstall([ serviceModule ], { save: true });
-    }
-
-    // Update dependencies
-    if (serviceModule.charAt(0) !== '.') {
       dependencies.push(serviceModule);
     }
 
     generator._packagerInstall(dependencies, { save: true });
+    generator._packagerInstall(devDependencies, { saveDev: true });
 
     // Determine which hooks are needed
     function getHookInfo(name) {
@@ -526,10 +555,10 @@ module.exports = function generatorWriting (generator, what) {
       const requiresAuth = specsService.requiresAuth;
 
       const hooks = [ 'iff' ];
-      const imports = [
-        isJs ?
-          `const commonHooks = require('feathers-hooks-common')${sc}` :
-          `import * as commonHooks from 'feathers-hooks-common'${sc}`
+      const imports = isJs ? [
+        `const commonHooks = require('feathers-hooks-common')${sc}`
+      ] : [
+        `import * as commonHooks from 'feathers-hooks-common'${sc}`
       ];
 
       const comments = {
@@ -566,11 +595,12 @@ module.exports = function generatorWriting (generator, what) {
       } else {
         // The order of the hooks is important
         if (isAuthEntityWithAuthentication.strategies.indexOf('local') !== -1) {
-          imports.push('// eslint-disable-next-line no-unused-vars');
 
           if (isJs) {
+            imports.push('// eslint-disable-next-line no-unused-vars');
             imports.push(`const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks${sc}`);
           } else {
+            imports.push('// tslint:disable-next-line no-unused-variable');
             imports.push(`import { hooks as localAuthHooks } from '@feathersjs/authentication-local'${sc}`);
             imports.push(`const { hashPassword, protect } = localAuthHooks${sc}`);
           }
@@ -657,9 +687,7 @@ module.exports = function generatorWriting (generator, what) {
 
     // Update dependencies
     generator.dependencies = generator.dependencies.concat(specs._connectionDeps);
-    generator._packagerInstall(generator.dependencies, {
-      save: true
-    });
+    generator._packagerInstall(generator.dependencies, { save: true });
 
     generatorFs(generator, context, todos);
   }
@@ -706,7 +734,9 @@ module.exports = function generatorWriting (generator, what) {
         dependencies.push(`@feathersjs/authentication-${strategy}`); // usually `local`
       }
 
-      devDependencies.push(STRATEGY_TYPES[strategy]);
+      if (AUTH_TYPES[strategy]) {
+        devDependencies.push(AUTH_TYPES[strategy]);
+      }
     });
 
     // Create the users (entity) service
@@ -716,7 +746,8 @@ module.exports = function generatorWriting (generator, what) {
 
     todos = [
       tmpl([srcPath, 'authentication.ejs'], [libDir, `authentication.${js}`]),
-      tmpl([srcPath, 'app.ejs'], [src, `app.${js}`])
+      tmpl([srcPath, 'app.ejs'], [src, `app.${js}`]),
+      // todo tmpl([tpl, 'test', 'auth-local.test.ejs'], [testDir, `auth-local.test.${js}`]),
     ];
 
     // Generate modules
@@ -724,14 +755,8 @@ module.exports = function generatorWriting (generator, what) {
 
     // Update dependencies
     writeAuthenticationConfiguration(generator, context);
-
-    generator._packagerInstall(dependencies, {
-      save: true
-    });
-
-    generator._packagerInstall(devDependencies, {
-      saveDev: true
-    });
+    generator._packagerInstall(dependencies, { save: true });
+    generator._packagerInstall(devDependencies, { saveDev: true });
   }
 
   // ===== middleware ==============================================================================

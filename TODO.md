@@ -242,6 +242,7 @@ OK - create src/services/name/name.sequelize.js
 OK - create src/models/name.model.js for sequelize
 OK - create src/models/name.model.js for sequelize user-entity with authentication
 OK - moved model templates under templates/src/_model
+OK - duplicate oauthProvider code in service and connection
 
 
 NO - hooks modules should be ifNew: true
@@ -257,7 +258,6 @@ NO   remain. This causes, for example, src/mongodb.js to still be generated.
 NO   Basically, the generator does not remove info in specs that's no longer relavent.
 
 - add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
-- duplicate oauthProvider code in service and connection
 - PUT BACK f+/graphql in package.json for fx/cli-gen-ex
 - code-fragments.js does a `require` on name.schema.js. This gets the default schema merged with
   custom changes. Only the default schema is wanted. This will mess up the regenerated module.
@@ -266,6 +266,8 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
 
 - test name.mongo.js
 - test name.validate.js
+- run tslint --fix / eslint --fix afterwards (watch for removal of trailing commas
+- adapter-info: use elsewhere? Make sure generic adapter can work somehow.
 
 - add f-auth-mgnt fields to graphql auth
 

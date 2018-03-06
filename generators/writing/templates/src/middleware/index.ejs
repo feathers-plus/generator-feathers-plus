@@ -1,18 +1,18 @@
 
 // Configure middleware. (Can be re-generated.)
-<%- tplTsOnly(`import { App } from '../app.interface'${sc}${EOL}`) -%>
+<%- tplTsOnly([`import { App } from '../app.interface'${sc}`, '', '']) -%>
 <%# -%>
 <%# --- forEach-1 starts below. -%>
 <% Object.keys(specs.middlewares || {}).sort().forEach(name => {
   __temp = specs.middlewares[name];
 -%>
-const <%- __temp.camel %> = require('./<%- __temp.kebab %>')<%- sc %>
+<%- tplImports(__temp.camel, `./${__temp.kebab}`) %>
 <% }) -%>
 <%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-// <%- lintDisableNextLine -%> no-unused-vars
+// <%- lintDisableNextLineUnused %>
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   <%- insertFragment('func_init') %>
   // Add your custom middleware here. Remember that

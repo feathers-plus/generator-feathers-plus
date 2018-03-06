@@ -1,14 +1,14 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`. (Can be re-generated.)
-const createService = require('<%= serviceModule %>')<%- sc %>
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
+<%- tplImports('createService', serviceModule, 'req') %>
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if(modelName) { -%>
-const createModel = require('../../models/<%= modelName %>')<%- sc %>
+<%- tplImports('createModel', `../../models/${modelName}`) %>
 <% } -%>
 <%# --- if-1 ends above. -%>
-const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
-<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
+<%- tplImports('hooks', `./${kebabName}.hooks`) %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 

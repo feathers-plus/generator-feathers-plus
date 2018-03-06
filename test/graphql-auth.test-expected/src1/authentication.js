@@ -31,12 +31,12 @@ let moduleExports = function (app) {
   app.service('authentication').hooks({
     before: {
       create: [
-        authentication.hooks.authenticate(config.strategies)
+        authentication.hooks.authenticate(config.strategies),
       ],
       remove: [
-        authentication.hooks.authenticate('jwt')
-      ]
-    }
+        authentication.hooks.authenticate('jwt'),
+      ],
+    },
   });
   // !code: func_return // !end
 };

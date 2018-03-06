@@ -31,7 +31,7 @@
     <%- insertFragment('sequelize_define') %>
   )<%- sc %>
 
-  // <%- lintDisableNextLine -%> no-unused-vars
+  // <%- lintDisableNextLineUnused %>
   <%= camelName %>.associate = function (models) {
     // Define associations here for foreign keys
     //   <%- sequelizeFks.length ? `- ${sequelizeFks}` : '- No foreign keys defined.' %>

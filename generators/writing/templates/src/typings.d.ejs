@@ -3,6 +3,7 @@
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
+// Application.
 declare module 'feathers-hooks-common'<%- sc %>
 <%# -%>
 <%# --- if-1 starts below. -%>
@@ -10,6 +11,57 @@ declare module 'feathers-hooks-common'<%- sc %>
 declare module 'primus'<%- sc %>
 <% } -%>
 <%# --- if-1 ends above. -%>
+<%# -%>
+<%# -%>
+<%# === Authentication ========================================================================= -%>
+<%# --- if-2 starts below. -%>
+<% if (specs.authentication.strategies.length) { -%>
+
+// Authentication.
+<% } -%>
+<%# --- if-2 ends above. -%>
+<%# -%>
+<%# --- if-3 starts below. -%>
+<% if (specs.authentication.strategies.indexOf('auth0') !== -1) { -%>
+declare module 'passport-auth0'<%- sc %>
+<% } -%>
+<%# --- if-3 ends above. -%>
+<%# --- if-4 starts below. -%>
+<% if (specs.authentication.strategies.indexOf('google') !== -1) { -%>
+declare module 'passport-google-oauth20'<%- sc %>
+<% } -%>
+<%# --- if-4 ends above. -%>
+<%# -%>
+<%# === Adapters =============================================================================== -%>
+<%
+  const __adapters1 = Object.keys(specs.services).map(name => specs.services[name].adapter);
+  const __adapters = generators = [...new Set(__adapters1)].sort(); // Get unique adapters.
+-%>
+<%# -%>
+<%# --- if-5 starts below. -%>
+<% if (__adapters.length) { -%>
+
+// Services.
+<% } -%>
+<%# --- if-5 ends above. -%>
+<%# -%>
+<%# --- forEach-6 starts below. -%>
+<% __adapters.forEach(name => { -%>
+declare module 'feathers-<%- name %>'<%- sc %>
+<% }) -%>
+<%# --- forEach-6 ends above. -%>
+<%# -%>
+<%# === GraphQL ================================================================================ -%>
+<%# -%>
+<%# --- if-5 starts below. -%>
+<% if (specs.graphql) { -%>
+
+// GraphQL.
+declare module '@feathers-plus/graphql'<%- sc %>
+declare module 'merge-graphql-schemas'<%- sc %>
+<% } -%>
+<%# --- if-5 ends above. -%>
+
 <%- insertFragment('more') %>
 
 <%- insertFragment('funcs') %>

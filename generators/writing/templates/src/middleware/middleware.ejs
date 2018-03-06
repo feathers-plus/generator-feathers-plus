@@ -1,5 +1,5 @@
-<%- tplTsOnly([`import { RequestHandler } from 'express'${sc}`, '']) -%>
-// <%- lintDisableNextLine -%> no-unused-vars
+<%- tplTsOnly([`import { RequestHandler } from 'express'${sc}`, '', '']) -%>
+// <%- lintDisableNextLineUnused %>
 <%- tplExport('function (options = {}) {', 'function(options: any = {}): RequestHandler {') %>
   return function <%= specs.middlewares[mwName].camel %>(req, res, next) {
     // <%- lintDisableNextLine -%> no-console

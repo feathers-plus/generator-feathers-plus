@@ -1,0 +1,61 @@
+<%- tplTsOnly(['/// <reference types="mocha"/>', '']) %>
+<%- tplImports('assert', null, 'req') %>
+<%- tplImports('app', `../${specs.app.src}/app`) %>
+
+<%- insertFragment('setup', [
+  '// Configure users service and sample user.',
+  `const email = 'user@domain.com'${sc}`,
+  `const password = 'secret'${sc}`,
+  `const usersServiceName = null${sc} // 'users'`,
+  `const usersRecord = { email, password }${sc}`,
+  '',
+  '// Configure an authenticated service and sample data.',
+  `const authenticatedServiceName = null${sc}`,
+  `const authenticatedServiceData = { foo: 'bar' }${sc}`
+]) %>
+
+if (authenticatedServiceName) {
+  const service = app.service(authenticatedServiceName)<%- sc %>
+
+  describe('Feathers authentication test', () => {
+    let params, result<%- sc %>
+
+    beforeEach(async () => {
+      let user = await app.service('users').create(usersRecord)<%- sc %>
+
+      const { accessToken } = await app.service('authentication').create({
+        strategy: 'local',
+        email,
+        password
+      })<%- sc %>
+
+      params = {
+        provider: 'socketio',
+        user,
+        accessToken,
+        authenticated: true
+      }<%- sc %>
+    })<%- sc %>
+
+    it('registered the service', () => {
+      assert.ok(service, 'Registered the service')<%- sc %>
+    })<%- sc %>
+
+    it('restricts create for unauthorized users', async () => {
+      try {
+        result = await service.create(authenticatedServiceData, { provider: 'socketio' })<%- sc %>
+      } catch (err) {
+        error = err<%- sc %>
+      }
+
+      assert.equal(result, undefined)<%- sc %>
+      assert.equal(error, 'NotAuthenticated: No auth token')<%- sc %>
+    })<%- sc %>
+
+    it('runs create for authorized users', async () => {
+      const result = await service.create(authenticatedServiceData, params)<%- sc %>
+
+      assert.ok(result, 'created record')<%- sc %>
+    })<%- sc %>
+  })<%- sc %>
+}<%- sc %>

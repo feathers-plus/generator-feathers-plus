@@ -1,9 +1,9 @@
 
-/* <%- lintRule -%>quotes: 0 */
+/* <%- lintRule %>quotes: 0 */
 // Defines Sequelize model for service `<%= serviceName %>`. (Can be re-generated.)
 const merge = require('lodash.merge')<%- sc %>
 const Sequelize = require('sequelize');
-// <%- lintDisableNextLine -%> no-unused-vars
+// <%- lintDisableNextLineUnused %>
 const DataTypes = Sequelize.DataTypes;
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>

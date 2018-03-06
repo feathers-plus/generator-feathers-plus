@@ -7,7 +7,7 @@
 ]) %>
 
 <%- insertFragment('used', [
-  `// ${lintDisableNextLine} no-unused-vars`,
+  `// ${lintDisableNextLineUnused}`,
   `const { iff } = commonHooks${sc}`
 ]) %>
 <%- insertFragment('init') %>

@@ -4,7 +4,7 @@
 <%- insertFragment('imports') %>
 
 <%- insertFragment('used', [
-  `// ${lintDisableNextLine} no-unused-vars`,
+  `// ${lintDisableNextLineUnused}`,
   `const { ${hooks.hooks.join(', ')} } = commonHooks${sc}`,
 ]) %>
 <%# -%>
@@ -13,7 +13,7 @@
 <%# --- if-3 starts below. (mongodb only) -%>
 <% if ((mapping.feathers[serviceName] || {}).adapter === 'mongodb') { -%>
 <%- insertFragment('foreign_keys', [
-  `// ${lintDisableNextLine} no-unused-vars`,
+  `// ${lintDisableNextLineUnused}`,
   `const foreignKeys = ${stringifyPlus(feathersSpecs[serviceName]._extensions.foreignKeys).replace(/"/g, '\'')}${sc}`,
 ]) -%>
 <% } -%>

@@ -1,11 +1,29 @@
 
 // Configure authentication. (Can be re-generated.)
-const authentication = require('@feathersjs/authentication')<%- sc %>
-const jwt = require('@feathersjs/authentication-jwt')<%- sc %>
-<% if(specs.authentication.strategies.indexOf('local') !== -1) { %>const local = require('@feathersjs/authentication-local')<%- sc %><% } %>
-<% if(oauthProviders.length){ %>const oauth2 = require('@feathersjs/authentication-oauth2')<%- sc %><% } %>
-<% oauthProviders.forEach(provider => { %>const <%= provider.strategyName %> = require('<%= provider.module %>')<%- sc %>
-<% }); %>
+<%- tplJsOrTs(
+  `const authentication = require('@feathersjs/authentication')${sc}`,
+  `import authentication, { hooks } from '@feathersjs/authentication'${sc}`)
+%>
+<%- tplImports('jwt', '@feathersjs/authentication-jwt') %>
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if(specs.authentication.strategies.indexOf('local') !== -1) { -%>
+<%- tplImports('local', '@feathersjs/authentication-local') %>
+<% } -%>
+<%# --- if-1 ends above. -%>
+<%# -%>
+<%# --- if-2 starts below. -%>
+<% if(oauthProviders.length){ -%>
+<%- tplImports('oauth2', '@feathersjs/authentication-oauth2') %>
+<% } -%>
+<%# --- if-2 ends above. -%>
+<%# -%>
+<%# --- forEach-3 starts below. -%>
+<% oauthProviders.forEach(provider => { -%>
+<%- tplImports(provider.strategyName, provider.module, 'req') %>
+<% }); -%>
+<%# --- forEach-3 ends above. -%>
+
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
@@ -35,12 +53,12 @@ const jwt = require('@feathersjs/authentication-jwt')<%- sc %>
   app.service('authentication').hooks({
     before: {
       create: [
-        authentication.hooks.authenticate(config.strategies)
+        <%- tplJsOnly('authentication.') -%>hooks.authenticate(config.strategies),
       ],
       remove: [
-        authentication.hooks.authenticate('jwt')
-      ]
-    }
+        <%- tplJsOnly('authentication.') -%>hooks.authenticate('jwt'),
+      ],
+    },
   })<%- sc %>
   <%- insertFragment('func_return') %>
 }<%- sc %>

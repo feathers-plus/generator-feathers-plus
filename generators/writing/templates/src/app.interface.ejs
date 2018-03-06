@@ -1,6 +1,12 @@
 
 // Application interface. (Can be re-generated.)
-import { Application } from '@feathersjs/feathers';
+import { Application } from '@feathersjs/express';
+<%# -%>
+<%# --- forEach-1 starts below. Loop thru the services. -%>
+<% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
+import { <%- upperFirst(__name) %> } from './models/<%- kebabCase(__name) %>.model'<%- sc %>
+<% }); -%>
+<%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
@@ -17,6 +23,12 @@ import { Application } from '@feathersjs/feathers';
   });
  */
 export type App = Application<{
+<%# -%>
+<%# --- forEach-2 starts below. Loop thru the services. -%>
+<% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
+  <%- __name %>: <%- upperFirst(__name) %>,
+<% }); -%>
+<%# --- forEach-2 ends above. -%>
   <%- insertFragment('moduleExports') %>
 }>;
 <%- insertFragment('funcs') %>

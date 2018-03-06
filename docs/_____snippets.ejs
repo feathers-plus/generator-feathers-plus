@@ -1,0 +1,55 @@
+
+<%- tplJsOnly([`${sc}${EOL}`]) -%>
+<%- tplTsOnly([`${sc}${EOL}`]) -%>
+
+<%- tplJsOrTs(
+  ``,
+  ``
+) %>
+
+<%- tplJsOrTs(``, ``) %>
+
+<%- tplImports('', null) %>
+<%- tplImports('', '') %>
+<%- tplImports('', '', 'req') %>
+<%- tplImports('', '', 'as') %>
+
+// let moduleExports = ${valueTs || value}
+<%- tplModuleExports(null, '', '') %>
+
+// let moduleExports: ${type} = ${valueTs || value}
+<%- tplModuleExports(type, '', '') %>
+
+<%- tplExport('', '') %>
+
+
+
+
+<%# -%>
+<%# --- forEach-1 starts below. -%>
+<% oauthProviders.forEach(provider => { -%>
+
+<% }); %>
+<%# --- forEach-1 ends above. -%>
+
+
+
+
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if () { -%>
+
+<% } -%>
+<%# --- if-1 ends above. -%>
+
+
+if (isJs)
+
+
+
+
+<%- insertFragment('funcs') %>
+
+<%- insertFragment('imports', [
+    tplImports('logger', './hooks/logger'),
+]) %>

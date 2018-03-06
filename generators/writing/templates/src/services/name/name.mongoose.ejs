@@ -1,9 +1,12 @@
 
-/* <%- lintRule -%>quotes: 0 */
+/* <%- lintRule %>quotes: 0 */
 // Defines Mongoose model for service `<%= serviceName %>`. (Can be re-generated.)
-const merge = require('lodash.merge')<%- sc %>
-// <%- lintDisableNextLine -%> no-unused-vars
-const mongoose = require('mongoose')<%- sc %>
+<%- tplImports('merge', 'lodash.merge', 'req') %>
+// <%- lintDisableNextLineUnused %>
+<%- tplJsOrTs(
+  `const mongoose = require('mongoose')${sc}`,
+  `import { mongoose } from 'mongoose'${sc}`,
+) %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 

@@ -1,14 +1,14 @@
 
 /* <%- lintRule -%>quotes: 0 */
 // Validation definitions for validateSchema hook for service `<%= serviceName %>`. (Can be re-generated.)
-const { validateSchema } = require('feathers-hooks-common')<%- sc %>
-const merge = require('lodash.merge')<%- sc %>
-const ajv = require('ajv')<%- sc %>
+<%- tplImports('{ validateSchema }', 'feathers-hooks-common') %>
+<%- tplImports('merge', 'lodash.merge', 'req') %>
+<%- tplImports('ajv', null, 'req') %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
 <%- insertFragment('set_id_type', [
-  `// ${lintDisableNextLine} no-unused-vars`,
+  `// ${lintDisableNextLineUnused}`,
   `const ID = 'string'${sc}`,
 ]) %>
 
@@ -40,25 +40,25 @@ let patch = merge({},
 )<%- sc %>
 <%- insertFragment('all_change') %>
 
-let validateCreate = options => {
+let validateCreate = <%- tplJsOrTs('options', '(options: any)') %> => {
   <%- insertFragment('func_create', [
     `  return validateSchema(create, ajv, options)${sc}`,
   ]) %>
 }<%- sc %>
 
-let validateUpdate = options => {
+let validateUpdate = <%- tplJsOrTs('options', '(options: any)') %> => {
   <%- insertFragment('func_update', [
     `  return validateSchema(update, ajv, options)${sc}`,
   ]) %>
 }<%- sc %>
 
-let validatePatch = options => {
+let validatePatch = <%- tplJsOrTs('options', '(options: any)') %> => {
   <%- insertFragment('func_patch', [
     `  return validateSchema(patch, ajv, options)${sc}`,
   ]) %>
 }<%- sc %>
 
-let quickValidate = (method, data, options) => {
+let quickValidate = <%- tplJsOrTs('(method, data, options)', '(method: string, data: any, options: any)') %> => {
   try {
     if (method === 'create') validateCreate(options)({ type: 'before', method: 'create', data })<%- sc %>
     if (method === 'update') validateCreate(options)({ type: 'before', method: 'update', data })<%- sc %>
