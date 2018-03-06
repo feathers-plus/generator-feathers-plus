@@ -22,7 +22,7 @@
 <%- insertFragment('init') %>
 <%# === Before ================================================================================= -%>
 
-let moduleExports = {
+<%- tplModuleExports('HooksObject', '{', '{') %>
   before: {
 <% if (hooks.comments.before.length) { -%>
 <%- hooks.comments.before.map(str => `    ${str}`).join(EOL) %>

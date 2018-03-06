@@ -522,10 +522,11 @@ module.exports = function generatorWriting (generator, what) {
     const kn = kebabName;
 
     todos = [
-      tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.${js}`],        ),
-      tmpl([srcPath,    '_model',   modelTpl],        [libDir, 'models', `${context.modelName}.${js}`], false, !context.modelName    ),
-      tmpl([serPath,    '_service', serviceTpl],      [libDir, 'services', kn, `${kn}.service.${js}`],  ),
-      tmpl([namePath,   genericServiceTpl],           [libDir, 'services', kn, `${kn}.class.${js}`],    false, adapter !== 'generic' ),
+      tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.${js}`],         ),
+      tmpl([srcPath,    '_model',   modelTpl],        [libDir, 'models', `${context.modelName}.${js}`],  false, !context.modelName    ),
+      tmpl([serPath,    '_service', serviceTpl],      [libDir, 'services', kn, `${kn}.service.${js}`],   ),
+      tmpl([namePath,   genericServiceTpl],           [libDir, 'services', kn, `${kn}.class.${js}`],     false, adapter !== 'generic' ),
+      tmpl([namePath,   'name.interface.ejs'],        [libDir, 'services', kn, `${kn}.interface.${js}`], false, isJs ),
 
       // lib/service-specs-combine.js runs a `require` on src/services/name/name.schema.js
       tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]       ),
@@ -558,7 +559,8 @@ module.exports = function generatorWriting (generator, what) {
       const imports = isJs ? [
         `const commonHooks = require('feathers-hooks-common')${sc}`
       ] : [
-        `import * as commonHooks from 'feathers-hooks-common'${sc}`
+        `import * as commonHooks from 'feathers-hooks-common'${sc}`,
+        `import { HooksObject } from '@feathersjs/feathers'${sc}`
       ];
 
       const comments = {

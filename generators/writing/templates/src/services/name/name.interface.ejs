@@ -1,0 +1,13 @@
+
+// Define TypeScript interface for service `<%= serviceName %>`. (Can be re-generated.)
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+<%- insertFragment('nedb_interface', [
+    `export interface ${upperFirst(camelName)} {`,
+    typescriptTypesStr,
+    '}',
+]) %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

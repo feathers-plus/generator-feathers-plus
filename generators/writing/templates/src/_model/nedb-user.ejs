@@ -13,8 +13,8 @@
   `export interface ${upperFirst(camelName)} {`,
   typescriptTypesStr,
   '}',
-  '',
-]) -%>
+]) %>
+
 <% } -%>
 <%# --- if-1 ends above. -%>
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>

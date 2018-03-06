@@ -1,5 +1,5 @@
 
-/* <%- lintRule -%>quotes: 0 */
+/* <%- tplJsOrTs('eslint quotes: 0', 'tslint:disable:quotemark') %> */
 // Validation definitions for validateSchema hook for service `<%= serviceName %>`. (Can be re-generated.)
 <%- tplImports('{ validateSchema }', 'feathers-hooks-common') %>
 <%- tplImports('merge', 'lodash.merge', 'req') %>
@@ -60,15 +60,16 @@ let validatePatch = <%- tplJsOrTs('options', '(options: any)') %> => {
 
 let quickValidate = <%- tplJsOrTs('(method, data, options)', '(method: string, data: any, options: any)') %> => {
   try {
-    if (method === 'create') validateCreate(options)({ type: 'before', method: 'create', data })<%- sc %>
-    if (method === 'update') validateCreate(options)({ type: 'before', method: 'update', data })<%- sc %>
-    if (method === 'patch') validateCreate(options)({ type: 'before', method: 'patch', data })<%- sc %>
+    if (method === 'create') { validateCreate(options)({ type: 'before', method: 'create', data })<%- sc %> }
+    if (method === 'update') { validateCreate(options)({ type: 'before', method: 'update', data })<%- sc %> }
+    if (method === 'patch') { validateCreate(options)({ type: 'before', method: 'patch', data })<%- sc %> }
   } catch (err) {
     return err<%- sc %>
   }
 }<%- sc %>
 <%- insertFragment('validate_change') %>
 
+<%- tplTsOnly(['// tslint:disable:trailing-comma', '']) -%>
 let moduleExports = {
   create,
   update,
