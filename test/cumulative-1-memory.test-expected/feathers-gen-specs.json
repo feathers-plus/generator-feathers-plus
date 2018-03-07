@@ -18,6 +18,7 @@
   "services": {
     "users1": {
       "name": "users1",
+      "nameSingular": "users1",
       "fileName": "users-1",
       "adapter": "memory",
       "path": "/users-1",
@@ -27,6 +28,7 @@
     },
     "nedb1": {
       "name": "nedb1",
+      "nameSingular": "nedb1",
       "fileName": "nedb-1",
       "adapter": "memory",
       "path": "/nedb-1",
@@ -36,6 +38,7 @@
     },
     "nedb2": {
       "name": "nedb2",
+      "nameSingular": "nedb2",
       "fileName": "nedb-2",
       "adapter": "memory",
       "path": "/nedb-2",

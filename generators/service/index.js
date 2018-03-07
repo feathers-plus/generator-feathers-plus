@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const { camelCase, kebabCase } = require('lodash');
 const { cwd } = require('process');
 const { parse } = require('path');
+const { singular } = require('pluralize');
 
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
@@ -115,6 +116,21 @@ module.exports = class ServiceGenerator extends Generator {
         return true;
       },
       when: () => !ifCalledByAuthentication
+    }, {
+      name: 'nameSingular',
+      message (answers) {
+        return `What would you call one row in the ${chalk.green(answers.name || props.name)} database?`;
+      },
+      default (answers) {
+        return singular(answers.name || props.name);
+      },
+      validate (input) {
+        if (input.trim() === '') {
+          return 'Service path can not be empty';
+        }
+
+        return true;
+      }
     }, {
       type: 'list',
       name: 'adapter',

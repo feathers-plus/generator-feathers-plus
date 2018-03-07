@@ -4,7 +4,7 @@ import { Application } from '@feathersjs/express';
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
-import { <%- upperFirst(__name) %> } from './models/<%- kebabCase(__name) %>.model'<%- sc %>
+import { <%- upperFirst(specs.services[__name].nameSingular) %> } from './services/<%- kebabCase(__name) %>/<%- kebabCase(__name) %>.interface'<%- sc %>
 <% }); -%>
 <%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>
@@ -26,7 +26,7 @@ export type App = Application<{
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
-  <%- __name %>: <%- upperFirst(__name) %>,
+  <%- __name %>: <%- upperFirst(specs.services[__name].nameSingular) %>,
 <% }); -%>
 <%# --- forEach-2 ends above. -%>
   <%- insertFragment('moduleExports') %>

@@ -15,7 +15,7 @@ declare module 'primus'<%- sc %>
 <%# -%>
 <%# === Authentication ========================================================================= -%>
 <%# --- if-2 starts below. -%>
-<% if (specs.authentication.strategies.length) { -%>
+<% if (specs.authentication && specs.authentication.strategies.length) { -%>
 
 // Authentication.
 <% } -%>

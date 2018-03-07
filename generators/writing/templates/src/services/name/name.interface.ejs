@@ -4,7 +4,7 @@
 <%- insertFragment('init') %>
 
 <%- insertFragment('nedb_interface', [
-    `export interface ${upperFirst(camelName)} {`,
+    `export interface ${upperFirst(specs.services[camelName].nameSingular)} {`,
     typescriptTypesStr,
     '}',
 ]) %>

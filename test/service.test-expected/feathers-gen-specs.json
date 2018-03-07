@@ -17,6 +17,7 @@
   "services": {
     "nedb1": {
       "name": "nedb1",
+      "nameSingular": "nedb1",
       "fileName": "nedb-1",
       "adapter": "nedb",
       "path": "/nedb-1",
@@ -26,6 +27,7 @@
     },
     "nedb2": {
       "name": "nedb2",
+      "nameSingular": "nedb2",
       "fileName": "nedb-2",
       "adapter": "nedb",
       "path": "/nedb-2",

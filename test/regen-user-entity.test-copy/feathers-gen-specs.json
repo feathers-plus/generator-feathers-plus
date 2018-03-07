@@ -18,6 +18,7 @@
   "services": {
     "nedb1": {
       "name": "nedb1",
+      "nameSingular": "nedb1",
       "fileName": "nedb-1",
       "adapter": "nedb",
       "path": "/nedb-1",

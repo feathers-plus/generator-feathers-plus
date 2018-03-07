@@ -6,17 +6,6 @@
 <%- insertFragment('nedb_imports') %>
 <%- insertFragment('nedb_init') %>
 
-<%# -%>
-<%# --- if-1 starts below. -%>
-<% if (!isJs) { -%>
-<%- insertFragment('nedb_interface', [
-  `export interface ${upperFirst(camelName)} {`,
-  typescriptTypesStr,
-  '}',
-]) %>
-
-<% } -%>
-<%# --- if-1 ends above. -%>
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   const dbPath = app.get('nedb')<%- sc %>
   <%- insertFragment('nedb_client', [
