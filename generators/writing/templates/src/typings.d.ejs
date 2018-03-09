@@ -22,12 +22,12 @@ declare module 'primus'<%- sc %>
 <%# --- if-2 ends above. -%>
 <%# -%>
 <%# --- if-3 starts below. -%>
-<% if (specs.authentication.strategies.indexOf('auth0') !== -1) { -%>
+<% if (specs.authentication && specs.authentication.strategies.indexOf('auth0') !== -1) { -%>
 declare module 'passport-auth0'<%- sc %>
 <% } -%>
 <%# --- if-3 ends above. -%>
 <%# --- if-4 starts below. -%>
-<% if (specs.authentication.strategies.indexOf('google') !== -1) { -%>
+<% if (specs.authentication && specs.authentication.strategies.indexOf('google') !== -1) { -%>
 declare module 'passport-google-oauth20'<%- sc %>
 <% } -%>
 <%# --- if-4 ends above. -%>

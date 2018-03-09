@@ -1,13 +1,14 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`. (Can be re-generated.)
-const createService = require('@feathers-plus/graphql')<%- sc %>
-const { mergeTypes } = require('merge-graphql-schemas')<%- sc %>
-const merge = require('lodash.merge')<%- sc %>
-const generatedSchema = require('./graphql.schemas')<%- sc %>
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
+<%- tplImports('createService', '@feathers-plus/graphql', 'req') %>
+<%- tplImports('merge', 'lodash.merge', 'req') %>
+<%- tplImports('{ mergeTypes }', 'merge-graphql-schemas') %>
+<%- tplImports('generatedSchema', './graphql.schemas') %>
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if (strategy === 'services') { -%>
-const generatedResolvers = require('./service.resolvers')<%- sc %>
+<%- tplImports(`generatedResolvers${!isJs ? ', { ServiceResolverOptions }' : ''}`, './service.resolvers') %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 <%# -%>
@@ -24,7 +25,7 @@ const generatedMetadata = require('./sql.metadata')<%- sc %>
 const { dialect, executeSql, openDb } = require('./sql.execute')<%- sc %>
 <% } -%>
 <%# --- if-3 ends above. -%>
-const hooks = require('./graphql.hooks')<%- sc %>
+<%- tplImports('hooks', './graphql.hooks') %>
 <%- insertFragment('imports') %>
 
 const strategy = '<%- strategy %>'<%- sc %>
@@ -39,7 +40,7 @@ let schemas = mergeTypes([
 <%# -%>
 <%# --- if-4 starts below. -%>
 <% if (strategy === 'services') { -%>
-let resolvers = (app, options) => merge({},
+let resolvers = <%- tplJsOrTs('(app, options)', '(app: App, options: ServiceResolverOptions)') %> => merge({},
   generatedResolvers(app, options),
   <%- insertFragment('service_resolvers') %>
 )<%- sc %>
@@ -74,7 +75,7 @@ if (!dialect) {
 <%# --- if-6 ends above. -%>
 <%- insertFragment('init') %>
 
-let moduleExports = function(){
+let moduleExports = function (<%- tplJsOrTs('', 'this: App') %>) {
   const app = this<%- sc %>
   <%- insertFragment('func_init') %>
 

@@ -1,15 +1,15 @@
 
 // Execute raw SQL statement for GraphQL. (Can be re-generated.)
 // <%- lintDisableNextLineUnused %>
-const { cwd } = require('process')<%- sc %>
+<%- tplImports('{ cwd }', 'process') %>
 // <%- lintDisableNextLineUnused %>
-const { join } = require('path')<%- sc %>
+<%- tplImports('{ join }', 'path') %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
 <%- insertFragment('main', [
   `let dialect, openDb, executeSql${sc}`,
-  `// const sqlite = require('sqlite')${sc}`,
+  `// ${tplJsOrTs(`const sqlite = require('sqlite')`, `import * as sqlite from 'sqlite'`)}${sc}`,
   `// dialect = 'sqlite3'${sc}`,
   '',
   '// openDb = () => {',
@@ -17,8 +17,8 @@ const { join } = require('path')<%- sc %>
   `//   return sqlite${sc}`,
   `// }${sc}`,
   '',
-  '// executeSql = sql => sqlite.all(sql)',
-  '//   .catch(err => {',
+  `// executeSql = ${tplJsOrTs('sql', '(sql: any)')} => ${tplJsOrTs('sqlite', '(sqlite as any)')}.all(sql)`,
+  `//   .catch(${tplJsOrTs('err', '(err: Error)')} => {`,
   `//     // ${lintDisableNextLine} no-console`,
   `//     console.log('executeSql error=', err.message)${sc}`,
   `//     throw err${sc}`,

@@ -16,7 +16,7 @@
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if (specs.graphql && specs.graphql.path) { -%>
-let <%- specs.graphql.name %> = require('./<%- specs.graphql.name %>/<%- specs.graphql.name %>.service')<%- sc %>
+<%- tplImports(specs.graphql.name, `./${specs.graphql.name}/${specs.graphql.name}.service`) %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 <%- insertFragment('imports') %>

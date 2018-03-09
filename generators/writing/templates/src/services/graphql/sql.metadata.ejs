@@ -1,16 +1,27 @@
 
 /* <%- lintDisableUnused %> */
 // Metadata for forming raw SQL statements for GraphQL. (Can be re-generated.)
+<%- tplTsOnly([
+`import { App } from '../../app.interface'${sc}`,
+`import { SqlResolverMap } from './graphql.interfaces'${sc}`,
+``,
+`export interface SqlMetadataOptions {`,
+`  convertArgsToFeathers: any${sc}`,
+`  convertArgsToOrderBy: any${sc}`,
+`  convertArgsToWhere: any${sc}`,
+`}`,
+'',
+]) -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-let moduleExports = function sqlMetadata(app, options) {
+let moduleExports = function sqlMetadata<%- tplJsOrTs('(app, options)', '(app: App, options: SqlMetadataOptions)') %> {
   let { convertArgsToFeathers, convertArgsToOrderBy, convertArgsToWhere } = options<%- sc %>
   let makeOrderBy = convertArgsToOrderBy(options)<%- sc %>
   let makeWhere = convertArgsToWhere(options)<%- sc %>
   <%- insertFragment('func_init') %>
 
-  let returns = {
+  let returns<%- tplTsOnly(': SqlResolverMap') -%> = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(mapping.graphqlSql).forEach(graphqlName => {

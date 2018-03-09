@@ -34,11 +34,11 @@ const tests = [
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
-  { testName: 'scaffolding.test', specsChanges: [
-    [specs => { delete specs.app.providers; }, { app: { providers: ['primus'] } }],
-    [specs => { delete specs.app.providers; }, { app: { providers: ['rest'] } }],
-    [specs => { delete specs.app.providers; }, { app: { providers: ['rest', 'socketio'] } }],
-  ] },
+    { testName: 'scaffolding.test', specsChanges: [
+      [specs => { delete specs.app.providers; }, { app: { providers: ['primus'] } }],
+      [specs => { delete specs.app.providers; }, { app: { providers: ['rest'] } }],
+      [specs => { delete specs.app.providers; }, { app: { providers: ['rest', 'socketio'] } }],
+    ], compareDirs: true },
 
   // t01, z01 Test creation of app.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -178,10 +178,10 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = null //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
 
 describe('writing.test.js', function () {
-  tests.forEach(({ testName, execute = true, specsChanges = [] }) => {
+  tests.forEach(({ testName, execute = true, specsChanges = [], compareDirs = false }) => {
     if (runJustThisTest && runJustThisTest !== testName) return;
 
     describe(testName, function () {
@@ -191,13 +191,13 @@ describe('writing.test.js', function () {
 
             // There is no second generation step
             if (!specsChanges.length) {
-              return compareCode(dir, `${testName}-expected`);
+              return compareCode(dir, `${testName}-expected`, compareDirs);
             }
 
             // Generate on top of contents of working directory
             return runNextGenerator(dir, specsChanges, { skipInstall: true })
               .then(dir => {
-                return compareCode(dir, `${testName}-expected`);
+                return compareCode(dir, `${testName}-expected`, compareDirs);
               });
           });
       });
@@ -325,17 +325,41 @@ function runCommand (cmd, args, options, text) {
   });
 }
 
-function compareCode (appDir, testDir) {
-  const expectedPaths = getFileNames(path.join(__dirname, testDir));
+function compareCode (appDir, testDir, compareDirs) {
+  const appDirLen = appDir.length;
+  const expectedDir = path.join(__dirname, testDir);
+  const expectedDirLen = expectedDir.length;
+
+  const expectedPaths = getFileNames(expectedDir);
   const actualPaths = getFileNames(appDir);
-  assert.deepEqual(actualPaths.relativePaths, expectedPaths.relativePaths, 'Unexpected files in generated dir');
+
+  if (compareDirs === true) {
+    assert.deepEqual(actualPaths.relativePaths, expectedPaths.relativePaths, 'Unexpected files in generated dir');
+  }
 
   actualPaths.paths.forEach((actualPath, i) => {
-    const actual = fs.readFileSync(actualPath.path, 'utf8');
-    const expected = fs.readFileSync(expectedPaths.paths[i].path, 'utf8');
-
-    assert.equal(actual, expected, `Unexpected contents for file ${actualPaths.relativePaths[i]}`);
+    compare(i, actualPath.path.substr(appDirLen));
   });
+
+  /*
+  expectedPaths.paths.forEach((expectedPath, i) => {
+    compare(i, expectedPath.path.substr(expectedDirLen));
+  });
+  */
+
+  function compare(i, fileName) {
+    let expected;
+
+    const actual = fs.readFileSync(`${appDir}${fileName}`, 'utf8');
+    try {
+      expected = fs.readFileSync(`${expectedDir}${fileName}`, 'utf8');
+    } catch (err) {
+      console.log(actual);
+      throw err;
+    }
+
+    assert.equal(actual, expected, `Unexpected contents for file ${appDir}${fileName}`);
+  }
 }
 
 function getFileNames (dir) {

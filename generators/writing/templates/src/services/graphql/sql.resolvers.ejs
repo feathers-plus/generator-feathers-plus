@@ -1,14 +1,25 @@
 
 /* <%- lintDisableUnused %> */
 // Define GraphQL resolvers for forming raw SQL statements. (Can be re-generated.)
+<%- tplTsOnly([
+  `import { App } from '../../app.interface'${sc}`,
+  `import { ResolverMap } from './graphql.interfaces'${sc}`,
+  ``,
+  `export interface SqlResolverFactoryOptions {`,
+  `  dialect: string${sc}`,
+  `  executeSql: any${sc}`,
+  `  genAndRunSql: any${sc}`,
+  `}`,
+  '',
+]) -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-let moduleExports = function sqlResolvers(app, options) {
+let moduleExports = function sqlResolvers<%- tplJsOrTs('(app, options)', '(app: App, options: SqlResolverFactoryOptions)') %> {
   let { dialect, executeSql, genAndRunSql } = options<%- sc %>
   let genRunSql = genAndRunSql(executeSql, { dialect }, options)<%- sc %>
 
-  const returns = {
+  const returns<%- tplTsOnly(': ResolverMap') -%> = {
     <%- insertFragment('resolver_field_more') %>
 
     Query: {

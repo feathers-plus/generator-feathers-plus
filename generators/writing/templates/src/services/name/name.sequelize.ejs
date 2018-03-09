@@ -1,10 +1,13 @@
 
-/* <%- lintRule %>quotes: 0 */
+/* <%- lintRule %>disable:quotemark */
 // Defines Sequelize model for service `<%= serviceName %>`. (Can be re-generated.)
-const merge = require('lodash.merge')<%- sc %>
-const Sequelize = require('sequelize');
+<%- tplImports('merge', 'lodash.merge', 'req') %>
+<%- tplImports('Sequelize', 'sequelize', 'req') %>
 // <%- lintDisableNextLineUnused %>
-const DataTypes = Sequelize.DataTypes;
+<%- tplJsOrTs(
+  `const DataTypes = Sequelize.DataTypes${sc}`,
+  `const DataTypes = (Sequelize as any).DataTypes as Sequelize.DataTypes${sc}`
+) %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 

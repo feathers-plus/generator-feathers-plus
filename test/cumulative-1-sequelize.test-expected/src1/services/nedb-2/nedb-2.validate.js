@@ -18,6 +18,7 @@ let base = merge({},
     title: "Nedb2",
     description: "Nedb2 database.",
     required: [],
+    uniqueItemProperties: [],
     properties: {
       id: {
         type: ID
@@ -28,8 +29,7 @@ let base = merge({},
       nedb1Id: {
         type: ID
       }
-    },
-    uniqueItemProperties: []
+    }
   },
   // !end
   // !code: base_more // !end

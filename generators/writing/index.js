@@ -528,14 +528,13 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([namePath,   genericServiceTpl],           [libDir, 'services', kn, `${kn}.class.${js}`],     false, adapter !== 'generic' ),
       tmpl([namePath,   'name.interface.ejs'],        [libDir, 'services', kn, `${kn}.interface.${js}`], false, isJs ),
 
-      // lib/service-specs-combine.js runs a `require` on src/services/name/name.schema.js
-      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.js`]       ),
-      tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.${js}`]     ),
-      tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.${js}`]  ),
-      //tmpl([namePath,   'name.sequelize.ejs'],        [libDir, 'services', kn, `${kn}.sequelize.${js}`] ),
-      tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.${js}`]  ),
-      tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.${js}`]     ),
-      tmpl([serPath,    'index.ejs'],                 [libDir, 'services', `index.${js}`]               )
+      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.${js}`]     ),
+      tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.${js}`]      ),
+      tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.${js}`]   ),
+      tmpl([namePath,   'name.sequelize.ejs'],        [libDir, 'services', kn, `${kn}.sequelize.${js}`]  ),
+      tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.${js}`]   ),
+      tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.${js}`]      ),
+      tmpl([serPath,    'index.ejs'],                 [libDir, 'services', `index.${js}`]                ),
     ];
 
     // Generate modules
@@ -799,6 +798,7 @@ module.exports = function generatorWriting (generator, what) {
 
     todos = [
       tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `graphql.test.${js}`], true),
+      tmpl([qlPath, 'graphql.interfaces.ejs'], [libDir, 'services', 'graphql', `graphql.interfaces.ts`], false, isJs),
 
       tmpl([namePath, 'name.hooks.ejs'], [libDir, 'services', 'graphql', `graphql.hooks.${js}`]),
       tmpl([qlPath, 'graphql.schemas.ejs'], [libDir, 'services', 'graphql', `graphql.schemas.${js}`]),
@@ -821,14 +821,21 @@ module.exports = function generatorWriting (generator, what) {
       'merge-graphql-schemas'
     ], { save: true });
 
+    generator._packagerInstall([
+      '@types/graphql'
+    ], { saveDev: true });
+
     // Determine which hooks are needed
     function getHookInfo() {
       const sc = context.sc;
       const requiresAuth = specs.graphql.requiresAuth;
 
       const hooks = [ 'iff' ];
-      const imports = [
-        `const commonHooks = require(\'feathers-hooks-common\')${sc}`
+      const imports = isJs ? [
+        `const commonHooks = require('feathers-hooks-common')${sc}`
+      ] : [
+        `import * as commonHooks from 'feathers-hooks-common'${sc}`,
+        `import { HooksObject } from '@feathersjs/feathers'${sc}`
       ];
 
       const comments = {
@@ -850,7 +857,15 @@ module.exports = function generatorWriting (generator, what) {
       };
 
       if (requiresAuth) {
-        imports.push(`const { authenticate } = require('@feathersjs/authentication').hooks${sc}`);
+        if (isJs) {
+          imports.push(`const { authenticate } = require('@feathersjs/authentication').hooks${sc}`);
+        } else {
+          imports.push(`import { hooks as authHooks } from '@feathersjs/authentication'${sc}`);
+          imports.push(`const { authenticate } = authHooks${sc}`);
+        }
+      }
+
+      if (requiresAuth) {
         code.before.all.push('authenticate(\'jwt\')');
       }
 

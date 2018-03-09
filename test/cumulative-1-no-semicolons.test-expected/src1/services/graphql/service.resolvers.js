@@ -51,7 +51,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // !<DEFAULT> code: query-Nedb1
       // getNedb1(query: JSON, params: JSON, key: JSON): Nedb1
-      getNedb1 (parent, args, content, ast) {
+      getNedb1(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast)
         return nedb1.get(args.key, feathersParams).then(extractFirstItem)
       },
@@ -65,7 +65,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // !<DEFAULT> code: query-Nedb2
       // getNedb2(query: JSON, params: JSON, key: JSON): Nedb2
-      getNedb2 (parent, args, content, ast) {
+      getNedb2(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast)
         return nedb2.get(args.key, feathersParams).then(extractFirstItem)
       },
@@ -100,5 +100,6 @@ function paginate(content) {
     return result
   }
 }
+
 // !code: funcs // !end
 // !code: end // !end

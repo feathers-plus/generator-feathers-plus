@@ -263,6 +263,8 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
   custom changes. Only the default schema is wanted. This will mess up the regenerated module.
 - Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
   for `uniqueItemProperties`? In say name.mongo.js?
+- name.schema.*#extensions.graphql.name s/b default to nameSingular
+- `json-schema-deref-sync` converts `type: 'ID'` to `type: 'string'` which is incorrect for primary keys.
 
 - test name.mongo.js
 - test name.validate.js

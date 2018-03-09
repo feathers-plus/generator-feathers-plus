@@ -1,10 +1,25 @@
 
 /* <%- lintDisableUnused %>, indent */
 // Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
+<%- tplTsOnly([
+  `import { App } from '../../app.interface'${sc}`,
+  `import { Paginated } from '@feathersjs/feathers'${sc}`,
+  `import { ResolverMap } from './graphql.interfaces'${sc}`,
+  '',
+]) -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-let moduleExports = function serviceResolvers(app, options) {
+<%- tplTsOnly([
+  'export interface ServiceResolverOptions {',
+  '  convertArgsToFeathers: any;',
+  '  extractAllItems: any;',
+  '  extractFirstItem: any;',
+  '}',
+  '',
+  '',
+]) -%>
+let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(app: App, options: ServiceResolverOptions)') %> {
   const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options<%- sc %>
   <%- insertFragment('extra_auth_props', [
     `  const convertArgs = convertArgsToFeathers([])${sc}`,
@@ -15,7 +30,7 @@ let moduleExports = function serviceResolvers(app, options) {
 ); -%>
   <%- insertFragment('services', __temp) %>
 
-  let returns = {
+  let returns<%- tplTsOnly(': ResolverMap') -%> = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(mapping.graphqlService).forEach(graphqlName => {
@@ -70,7 +85,7 @@ let moduleExports = function serviceResolvers(app, options) {
   __graphql = feathersSpecs[__serviceName]._extensions.graphql;
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
-    `      get${graphqlName} (parent, args, content, ast) {`,
+    `      get${graphqlName}(parent, args, content, ast) {`,
     `        const feathersParams = convertArgs(args, content, ast)${sc}`,
     `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem)${sc}`,
     '      },',
@@ -99,9 +114,12 @@ let moduleExports = function serviceResolvers(app, options) {
 <%- insertFragment('exports') %>
 <%- `${tplExport('moduleExports')}${sc}` %>
 
-function paginate(content) {
-  return result => {
-    content.pagination = !result.data ? undefined : {
+function paginate(content<%- tplTsOnly(': any') -%>) {
+  return <%- tplJsOrTs('result', '(result: any[] | Paginated<any>)') %> => {
+<%- tplJsOrTs(
+`    content.pagination = !result.data ? undefined : {`,
+`    content.pagination = !isPaginated(result) ? undefined : {`
+) %>
       total: result.total,
       limit: result.limit,
       skip: result.skip,
@@ -110,5 +128,12 @@ function paginate(content) {
     return result<%- sc %>
   }<%- sc %>
 }
+
+<%- tplTsOnly([
+  'function isPaginated<T>(it: T[] | Paginated<T>): it is Paginated<T> {',
+  '  return !!(it as any).data;',
+  '}',
+  '',
+]) -%>
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
