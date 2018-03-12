@@ -243,7 +243,9 @@ OK - create src/models/name.model.js for sequelize
 OK - create src/models/name.model.js for sequelize user-entity with authentication
 OK - moved model templates under templates/src/_model
 OK - duplicate oauthProvider code in service and connection
-
+OK - code-fragments.js does a `require` on name.schema.js. This gets the default schema merged with
+     custom changes. Only the default schema is wanted. This will mess up the regenerated module.
+OK - PUT BACK f+/graphql in package.json for fx/cli-gen-ex
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -256,20 +258,28 @@ NO   --> Let user handle this as we think object keys will be rarely used.
 NO - Let's say we had mongodb services and changed them to NeDB. connentions['mongodb+mongodb'] will
 NO   remain. This causes, for example, src/mongodb.js to still be generated.
 NO   Basically, the generator does not remove info in specs that's no longer relavent.
+NO - If we gen an NeDB service & add custom code to name.service.js. Then we regen to mongo. Then we
+     regen back to NeDB. We do not include the previous custom code for NeDB. We could have
+     diff insertion point names for each adapter, nedb_import, mongo_import. We could write a
+     module (not called from anywhere) containing all scanned custom code that has not been used in
+     the current regen. That module is basically a container for custom code we no longer use.\
+     It can be scanned every regen. So it we regen from mongo to nedb, we'd pick up the custom
+     code that was stashed away before.
+     Main problem: If we regen a service, we have to know which modules contain custom code we have
+     to consider for stashing. Basically, if we regen middleware, we won't be regen'ing graphql, so
+     scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
 
 - add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
-- PUT BACK f+/graphql in package.json for fx/cli-gen-ex
-- code-fragments.js does a `require` on name.schema.js. This gets the default schema merged with
-  custom changes. Only the default schema is wanted. This will mess up the regenerated module.
 - Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
   for `uniqueItemProperties`? In say name.mongo.js?
-- name.schema.*#extensions.graphql.name s/b default to nameSingular
+- name.schema.*#extensions.graphql.name s/b default to `nameSingular`
 - `json-schema-deref-sync` converts `type: 'ID'` to `type: 'string'` which is incorrect for primary keys.
 
 - test name.mongo.js
 - test name.validate.js
-- run tslint --fix / eslint --fix afterwards (watch for removal of trailing commas
+- run tslint --fix / eslint --fix afterwards ?!? (watch for removal of trailing commas
 - adapter-info: use elsewhere? Make sure generic adapter can work somehow.
+- put adapter-info into expanded service specs.
 
 - add f-auth-mgnt fields to graphql auth
 
@@ -285,17 +295,6 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
   - Write sample emails.
 - prompt for i18n support  
 
-- If we gen an NeDB service & add custom code to name.service.js. Then we regen to mongo. Then we
-  regen back to NeDB. We do not include the previous custom code for NeDB. We could have
-  diff insertion point names for each adapter, nedb_import, mongo_import. We could write a
-  module (not called from anywhere) containing all scanned custom code that has not been used in
-  the current regen. That module is basically a container for custom code we no longer use.\
-  It can be scanned every regen. So it we regen from mongo to nedb, we'd pick up the custom
-  code that was stashed away before.
-  Main problem: If we regen a service, we have to know which modules contain custom code we have
-  to consider for stashing. Basically, if we regen middleware, we won't be regen'ing graphql, so
-  scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
-
 - error checking pass over specs (plus some custom code),
   e.g. email/password exists in schema of user-entity when local auth selected.
 - what can we do with feathers-sync? 
@@ -305,6 +304,6 @@ NO   Basically, the generator does not remove info in specs that's no longer rel
 - create Knex schema
 - create fastJoin definitions
 - create for swagger
-- create rate limiter for socxket.io. luc.claustres asked about on eon Slack
+- create rate limiter for socket.io. luc.claustres asked about one on Slack
 - create workflow. luc.claustres asked about one on Slack.
 - bring dependencies up to date
