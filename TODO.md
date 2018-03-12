@@ -307,3 +307,9 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 - create rate limiter for socket.io. luc.claustres asked about one on Slack
 - create workflow. luc.claustres asked about one on Slack.
 - bring dependencies up to date
+
+
+final checks
+- consistency. name.sequelize.js lists needed fields for user-entity while others don't.
+- code locations to add
+- which generated code to make the default at a new code location

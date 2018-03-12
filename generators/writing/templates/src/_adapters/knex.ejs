@@ -1,9 +1,16 @@
-const knex = require('knex')<%- sc %>
+
+// knex.<%- js %> - Knex adapter
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
+<%- tplImports('knex', 'knex', 'req') %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 <%- tplExport('function(app) {', 'function(app: App) {') %>
-  const { client, connection } = app.get('<%= database %>')<%- sc %>
-  const db = knex({ client, connection })<%- sc %>
+  let { client, connection } = app.get('<%= database %>')<%- sc %>
+  let db = knex({ client, connection })<%- sc %>
 
   app.set('knexClient', db)<%- sc %>
+  <%- insertFragment('more') %>
 }<%- sc %>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

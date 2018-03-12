@@ -9,7 +9,7 @@
 
 <%- insertFragment('set_id_type', [
   `// ${lintDisableNextLineUnused}`,
-  `const ID = 'string'${sc}`,
+  `const ID = '${primaryKey.idType === 'number' ? 'integer' : primaryKey.idType}'${sc}`,
 ]) %>
 
 let base = merge({},

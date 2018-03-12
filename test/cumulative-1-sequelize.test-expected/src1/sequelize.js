@@ -1,5 +1,9 @@
+
+// sequelize.js - Sequelize adapter (other than SQL server)
 const Sequelize = require('sequelize');
-const { Op } = Sequelize;
+let { Op } = Sequelize;
+// !code: imports // !end
+// !code: init // !end
 
 const operatorsAliases = {
   $eq: Op.eq,
@@ -39,8 +43,8 @@ const operatorsAliases = {
 };
 
 module.exports = function (app) {
-  const connectionString = app.get('postgres');
-  const sequelize = new Sequelize(connectionString, {
+  let connectionString = app.get('postgres');
+  let sequelize = new Sequelize(connectionString, {
     dialect: 'postgres',
     logging: false,
     operatorsAliases,
@@ -48,12 +52,15 @@ module.exports = function (app) {
       freezeTableName: true
     }
   });
-  const oldSetup = app.setup;
+
+  let oldSetup = app.setup;
+  // !code: func_init // !end
 
   app.set('sequelizeClient', sequelize);
 
   app.setup = function (...args) {
-    const result = oldSetup.apply(this, args);
+    let result = oldSetup.apply(this, args);
+    // !code: func_init // !end
 
     // Set up data relationships
     const models = sequelize.models;
@@ -66,6 +73,10 @@ module.exports = function (app) {
     // Sync to the database
     sequelize.sync();
 
+    // !code: func_return // !end
     return result;
   };
+  // !code: more // !end
 };
+// !code: funcs // !end
+// !code: end // !end

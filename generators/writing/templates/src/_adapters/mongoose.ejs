@@ -1,9 +1,18 @@
-const mongoose = require('mongoose')<%- sc %>
+
+// mongoose.<%- js %> - Mongoose adapter
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
+<%- tplImports('mongoose', 'mongoose', 'req') %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
   mongoose.connect(app.get('mongodb'), {})<%- sc %>
   mongoose.Promise = global.Promise<%- sc %>
+  <%- insertFragment('func_init') %>
 
   app.set('mongooseClient', mongoose)<%- sc %>
+  <%- insertFragment('more') %>
 }<%- sc %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

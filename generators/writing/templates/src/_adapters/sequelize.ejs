@@ -1,6 +1,10 @@
-const Sequelize = require('sequelize')<%- sc %>
-const { Op } = Sequelize<%- sc %>
+
+// sequelize.<%- js %> - Sequelize adapter (other than SQL server)
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
+<%- tplImports('Sequelize', 'sequelize', 'req') %>
+let { Op } = Sequelize<%- sc %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 const operatorsAliases = {
   $eq: Op.eq,
@@ -40,8 +44,8 @@ const operatorsAliases = {
 }<%- sc %>
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
-  const connectionString = app.get('<%= database %>')<%- sc %>
-  const sequelize = new Sequelize(connectionString, {
+  let connectionString = app.get('<%= database %>')<%- sc %>
+  let sequelize = new Sequelize(connectionString, {
     dialect: '<%= database %>',
     logging: false,
     operatorsAliases,
@@ -49,12 +53,15 @@ const operatorsAliases = {
       freezeTableName: true
     }
   })<%- sc %>
-  const oldSetup = app.setup<%- sc %>
+
+  let oldSetup = app.setup<%- sc %>
+  <%- insertFragment('func_init') %>
 
   app.set('sequelizeClient', sequelize)<%- sc %>
 
   app.setup = function (...args) {
-    const result = oldSetup.apply(this, args)<%- sc %>
+    let result = oldSetup.apply(this, args)<%- sc %>
+    <%- insertFragment('func_init') %>
 
     // Set up data relationships
     const models = sequelize.models<%- sc %>
@@ -67,6 +74,10 @@ const operatorsAliases = {
     // Sync to the database
     sequelize.sync()<%- sc %>
 
+    <%- insertFragment('func_return') %>
     return result<%- sc %>
   }<%- sc %>
+  <%- insertFragment('more') %>
 }<%- sc %>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

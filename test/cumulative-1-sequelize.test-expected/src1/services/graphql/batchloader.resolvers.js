@@ -70,10 +70,10 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     // Nedb1.nedb2: Nedb2!
     // !<DEFAULT> code: bl-Nedb1-nedb2
     case 'Nedb1.nedb2':
-      return feathersBatchLoader(dataLoaderName, '!', '_id',
+      return feathersBatchLoader(dataLoaderName, '!', 'id',
         keys => {
           feathersParams = convertArgs(args, content, null, {
-            query: { _id: { $in: keys }, $sort: undefined },
+            query: { id: { $in: keys }, $sort: undefined },
             _populate: 'skip', paginate: false
           });
           return nedb2.find(feathersParams);
@@ -85,10 +85,10 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     // Nedb2.nedb1: Nedb1!
     // !<DEFAULT> code: bl-Nedb2-nedb1
     case 'Nedb2.nedb1':
-      return feathersBatchLoader(dataLoaderName, '!', '_id',
+      return feathersBatchLoader(dataLoaderName, '!', 'id',
         keys => {
           feathersParams = convertArgs(args, content, null, {
-            query: { _id: { $in: keys }, $sort: undefined },
+            query: { id: { $in: keys }, $sort: undefined },
             _populate: 'skip', paginate: false
           });
           return nedb1.find(feathersParams);
@@ -135,7 +135,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
       // findNedb1(query: JSON, params: JSON): [Nedb1!]
       findNedb1(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   id: 1 } } });
         return nedb1.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -149,7 +149,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
       // findNedb2(query: JSON, params: JSON): [Nedb2!]
       findNedb2(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   id: 1 } } });
         return nedb2.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end

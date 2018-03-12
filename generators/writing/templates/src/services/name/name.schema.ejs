@@ -33,13 +33,13 @@ let extensions = {
   // GraphQL generation.
   graphql: {
     <%- insertFragment('graphql_header', [
-      `    // name: '${__defaultGraphqlName}',`,
+      `    // name: '${serviceNameSingular.charAt(0).toUpperCase() + serviceNameSingular.slice(1)}',`,
       '    // service: {',
-      '    //   sort: { __id__: 1 },',
+      `    //   sort: { ${primaryKey.idName}: 1 },`,
       '    // },',
       '    // sql: {',
       `    //   sqlTable: '${__defaultGraphqlName}',`,
-      '    //   uniqueKey: \'__id__\',',
+      `    //   uniqueKey: \'${primaryKey.idName}\',`,
       '    //   sqlColumn: {',
       '    //     __authorId__: \'__author_id__\',',
       '    //   },',
@@ -50,7 +50,7 @@ let extensions = {
     ],
     add: {
       <%- insertFragment('graphql_add', [
-        '      // __author__: { type: \'__User__!\', args: false, relation: { ourTable: \'__authorId__\', otherTable: \'__id__\' } },',
+        `      // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: '${primaryKey.idName}' } },`,
       ])%>
     },
     <%- insertFragment('graphql_more') %>

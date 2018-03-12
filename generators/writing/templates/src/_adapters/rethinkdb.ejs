@@ -1,20 +1,27 @@
-const rethinkdbdash = require('rethinkdbdash')<%- sc %>
+
+// rethink.<%- js %> - RethinkDB adapter
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
+<%- tplImports('rethinkdbdash', 'rethinkdbdash', 'req') %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
-  const config = app.get('rethinkdb')<%- sc %>
-  const r = rethinkdbdash(config)<%- sc %>
-  const oldSetup = app.setup<%- sc %>
+  let config = app.get('rethinkdb')<%- sc %>
+  let r = rethinkdbdash(config)<%- sc %>
+
+  let oldSetup = app.setup<%- sc %>
+  <%- insertFragment('func_init') %>
 
   app.set('rethinkdbClient', r)<%- sc %>
 
   app.setup = function (...args) {
     let promise = Promise.resolve()<%- sc %>
+    <%- insertFragment('func_init') %>
 
     // Go through all services and call the RethinkDB `init`
     // which creates the database and tables if they do not exist
     Object.keys(app.services).forEach(path => {
-      const service = app.service(path)<%- sc %>
+      let service = app.service(path)<%- sc %>
 
       if (typeof service.init === 'function') {
         promise = promise.then(() => service.init())<%- sc %>
@@ -25,6 +32,10 @@ const rethinkdbdash = require('rethinkdbdash')<%- sc %>
     // right away that depend on the database and tables being created
     this.set('rethinkInit', promise)<%- sc %>
 
+    <%- insertFragment('func_return') %>
     return oldSetup.apply(this, args)<%- sc %>
   }<%- sc %>
+  <%- insertFragment('more') %>
 }<%- sc %>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

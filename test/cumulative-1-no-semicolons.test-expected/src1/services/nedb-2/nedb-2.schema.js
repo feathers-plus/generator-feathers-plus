@@ -42,7 +42,7 @@ let extensions = {
     },
     // sql: {
     //   sqlTable: 'Nedb2',
-    //   uniqueKey: '__id__',
+    //   uniqueKey: '_id',
     //   sqlColumn: {
     //     __authorId__: '__author_id__',
     //   },

@@ -334,6 +334,7 @@ module.exports = function generatorWriting (generator, what) {
     generator.dependencies = [
       '@feathersjs/configuration',
       '@feathersjs/errors',
+      '@feathersjs/express',
       '@feathersjs/feathers',
       'compression',
       'cors',
@@ -445,6 +446,8 @@ module.exports = function generatorWriting (generator, what) {
     // Custom template context.
     context = Object.assign({}, context, {
       serviceName: name,
+      serviceNameSingular: specsService.nameSingular,
+      primaryKey: feathersSpecs[name]._extensions.primaryKey,
       camelName,
       kebabName,
       snakeName,

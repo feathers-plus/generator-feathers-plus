@@ -9,7 +9,7 @@ const ajv = require('ajv');
 
 // !<DEFAULT> code: set_id_type
 // eslint-disable-next-line no-unused-vars
-const ID = 'string';
+const ID = 'integer';
 // !end
 
 let base = merge({},

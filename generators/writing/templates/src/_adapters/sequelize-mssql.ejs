@@ -1,7 +1,11 @@
-const url = require('url')<%- sc %>
-const Sequelize = require('sequelize')<%- sc %>
-const { Op } = Sequelize<%- sc %>
+
+// sequelize.<%- js %> - Sequelize adapter for SQL server.
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
+<%- tplImports('url', 'url', 'req') %>
+<%- tplImports('Sequelize', 'sequelize', 'req') %>
+let { Op } = Sequelize<%- sc %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 const operatorsAliases = {
   $eq: Op.eq,
@@ -41,12 +45,12 @@ const operatorsAliases = {
 }<%- sc %>
 
 <%- tplExport('function (app) {', 'function app: App) {') %>
-  const connectionString = app.get('mssql')<%- sc %>
-  const connection = url.parse(connectionString)<%- sc %>
-  const database = connection.path.substring(1, connection.path.length)<%- sc %>
-  const { port, hostname } = connection<%- sc %>
-  const [ username, password ] = (connection.auth || ':').split(':')<%- sc %>
-  const sequelize = new Sequelize(database, username, password, {
+  let connectionString = app.get('mssql')<%- sc %>
+  let connection = url.parse(connectionString)<%- sc %>
+  let database = connection.path.substring(1, connection.path.length)<%- sc %>
+  let { port, hostname } = connection<%- sc %>
+  let [ username, password ] = (connection.auth || ':').split(':')<%- sc %>
+  let sequelize = new Sequelize(database, username, password, {
     dialect: 'mssql',
     host: hostname,
     logging: false,
@@ -60,15 +64,17 @@ const operatorsAliases = {
     }
   })<%- sc %>
 
-  const oldSetup = app.setup<%- sc %>
+  let oldSetup = app.setup<%- sc %>
+  <%- insertFragment('func_init') %>
 
   app.set('sequelizeClient', sequelize)<%- sc %>
 
   app.setup = function (...args) {
-    const result = oldSetup.apply(this, args)<%- sc %>
+    let result = oldSetup.apply(this, args)<%- sc %>
+    <%- insertFragment('func_init') %>
 
     // Set up data relationships
-    const models = sequelize.models<%- sc %>
+    let models = sequelize.models<%- sc %>
     Object.keys(models).forEach(name => {
       if ('associate' in models[name]) {
         models[name].associate(models)<%- sc %>
@@ -78,6 +84,10 @@ const operatorsAliases = {
     // Sync to the database
     sequelize.sync()<%- sc %>
 
+    <%- insertFragment('func_return') %>
     return result<%- sc %>
   }<%- sc %>
+  <%- insertFragment('more') %>
 }<%- sc %>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

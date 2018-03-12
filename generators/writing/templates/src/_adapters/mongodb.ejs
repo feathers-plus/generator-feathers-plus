@@ -1,10 +1,16 @@
-const url = require('url')<%- sc %>
-const MongoClient = require('mongodb').MongoClient<%- sc %>
+
+// mongodb.<%- js %> - MongoDB adapter
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
+<%- tplImports('url', 'url', 'req') %>
+<%- tplImports('{ MongoClient }', 'mongodb', 'req') %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
-  const config = app.get('mongodb')<%- sc %>
-  const dbName = url.parse(config).path.substring(1)<%- sc %>
+  let config = app.get('mongodb')<%- sc %>
+  let dbName = url.parse(config).path.substring(1)<%- sc %>
+  <%- insertFragment('func_init') %>
+
   const promise = MongoClient.connect(config).then(client => {
     // For mongodb <= 2.2
     if (client.collection) {
@@ -15,4 +21,7 @@ const MongoClient = require('mongodb').MongoClient<%- sc %>
   })<%- sc %>
 
   app.set('mongoClient', promise)<%- sc %>
+  <%- insertFragment('more') %>
 }<%- sc %>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

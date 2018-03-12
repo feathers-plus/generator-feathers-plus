@@ -27,11 +27,11 @@ let extensions = {
     // !code: graphql_header
     name: 'Nedb1',
     service: {
-      sort: { _id: 1 },
+      sort: { id: 1 },
     },
     // sql: {
     //   sqlTable: 'Nedb1',
-    //   uniqueKey: '__id__',
+    //   uniqueKey: 'id',
     //   sqlColumn: {
     //     __authorId__: '__author_id__',
     //   },
@@ -42,7 +42,7 @@ let extensions = {
     ],
     add: {
       // !code: graphql_add
-      nedb2: { type: 'Nedb2!', args: false, relation: { ourTable: 'nedb2Id', otherTable: '_id' } },
+      nedb2: { type: 'Nedb2!', args: false, relation: { ourTable: 'nedb2Id', otherTable: 'id' } },
       // !end
     },
     // !code: graphql_more // !end

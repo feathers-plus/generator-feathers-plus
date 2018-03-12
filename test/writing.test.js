@@ -150,6 +150,7 @@ const tests = [
       nedb1: { isAuthEntity: false },
       users1: {
         name: 'users1',
+        nameSingular: 'users1',
         fileName: 'users-1',
         adapter: 'nedb',
         path: '/users-1',
@@ -351,12 +352,16 @@ function compareCode (appDir, testDir, compareDirs) {
     let expected;
 
     const actual = fs.readFileSync(`${appDir}${fileName}`, 'utf8');
+
     try {
       expected = fs.readFileSync(`${expectedDir}${fileName}`, 'utf8');
     } catch (err) {
       console.log(actual);
       throw err;
     }
+
+    // if (actual !== expected) console.log(actual);
+    // if (actual !== expected) console.log(expected);
 
     assert.equal(actual, expected, `Unexpected contents for file ${appDir}${fileName}`);
   }

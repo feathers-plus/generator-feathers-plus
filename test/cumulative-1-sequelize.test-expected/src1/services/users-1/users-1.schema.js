@@ -34,11 +34,11 @@ let extensions = {
     // !<DEFAULT> code: graphql_header
     // name: 'Users1',
     // service: {
-    //   sort: { __id__: 1 },
+    //   sort: { id: 1 },
     // },
     // sql: {
     //   sqlTable: 'Users1',
-    //   uniqueKey: '__id__',
+    //   uniqueKey: 'id',
     //   sqlColumn: {
     //     __authorId__: '__author_id__',
     //   },
@@ -49,7 +49,7 @@ let extensions = {
     ],
     add: {
       // !<DEFAULT> code: graphql_add
-      // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: '__id__' } },
+      // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: 'id' } },
       // !end
     },
     // !code: graphql_more // !end
