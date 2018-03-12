@@ -8,7 +8,7 @@ const generatorWriting = require('../writing');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const { initSpecs } = require('../../lib/specs');
 
-module.exports = class ServiceGenerator extends Generator {
+module.exports = class GraphqlGenerator extends Generator {
   async prompting () {
     this.checkDirContainsApp();
     await Generator.asyncInit(this);

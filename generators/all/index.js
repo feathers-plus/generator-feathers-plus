@@ -10,7 +10,7 @@ const doesFileExist = require('../../lib/does-file-exist');
 const { getFileNames } = require('../../lib/generator-fs');
 const { initSpecs } = require('../../lib/specs');
 
-module.exports = class MiddlewareGenerator extends Generator {
+module.exports = class AllGenerator extends Generator {
   async prompting () {
     await Generator.asyncInit(this);
     initSpecs('all');
@@ -58,16 +58,16 @@ module.exports = class MiddlewareGenerator extends Generator {
       }
 
       if (doesFileExist(path)) {
-        console.log(chalk.cyan('   remove'), path.substr(dirLen));
+        this.log(chalk.cyan('   remove'), path.substr(dirLen));
         unlinkSync(path);
       }
     });
 
     if (frozenFiles.length) {
-      console.log(chalk.yellow.bold(`\nYou must remove these files manually before using the generator again:`));
+      this.log(chalk.yellow.bold(`\nYou must remove these files manually before using the generator again:`));
 
       frozenFiles.forEach(path => {
-        console.log(chalk.cyan('   frozen'), path.substr(dirLen));
+        this.log(chalk.cyan('   frozen'), path.substr(dirLen));
       });
     }
   }

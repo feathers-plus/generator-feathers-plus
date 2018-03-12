@@ -7,7 +7,7 @@ const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
 
-module.exports = class MiddlewareGenerator extends Generator {
+module.exports = class OptionsGenerator extends Generator {
   async prompting () {
     await Generator.asyncInit(this);
     const { _specs: specs } = this;
