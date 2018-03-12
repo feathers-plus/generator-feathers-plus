@@ -1,33 +1,32 @@
 
 // <%= serviceName %>-model.<%- js %> - A Mongoose model for a user entity
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-
-<%- insertFragment('mongoose_schema', [
-  `const mongooseSchema = require('../services/${kebabName}/${kebabName}.mongoose')${sc}`,
+<%- insertFragment('schema', [
+  tplImports('mongooseSchema', `../services/${kebabName}/${kebabName}.mongoose`)
 ]) %>
-<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
-<%- insertFragment('mongoose_imports') %>
-<%- insertFragment('mongoose_init') %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   let mongooseClient = app.get('mongooseClient')<%- sc %>
-  <%- insertFragment('mongoose_func_init') %>
+  <%- insertFragment('func_init') %>
 
-  <%- insertFragment('mongoose_client', [
+  <%- insertFragment('client', [
     `  const ${camelName} = new mongooseClient.Schema(mongooseSchema, { timestamps: true })${sc}`,
   ]) %>
 
   let returns = mongooseClient.model('<%= camelName %>', <%= camelName %>)<%- sc %>
 
-  <%- insertFragment('mongoose_func_return') %>
+  <%- insertFragment('func_return') %>
   return returns<%- sc %>
 }<%- sc %>
-<%- insertFragment('mongoose_more') %>
+<%- insertFragment('more') %>
 
-<%- insertFragment('mongoose_exports') %>
+<%- insertFragment('exports') %>
 <%- `${tplExport('moduleExports')}${sc}` %>
 
-<%- insertFragment('mongoose_funcs') %>
-<%- insertFragment('mongoose_end') %>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

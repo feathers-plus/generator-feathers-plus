@@ -1,18 +1,19 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
 <%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
-const createService = require('feathers-mongodb')<%- sc %>
-const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
-<%- insertFragment('mongo_imports', [
-  `// let $jsonSchema = require('./${kebabName}.mongo')${sc}`
+<%- tplImports('createService', 'feathers-mongodb', 'req') %>
+<%- tplImports('hooks', `./${kebabName}.hooks`) %>
+<%- insertFragment('imports', [
+  `// ${tplImports('$jsonSchema', `./${kebabName}.mongo`, 'req', 'let')}`
 ]) %>
-<%- insertFragment('mongo_init') %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   let paginate = app.get('paginate')<%- sc %>
   let mongoClient = app.get('mongoClient')<%- sc %>
   let options = { paginate }<%- sc %>
-  <%- insertFragment('mongo_func_init') %>
+  <%- insertFragment('func_init') %>
 
   // Initialize our service with any options it requires
   app.use('/<%= path %>', createService(options))<%- sc %>
@@ -22,7 +23,7 @@ const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
 
   mongoClient.then(db => {
     return db.createCollection('<%= kebabName %>', {
-      <%- insertFragment('mongo_create_collection', [
+      <%- insertFragment('create_collection', [
         '      // validator: { $jsonSchema: $jsonSchema },',
         '      // validationLevel: \'strict\', // The MongoDB default',
         '      // validationAction: \'error\', // The MongoDB default',
@@ -34,12 +35,12 @@ const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
     })<%- sc %>
 
   service.hooks(hooks)<%- sc %>
-  <%- insertFragment('mongo_func_return') %>
+  <%- insertFragment('func_return') %>
 }<%- sc %>
-<%- insertFragment('mongo_more') %>
+<%- insertFragment('more') %>
 
-<%- insertFragment('mongo_exports') %>
+<%- insertFragment('exports') %>
 <%- `${tplExport('moduleExports')}${sc}` %>
 
-<%- insertFragment('mongo_funcs') %>
-<%- insertFragment('mongo_end') %>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

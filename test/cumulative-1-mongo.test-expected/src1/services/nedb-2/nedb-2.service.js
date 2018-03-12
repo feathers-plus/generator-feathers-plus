@@ -2,16 +2,17 @@
 // Initializes the `nedb2` service on path `/nedb-2`
 const createService = require('feathers-mongodb');
 const hooks = require('./nedb-2.hooks');
-// !<DEFAULT> code: mongo_imports
+// !<DEFAULT> code: imports
 // let $jsonSchema = require('./nedb-2.mongo');
 // !end
-// !code: mongo_init // !end
+// !code: imports // !end
+// !code: init // !end
 
 let moduleExports = function (app) {
   let paginate = app.get('paginate');
   let mongoClient = app.get('mongoClient');
   let options = { paginate };
-  // !code: mongo_func_init // !end
+  // !code: func_init // !end
 
   // Initialize our service with any options it requires
   app.use('/nedb-2', createService(options));
@@ -21,7 +22,7 @@ let moduleExports = function (app) {
 
   mongoClient.then(db => {
     return db.createCollection('nedb-2', {
-      // !<DEFAULT> code: mongo_create_collection
+      // !<DEFAULT> code: create_collection
       // validator: { $jsonSchema: $jsonSchema },
       // validationLevel: 'strict', // The MongoDB default
       // validationAction: 'error', // The MongoDB default
@@ -33,12 +34,12 @@ let moduleExports = function (app) {
     });
 
   service.hooks(hooks);
-  // !code: mongo_func_return // !end
+  // !code: func_return // !end
 };
-// !code: mongo_more // !end
+// !code: more // !end
 
-// !code: mongo_exports // !end
+// !code: exports // !end
 module.exports = moduleExports;
 
-// !code: mongo_funcs // !end
-// !code: mongo_end // !end
+// !code: funcs // !end
+// !code: end // !end

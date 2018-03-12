@@ -1,15 +1,15 @@
 
 // <%= serviceName %>-model.<%- js %> - A Sequelize model for user entity. (Can be re-generated.)
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 //
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
 <%- insertFragment('sequelize_schema', [
-  '// const Sequelize = require(\'sequelize\');',
+  `// ${tplImports('Sequelize', 'sequelize', 'req')}`,
   '// const DataTypes = Sequelize.DataTypes;',
   '',
-  `const sequelizeSchema = require('../services/${kebabName}/${kebabName}.sequelize')${sc}`,
+  tplImports('sequelizeSchema', `../services/${kebabName}/${kebabName}.sequelize`, 'req'),
 ]) %>
-<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- insertFragment('sequelize_imports') %>
 <%- insertFragment('sequelize_init') %>
 

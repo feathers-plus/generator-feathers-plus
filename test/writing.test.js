@@ -126,7 +126,7 @@ const tests = [
 
   // t08-sequelize, z08-sequelize The same as t08 & z08 but using @f/sequelize & PostgreSQL.
   // Service names remain nedb1 & nedb2; use default connection string.
-    //{ testName: 'cumulative-1-sequelize.test' },
+    { testName: 'cumulative-1-sequelize.test' },
 
   // The same as t08 & z08 but using options: { semicolons: false }
     { testName: 'cumulative-1-no-semicolons.test' },

@@ -500,7 +500,7 @@ module.exports = function generatorWriting (generator, what) {
     }
 
     // Set up strategies and add dependencies
-    /*
+    const strategies = (specs.authentication || {}).strategies || [];
     strategies.forEach(strategy => {
       const oauthProvider = OAUTH2_STRATEGY_MAPPINGS[strategy];
 
@@ -517,7 +517,6 @@ module.exports = function generatorWriting (generator, what) {
         dependencies.push(`@feathersjs/authentication-${strategy}`);
       }
     });
-    */
 
     // Custom abbreviations for building 'todos'.
     const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))

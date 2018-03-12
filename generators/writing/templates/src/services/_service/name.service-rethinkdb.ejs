@@ -1,15 +1,15 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
 <%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
-const createService = require('feathers-rethinkdb')<%- sc %>
-const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
-<%- insertFragment('rethink_imports') %>
-<%- insertFragment('rethink_init') %>
+<%- tplImports('createService', 'feathers-rethinkdb', 'req') %>
+<%- tplImports('hooks', `./${kebabName}.hooks`) %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   let Model = app.get('rethinkdbClient')<%- sc %>
   let paginate = app.get('paginate')<%- sc %>
-  <%- insertFragment('rethink_func_init') %>
+  <%- insertFragment('func_init') %>
 
   const options = {
     name: '<%= snakeName %>',
@@ -24,12 +24,12 @@ const hooks = require('./<%= kebabName %>.hooks')<%- sc %>
   const service = app.service('<%= path %>')<%- sc %>
 
   service.hooks(hooks)<%- sc %>
-  <%- insertFragment('rethink_func_return') %>
+  <%- insertFragment('func_return') %>
 }<%- sc %>
-<%- insertFragment('rethink_more') %>
+<%- insertFragment('more') %>
 
-<%- insertFragment('rethink_exports') %>
+<%- insertFragment('exports') %>
 <%- `${tplExport('moduleExports')}${sc}` %>
 
-<%- insertFragment('rethink_funcs') %>
-<%- insertFragment('rethink_end') %>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

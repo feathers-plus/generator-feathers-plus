@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const { Op } = Sequelize;
+
 const operatorsAliases = {
   $eq: Op.eq,
   $ne: Op.ne,

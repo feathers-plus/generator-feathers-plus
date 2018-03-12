@@ -3,30 +3,29 @@
 // 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-
-// !<DEFAULT> code: mongoose_schema
+// !<DEFAULT> code: schema
 const mongooseSchema = require('../services/nedb-2/nedb-2.mongoose');
 // !end
-// !code: mongoose_imports // !end
-// !code: mongoose_init // !end
+// !code: imports // !end
+// !code: init // !end
 
 let moduleExports = function (app) {
   let mongooseClient = app.get('mongooseClient');
-  // !code: mongoose_func_init // !end
+  // !code: func_init // !end
 
-  // !<DEFAULT> code: mongoose_client
+  // !<DEFAULT> code: client
   const nedb2 = new mongooseClient.Schema(mongooseSchema, { timestamps: true });
   // !end
 
   let returns = mongooseClient.model('nedb2', nedb2);
 
-  // !code: mongoose_func_return // !end
+  // !code: func_return // !end
   return returns;
 };
-// !code: mongoose_more // !end
+// !code: more // !end
 
-// !code: mongoose_exports // !end
+// !code: exports // !end
 module.exports = moduleExports;
 
-// !code: mongoose_funcs // !end
-// !code: mongoose_end // !end
+// !code: funcs // !end
+// !code: end // !end
