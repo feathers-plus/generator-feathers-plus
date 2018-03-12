@@ -11,7 +11,7 @@ const { existsSync } = require('fs');
 const { inspect } = require('util');
 const { join } = require('path');
 
-const generatorFs = require('../../lib/generator-fs');
+const { generatorFs } = require('../../lib/generator-fs');
 const makeConfig = require('./templates/_configs');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
@@ -77,7 +77,7 @@ function stripSlashes (name) {
   return name.replace(/^(\/*)|(\/*)$/g, '');
 }
 
-// Abstract creating import and export statements for .js and .ts
+// Abstract statements between .js and .ts
 function abstractTs(specs) {
   const ifTs = specs.options.ts;
   const sc = specs.options.semicolons ? ';' : '';
@@ -94,8 +94,8 @@ function abstractTs(specs) {
 
       return ifTs ? lines.join(EOL) : '';
     },
-    tplImports: (vars, module, format) => {
-      if (!ifTs) return `const ${vars} = require('${module || vars}')${sc}`;
+    tplImports: (vars, module, format, useConst = 'const') => {
+      if (!ifTs) return `${useConst} ${vars} = require('${module || vars}')${sc}`;
 
       if (format === 'req') return `import ${vars} = require('${module || vars}')${sc}`;
       if (format === 'as') return `import * as ${vars} from '${module || vars}'${sc}`;
@@ -169,12 +169,17 @@ module.exports = function generatorWriting (generator, what) {
     js,
     isJs,
     sc: specs.options.semicolons ? ';' : '',
+
+    // Abstract .js and .ts linting.
     lintRule: isJs ? 'eslint ' : 'tslint:',
     lintDisable: isJs ?  'eslint-disable' : 'tslint:disable',
     lintDisableUnused: isJs ? 'eslint-disable no-unused-vars' : 'tslint:disable no-unused-variable',
     lintDisableNextLine: isJs ?  'eslint-disable-next-line' : 'tslint:disable-next-line',
     lintDisableNextLineUnused: isJs ?
       'eslint-disable-next-line no-unused-vars' : 'tslint:disable-next-line no-unused-variable',
+    ruleQuoteDisable: isJs ? 'quotes: 0' : 'disable:quotemark',
+
+    // Abstract .js and .ts statements.
     tplJsOrTs,
     tplJsOnly,
     tplTsOnly,
@@ -213,7 +218,6 @@ module.exports = function generatorWriting (generator, what) {
       ) {
         graphql(generator);
       }
-
       break;
     case 'app':
       app(generator);

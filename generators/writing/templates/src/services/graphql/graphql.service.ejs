@@ -14,15 +14,15 @@
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (strategy === 'batchloaders') { -%>
-const generatedResolvers = require('./batchloader.resolvers')<%- sc %>
+<%- tplImports(`generatedResolvers${!isJs ? ', { BatchloaderResolverOptions }' : ''}`, './batchloader.resolvers') %>
 <% } -%>
 <%# --- if-2 ends above. -%>
 <%# -%>
 <%# --- if-3 starts below. -%>
 <% if (strategy === 'sql') { -%>
-const generatedResolvers = require('./sql.resolvers')<%- sc %>
-const generatedMetadata = require('./sql.metadata')<%- sc %>
-const { dialect, executeSql, openDb } = require('./sql.execute')<%- sc %>
+<%- tplImports(`generatedResolvers${!isJs ? ', { SqlResolverFactoryOptions }' : ''}`, './sql.resolvers') %>
+<%- tplImports(`generatedMetadata${!isJs ? ', { SqlMetadataOptions }' : ''}`, './sql.metadata') %>
+<%- tplImports('{ dialect, executeSql, openDb }','./sql.exec') %>
 <% } -%>
 <%# --- if-3 ends above. -%>
 <%- tplImports('hooks', './graphql.hooks') %>

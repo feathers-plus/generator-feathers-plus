@@ -12,6 +12,7 @@ module.exports = class MiddlewareGenerator extends Generator {
     await Generator.asyncInit(this);
     const { _specs: specs } = this;
     initSpecs('options');
+    const js = specs.options.ts ? 'ts' : 'js';
 
     this.log();
     this.log([
@@ -20,13 +21,13 @@ module.exports = class MiddlewareGenerator extends Generator {
       '\n',
       '  public/favicon.ico, index.html\n',
       '  src/\n',
-      '    hooks/logger.js\n',
-      '    middleware/ { all files other than index.js)\n',
+      `    hooks/logger.${js}\n`,
+      `    middleware/ { all files other than index.${js})\n`,
       '    refs/common.json\n',
-      '    channels.js\n',
+      `    channels.${js}\n`,
       '  test\n',
-      '    services/*.test.js\n',
-      '    app.test.js\n',
+      `    services/*.test.${js}\n`,
+      `    app.test.${js}\n`,
       '  .editorconfig, .gitignore, LICENSE, README.md\n',
       '  tslint.json, tsconfig.json, tsconfig.test.json',
       '\n',

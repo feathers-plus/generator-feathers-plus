@@ -41,8 +41,8 @@ let moduleExports = function batchLoaderResolvers(app, options) {
         setByDot(content, contentByDot, batchLoader);
       }
 
-      const returns = batchLoader.load(parent[fieldName]);
-      return !isArray ? returns : returns.then(result => result || []);
+      const returns1 = batchLoader.load(parent[fieldName]);
+      return !isArray ? returns1 : returns1.then(result => result || []);
     };
   }
   // !end

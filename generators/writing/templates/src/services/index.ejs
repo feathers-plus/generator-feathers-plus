@@ -6,17 +6,14 @@
 <% Object.keys(specs.services || {}).sort().forEach(__name => {
   __fileName = specs.services[__name].fileName || __name;
 -%>
-<%- tplJsOrTs(
-  `let ${__name} = require('./${__fileName}/${__fileName}.service')${sc}`,
-  `import ${__name} from './${__fileName}/${__fileName}.service'${sc}`,
-) %>
+<%- tplImports(__name, `./${__fileName}/${__fileName}.service`, null, 'let') %>
 <% }); -%>
 <%# --- forEach-1 ends above. -%>
 
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if (specs.graphql && specs.graphql.path) { -%>
-<%- tplImports(specs.graphql.name, `./${specs.graphql.name}/${specs.graphql.name}.service`) %>
+<%- tplImports('graphql', './graphql/graphql.service', null, 'let') %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 <%- insertFragment('imports') %>
