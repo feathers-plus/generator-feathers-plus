@@ -1,9 +1,6 @@
 
 // Configure authentication. (Can be re-generated.)
-<%- tplJsOrTs(
-  `const authentication = require('@feathersjs/authentication')${sc}`,
-  `import authentication, { hooks } from '@feathersjs/authentication'${sc}`)
-%>
+<%- tplImports('authentication', '@feathersjs/authentication') %>
 <%- tplImports('jwt', '@feathersjs/authentication-jwt') %>
 <%# -%>
 <%# --- if-1 starts below. -%>
@@ -53,10 +50,10 @@
   app.service('authentication').hooks({
     before: {
       create: [
-        <%- tplJsOnly('authentication.') -%>hooks.authenticate(config.strategies),
+        authentication.hooks.authenticate(config.strategies),
       ],
       remove: [
-        <%- tplJsOnly('authentication.') -%>hooks.authenticate('jwt'),
+        authentication.hooks.authenticate('jwt'),
       ],
     },
   })<%- sc %>

@@ -246,6 +246,15 @@ OK - duplicate oauthProvider code in service and connection
 OK - code-fragments.js does a `require` on name.schema.js. This gets the default schema merged with
      custom changes. Only the default schema is wanted. This will mess up the regenerated module.
 OK - PUT BACK f+/graphql in package.json for fx/cli-gen-ex
+OK - name.schema.*#extensions.graphql.name s/b default to `nameSingular`
+OK - put adapter-info into expanded service specs.
+OK - adapter-info: use elsewhere?
+OK - add f-auth-mgnt fields to graphql auth
+OK - `json-schema-deref-sync` converts `type: 'ID'` to `type: 'string'` which is incorrect for primary keys.
+     This doesn't seem to be the case.
+OK - rename production dependencies
+OK - check if any dependencies before scheduling install     
+
 
 NO - hooks modules should be ifNew: true
 NO - should class.js and class-async.js be in their own folder?
@@ -269,25 +278,27 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
      to consider for stashing. Basically, if we regen middleware, we won't be regen'ing graphql, so
      scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
 
+
+- mention src/services/name/name.class.*s are not regenerated
+- alpha order for .ts and in front of the package.json
+
 - add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
 - Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
   for `uniqueItemProperties`? In say name.mongo.js?
-- name.schema.*#extensions.graphql.name s/b default to `nameSingular`
-- `json-schema-deref-sync` converts `type: 'ID'` to `type: 'string'` which is incorrect for primary keys.
 
 - test name.mongo.js
 - test name.validate.js
 - run tslint --fix / eslint --fix afterwards ?!? (watch for removal of trailing commas
-- adapter-info: use elsewhere? Make sure generic adapter can work somehow.
-- put adapter-info into expanded service specs.
+- adapter-info: Make sure generic adapter can work somehow.
 
-- add f-auth-mgnt fields to graphql auth
+- test f-auth-mgnt fields to graphql auth
 
 - add comment in hooks regarding context.params.graphql for services included in graphql
 - add sort one 1 prop in array of objects, sort on multiple prop names to BatchLoader. See f-x/common-utils
 - what is feathersjs/cli/lib/shell.js
 - Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/generator.js
 
+- prompt for softDelete (after testing discard('password') on users with auth)
 - prompt and inert feathers-authentication-management. Need to handle arrays for SQL servers.
   - Will need to update feathersjs/authentication to check some extra fields
   - Figure out how to define schema for extra fields in Sequelize/PSQL,... and Knex/...
@@ -300,6 +311,7 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 - what can we do with feathers-sync? 
 
 - add async init https://github.com/feathersjs/feathers/issues/509#issuecomment-358039365
+- add stress test https://blog.feathersjs.com/stress-testing-your-feathersjs-application-like-in-production-4b8611ee8d9e
 - create deployment    
 - create Knex schema
 - create fastJoin definitions
@@ -309,7 +321,32 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 - bring dependencies up to date
 
 
-final checks
-- consistency. name.sequelize.js lists needed fields for user-entity while others don't.
-- code locations to add
-- which generated code to make the default at a new code location
+FINAL CHECKS
+- Consistency, e.g. name.sequelize.js lists needed fields for user-entity while others don't.
+- New code locations any place its reasonable to add custom code.
+  Pay extra attention to the _adapters, _model, _service templates
+- Consider which generated code to instead make default code, creating a new code location there.
+
+- Several templates may have the same app module as their destination. Each of these
+  templates needs to be tested BOTH FOR .js AND .ts .
+  - src/models/name.model.*s
+    - knex for the user-entity service
+    - knex for other service
+    - mongoose for the user-entity service
+    - mongoose for other service
+    - nedb for the user-entity service
+    - nedb for other service
+    - sequelize for the user-entity service
+    - sequelize for other service
+  - src/services/name/name.service.*s
+    - mongo service
+    - rethink service
+    - other adapters use a common template
+  - src/*.*s
+    - knex.*s
+    - mongodb.*s
+    - mongoose.*s
+    - rethinkdb.*s
+    - sequelize.*s for MS SQL Server
+    - sequelize.*s for other DBs use a common template
+        

@@ -1,37 +1,43 @@
 
 // Execute raw SQL statement for GraphQL. (Can be re-generated.)
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
 // <%- lintDisableNextLineUnused %>
 <%- tplImports('{ cwd }', 'process') %>
 // <%- lintDisableNextLineUnused %>
 <%- tplImports('{ join }', 'path') %>
-<%- insertFragment('imports') %>
+<%- insertFragment('imports', [
+  `// ${tplJsOrTs(`const sqlite = require('sqlite')`, `import * as sqlite from 'sqlite'`)}${sc}`,
+]) %>
 <%- insertFragment('init') %>
 
-<%- insertFragment('main', [
-  `let dialect, openDb, executeSql${sc}`,
-  `// ${tplJsOrTs(`const sqlite = require('sqlite')`, `import * as sqlite from 'sqlite'`)}${sc}`,
-  `// dialect = 'sqlite3'${sc}`,
+<%- tplModuleExports(null, 'function sqlExecute(app) {', 'function sqlExecute(app: App) {') %>
+  <%- insertFragment('main', [
+  `  let dialect, openDb, executeSql${sc}`,
+  `  // dialect = 'sqlite3'${sc}`,
   '',
-  '// openDb = () => {',
-  `//   sqlite.open(join(cwd(), 'data', 'sqlite3.db'))${sc}`,
-  `//   return sqlite${sc}`,
-  `// }${sc}`,
+  '  // openDb = () => {',
+  `  //   sqlite.open(join(cwd(), 'data', 'sqlite3.db'))${sc}`,
+  `  //   return sqlite${sc}`,
+  `  // }${sc}`,
   '',
-  `// executeSql = ${tplJsOrTs('sql', '(sql: any)')} => ${tplJsOrTs('sqlite', '(sqlite as any)')}.all(sql)`,
-  `//   .catch(${tplJsOrTs('err', '(err: Error)')} => {`,
-  `//     // ${lintDisableNextLine} no-console`,
-  `//     console.log('executeSql error=', err.message)${sc}`,
-  `//     throw err${sc}`,
-  `//   })${sc}`,
-]) %>
+  `  // executeSql = ${tplJsOrTs('sql', '(sql: any)')} => ${tplJsOrTs('sqlite', '(sqlite as any)')}.all(sql)`,
+  `  //   .catch(${tplJsOrTs('err', '(err: Error)')} => {`,
+  `  //     // ${lintDisableNextLine} no-console`,
+  `  //     console.log('executeSql error=', err.message)${sc}`,
+  `  //     throw err${sc}`,
+  `  //   })${sc}`,
+  ]) %>
 
-let moduleExports = {
-  dialect,
-  executeSql,
-  openDb,
-  <%- insertFragment('moduleExports') %>
-}<%- sc %>
+  let returns = {
+    dialect,
+    executeSql,
+    openDb,
+    <%- insertFragment('moduleExports') %>
+  }<%- sc %>
 
+  <%- insertFragment('func_return') %>
+  return returns;
+}
 <%- insertFragment('more') %>
 
 <%- insertFragment('exports') %>

@@ -1,7 +1,7 @@
 
 // sequelize.<%- js %> - Sequelize adapter for SQL server.
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
-<%- tplImports('url', 'url', 'req') %>
+<%- tplImports('url', null, 'req') %>
 <%- tplImports('Sequelize', 'sequelize', 'req') %>
 let { Op } = Sequelize<%- sc %>
 <%- insertFragment('imports') %>

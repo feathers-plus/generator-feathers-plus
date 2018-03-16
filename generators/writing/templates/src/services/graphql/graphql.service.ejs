@@ -6,23 +6,23 @@
 <%- tplImports('{ mergeTypes }', 'merge-graphql-schemas') %>
 <%- tplImports('generatedSchema', './graphql.schemas') %>
 <%# -%>
-<%# --- if-1 starts below. -%>
+<%# --- if-1 starts below. SERVICES -%>
 <% if (strategy === 'services') { -%>
 <%- tplImports(`generatedResolvers${!isJs ? ', { ServiceResolverOptions }' : ''}`, './service.resolvers') %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 <%# -%>
-<%# --- if-2 starts below. -%>
+<%# --- if-2 starts below. BATCHLOADERS -%>
 <% if (strategy === 'batchloaders') { -%>
 <%- tplImports(`generatedResolvers${!isJs ? ', { BatchloaderResolverOptions }' : ''}`, './batchloader.resolvers') %>
 <% } -%>
 <%# --- if-2 ends above. -%>
 <%# -%>
-<%# --- if-3 starts below. -%>
+<%# --- if-3 starts below. SQL -%>
 <% if (strategy === 'sql') { -%>
 <%- tplImports(`generatedResolvers${!isJs ? ', { SqlResolverFactoryOptions }' : ''}`, './sql.resolvers') %>
 <%- tplImports(`generatedMetadata${!isJs ? ', { SqlMetadataOptions }' : ''}`, './sql.metadata') %>
-<%- tplImports('{ dialect, executeSql, openDb }','./sql.exec') %>
+<%- tplImports('sqlExecute','./sql.execute') %>
 <% } -%>
 <%# --- if-3 ends above. -%>
 <%- tplImports('hooks', './graphql.hooks') %>
@@ -38,7 +38,7 @@ let schemas = mergeTypes([
 ])<%- sc %>
 
 <%# -%>
-<%# --- if-4 starts below. -%>
+<%# --- if-4 starts below. SERVICES -%>
 <% if (strategy === 'services') { -%>
 let resolvers = <%- tplJsOrTs('(app, options)', '(app: App, options: ServiceResolverOptions)') %> => merge({},
   generatedResolvers(app, options),
@@ -47,43 +47,58 @@ let resolvers = <%- tplJsOrTs('(app, options)', '(app: App, options: ServiceReso
 <% } -%>
 <%# --- if-4 ends above. -%>
 <%# -%>
-<%# --- if-5 starts below. -%>
+<%# --- if-5 starts below. NATCHLOADERS -%>
 <% if (strategy === 'batchloaders') { -%>
-let resolvers = (app, options) => merge({},
+let resolvers = <%- tplJsOrTs('(app, options)', '(app: App, options: BatchloaderResolverOptions)') %> => merge({},
   generatedResolvers(app, options),
   <%- insertFragment('batchloader_resolvers') %>
 )<%- sc %>
 <% } -%>
 <%# --- if-5 ends above. -%>
 <%# -%>
-<%# --- if-6 starts below. -%>
+<%# --- if-6 starts below. SQL -%>
 <% if (strategy === 'sql') { -%>
-let resolvers = (app, options) => merge({},
+let resolvers = <%- tplJsOrTs('(app, options)', '(app: App, options: SqlResolverFactoryOptions)') %> => merge({},
   generatedResolvers(app, options),
   <%- insertFragment('sql_resolvers') %>
 )<%- sc %>
 
-let sqlJoins = (app, options) => merge({},
+let sqlJoins = <%- tplJsOrTs('(app, options)', '(app: App, options: SqlMetadataOptions)') %> => merge({},
   generatedMetadata(app, options),
   <%- insertFragment('sql_metadata') %>
 )<%- sc %>
 
-if (!dialect) {
-  throw new Error('services/graphql/sql.execute.<%- js %> has not been configured.')<%- sc %>
-}
 <% } -%>
 <%# --- if-6 ends above. -%>
 <%- insertFragment('init') %>
 
-let moduleExports = function (<%- tplJsOrTs('', 'this: App') %>) {
-  const app = this<%- sc %>
+<%- tplJsOnly([
+  'let moduleExports = function () {',
+  `  const app = this${sc}`,
+  ''
+]) -%>
+<%- tplTsOnly([
+  'let moduleExports = function (app: App) {',
+  ''
+]) -%>
+<%# -%>
+<%# --- if-6a starts below. SQL -%>
+<% if (strategy === 'sql') { -%>
+  let { dialect, executeSql, openDb } = sqlExecute(app)<%- sc %>
+
+  if (!dialect) {
+    throw new Error('services/graphql/sql.execute.<%- js %> has not been configured.')<%- sc %>
+  }
+
+<% } -%>
+<%# --- if-6a ends above. -%>
   <%- insertFragment('func_init') %>
 
   let options = {
     schemas,
     resolvers,
 <%# -%>
-<%# --- if-7 starts below. -%>
+<%# --- if-7 starts below. SQL -%>
 <% if (strategy === 'sql') { -%>
     sqlJoins,
     dialect,
@@ -115,19 +130,19 @@ let moduleExports = function (<%- tplJsOrTs('', 'this: App') %>) {
 /*
 Stash code not used now but which may be used if the module is regenerated.
 <%# -%>
-<%# --- if-a starts below. -%>
+<%# --- if-a starts below. SERVICES -%>
 <% if (strategy !== 'services') { -%>
 <%- insertFragment('service_resolvers') %>
 <% } -%>
 <%# --- if-a ends above. -%>
 <%# -%>
-<%# --- if-b starts below. -%>
+<%# --- if-b starts below. BATCHLOADERS -%>
 <% if (strategy !== 'batchloaders') { -%>
 <%- insertFragment('batchloader_resolvers') %>
 <% } -%>
 <%# --- if-b ends above. -%>
 <%# -%>
-<%# --- if-c starts below. -%>
+<%# --- if-c starts below. SQL -%>
 <% if (strategy !== 'sql') { -%>
 <%- insertFragment('sql_resolvers') %>
 <%- insertFragment('sql_metadata') %>

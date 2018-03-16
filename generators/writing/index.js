@@ -97,7 +97,7 @@ function abstractTs(specs) {
     tplImports: (vars, module, format, useConst = 'const') => {
       if (!ifTs) return `${useConst} ${vars} = require('${module || vars}')${sc}`;
 
-      if (format === 'req') return `import ${vars} = require('${module || vars}')${sc}`;
+      // todo [removed] if (format === 'req') return `import ${vars} = require('${module || vars}')${sc}`;
       if (format === 'as') return `import * as ${vars} from '${module || vars}'${sc}`;
       return `import ${vars} from '${module || vars}'${sc}`;
     },

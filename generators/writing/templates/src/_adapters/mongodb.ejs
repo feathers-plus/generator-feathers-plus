@@ -1,7 +1,7 @@
 
 // mongodb.<%- js %> - MongoDB adapter
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
-<%- tplImports('url', 'url', 'req') %>
+<%- tplImports('url', null, 'req') %>
 <%- tplImports('{ MongoClient }', 'mongodb', 'req') %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>

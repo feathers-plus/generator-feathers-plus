@@ -1,6 +1,6 @@
 
 // Configure Feathers app. (Can be re-generated.)
-<%- tplImports('path', 'path', 'as') %>
+<%- tplImports('path', null, 'as') %>
 <%- tplImports('favicon', 'serve-favicon', 'req') %>
 <%- tplImports('compress', 'compression', 'req') %>
 <%- tplImports('cors', null, 'req') %>
@@ -9,14 +9,7 @@
 
 <%- tplImports('feathers', '@feathersjs/feathers') %>
 <%- tplImports('configuration', '@feathersjs/configuration') %>
-<%# -%>
-<%# --- if-1 starts below. -%>
-<% if (isJs) { -%>
-const express = require('@feathersjs/express')<%- sc %>
-<% } else {%>
-import express, { json, errorHandler, notFound, rest, static as _static, urlencoded } from '@feathersjs/express'<%- sc %>
-<% } -%>
-<%# --- if-1 ends above. -%>
+<%- tplImports('express', '@feathersjs/express') %>
 <%- hasProvider('socketio') ? tplImports('socketio', '@feathersjs/socketio') : '' %>
 <%- hasProvider('primus') ? tplImports('primus', '@feathersjs/primus') : '' %>
 <%- tplImports('middleware', './middleware') %>
@@ -51,16 +44,16 @@ app.configure(configuration())<%- sc %>
 app.use(cors())<%- sc %>
 app.use(helmet())<%- sc %>
 app.use(compress())<%- sc %>
-app.use(<%- isJs ? 'express.' : '' -%>json())<%- sc %>
-app.use(<%- isJs ? 'express.' : '' -%>urlencoded({ extended: true }))<%- sc %>
+app.use(express.json())<%- sc %>
+app.use(express.urlencoded({ extended: true }))<%- sc %>
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')))<%- sc %>
 // Host the public folder
-app.use('/', <%- isJs ? 'express.static' : '_static' -%>(app.get('public')))<%- sc %>
+app.use('/', express.static(app.get('public')))<%- sc %>
 <%- insertFragment('use_end') %>
 
 // Set up Plugins and providers
 <%- insertFragment('config_start') %>
-<%- hasProvider('rest') ? `app.configure(${isJs ? 'express.' : '' }rest())${sc}` : '' %>
+<%- hasProvider('rest') ? `app.configure(express.rest())${sc}` : '' %>
 <%- hasProvider('socketio') ? `app.configure(socketio())${sc}` : '' %>
 <%- hasProvider('primus') ? `app.configure(primus({ transformer: 'websockets' }))${sc}` : '' %>
 <%# --- forEach-3 starts below. -%>
@@ -86,8 +79,8 @@ app.configure(authentication)<%- sc %>
 <%- insertFragment('config_middle') %>
 
 // Configure a middleware for 404s and the error handler
-app.use(<%- isJs ? 'express.' : '' -%>notFound())<%- sc %>
-app.use(<%- isJs ? 'express.' : '' -%>errorHandler({ logger }))<%- sc %>
+app.use(express.notFound())<%- sc %>
+app.use(express.errorHandler({ logger }))<%- sc %>
 <%- insertFragment('config_end') %>
 
 app.hooks(appHooks)<%- sc %>

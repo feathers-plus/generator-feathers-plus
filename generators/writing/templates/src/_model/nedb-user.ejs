@@ -1,7 +1,7 @@
 
 // <%= serviceName %>-model.<%- js %> - An nedb model for user entity
 <%- tplTsOnly([`import { App } from '../app.interface'${sc}`, '', '']) -%>
-<%- tplImports('NeDB', 'nedb', 'as') %>
+<%- tplImports('NeDB', 'nedb') %>
 <%- tplImports('path', null, 'as') %>
 <%- insertFragment('nedb_imports') %>
 <%- insertFragment('nedb_init') %>
