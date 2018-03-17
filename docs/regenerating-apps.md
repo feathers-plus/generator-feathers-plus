@@ -4,15 +4,19 @@
 Cli-plus persists a definition of the app in `project-name/feathers-gen-specs.json`.
 This contains primarily the responses provided to the prompts used to create the app.
 
-The `cli-generator-example` repo has the following specs:
+An example is:
 ```json
 {
   "options": {
     "ver": "1.0.0",
     "inspectConflicts": false,
-    "freeze": []
+    "semicolons": true,
+    "freeze": [],
+    "ts": false
   },
   "app": {
+    "name": "GraphQL-test",
+    "description": "Test Feathers GraphQL adapter.",
     "src": "src",
     "packager": "npm@>= 3.0.0",
     "providers": [
@@ -21,59 +25,102 @@ The `cli-generator-example` repo has the following specs:
     ]
   },
   "services": {
-    "comment": {
-      "name": "comment",
-      "fileName": "comment",
+    "users": {
+      "name": "users",
+      "nameSingular": "user",
+      "fileName": "users",
       "adapter": "nedb",
-      "path": "/comment",
+      "path": "/users",
+      "isAuthEntity": true,
+      "requiresAuth": true,
+      "graphql": true
+    },
+    "comments": {
+      "name": "comments",
+      "nameSingular": "comment",
+      "fileName": "comments",
+      "adapter": "nedb",
+      "path": "/comments",
+      "isAuthEntity": false,
       "requiresAuth": false,
       "graphql": true
     },
-    "user": {
-      "name": "user",
-      "fileName": "user",
+    "likes": {
+      "name": "likes",
+      "nameSingular": "like",
+      "fileName": "likes",
       "adapter": "nedb",
-      "path": "/user",
+      "path": "/likes",
+      "isAuthEntity": false,
       "requiresAuth": false,
       "graphql": true
     },
-    "like": {
-      "name": "like",
-      "fileName": "like",
+    "posts": {
+      "name": "posts",
+      "nameSingular": "post",
+      "fileName": "posts",
       "adapter": "nedb",
-      "path": "/like",
+      "path": "/posts",
+      "isAuthEntity": false,
       "requiresAuth": false,
       "graphql": true
     },
-    "post": {
-      "name": "post",
-      "fileName": "post",
+    "relationships": {
+      "name": "relationships",
+      "nameSingular": "relationship",
+      "fileName": "relationships",
       "adapter": "nedb",
-      "path": "/post",
+      "path": "/relationships",
+      "isAuthEntity": false,
       "requiresAuth": false,
       "graphql": true
     },
-    "relationship": {
-      "name": "relationship",
-      "fileName": "relationship",
-      "adapter": "nedb",
-      "path": "/relationship",
+    "permissions": {
+      "name": "permissions",
+      "nameSingular": "permission",
+      "fileName": "permissions",
+      "adapter": "sequelize",
+      "path": "/permissions",
+      "isAuthEntity": false,
       "requiresAuth": false,
-      "graphql": true
+      "graphql": false
     }
   },
+  "authentication": {
+    "strategies": [
+      "local"
+    ],
+    "entity": "users"
+  },
   "connections": {
-    "nedb+nedb": {
+    "nedb": {
       "database": "nedb",
       "adapter": "nedb",
-      "connectionString": "../data"
+      "connectionString": "nedb://../data"
+    },
+    "sequelize": {
+      "database": "sqlite",
+      "adapter": "sequelize",
+      "connectionString": "sqlite://data/db.sqlite"
+    }
+  },
+  "middlewares": {
+    "mw1": {
+      "path": "*",
+      "camel": "mw1",
+      "kebab": "mw-1"
+    },
+    "mw2": {
+      "path": "mw2",
+      "camel": "mw2",
+      "kebab": "mw-2"
     }
   },
   "graphql": {
-    "name": "graphql",
-    "path": "graphql",
-    "strategy": "services",
-    "requiresAuth": false
+    "path": "/graphql",
+    "strategy": "sql",
+    "requiresAuth": false,
+    "name": "graphql"
   }
 }
 ```
@@ -87,3 +134,10 @@ Cli-plus will be updated over time, fixing issues and adding enhancements.
 You can include these enhancements in your app by simply running `generate all` and
 the entire app will be updated.
 Most of the time this'll "just work".
+
+> Your app can obtain information about the app at run-time by reading `feathers-gen-specs.json`.
+It can, for example, determine the adapter used by a service and then use that information to
+decide which hooks to run.
+
+> `feathers-gen-specs.json` combined with the output from `generate codelist` completely
+describe the generated modules. The generator can re-generate the project with this information.

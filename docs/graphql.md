@@ -92,13 +92,13 @@ let extensions = {
 ```
 
 - `name` - The name of the GraphQL type for this service.
-It defaults to the service name with the first letter capitalized.
+It defaults to the singular name you provided for the service, with the first letter capitalized.
 - `service` - This is required if you want to generate GraphQL resolvers using Feathers service,
 alone or with BatchLoaders.
   - `sort` - The sort criteria used when this service is the top level of a GraphQL Query.
 - `sql` - This is required if you want to generate GraphQL resolvers which use raw SQL statements.
   - `sqlTable`: The name of the SQL table in the database.
-  - `uniqueLey`: The name of the column containing the unique key for records in the table.
+  - `uniqueKey`: The name of the column containing the unique key for records in the table.
   - `sqlColumn`: A hash containing the map of field names in comment.schema.js to column names in the SQL table.
 - `discard`: Field names to exclude from GraphQL queries.
 - `add`: Relations between this service and other services.
@@ -154,7 +154,7 @@ These modules are always created:
   and you definitely need to understand its documentation.
   - `graphql/sql.resolvers.js`: Resolvers which call join-monster routines.
   - `graphql/sql.execute.js`: You will have to modify this module.
-  It defaults to calling `sqlite` tables.
+  It defaults to using a Sequelize instance.
 
 You are asked which type of resolvers you want to use when generating the endpoint.
 You can choose any for which your schemas have the required information.
@@ -165,7 +165,7 @@ You can change the the resolvers used by regenerating the endpoint.
 GraphQL, in our opinion, is great for queries.
 However we feel Feathers is cleaner and easier for mutations and subscriptions.
 
-Two GraphQL queries are generated for each service.
+Two GraphQL CRUD queries are generated for each service.
 They would be `getComment` and `findComment` for the `comment`.
 - `getComment` requires the `key` parameter. The `params` one is optional.
 - `findComment` would usually include a `query` parameter. The `params` one is optional.
@@ -281,3 +281,35 @@ In sum, these resolver paths would be produced
 
 Feathers service hooks can reference `context.params.graphql = resolverPath }`
 so that the hook has more information about the GraphQL call.
+
+### Authentication
+
+If the GraphQL endpoint is generated as requiring authentication,
+then its resulting `context.user`, `context.authenticated`
+are passed along to the resolver calls.
+
+> `context.provider` is always passed along.
+
+You may have other props passed along as well by customizing src/services/graphql/service.resolvers.js
+and batchloader.resolvers.js.
+For example
+```js
+// !<DEFAULT> code: extra_auth_props
+const convertArgs = convertArgsToFeathers(['extraPropName1', 'extraPropName2']);
+// !end
+```
+
+### Pagination
+
+Pagination is respected for the top-level service in the Query.
+It is ignored by default for services at a lower level in the query.
+
+The maximum number of keys retrieved by a BatchLoader defaults to the pagination size,
+and you can customize it.
+```js
+// !<DEFAULT> code: max-batch-size
+let defaultPaginate = app.get('paginate');
+let maxBatchSize = defaultPaginate && typeof defaultPaginate.max === 'number' ?
+  defaultPaginate.max : undefined;
+// !end
+```

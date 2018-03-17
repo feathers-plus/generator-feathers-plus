@@ -16,6 +16,7 @@ it into @feathers-x/cli.
   - In @feathers-x/generator-feathers-plus, run `npm symlink`.
   - In @feathers-x/cli, run `npm symlink @feathers-x/generator-feathers-plus`.
   The location containing the global @feathers-x/cli will vary based on your OS.
+  You can run `npm list -g` to see where global libraries are installed.
 
 ## Introduction
 
@@ -27,6 +28,8 @@ The cli-plus is similar to @feathersjs/cli in that:
 However the similarities fundamentally end there.
 
 ## [Regenerating apps](./docs/regenerating-apps.md)
+
+## [Additional generators](./docs/additional-generators.md)
 
 ## [Retaining custom code](./docs/retaining-custom-code.md)
 

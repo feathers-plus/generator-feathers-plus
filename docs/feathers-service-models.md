@@ -9,11 +9,8 @@ The Mongoose database adapter, for example, will not understand a schema
 written for the Sequelize database adapter.
 
 However if you use Feathers Service Models,
-Feathers can automatically convert your Feathers model into the schema expected by
+@feathers-plus/cli can automatically convert your Feathers model into the schema expected by
 a particular database adapter.
-
-> **ProTip:** Presently, the Mongoose database adapter is supported.
-Sequelize adapters will be supported next.
 
 With Feathers service adapters and Feathers Models you can connect to the most popular databases and
 query them with a unified interface no matter which one you use.

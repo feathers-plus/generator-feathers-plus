@@ -23,7 +23,7 @@ Feathers Models can default the `type` properties, so you can write more concise
 ```javascript
 const productJsonSchema = {
     properties: {
-        _id: {},
+        _id: { type: 'ID' },
         checked: { type: 'boolean' },
         name: {},
         price: { type: 'number' },
