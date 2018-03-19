@@ -253,7 +253,10 @@ OK - add f-auth-mgnt fields to graphql auth
 OK - `json-schema-deref-sync` converts `type: 'ID'` to `type: 'string'` which is incorrect for primary keys.
      This doesn't seem to be the case.
 OK - rename production dependencies
-OK - check if any dependencies before scheduling install     
+OK - check if any dependencies before scheduling install
+OK - mention src/services/name/name.class.*s are not regenerated
+OK - alpha order for .ts and in front of the package.json
+OK - test f-auth-mgnt fields to graphql auth     
 
 
 NO - hooks modules should be ifNew: true
@@ -279,19 +282,16 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
      scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
 
 
-- mention src/services/name/name.class.*s are not regenerated
-- alpha order for .ts and in front of the package.json
-
 - add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
 - Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
   for `uniqueItemProperties`? In say name.mongo.js?
 
 - test name.mongo.js
 - test name.validate.js
+- test name.sequelize.js
 - run tslint --fix / eslint --fix afterwards ?!? (watch for removal of trailing commas
-- adapter-info: Make sure generic adapter can work somehow.
 
-- test f-auth-mgnt fields to graphql auth
+* - adapter-info: Make sure generic adapter can work somehow.
 
 - add comment in hooks regarding context.params.graphql for services included in graphql
 - add sort one 1 prop in array of objects, sort on multiple prop names to BatchLoader. See f-x/common-utils
@@ -328,7 +328,7 @@ FINAL CHECKS
 - Consider which generated code to instead make default code, creating a new code location there.
 
 - Several templates may have the same app module as their destination. Each of these
-  templates needs to be tested BOTH FOR .js AND .ts .
+  templates needs to be tested for .ts .
   - src/models/name.model.*s
     - knex for the user-entity service
     - knex for other service
@@ -349,4 +349,4 @@ FINAL CHECKS
     - rethinkdb.*s
     - sequelize.*s for MS SQL Server
     - sequelize.*s for other DBs use a common template
-        
+- Also test generic adapter for .js and .ts        

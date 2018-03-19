@@ -8,7 +8,7 @@
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
   let config = app.get('mongodb')<%- sc %>
-  let dbName = url.parse(config).path.substring(1)<%- sc %>
+  let dbName = url.parse(config).path<%- tplTsOnly(['!']) %>.substring(1)<%- sc %>
   <%- insertFragment('func_init') %>
 
   const promise = MongoClient.connect(config).then(client => {

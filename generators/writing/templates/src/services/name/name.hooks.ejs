@@ -14,7 +14,7 @@
 <% if ((mapping.feathers[serviceName] || {}).adapter === 'mongodb') { -%>
 <%- insertFragment('foreign_keys', [
   `// ${lintDisableNextLineUnused}`,
-  `const foreignKeys = ${stringifyPlus(feathersSpecs[serviceName]._extensions.foreignKeys).replace(/"/g, '\'')}${sc}`,
+  `const foreignKeys${tplTsOnly([': string | string[]'])} = ${stringifyPlus(feathersSpecs[serviceName]._extensions.foreignKeys).replace(/"/g, '\'')}${sc}`,
 ]) -%>
 <% } -%>
 <%# --- if-3 ends above. -%>

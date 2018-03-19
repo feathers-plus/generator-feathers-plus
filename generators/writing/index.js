@@ -626,7 +626,11 @@ module.exports = function generatorWriting (generator, what) {
       }
 
       if (isMongo) {
-        imports.push(`const { ObjectID } = require('mongodb')${sc}`);
+        imports.push(
+          isJs ?
+          `const { ObjectID } = require('mongodb')${sc}` :
+          `import { ObjectID } from 'mongodb'${sc}`
+        );
         hooks.push('mongoKeys');
         code.before.find.push('mongoKeys(ObjectID, foreignKeys)');
       }

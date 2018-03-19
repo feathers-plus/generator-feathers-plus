@@ -3,6 +3,7 @@
 <%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
 <%- tplImports('createService', 'feathers-mongodb', 'req') %>
 <%- tplImports('hooks', `./${kebabName}.hooks`) %>
+<%- tplTsOnly([`import { Db, MongoClient } from 'mongodb'${sc}`, '']) -%>
 <%- insertFragment('imports', [
   `// ${tplImports('$jsonSchema', `./${kebabName}.mongo`, 'req', 'let')}`
 ]) %>
@@ -11,7 +12,7 @@
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   let paginate = app.get('paginate')<%- sc %>
-  let mongoClient = app.get('mongoClient')<%- sc %>
+  let mongoClient = app.get('mongoClient')<%- tplTsOnly([' as Promise<Db>']) -%><%- sc %>
   let options = { paginate }<%- sc %>
   <%- insertFragment('func_init') %>
 
@@ -31,7 +32,7 @@
     })<%- sc %>
   })
     .then(serviceModel => {
-      service.Model = serviceModel<%- sc %>
+      <%- tplJsOrTs('service', '(service as any)') %>.Model = serviceModel<%- sc %>
     })<%- sc %>
 
   service.hooks(hooks)<%- sc %>

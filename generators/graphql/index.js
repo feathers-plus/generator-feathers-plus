@@ -57,7 +57,7 @@ module.exports = class GraphqlGenerator extends Generator {
     const prompts = [{
       type: 'list',
       name: 'strategy',
-      message: 'How should Queries be completed?.',
+      message: 'How should Queries be completed?',
       default: graphqlSpecs.strategy,
       choices: [{
         name: 'Using standalone Feathers service calls.',
@@ -68,6 +68,24 @@ module.exports = class GraphqlGenerator extends Generator {
       }, {
         name: 'Using dynamic SQL statements.',
         value: 'sql'
+      }]
+    }, {
+      type: 'list',
+      name: 'sqlInterface',
+      message: 'What SQL interface do you want to use?',
+      default: 'sequelize', //graphqlSpecs.sqlInterface,
+      when(answers) {
+        return answers.strategy === 'sql';
+      },
+      choices: [{
+        name: 'Sequelize.',
+        value: 'sequelize'
+      }, {
+        name: 'Knex.',
+        value: 'knex'
+      }, {
+        name: 'A custom interface.',
+        value: 'custom'
       }]
     }, {
       name: 'path',

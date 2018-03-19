@@ -47,7 +47,7 @@ const operatorsAliases = {
 <%- tplExport('function (app) {', 'function app: App) {') %>
   let connectionString = app.get('mssql')<%- sc %>
   let connection = url.parse(connectionString)<%- sc %>
-  let database = connection.path.substring(1, connection.path.length)<%- sc %>
+  let database = connection.path<%- tplTsOnly(['!']) %>.substring(1, connection.path.length)<%- sc %>
   let { port, hostname } = connection<%- sc %>
   let [ username, password ] = (connection.auth || ':').split(':')<%- sc %>
   let sequelize = new Sequelize(database, username, password, {

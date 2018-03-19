@@ -15,7 +15,9 @@ declare module 'primus'<%- sc %>
 <%# -%>
 <%# === Authentication ========================================================================= -%>
 <%# --- if-2 starts below. -%>
-<% if (specs.authentication && specs.authentication.strategies.length) { -%>
+<% if (specs.authentication && specs.authentication.strategies.length &&
+  (specs.authentication.strategies.indexOf('auth0') !== -1 || specs.authentication.strategies.indexOf('google') !== -1)) {
+-%>
 
 // Authentication.
 <% } -%>

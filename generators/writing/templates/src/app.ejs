@@ -29,7 +29,7 @@
   __temp = specs._adapters[__adapter];
   __module = __temp.substring(0, __temp.length - 4);
 -%>
-const <%- __adapter %> = require('./<%- __module %>')<%- sc %>
+<%- tplImports(__adapter, `./${__module}`) %>
 <% }) -%>
 <%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>
