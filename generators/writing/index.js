@@ -816,6 +816,7 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([qlPath, 'batchloader.resolvers.ejs'], [libDir, 'services', 'graphql', `batchloader.resolvers.${js}`]),
       tmpl([qlPath, 'service.resolvers.ejs'], [libDir, 'services', 'graphql', `service.resolvers.${js}`]),
       tmpl([qlPath, 'sql.execute.ejs'], [libDir, 'services', 'graphql', `sql.execute.${js}`]),
+      tmpl([qlPath, 'sql.execute.sequelize.ejs'], [libDir, 'services', 'graphql', `sql.execute.sequelize.${js}`]),
       tmpl([qlPath, 'sql.metadata.ejs'], [libDir, 'services', 'graphql', `sql.metadata.${js}`]),
       tmpl([qlPath, 'sql.resolvers.ejs'], [libDir, 'services', 'graphql', `sql.resolvers.${js}`]),
       tmpl([serPath, 'index.ejs'], [libDir, 'services', `index.${js}`])

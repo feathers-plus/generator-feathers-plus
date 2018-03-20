@@ -16,6 +16,7 @@
 <%- tplImports('services', './services') %>
 <%- tplImports('appHooks', './app.hooks') %>
 <%- tplImports('channels', './channels') %>
+<%- tplImports('generatorSpecs', '../feathers-gen-specs.json') %>
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (specs.authentication) { -%>
@@ -40,6 +41,7 @@ const app = express(feathers())<%- sc %>
 
 // Load app configuration
 app.configure(configuration())<%- sc %>
+app.set('generatorSpecs', generatorSpecs)<%- sc %>
 // Enable CORS, security, compression, favicon and body parsing
 app.use(cors())<%- sc %>
 app.use(helmet())<%- sc %>

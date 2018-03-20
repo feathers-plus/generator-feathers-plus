@@ -1,0 +1,52 @@
+
+// Execute raw SQL statement for GraphQL using Sequelize. (Can be re-generated.)
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
+<%- tplTsOnly([`import { Sequelize } from 'sequelize'${sc}`, '']) -%>
+<%- tplImports('{ getByDot}', 'feathers-hooks-common') %>
+<%- insertFragment('imports') %>
+
+let dialects = {
+  mysql: 'mysql',
+  sqlite: 'sqlite3',
+  postgres: 'pg'
+};
+<%- insertFragment('init') %>
+
+<%- tplModuleExports(null, 'function sqlExecuteSequelize(app) {', 'function sqlExecuteSequelize(app: App) {') %>
+  let generatorSpecs = app.get('generatorSpecs')<%- sc %>
+  let sequelize = app.get('sequelizeClient')<%- tplTsOnly([' as Sequelize']) -%><%- sc %>
+  let database = getByDot(generatorSpecs, 'connections.sequelize.database')<%- sc %>
+  let dialect = dialects[database]<%- sc %>
+  <%- insertFragment('func_init') %>
+
+  if (!sequelize) {
+    throw new Error(<%- tplTsOnly(['message: ']) -%>'No Sequelize client')<%- sc %>
+  }
+  if (!dialect) {
+    throw new Error(<%- tplTsOnly(['message: ']) -%>`Unsupported dialect: '${sequelize.getDialect()}'`)<%- sc %>
+  }
+
+  let executeSql = <%- tplJsOrTs('sql', '(sql: any)') %> => sequelize.query(sql)
+    .then(([result, meta]) => result)
+    .catch(<%- tplJsOrTs('err', 'onrejected: (err: Error)') %> => {
+      // <%- lintDisableNextLine %> no-console
+      console.log('executeSql error=', err.message)<%- sc %>
+      throw err<%- sc %>
+    })<%- sc %>
+
+  let returns = {
+    dialect,
+    executeSql,
+    <%- insertFragment('moduleExports') %>
+  }<%- sc %>
+
+  <%- insertFragment('func_return') %>
+  return returns;
+}
+<%- insertFragment('more') %>
+
+<%- insertFragment('exports') %>
+<%- `${tplExport('moduleExports')}${sc}` %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>
