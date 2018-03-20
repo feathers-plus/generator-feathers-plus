@@ -22,7 +22,7 @@
 <% if (strategy === 'sql') { -%>
 <%- tplImports(`generatedResolvers${!isJs ? ', { SqlResolverFactoryOptions }' : ''}`, './sql.resolvers') %>
 <%- tplImports(`generatedMetadata${!isJs ? ', { SqlMetadataOptions }' : ''}`, './sql.metadata') %>
-<%- tplImports('sqlExecute', `./sql.execute.${strategy}`) %>
+<%- tplImports('sqlExecute', `./sql.execute.${strategy !== 'sql' ? strategy : specs.graphql.sqlInterface}`) %>
 <% } -%>
 <%# --- if-3 ends above. -%>
 <%- tplImports('hooks', './graphql.hooks') %>

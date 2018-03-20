@@ -84,7 +84,7 @@ module.exports = class AllGenerator extends Generator {
     });
 
     if (frozenFiles.length) {
-      this.log(chalk.yellow.bold(`\nYou must remove these files manually before using the generator again:`));
+      this.log(chalk.yellow.bold('\nYou must remove these files manually before using the generator again:'));
 
       frozenFiles.forEach(path => {
         this.log(chalk.cyan('   frozen'), path.substr(dirLen));

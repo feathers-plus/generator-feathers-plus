@@ -1,0 +1,41 @@
+
+// Execute raw SQL statement for GraphQL using a custom interface. (Can be re-generated.)
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+<%- tplModuleExports(null, 'function sqlExecuteCustom(app) {', 'function sqlExecuteCustom(app: App) {') %>
+  let generatorSpecs = app.get('generatorSpecs')<%- sc %>
+  <%- insertFragment('dialect', [
+    `let dialect${tplTsOnly(": 'sqlite3' | 'mariadb' | 'mysql' | 'pg' | 'oracle'")} = null${sc}`
+  ]) %>
+  let dialect<%- tplTsOnly(': \'sqlite3\' | \'mariadb\' | \'mysql\' | \'pg\' | \'oracle\'') -%> = '?????<%- sc %>
+  <%- insertFragment('func_init') %>
+
+  if (!dialect) {
+    throw new Error(`Unsupported dialect: '${dialect}'`)<%- sc %>
+  }
+
+  // An async function that takes an SQL statement queries a database and resolves to an array of objects
+  async function executeSql<%- tplJsOrTs('(sql)', '(sql: string): Promise<any[]>') %> {
+    throw new Error(`No function for GraphQL SQL execution provided. You need to provide one in ${ __filename }`);
+    return [];
+  }
+
+  let returns = {
+    dialect,
+    executeSql,
+    openDb: undefined
+    <%- insertFragment('moduleExports') %>
+  }<%- sc %>
+
+  <%- insertFragment('func_return') %>
+  return returns;
+}<%- sc %>
+<%- insertFragment('more') %>
+
+<%- insertFragment('exports') %>
+<%- `${tplExport('moduleExports')}${sc}` %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>
