@@ -16,7 +16,7 @@
 <%- tplImports('services', './services') %>
 <%- tplImports('appHooks', './app.hooks') %>
 <%- tplImports('channels', './channels') %>
-<%- tplImports('generatorSpecs', '../feathers-gen-specs.json') %>
+const generatorSpecs = require('../feathers-gen-specs.json')<%- sc %>
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (specs.authentication) { -%>

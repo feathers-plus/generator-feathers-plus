@@ -2,7 +2,10 @@
 /* <%- lintRule %><%- ruleQuoteDisable %> */
 // Defines Sequelize model for service `<%= serviceName %>`. (Can be re-generated.)
 <%- tplImports('merge', 'lodash.merge', 'req') %>
-<%- tplImports('Sequelize', 'sequelize', 'req') %>
+<%- tplJsOrTs(
+  `const Sequelize = require('sequelize')${sc}`,
+  `import Sequelize, { DefineAttributes } from 'sequelize'${sc}`
+) %>
 // <%- lintDisableNextLineUnused %>
 <%- tplJsOrTs(
   `const DataTypes = Sequelize.DataTypes${sc}`,
@@ -32,7 +35,7 @@
 <%# --- if-1 ends above. -%>
 let moduleExports = merge({},
   <%- insertFragment('sequelize_model',
-    sequelizeSchemaStr.split('\n').map(str => `  ${str}`).join('\n') + ',')
+    sequelizeSchemaStr.split('\n').map(str => `  ${str}`).join('\n') + ${tplTsOnly(' as DefineAttributes')} + ',')
   %>
   <%- insertFragment('moduleExports') %>
 )<%- sc %>

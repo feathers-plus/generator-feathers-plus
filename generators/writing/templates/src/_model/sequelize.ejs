@@ -1,31 +1,31 @@
 
 // <%= serviceName %>-model.<%- js %> - A Sequelize model. (Can be re-generated.)
-<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
+<%- tplTsOnly([`import { App } from '../app.interface'${sc}`, '']) -%>
 //
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
 <%- insertFragment('sequelize_schema', [
-  `// ${tplImports('Sequelize', 'sequelize', 'req')}`,
-  '// const DataTypes = Sequelize.DataTypes;',
-  '',
-  tplImports('sequelizeSchema', `../services/${kebabName}/${kebabName}.sequelize`, 'req'),
+  tplImports('{ Sequelize }', 'sequelize'),
+  tplImports('sequelizeSchema', `../services/${kebabName}/${kebabName}.sequelize`),
 ]) %>
 <%- insertFragment('sequelize_imports') %>
+
+const DataTypes = Sequelize.DataTypes<%- sc %
 <%- insertFragment('sequelize_init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
-  let sequelizeClient = app.get('sequelizeClient')<%- sc %>
+  let sequelizeClient = app.get('sequelizeClient')<%- tplTsOnly(' as Sequelize') %><%- sc %>
   <%- insertFragment('sequelize_func_init') %>
 
   const <%= camelName %> = sequelizeClient.define('<%= snakeName %>',
     <%- insertFragment('sequelize_model', ['    sequelizeSchema,']) %>
     <%- insertFragment('sequelize_options', [
-      '    { ',
+      '    {',
       '      hooks: {',
-      '        beforeCount(options) {',
+      `        beforeCount(options${tplTsOnly(': any')}) {`,
       `          options.raw = true${sc}`,
       '        },',
-      '      },',
+      `      }${tplTsOnly(' as any)},`,
       '    },'
     ]) %>
     <%- insertFragment('sequelize_define') %>

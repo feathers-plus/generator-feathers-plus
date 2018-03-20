@@ -59,7 +59,7 @@ const operatorsAliases = {
 
   app.set('sequelizeClient', sequelize)<%- sc %>
 
-  app.setup = function (...args) {
+  app.setup = function (...args<%- tplTsOnly(': any[]') -%>) {
     let result = oldSetup.apply(this, args)<%- sc %>
     <%- insertFragment('func_init') %>
 
@@ -67,7 +67,7 @@ const operatorsAliases = {
     const models = sequelize.models<%- sc %>
     Object.keys(models).forEach(name => {
       if ('associate' in models[name]) {
-        models[name].associate(models)<%- sc %>
+        models[name].associate<%- tplTsOnly('!') -%>(models)<%- sc %>
       }
     })<%- sc %>
 
@@ -78,6 +78,6 @@ const operatorsAliases = {
     return result<%- sc %>
   }<%- sc %>
   <%- insertFragment('more') %>
-}<%- sc %>
+}
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
