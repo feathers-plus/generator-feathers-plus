@@ -25,7 +25,7 @@ const DataTypes = Sequelize.DataTypes<%- sc %
       '        beforeCount(options) {',
       `          options.raw = true${sc}`,
       '        },',
-      '      },',
+      `      }${tplTsOnly(' as any')},`,
       '    },'
     ]) %>
     <%- insertFragment('sequelize_define') %>

@@ -10,7 +10,7 @@
 ]) %>
 <%- insertFragment('sequelize_imports') %>
 
-const DataTypes = Sequelize.DataTypes<%- sc %
+const DataTypes = Sequelize.DataTypes<%- sc %>
 <%- insertFragment('sequelize_init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>

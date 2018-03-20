@@ -1,17 +1,17 @@
 
 /* <%- lintDisable -%> no-console */
 // <%= serviceName %>-model.<%- js %> - A KnexJS
-<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
+<%- tplTsOnly([`import { App } from '../app.interface'${sc}`, '']) -%>
 // 
 // See http://knexjs.org/
 // for more of what you can do here.
-<%- insertFragment('imports') %>
-<%- insertFragment('init') %>
+<%- insertFragment('knex_imports') %>
+<%- insertFragment('knex_init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   const db = app.get('knexClient')<%- sc %>
   const tableName = '<%= snakeName %>'
-  <%- insertFragment('func_init') %>
+  <%- insertFragment('knex_func_init') %>
 
   db.schema.hasTable(tableName).then(exists => {
     if (!exists) {
@@ -30,13 +30,13 @@
     }
   })<%- sc %>
 
-<%- insertFragment('func_return') %>
+<%- insertFragment('knex_func_return') %>
   return db<%- sc %>
 }<%- sc %>
-<%- insertFragment('more') %>
+<%- insertFragment('knex_more') %>
 
-<%- insertFragment('exports') %>
+<%- insertFragment('knex_exports') %>
 <%- `${tplExport('moduleExports')}${sc}` %>
 
-<%- insertFragment('funcs') %>
-<%- insertFragment('end') %>
+<%- insertFragment('knex_funcs') %>
+<%- insertFragment('knex_end') %>
