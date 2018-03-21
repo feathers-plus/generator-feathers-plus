@@ -21,7 +21,8 @@
   // <%- lintDisableNextLineUnused %>
   async function executeSql<%- tplJsOrTs('(sql)', '(sql: string): Promise<any[]>') %> {
     throw new Error(`No function for GraphQL SQL execution provided. You need to provide one in ${ __filename }`)<%- sc %>
-    // return []<%- sc %>
+    // <%- lintDisableNextLine %>
+    return []<%- sc %>
   }
 
   let returns = {

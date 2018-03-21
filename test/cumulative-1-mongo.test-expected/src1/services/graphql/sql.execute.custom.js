@@ -20,7 +20,8 @@ let moduleExports = function sqlExecuteCustom(app) {
   // eslint-disable-next-line no-unused-vars
   async function executeSql(sql) {
     throw new Error(`No function for GraphQL SQL execution provided. You need to provide one in ${ __filename }`);
-    // return [];
+    // eslint-disable-next-line
+    return [];
   }
 
   let returns = {
