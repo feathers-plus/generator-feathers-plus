@@ -59,5 +59,10 @@ if (isJs)
 ]) %>
 
 
-"nameSingular": "users1",
-"nameSingular": "nedb1",
+lintRule: isJs ? 'eslint ' : 'tslint:',
+lintDisable: isJs ?  'eslint-disable' : 'tslint:disable',
+lintDisableUnused: isJs ? 'eslint-disable no-unused-vars' : 'tslint:disable no-unused-variable',
+lintDisableNextLine: isJs ?  'eslint-disable-next-line' : 'tslint:disable-next-line',
+lintDisableNextLineUnused: isJs ?
+'eslint-disable-next-line no-unused-vars' : 'tslint:disable-next-line no-unused-variable',
+ruleQuoteDisable: isJs ? 'quotes: 0' : 'disable:quotemark',1",

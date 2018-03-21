@@ -41,7 +41,10 @@ const app = express(feathers())<%- sc %>
 
 // Load app configuration
 app.configure(configuration())<%- sc %>
-app.set('generatorSpecs', generatorSpecs)<%- sc %>
+<%- insertFragment('init_config', [
+  `app.set('generatorSpecs', generatorSpecs)${sc}`,
+]) %>
+
 // Enable CORS, security, compression, favicon and body parsing
 app.use(cors())<%- sc %>
 app.use(helmet())<%- sc %>

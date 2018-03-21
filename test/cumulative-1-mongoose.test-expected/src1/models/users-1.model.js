@@ -3,29 +3,29 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-// !<DEFAULT> code: schema
+// !<DEFAULT> code: mongoose_schema
 const mongooseSchema = require('../services/users-1/users-1.mongoose');
 // !end
-// !code: imports // !end
-// !code: init // !end
+// !code: mongoose_imports // !end
+// !code: mongoose_init // !end
 
 let moduleExports = function (app) {
   let mongooseClient = app.get('mongooseClient');
-  // !code: func_init // !end
+  // !code: mongoose_func_init // !end
 
-  // !<DEFAULT> code: client
+  // !<DEFAULT> code: mongoose_client
   const users1 = new mongooseClient.Schema(mongooseSchema, { timestamps: true });
   // !end
 
   let returns = mongooseClient.model('users1', users1);
 
-  // !code: func_return // !end
+  // !code: mongoose_func_return // !end
   return returns;
 };
-// !code: more // !end
+// !code: mongoose_more // !end
 
-// !code: exports // !end
+// !code: mongoose_exports // !end
 module.exports = moduleExports;
 
-// !code: funcs // !end
-// !code: end // !end
+// !code: mongoose_funcs // !end
+// !code: mongoose_end // !end

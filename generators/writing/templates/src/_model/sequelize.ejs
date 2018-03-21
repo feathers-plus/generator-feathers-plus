@@ -4,13 +4,13 @@
 //
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
+<%- tplTsOnly([`import { Sequelize } from 'sequelize'${sc}`, '']) -%>
 <%- insertFragment('sequelize_schema', [
-  tplImports('{ Sequelize }', 'sequelize'),
   tplImports('sequelizeSchema', `../services/${kebabName}/${kebabName}.sequelize`),
 ]) %>
 <%- insertFragment('sequelize_imports') %>
 
-const DataTypes = Sequelize.DataTypes<%- sc %>
+<%- tplTsOnly([`const DataTypes = Sequelize.DataTypes${sc}`, '']) -%>
 <%- insertFragment('sequelize_init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>

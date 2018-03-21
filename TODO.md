@@ -290,6 +290,7 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 - test name.validate.js
 - test name.sequelize.js
 - run tslint --fix / eslint --fix afterwards ?!? (watch for removal of trailing commas
+  Alternatively have pretty-stringify produce single rather than double quotes.
 
 * - adapter-info: Make sure generic adapter can work somehow.
 

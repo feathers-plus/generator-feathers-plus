@@ -808,14 +808,13 @@ module.exports = function generatorWriting (generator, what) {
 
     todos = [
       tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `graphql.test.${js}`], true),
-      tmpl([qlPath, 'graphql.interfaces.ejs'], [libDir, 'services', 'graphql', `graphql.interfaces.ts`], false, isJs),
+      tmpl([qlPath, 'graphql.interfaces.ejs'], [libDir, 'services', 'graphql', 'graphql.interfaces.ts'], false, isJs),
 
       tmpl([namePath, 'name.hooks.ejs'], [libDir, 'services', 'graphql', `graphql.hooks.${js}`]),
       tmpl([qlPath, 'graphql.schemas.ejs'], [libDir, 'services', 'graphql', `graphql.schemas.${js}`]),
       tmpl([qlPath, 'graphql.service.ejs'], [libDir, 'services', 'graphql', `graphql.service.${js}`]),
       tmpl([qlPath, 'batchloader.resolvers.ejs'], [libDir, 'services', 'graphql', `batchloader.resolvers.${js}`]),
       tmpl([qlPath, 'service.resolvers.ejs'], [libDir, 'services', 'graphql', `service.resolvers.${js}`]),
-      tmpl([qlPath, 'sql.execute.ejs'], [libDir, 'services', 'graphql', `sql.execute.${js}`]),
       tmpl([qlPath, 'sql.execute.custom.ejs'], [libDir, 'services', 'graphql', `sql.execute.custom.${js}`]),
       tmpl([qlPath, 'sql.execute.knex.ejs'], [libDir, 'services', 'graphql', `sql.execute.knex.${js}`]),
       tmpl([qlPath, 'sql.execute.sequelize.ejs'], [libDir, 'services', 'graphql', `sql.execute.sequelize.${js}`]),

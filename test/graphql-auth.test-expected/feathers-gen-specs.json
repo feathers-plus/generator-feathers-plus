@@ -64,6 +64,7 @@
     "name": "graphql",
     "path": "/graphql",
     "strategy": "services",
+    "sqlInterface": null,
     "requiresAuth": true
   }
 }

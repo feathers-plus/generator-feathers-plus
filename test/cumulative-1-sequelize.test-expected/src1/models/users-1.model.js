@@ -4,16 +4,14 @@
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
 // !<DEFAULT> code: sequelize_schema
-// const Sequelize = require('sequelize');
-// const DataTypes = Sequelize.DataTypes;
-
 const sequelizeSchema = require('../services/users-1/users-1.sequelize');
 // !end
 // !code: sequelize_imports // !end
+
 // !code: sequelize_init // !end
 
 let moduleExports = function (app) {
-  const sequelizeClient = app.get('sequelizeClient');
+  let sequelizeClient = app.get('sequelizeClient');
   // !code: sequelize_func_init // !end
 
   const users1 = sequelizeClient.define('users_1',
@@ -21,7 +19,7 @@ let moduleExports = function (app) {
     sequelizeSchema,
     // !end
     // !<DEFAULT> code: sequelize_options
-    { 
+    {
       hooks: {
         beforeCount(options) {
           options.raw = true;

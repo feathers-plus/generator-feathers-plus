@@ -9,7 +9,7 @@ let dialects<%- tplTsOnly(': any') -%> = {
   mysql: 'mysql',
   sqlite: 'sqlite3',
   postgres: 'pg'
-};
+}<%- sc %>
 <%- insertFragment('init') %>
 
 <%- tplModuleExports(null, 'function sqlExecuteKnex(app) {', 'function sqlExecuteKnex(app: App) {') %>
@@ -27,7 +27,6 @@ let dialects<%- tplTsOnly(': any') -%> = {
   }
 
   let executeSql = <%- tplJsOrTs('sql', '(sql: string)') %> => knex.raw(sql)
-    .then(([result, meta]) => result)
     .catch(<%- tplJsOrTs('err', '(err: Error)') %> => {
       // <%- lintDisableNextLine %> no-console
       console.log('executeSql error=', err.message)<%- sc %>
@@ -42,7 +41,7 @@ let dialects<%- tplTsOnly(': any') -%> = {
   }<%- sc %>
 
   <%- insertFragment('func_return') %>
-  return returns;
+  return returns<%- sc %>
 }<%- sc %>
 <%- insertFragment('more') %>
 

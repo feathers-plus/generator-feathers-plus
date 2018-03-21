@@ -5,11 +5,12 @@
 <%- insertFragment('init') %>
 
 <%- tplModuleExports(null, 'function sqlExecuteCustom(app) {', 'function sqlExecuteCustom(app: App) {') %>
+  // <%- lintDisableNextLineUnused %>
   let generatorSpecs = app.get('generatorSpecs')<%- sc %>
   <%- insertFragment('dialect', [
-    `let dialect${tplTsOnly(": 'sqlite3' | 'mariadb' | 'mysql' | 'pg' | 'oracle'")} = null${sc}`
+    `  // ${lintDisableNextLineUnused}`,
+    `  let dialect${tplTsOnly(": 'sqlite3' | 'mariadb' | 'mysql' | 'pg' | 'oracle'")} = null${sc}`
   ]) %>
-  let dialect<%- tplTsOnly(': \'sqlite3\' | \'mariadb\' | \'mysql\' | \'pg\' | \'oracle\'') -%> = '?????<%- sc %>
   <%- insertFragment('func_init') %>
 
   if (!dialect) {
@@ -17,9 +18,10 @@
   }
 
   // An async function that takes an SQL statement queries a database and resolves to an array of objects
+  // <%- lintDisableNextLineUnused %>
   async function executeSql<%- tplJsOrTs('(sql)', '(sql: string): Promise<any[]>') %> {
-    throw new Error(`No function for GraphQL SQL execution provided. You need to provide one in ${ __filename }`);
-    return [];
+    throw new Error(`No function for GraphQL SQL execution provided. You need to provide one in ${ __filename }`)<%- sc %>
+    // return []<%- sc %>
   }
 
   let returns = {
@@ -30,7 +32,7 @@
   }<%- sc %>
 
   <%- insertFragment('func_return') %>
-  return returns;
+  return returns<%- sc %>
 }<%- sc %>
 <%- insertFragment('more') %>
 

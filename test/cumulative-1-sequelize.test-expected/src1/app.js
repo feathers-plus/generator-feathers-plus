@@ -16,6 +16,7 @@ const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
 const channels = require('./channels');
+const generatorSpecs = require('../feathers-gen-specs.json');
 const authentication = require('./authentication');
 
 const sequelize = require('./sequelize');
@@ -27,6 +28,10 @@ const app = express(feathers());
 
 // Load app configuration
 app.configure(configuration());
+// !<DEFAULT> code: init_config
+app.set('generatorSpecs', generatorSpecs);
+// !end
+
 // Enable CORS, security, compression, favicon and body parsing
 app.use(cors());
 app.use(helmet());

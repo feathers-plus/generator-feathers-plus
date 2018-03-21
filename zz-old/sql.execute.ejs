@@ -1,0 +1,14 @@
+
+// Execute raw SQL statement for GraphQL. (Can be re-generated.)
+<%- tplImports('sqlExecute', `./sql.execute.${specs.graphql.sqlInterface || 'custom'}`) %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+let moduleExports = sqlExecute;
+<%- insertFragment('more') %>
+
+<%- insertFragment('exports') %>
+<%- `${tplExport('moduleExports')}${sc}` %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>
