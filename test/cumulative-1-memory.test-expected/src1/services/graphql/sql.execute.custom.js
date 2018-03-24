@@ -3,26 +3,27 @@
 // !code: imports // !end
 // !code: init // !end
 
+// eslint-disable-next-line no-unused-vars
 let moduleExports = function sqlExecuteCustom(app) {
-  // eslint-disable-next-line no-unused-vars
-  let generatorSpecs = app.get('generatorSpecs');
-  // !<DEFAULT> code: dialect
+  // !code: func_custom // !end
+  // !<DEFAULT> code: func_dialect
   // eslint-disable-next-line no-unused-vars
   let dialect = null;
+  if (!dialect) {
+    throw new Error('Unsupported Custom dialect: \'' + dialect + '\'. (sql.execute.custom.*s)');
+  }
   // !end
   // !code: func_init // !end
 
-  if (!dialect) {
-    throw new Error(`Unsupported dialect: '${dialect}'`);
-  }
-
   // An async function that takes an SQL statement queries a database and resolves to an array of objects
+  // !<DEFAULT> code: func_exec
   // eslint-disable-next-line no-unused-vars
   async function executeSql(sql) {
-    throw new Error(`No function for GraphQL SQL execution provided. You need to provide one in ${ __filename }`);
+    throw new Error('No function for GraphQL SQL execution provided. You need to provide one in ' + __filename);
     // eslint-disable-next-line
     return [];
   }
+  // !end
 
   let returns = {
     dialect,

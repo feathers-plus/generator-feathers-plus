@@ -4,26 +4,27 @@
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
+// <%- lintDisableNextLineUnused %>
 <%- tplModuleExports(null, 'function sqlExecuteCustom(app) {', 'function sqlExecuteCustom(app: App) {') %>
-  // <%- lintDisableNextLineUnused %>
-  let generatorSpecs = app.get('generatorSpecs')<%- sc %>
-  <%- insertFragment('dialect', [
+  <%- insertFragment('func_custom') %>
+  <%- insertFragment('func_dialect', [
     `  // ${lintDisableNextLineUnused}`,
-    `  let dialect${tplTsOnly(": 'sqlite3' | 'mariadb' | 'mysql' | 'pg' | 'oracle'")} = null${sc}`
+    `  let dialect${tplTsOnly(": 'sqlite3' | 'mariadb' | 'mysql' | 'pg' | 'oracle'")} = null${sc}`,
+    '  if (!dialect) {',
+    `    throw new Error('Unsupported Custom dialect: \\'' + dialect + '\\'. (sql.execute.custom.*s)')${sc}`,
+    '  }',
   ]) %>
   <%- insertFragment('func_init') %>
 
-  if (!dialect) {
-    throw new Error(`Unsupported dialect: '${dialect}'`)<%- sc %>
-  }
-
   // An async function that takes an SQL statement queries a database and resolves to an array of objects
-  // <%- lintDisableNextLineUnused %>
-  async function executeSql<%- tplJsOrTs('(sql)', '(sql: string): Promise<any[]>') %> {
-    throw new Error(`No function for GraphQL SQL execution provided. You need to provide one in ${ __filename }`)<%- sc %>
-    // <%- lintDisableNextLine %>
-    return []<%- sc %>
-  }
+  <%- insertFragment('func_exec', [
+    `  // ${lintDisableNextLineUnused}`,
+    `  async function executeSql${tplJsOrTs('(sql)', '(sql: string): Promise<any[]>')} {`,
+    `    throw new Error('No function for GraphQL SQL execution provided. You need to provide one in ' + __filename)${sc}`,
+    `    // ${lintDisableNextLine}`,
+    `    return []${sc}`,
+    `  }`,
+  ]) %>
 
   let returns = {
     dialect,

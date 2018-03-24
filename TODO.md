@@ -299,6 +299,8 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 - what is feathersjs/cli/lib/shell.js
 - Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/generator.js
 
+- Hi, I’ve got a short question: is it possible to generate Typescript typings from the backend
+  from the services, that can be used to type the feathers-client? name.interface.ts
 - prompt for softDelete (after testing discard('password') on users with auth)
 - prompt and inert feathers-authentication-management. Need to handle arrays for SQL servers.
   - Will need to update feathersjs/authentication to check some extra fields

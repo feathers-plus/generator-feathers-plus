@@ -1,6 +1,5 @@
 
 // Execute raw SQL statement for GraphQL using Knex. (Can be re-generated.)
-const { getByDot } = require('feathers-hooks-common');
 // !code: imports // !end
 
 let dialects = {
@@ -11,25 +10,31 @@ let dialects = {
 // !code: init // !end
 
 let moduleExports = function sqlExecuteKnex(app) {
-  let generatorSpecs = app.get('generatorSpecs');
+  // !<DEFAULT> code: func_knex
   let knex = app.get('knexClient');
-  let database = getByDot(generatorSpecs, 'connections.knex.database');
-  let dialect = dialects[database];
+  if (!knex) {
+    throw new Error('No Knex client. (sql.execute.knex.*s)');
+  }
+  // !end
+
+  // !<DEFAULT> code: func_dialect
+  let dialect = dialects[knex.client.dialect];
+  if (!dialect) {
+    throw new Error('Unsupported Knex dialect: \'' + knex.client.dialect + '\'. (sql.execute.knex.*s)');
+  }
+  // !end
   // !code: func_init // !end
 
-  if (!knex) {
-    throw new Error('No knex client');
-  }
-  if (!dialect) {
-    throw new Error(`Unsupported dialect: '${dialect}'`);
-  }
-
-  let executeSql = sql => knex.raw(sql)
-    .catch(err => {
-      // eslint-disable-next-line no-console
-      console.log('executeSql error=', err.message);
-      throw err;
-    });
+  // !<DEFAULT> code: func_exec
+  let executeSql = sql => {
+    return knex.raw(sql)
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.log('executeSql error=', err.message);
+        throw err;
+      });
+  };
+  // !end
 
   let returns = {
     dialect,

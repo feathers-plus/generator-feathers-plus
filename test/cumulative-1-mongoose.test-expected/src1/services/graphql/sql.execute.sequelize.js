@@ -1,6 +1,5 @@
 
 // Execute raw SQL statement for GraphQL using Sequelize. (Can be re-generated.)
-const { getByDot } = require('feathers-hooks-common');
 // !code: imports // !end
 
 let dialects = {
@@ -11,26 +10,32 @@ let dialects = {
 // !code: init // !end
 
 let moduleExports = function sqlExecuteSequelize(app) {
-  let generatorSpecs = app.get('generatorSpecs');
+  // !<DEFAULT> code: func_sequelize
   let sequelize = app.get('sequelizeClient');
-  let database = getByDot(generatorSpecs, 'connections.sequelize.database');
-  let dialect = dialects[database];
+  if (!sequelize) {
+    throw new Error('No Sequelize client. (sql.execute.sequelize.*s)');
+  }
+  // !end
+
+  // !<DEFAULT> code: func_dialect
+  let dialect = dialects[sequelize.getDialect()];
+  if (!dialect) {
+    throw new Error('Unsupported Sequelize dialect: \'' + sequelize.getDialect() + '\'. (sql.execute.sequelize.*s)');
+  }
+  // !end
   // !code: func_init // !end
 
-  if (!sequelize) {
-    throw new Error('No Sequelize client');
-  }
-  if (!dialect) {
-    throw new Error(`Unsupported dialect: '${sequelize.getDialect()}'`);
-  }
-
-  let executeSql = sql => sequelize.query(sql)
-    .then(([result]) => result)
-    .catch(err => {
-      // eslint-disable-next-line no-console
-      console.log('executeSql error=', err.message);
-      throw err;
-    });
+  // !<DEFAULT> code: func_exec
+  let executeSql = sql => {
+    return sequelize.query(sql)
+      .then(([result]) => result)
+      .catch(err => {
+        // eslint-disable-next-line no-console
+        console.log('executeSql error=', err.message);
+        throw err;
+      });
+  };
+  // !end
 
   let returns = {
     dialect,

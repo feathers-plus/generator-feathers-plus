@@ -1,43 +1,74 @@
 
-/* <%- lintDisableUnused %>
+// Class for the custom service `<%= serviceName %>` on path `/<%= path %>`. (Can be re-generated.)
+/* <%- lintDisableUnused %> */
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
 class Service {
   constructor (options) {
     this.options = options || {}<%- sc %>
+    <%- insertFragment('constructor') %>
   }
 
-  async find (params) {
-    return []<%- sc %>
-  }
+  <%- insertFragment('find', [
+    '  async find (params) {',
+    `    return []${sc}`,
+    '  }',
+  ]) %>
 
-  async get (id, params) {
-    return {
-      id, text: `A new message with ID: ${id}!`
-    }<%- sc %>
-  }
+  <%- insertFragment('get', [
+    '  async get (id, params) {',
+    '    return {',
+    '      id, text: `A new message with ID: ${id}!`',
+    `    }${sc}`,
+    '  }',
+  ]) %>
 
-  async create (data, params) {
-    if (Array.isArray(data)) {
-      return await Promise.all(data.map(current => this.create(current)))<%- sc %>
-    }
+  <%- insertFragment('create', [
+    '  async create (data, params) {',
+    '    if (Array.isArray(data)) {',
+    `      return await Promise.all(data.map(current => this.create(current)))${sc}`,
+    '    }',
+    '',
+    `    return data${sc}`,
+    '  }',
+  ]) %>
 
-    return data<%- sc %>
-  }
+  <%- insertFragment('update', [
+    '  async update (id, data, params) {',
+    `    return data${sc}`,
+    '  }',
+  ]) %>
 
-  async update (id, data, params) {
-    return data<%- sc %>
-  }
+  <%- insertFragment('patch', [
+    '  async patch (id, data, params) {',
+    `    return data${sc}`,
+    '  }',
+  ]) %>
 
-  async patch (id, data, params) {
-    return data<%- sc %>
-  }
-
-  async remove (id, params) {
-    return { id }<%- sc %>
-  }
+  <%- insertFragment('remove', [
+    '  async remove (id, params) {',
+    `    return { id }${sc}`,
+    '  }',
+  ]) %>
 }
 
-<%- tplExport('function (options) {') %>
-  return new Service(options)<%- sc %>
-}<%- sc %>
-
-module.exports.Service = Service<%- sc %>
+<%- tplJsOnly([
+  'module.exports = function (options) {',
+  `  return new Service(options)${sc}`,
+  `}${sc}`,
+  '',
+  `module.exports.Service = Service${sc}`,
+  '',
+]) -%>
+<%- tplTsOnly([
+  'export default function (options) {',
+  `  return new Service(options)${sc}`,
+  `}${sc}`,
+  '',
+  `export Service = Service${sc}`,
+  '',
+]) -%>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

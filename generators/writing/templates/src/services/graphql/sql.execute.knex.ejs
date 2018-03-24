@@ -2,7 +2,6 @@
 // Execute raw SQL statement for GraphQL using Knex. (Can be re-generated.)
 <%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
 <%- tplTsOnly([`import { Knex } from 'knex'${sc}`, '']) -%>
-<%- tplImports('{ getByDot }', 'feathers-hooks-common') %>
 <%- insertFragment('imports') %>
 
 let dialects<%- tplTsOnly(': any') -%> = {
@@ -13,25 +12,31 @@ let dialects<%- tplTsOnly(': any') -%> = {
 <%- insertFragment('init') %>
 
 <%- tplModuleExports(null, 'function sqlExecuteKnex(app) {', 'function sqlExecuteKnex(app: App) {') %>
-  let generatorSpecs = app.get('generatorSpecs')<%- sc %>
-  let knex = app.get('knexClient')<%- tplTsOnly([' as Knex']) -%><%- sc %>
-  let database = getByDot(generatorSpecs, 'connections.knex.database')<%- sc %>
-  let dialect = dialects[database]<%- sc %>
+  <%- insertFragment('func_knex', [
+    `  let knex = app.get('knexClient')${tplTsOnly([' as Knex'])}${sc}`,
+    '  if (!knex) {',
+    `    throw new Error('No Knex client. (sql.execute.knex.*s)')${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('func_dialect', [
+    `  let dialect = dialects[knex.client.dialect]${sc}`,
+    '  if (!dialect) {',
+    `    throw new Error('Unsupported Knex dialect: \\'' + knex.client.dialect + '\\'. (sql.execute.knex.*s)')${sc}`,
+    '  }',
+  ]) %>
   <%- insertFragment('func_init') %>
 
-  if (!knex) {
-    throw new Error('No knex client')<%- sc %>
-  }
-  if (!dialect) {
-    throw new Error(`Unsupported dialect: '${dialect}'`)<%- sc %>
-  }
-
-  let executeSql = <%- tplJsOrTs('sql', '(sql: string)') %> => knex.raw(sql)
-    .catch(<%- tplJsOrTs('err', '(err: Error)') %> => {
-      // <%- lintDisableNextLine %> no-console
-      console.log('executeSql error=', err.message)<%- sc %>
-      throw err<%- sc %>
-    })<%- sc %>
+  <%- insertFragment('func_exec', [
+    `  let executeSql = ${tplJsOrTs('sql', '(sql: string)')} => {`,
+    '    return knex.raw(sql)',
+    `      .catch(${tplJsOrTs('err', '(err: Error)')} => {`,
+    `        // ${lintDisableNextLine} no-console`,
+    `        console.log('executeSql error=', err.message)${sc}`,
+    `        throw err${sc}`,
+    `      })${sc}`,
+    `  }${sc}`,
+  ]) %>
 
   let returns = {
     dialect,

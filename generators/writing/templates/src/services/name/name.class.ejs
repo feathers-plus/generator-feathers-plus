@@ -1,43 +1,74 @@
 
-/* <%- lintDisableUnused %>
+// Class for the custom service `<%= serviceName %>` on path `/<%= path %>`. (Can be re-generated.)
+/* <%- lintDisableUnused %> */
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
 class Service {
   constructor (options) {
     this.options = options || {}<%- sc %>
+    <%- insertFragment('constructor') %>
   }
 
-  find (params) {
-    return Promise.resolve([])<%- sc %>
-  }
+  <%- insertFragment('find', [
+    '  find (params) {',
+    `    return Promise.resolve([])${sc}`,
+    '  }',
+  ]) %>
 
-  get (id, params) {
-    return Promise.resolve({
-      id, text: `A new message with ID: ${id}!`
-    })<%- sc %>
-  }
+  <%- insertFragment('get', [
+    '  get (id, params) {',
+    '    return Promise.resolve({',
+    '      id, text: `A new message with ID: ${id}!`',
+    `    })${sc}`,
+    '  }',
+  ]) %>
 
-  create (data, params) {
-    if (Array.isArray(data)) {
-      return Promise.all(data.map(current => this.create(current)))<%- sc %>
-    }
+  <%- insertFragment('create', [
+    '  create (data, params) {',
+    '    if (Array.isArray(data)) {',
+    `      return Promise.all(data.map(current => this.create(current)))${sc}`,
+    '    }',
+    '',
+    `    return Promise.resolve(data)${sc}`,
+    '  }',
+  ]) %>
 
-    return Promise.resolve(data)<%- sc %>
-  }
+  <%- insertFragment('update', [
+    '  update (id, data, params) {',
+    `    return Promise.resolve(data)${sc}`,
+    '  }',
+  ]) %>
 
-  update (id, data, params) {
-    return Promise.resolve(data)<%- sc %>
-  }
+  <%- insertFragment('patch', [
+    '  patch (id, data, params) {',
+    `    return Promise.resolve(data)${sc}`,
+    '  }',
+  ]) %>
 
-  patch (id, data, params) {
-    return Promise.resolve(data)<%- sc %>
-  }
-
-  remove (id, params) {
-    return Promise.resolve({ id })<%- sc %>
-  }
+  <%- insertFragment('remove', [
+    '  remove (id, params) {',
+    `    return Promise.resolve({ id })${sc}`,
+    '  }',
+  ]) %>
 }
 
-<%- tplExport('function (options) {') %>
-  return new Service(options)<%- sc %>
-}<%- sc %>
-
-module.exports.Service = Service<%- sc %>
+<%- tplJsOnly([
+  'module.exports = function (options) {',
+  `  return new Service(options)${sc}`,
+  `}${sc}`,
+  '',
+  `module.exports.Service = Service${sc}`,
+  '',
+]) -%>
+<%- tplTsOnly([
+  'export default function (options) {',
+  `  return new Service(options)${sc}`,
+  `}${sc}`,
+  '',
+  `export Service = Service${sc}`,
+  '',
+]) -%>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

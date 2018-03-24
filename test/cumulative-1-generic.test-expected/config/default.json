@@ -75,6 +75,5 @@
       "httpOnly": false,
       "secure": false
     }
-  },
-  "nedb": "../data"
+  }
 }

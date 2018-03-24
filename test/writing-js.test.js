@@ -69,7 +69,7 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-    //{ testName: 'graphql.test' },
+    { testName: 'graphql.test' },
 
   // (z04 ->) Test graphql endpoint creation with authentication.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -80,25 +80,25 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-    //{ testName: 'graphql-auth.test', execute: false },
+    { testName: 'graphql-auth.test', execute: false },
 
   // t05, z05 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
-    //{ testName: 'authentication-1.test' },
+    { testName: 'authentication-1.test' },
 
   // t06, z06 (z05 ->) Test creation of authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
-    //{ testName: 'authentication-2.test' },
+    { testName: 'authentication-2.test' },
 
   // t07, z07 (z06 ->) Test creation of non-authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
-    //{ testName: 'authentication-3.test' },
+    { testName: 'authentication-3.test' },
 
   // t08, z08 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -112,7 +112,7 @@ const tests = [
   //  Add schemas for users1, nedb1 and nedb2 --> ADD BOTH schema.properties AND extensions <--
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
-    //{ testName: 'cumulative-1.test' },
+    { testName: 'cumulative-1.test' },
 
   // t08, z08 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -130,26 +130,26 @@ const tests = [
 
   // t08-memory, z08-memory The same as t08 & z08 but using @f/memory.
   // Service names remain nedb1 & nedb2.
-    //{ testName: 'cumulative-1-memory.test' },
+    { testName: 'cumulative-1-memory.test' },
 
   // t08-mongo, z08-mongo The same as t08 & z08 but using @f/mongodb.
   // Service names remain nedb1 & nedb2; use default connection string.
-    //{ testName: 'cumulative-1-mongo.test' },
+    { testName: 'cumulative-1-mongo.test' },
 
   // t08-mongoose, z08-mongoose The same as t08 & z08 but using @f/mongoosedb.
   // Service names remain nedb1 & nedb2; use default connection string.
-    //{ testName: 'cumulative-1-mongoose.test' },
+    { testName: 'cumulative-1-mongoose.test' },
+
+  // The same as t08 & z08 but using options: { semicolons: false }
+    { testName: 'cumulative-1-no-semicolons.test' },
 
   // t08-sequelize, z08-sequelize The same as t08 & z08 but using @f/sequelize & PostgreSQL.
   // Service names remain nedb1 & nedb2; use default connection string.
-    //{ testName: 'cumulative-1-sequelize.test' },
-
-  // The same as t08 & z08 but using options: { semicolons: false }
-    //{ testName: 'cumulative-1-no-semicolons.test' },
+    { testName: 'cumulative-2-sequelize-services.test' },
 
   // The same as t08 & z08 but using options: { graphql: { strategy: 'batchloaders' } }
   // Service names remain nedb1 & nedb2; use default connection string.
-    { testName: 'cumulative-2-batchloaders.test' },
+    { testName: 'cumulative-2-nedb-batchloaders.test' },
 
   // t21, z21 Test switching the user-entity
   // t21
