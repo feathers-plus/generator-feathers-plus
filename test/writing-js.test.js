@@ -197,7 +197,7 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = 'cumulative-2-sequelize-services.test' //null; //'cumulative-1-sequelize.test' //null;
 
 describe('writing.test.js', function () {
   tests.forEach(({ testName, execute = true, specsChanges = [], compareDirs = true }) => {
@@ -386,7 +386,8 @@ function compareCode (appDir, testDir, compareDirs) {
 }
 
 function getFileNames (dir) {
-  const nodes = klawSync(dir, { nodir: true }).filter(obj => obj.path.indexOf('node_modules') === -1);
+  const nodes = klawSync(dir, { nodir: true })
+    .filter(obj => obj.path.indexOf('/node_modules/') === -1 && obj.path.indexOf('/data/') === -1);
 
   return {
     paths: nodes,

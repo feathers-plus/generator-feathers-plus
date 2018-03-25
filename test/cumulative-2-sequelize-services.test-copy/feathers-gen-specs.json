@@ -82,5 +82,9 @@
     "strategy": "services",
     "sqlInterface": null,
     "requiresAuth": false
-  }
+  },
+  "additional-dependencies": [
+    "sqlite3"
+  ],
+  "additional-devDependencies": []
 }

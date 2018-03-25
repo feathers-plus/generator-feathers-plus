@@ -26,8 +26,5 @@
     "eslint": "eslint src1/. test/. --config .eslintrc.json",
     "start": "node src1/",
     "mocha": "mocha test/ --recursive --exit --timeout 10000"
-  },
-  "dependencies": {
-    "sqlite3": "4.0.0"
   }
 }
