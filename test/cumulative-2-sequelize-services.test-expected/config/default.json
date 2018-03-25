@@ -76,5 +76,5 @@
       "secure": false
     }
   },
-  "postgres": "postgres://postgres:@localhost:5432/z_1"
+  "sqlite": "sqlite://data/db.sqlite"
 }

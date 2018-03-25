@@ -34,24 +34,22 @@ const tests = [
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
-  /*
     { testName: 'scaffolding.test', specsChanges: [
       [specs => { delete specs.app.providers; }, { app: { providers: ['primus'] } }],
       [specs => { delete specs.app.providers; }, { app: { providers: ['rest'] } }],
       [specs => { delete specs.app.providers; }, { app: { providers: ['rest', 'socketio'] } }],
     ], compareDirs: true },
-    */
 
   // t01, z01 Test creation of app.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
-    //{ testName: 'app.test' },
+    { testName: 'app.test' },
 
   // t02, z02 (z01 ->) Test service creation without authentication scaffolding.
   // Also test any missing specs.options props are created.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-    //{ testName: 'service.test' },
+    { testName: 'service.test' },
 
   // t03, z03 (z02 ->) Test middleware creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -59,7 +57,7 @@ const tests = [
   //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
   //  generate middleware     # mw1, *
   //  generate middleware     # mw2, mw2
-    //{ testName: 'middleware.test' },
+    { testName: 'middleware.test' },
 
   // t04, z04 (z02 ->) Test graphql endpoint creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -126,7 +124,7 @@ const tests = [
   //  Add schemas for users1, nedb1 and nedb2 --> ADD BOTH schema.properties AND extensions <--
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
-    //{ testName: 'cumulative-1-generic.test' },
+    { testName: 'cumulative-1-generic.test' },
 
   // t08-memory, z08-memory The same as t08 & z08 but using @f/memory.
   // Service names remain nedb1 & nedb2.
@@ -388,10 +386,10 @@ function compareCode (appDir, testDir, compareDirs) {
 }
 
 function getFileNames (dir) {
-  const paths = klawSync(dir, { nodir: true });
+  const nodes = klawSync(dir, { nodir: true }).filter(obj => obj.path.indexOf('node_modules') === -1);
 
   return {
-    paths: paths,
-    relativePaths: paths.map(path => path.path.replace(`${dir}/`, '')).sort()
+    paths: nodes,
+    relativePaths: nodes.map(path => path.path.replace(`${dir}/`, '')).sort()
   };
 }

@@ -1,19 +1,17 @@
 
 // Initializes the `nedb1` service on path `/nedb-1`. (Can be re-generated.)
-const createService = require('feathers-nedb');
-const createModel = require('../../models/nedb-1.model');
+const createService = require('./nedb-1.class.js');
 const hooks = require('./nedb-1.hooks');
 // !code: imports // !end
 // !code: init // !end
 
 let moduleExports = function (app) {
-  let Model = createModel(app);
+
   let paginate = app.get('paginate');
   // !code: func_init // !end
 
   let options = {
     name: 'nedb-1',
-    Model,
     paginate,
     // !code: options_more // !end
   };

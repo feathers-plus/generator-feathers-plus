@@ -59,9 +59,9 @@
   },
   "connections": {
     "sequelize": {
-      "database": "postgres",
+      "database": "sqlite",
       "adapter": "sequelize",
-      "connectionString": "postgres://postgres:@localhost:5432/z_1"
+      "connectionString": "sqlite://data/db.sqlite"
     }
   },
   "middlewares": {

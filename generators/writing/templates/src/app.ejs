@@ -16,7 +16,7 @@
 <%- tplImports('services', './services') %>
 <%- tplImports('appHooks', './app.hooks') %>
 <%- tplImports('channels', './channels') %>
-<%- tplTsOnly([lintDisableNextLine, '']) -%>
+<%- tplTsOnly([`// ${lintDisableNextLine}`, '']) -%>
 const generatorSpecs = require('../feathers-gen-specs.json')<%- sc %>
 <%# -%>
 <%# --- if-2 starts below. -%>

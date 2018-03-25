@@ -43,9 +43,9 @@ const operatorsAliases = {
 };
 
 module.exports = function (app) {
-  let connectionString = app.get('postgres');
+  let connectionString = app.get('sqlite');
   let sequelize = new Sequelize(connectionString, {
-    dialect: 'postgres',
+    dialect: 'sqlite',
     logging: false,
     operatorsAliases,
     define: {

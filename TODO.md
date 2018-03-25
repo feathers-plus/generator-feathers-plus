@@ -256,7 +256,8 @@ OK - rename production dependencies
 OK - check if any dependencies before scheduling install
 OK - mention src/services/name/name.class.*s are not regenerated
 OK - alpha order for .ts and in front of the package.json
-OK - test f-auth-mgnt fields to graphql auth     
+OK - test f-auth-mgnt fields to graphql auth  
+OK - adapter-info: Make sure generic adapter can work somehow. 
 
 
 NO - hooks modules should be ifNew: true
@@ -323,6 +324,16 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 - create workflow. luc.claustres asked about one on Slack.
 - bring dependencies up to date
 
+- tests:
+describe('Feathers application tests', () => {
+  before(function (done) {
+    this.server = stoppable(app.listen(port), 0);
+    this.server.once('listening', () => done());
+  });
+
+  after(function (done) {
+    this.server.stop(done);
+  });
 
 FINAL CHECKS
 - Consistency, e.g. name.sequelize.js lists needed fields for user-entity while others don't.
