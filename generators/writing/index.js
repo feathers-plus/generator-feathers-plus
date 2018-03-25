@@ -346,6 +346,7 @@ module.exports = function generatorWriting (generator, what) {
     ];
 
     generator.devDependencies = [
+      'mocha',
       'request',
       'request-promise'
     ];
@@ -353,7 +354,6 @@ module.exports = function generatorWriting (generator, what) {
     if (isJs) {
       generator.devDependencies = generator.devDependencies.concat([
         'eslint',
-        'mocha',
       ]);
     } else {
       generator.devDependencies = generator.devDependencies.concat([
@@ -394,6 +394,16 @@ module.exports = function generatorWriting (generator, what) {
 
       generator.dependencies.push(`@feathersjs/${type}`);
     });
+
+    const extraDeps = specs['additional-dependencies'];
+    if (extraDeps && extraDeps.length) {
+      generator.dependencies = generator.dependencies.concat(extraDeps);
+    }
+
+    const extraDevDeps = specs['additional-devDependencies'];
+    if (extraDevDeps && extraDevDeps.length) {
+      generator.devDependencies = generator.devDependencies.concat(extraDevDeps);
+    }
 
     generator._packagerInstall(generator.dependencies, { save: true });
     generator._packagerInstall(generator.devDependencies, { saveDev: true });
