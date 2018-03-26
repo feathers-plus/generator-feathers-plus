@@ -12,7 +12,7 @@
 
   app.set('mongooseClient', mongoose)<%- sc %>
   <%- insertFragment('more') %>
-}<%- sc %>
+}<%- tplJsOnly([sc]) %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

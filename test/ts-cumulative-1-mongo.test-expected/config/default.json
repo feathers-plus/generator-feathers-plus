@@ -1,0 +1,80 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "authentication": {
+    "secret": "8b6b6083fbd0940dbbdcac999bbf885d26fad12091efce9a5ce167b4dcfaea8415fa3b0445a6e7f23bd10d7c1fd79ad18c451f56eddc6c49cb915849193b59c5745f723ddc96d0f9a6943abd2dd752e15132ff1446c38a81fd6118b4eeb213ffeafe504774714bc553f33ca3abd40e820e7b08ab06084c018c9da74517b01db497d21cd42caebe3337fe3fcaeafca38c1137d534836ff4101daca0830cb74e140b899466f95d4b848f62a45defbbd39aa12119baad16cbb678c10a888a15eb353511cac75f8676a9481d7594c9d7fd85434cb0ccc13551b7e54da60163f409b94cc82a79bac26b01ba2e7a49584252f75536b07562de89d4e40fcb82909265fc",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/authentication",
+    "service": "users-1",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "usernameField": "email",
+      "passwordField": "password"
+    },
+    "auth0": {
+      "clientID": "your auth0 client id",
+      "clientSecret": "your auth0 client secret",
+      "successRedirect": "/",
+      "domain": "mydomain.auth0.com"
+    },
+    "google": {
+      "clientID": "your google client id",
+      "clientSecret": "your google client secret",
+      "successRedirect": "/",
+      "scope": [
+        "profile openid email"
+      ]
+    },
+    "facebook": {
+      "clientID": "your facebook client id",
+      "clientSecret": "your facebook client secret",
+      "successRedirect": "/",
+      "scope": [
+        "public_profile",
+        "email"
+      ],
+      "profileFields": [
+        "id",
+        "displayName",
+        "first_name",
+        "last_name",
+        "email",
+        "gender",
+        "profileUrl",
+        "birthday",
+        "picture",
+        "permissions"
+      ]
+    },
+    "github": {
+      "clientID": "your github client id",
+      "clientSecret": "your github client secret",
+      "successRedirect": "/"
+    },
+    "cookie": {
+      "enabled": true,
+      "name": "feathers-jwt",
+      "httpOnly": false,
+      "secure": false
+    }
+  },
+  "mongodb": "mongodb://localhost:27017/z_1"
+}

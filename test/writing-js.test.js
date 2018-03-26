@@ -110,7 +110,7 @@ const tests = [
   //  Add schemas for users1, nedb1 and nedb2 --> ADD BOTH schema.properties AND extensions <--
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
-    { testName: 'cumulative-1.test' },
+    { testName: 'cumulative-1-nedb.test' },
 
   // t08, z08 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -194,10 +194,28 @@ const tests = [
       }
     }
   }] },
+
+  // .ts version of cumulative-1-nedb.test
+    { testName: 'ts-cumulative-1-nedb.test' },
+
+  // .ts version of cumulative-1-generic.test
+    { testName: 'ts-cumulative-1-generic.test' },
+
+  // .ts version of cumulative-1-memory.test
+    { testName: 'ts-cumulative-1-memory.test' },
+
+  // .ts version of cumulative-1-mongo.test
+    { testName: 'ts-cumulative-1-mongo.test' },
+
+  // .ts version of cumulative-1-mongoose.test
+    { testName: 'ts-cumulative-1-mongoose.test' },
+
+  // .ts version of cumulative-2-sequelize-services.test
+    { testName: 'ts-cumulative-2-sequelize-services.test' },
 ];
 
 let appDir;
-const runJustThisTest = 'cumulative-2-sequelize-services.test' //null; //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
 
 describe('writing.test.js', function () {
   tests.forEach(({ testName, execute = true, specsChanges = [], compareDirs = true }) => {
@@ -310,6 +328,11 @@ function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
 function runGeneratedTests (expectedText) {
   return runCommand(packageInstaller, ['test'], { cwd: appDir })
     .then(({ buffer }) => {
+      if (buffer.indexOf(expectedText) === -1) {
+        console.log(`\n\n===== runGeneratedTests. Expected "${expectedText}". Found:`);
+        console.log(buffer);
+      }
+
       assert.ok(buffer.indexOf(expectedText) !== -1,
         'Ran test with text: ' + expectedText);
     });

@@ -22,6 +22,6 @@
 
   app.set('mongoClient', promise)<%- sc %>
   <%- insertFragment('more') %>
-}<%- sc %>
+}<%- tplJsOnly([sc]) %>
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

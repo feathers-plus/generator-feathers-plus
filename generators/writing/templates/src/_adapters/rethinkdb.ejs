@@ -36,6 +36,6 @@
     return oldSetup.apply(this, args)<%- sc %>
   }<%- sc %>
   <%- insertFragment('more') %>
-}
+}<%- tplJsOnly([sc]) %>
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

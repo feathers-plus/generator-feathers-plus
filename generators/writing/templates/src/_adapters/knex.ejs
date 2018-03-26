@@ -11,6 +11,6 @@
 
   app.set('knexClient', db)<%- sc %>
   <%- insertFragment('more') %>
-}<%- sc %>
+}<%- tplJsOnly([sc]) %>
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
