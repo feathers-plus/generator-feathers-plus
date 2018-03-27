@@ -9,8 +9,6 @@ import { Sequelize } from 'sequelize';
 import sequelizeSchema from '../services/nedb-2/nedb-2.sequelize';
 // !end
 // !code: sequelize_imports // !end
-
-const DataTypes = Sequelize.DataTypes;
 // !code: sequelize_init // !end
 
 let moduleExports = function (app: App) {

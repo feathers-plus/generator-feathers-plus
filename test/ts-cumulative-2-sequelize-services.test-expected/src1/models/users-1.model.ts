@@ -9,8 +9,6 @@ import { Sequelize } from 'sequelize';
 import sequelizeSchema from '../services/users-1/users-1.sequelize';
 // !end
 // !code: sequelize_imports // !end
-
-const DataTypes = Sequelize.DataTypes;
 // !code: sequelize_init // !end
 
 let moduleExports = function (app: App) {
@@ -24,7 +22,7 @@ let moduleExports = function (app: App) {
     // !<DEFAULT> code: sequelize_options
     {
       hooks: {
-        beforeCount(options) {
+        beforeCount(options: any) {
           options.raw = true;
         },
       } as any,

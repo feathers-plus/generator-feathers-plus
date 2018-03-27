@@ -1,6 +1,6 @@
 
 // nedb2-model.js - A Mongoose model
-// 
+//
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 // !<DEFAULT> code: mongoose_schema

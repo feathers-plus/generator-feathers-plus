@@ -9,8 +9,6 @@
   tplImports('sequelizeSchema', `../services/${kebabName}/${kebabName}.sequelize`),
 ]) %>
 <%- insertFragment('sequelize_imports') %>
-
-<%- tplTsOnly([`const DataTypes = Sequelize.DataTypes${sc}`, '']) -%>
 <%- insertFragment('sequelize_init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>

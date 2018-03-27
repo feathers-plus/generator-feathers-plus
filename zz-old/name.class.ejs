@@ -1,0 +1,131 @@
+
+// Class for the custom service `<%= serviceName %>` on path `/<%= path %>`. (Can be re-generated.)
+/* <%- lintDisableUnused %> */
+<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
+<%- tplTsOnly([`import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '@feathersjs/feathers'${sc}${EOL}`]) -%>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+<%# -%>
+<%# --- if-1 starts below. JAVASCRIPT ---------------------------------------------------------- -%>
+<% if (isJs) { %>
+class Service {
+  constructor (options) {
+    this.options = options || {}<%- sc %>
+    <%- insertFragment('constructor') %>
+    }
+
+  <%- insertFragment('find', [
+    '  find (params) {',
+    `    return Promise.resolve([])${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('get', [
+    '  get (id, params) {',
+    '    return Promise.resolve({',
+    '      id, text: `A new message with ID: ${id}!`',
+    `    })${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('create', [
+    '  create (data, params) {',
+    '    if (Array.isArray(data)) {',
+    `      return Promise.all(data.map(current => this.create(current)))${sc}`,
+    '    }',
+    '',
+    `    return Promise.resolve(data)${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('update', [
+    '  update (id, data, params) {',
+    `    return Promise.resolve(data)${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('patch', [
+    '  patch (id, data, params) {',
+    `    return Promise.resolve(data)${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('remove', [
+    '  remove (id, params) {',
+    `    return Promise.resolve({ id })${sc}`,
+    '  }',
+  ]) %>
+}
+
+module.exports = function (options) {
+  return new Service(options)<%- sc %>
+}<%- sc %>
+
+module.exports.Service = Service<%- sc %>
+<% } -%>
+<%# --- if-1 ends above. -%>
+<%# -%>
+<%# --- if-2 starts below. TYPESCRIPT ---------------------------------------------------------- -%>
+<% if (!isJs) { %>
+// tslint:disable-next-line no-empty-interface
+interface ServiceOptions {
+}
+
+export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
+  constructor (private options: ServiceOptions = {}) {
+    <%- insertFragment('constructor') %>
+  }
+
+  setup (app: App, path: string): void {}
+
+  <%- insertFragment('find', [
+    '  find(params?: Params): Promise<any[] | Paginated<any>> {',
+    `    return Promise.resolve([])${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('get', [
+    '  get (id: Id, params?: Params): Promise<any> {',
+    '    return Promise.resolve({',
+    '      id, text: `A new message with ID: ${id}!`',
+    `    })${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('create', [
+    '  create (data: Partial<any> | Array<Partial<any>>, params?: Params): Promise<any> {',
+    '    if (Array.isArray(data)) {',
+    `      return Promise.all(data.map(current => this.create(current)))${sc}`,
+    '    }',
+    '',
+    `    return Promise.resolve(data)${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('update', [
+    '  update (id: NullableId, data: any, params?: Params): Promise<any> {',
+    `    return Promise.resolve(data)${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('patch', [
+    '  patch (id: NullableId, data: Partial<any>, params?: Params): Promise<any> {',
+    `    return Promise.resolve(data)${sc}`,
+    '  }',
+  ]) %>
+
+  <%- insertFragment('remove', [
+    '  remove (id: NullableId, params?: Params): Promise<any> {',
+    `    return Promise.resolve({ id })${sc}`,
+    '  }',
+  ]) %>
+}
+
+export default function (options: ServiceOptions) {
+  return new Service(options)<%- sc %>
+}<%- sc %>
+<% } -%>
+<%# --- if-2 ends above. -%>
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

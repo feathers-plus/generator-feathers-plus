@@ -7,7 +7,7 @@
     "max": 50
   },
   "authentication": {
-    "secret": "8b6b6083fbd0940dbbdcac999bbf885d26fad12091efce9a5ce167b4dcfaea8415fa3b0445a6e7f23bd10d7c1fd79ad18c451f56eddc6c49cb915849193b59c5745f723ddc96d0f9a6943abd2dd752e15132ff1446c38a81fd6118b4eeb213ffeafe504774714bc553f33ca3abd40e820e7b08ab06084c018c9da74517b01db497d21cd42caebe3337fe3fcaeafca38c1137d534836ff4101daca0830cb74e140b899466f95d4b848f62a45defbbd39aa12119baad16cbb678c10a888a15eb353511cac75f8676a9481d7594c9d7fd85434cb0ccc13551b7e54da60163f409b94cc82a79bac26b01ba2e7a49584252f75536b07562de89d4e40fcb82909265fc",
+    "secret": "***** secret generated for tests *****",
     "strategies": [
       "jwt",
       "local"

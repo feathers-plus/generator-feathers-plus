@@ -7,7 +7,6 @@
 const sequelizeSchema = require('../services/nedb-2/nedb-2.sequelize');
 // !end
 // !code: sequelize_imports // !end
-
 // !code: sequelize_init // !end
 
 let moduleExports = function (app) {

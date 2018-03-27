@@ -10,7 +10,7 @@ import * as mongoose from 'mongoose';
 let moduleExports = merge({},
   // !<DEFAULT> code: model
   {
-    nedb1Id: mongoose.Schema.ObjectId
+    nedb1Id: mongoose.Schema.Types.ObjectId
   },
   // !end
   // !code: moduleExports // !end

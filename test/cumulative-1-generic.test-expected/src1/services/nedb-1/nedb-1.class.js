@@ -1,6 +1,7 @@
 
 // Class for the custom service `nedb1` on path `/nedb-1`. (Can be re-generated.)
 /* eslint-disable no-unused-vars */
+
 // !code: imports // !end
 // !code: init // !end
 
@@ -51,12 +52,17 @@ class Service {
     return { id };
   }
   // !end
+  // !code: more // !end
 }
 
-module.exports = function (options) {
+const moduleExports = function (options) {
   return new Service(options);
 };
 
-module.exports.Service = Service;
+moduleExports.Service = Service;
+
+// !code: exports // !end
+module.exports = moduleExports;
+
 // !code: funcs // !end
 // !code: end // !end

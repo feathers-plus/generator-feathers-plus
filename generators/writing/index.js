@@ -40,7 +40,7 @@ const AUTH_TYPES = {
 
 const mongooseNativeFuncs = {
   [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
-  [mongoose.Schema.ObjectId]: 'mongoose.Schema.ObjectId'
+  [mongoose.Schema.Types.ObjectId]: 'mongoose.Schema.Types.ObjectId'
 };
 
 const sequelizeNativeFuncs = {
@@ -534,14 +534,15 @@ module.exports = function generatorWriting (generator, what) {
     // Custom abbreviations for building 'todos'.
     const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))
       ? `name.service-${adapter}.ejs` : 'name.service.ejs';
-    const genericServiceTpl = generator.hasAsync ? 'name.class-async.ejs' : 'name.class.ejs';
+    // Generator targets Node 8+ so async/await exists
+    // const genericServiceTpl = generator.hasAsync ? 'name.class-async.ejs' : 'name.class.ejs';
     const kn = kebabName;
 
     todos = [
       tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.${js}`],         ),
       tmpl([srcPath,    '_model',   modelTpl],        [libDir, 'models', `${context.modelName}.${js}`],  false, !context.modelName    ),
       tmpl([serPath,    '_service', serviceTpl],      [libDir, 'services', kn, `${kn}.service.${js}`],   ),
-      tmpl([namePath,   genericServiceTpl],           [libDir, 'services', kn, `${kn}.class.${js}`],     false, adapter !== 'generic' ),
+      tmpl([namePath,   'name.class-async.ejs'],      [libDir, 'services', kn, `${kn}.class.${js}`],     false, adapter !== 'generic' ),
       tmpl([namePath,   'name.interface.ejs'],        [libDir, 'services', kn, `${kn}.interface.${js}`], false, isJs ),
 
       tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.${js}`]     ),
