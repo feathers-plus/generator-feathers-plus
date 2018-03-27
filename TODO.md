@@ -346,21 +346,21 @@ FINAL CHECKS
   - src/models/name.model.*s
     - knex for the user-entity service
     - knex for other service
-    - mongoose for the user-entity service
-    - mongoose for other service
-    - nedb for the user-entity service
-    - nedb for other service
-    - sequelize for the user-entity service
-    - sequelize for other service
+    OK - mongoose for the user-entity service
+    OK - mongoose for other service
+    OK - nedb for the user-entity service
+    OK - nedb for other service
+    OK - sequelize for the user-entity service
+    OK - sequelize for other service
   - src/services/name/name.service.*s
-    - mongo service
+    OK - mongo service
     - rethink service
-    - other adapters use a common template
+    OK - other adapters use a common template
   - src/*.*s
     - knex.*s
-    - mongodb.*s
-    - mongoose.*s
+    OK - mongodb.*s
+    OK - mongoose.*s
     - rethinkdb.*s
     - sequelize.*s for MS SQL Server
-    - sequelize.*s for other DBs use a common template
+    OK - sequelize.*s for other DBs use a common template
 - Also test generic adapter for .js and .ts        

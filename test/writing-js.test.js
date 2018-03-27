@@ -215,7 +215,7 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = 'ts-cumulative-1-mongoose.test' //null; //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
 
 describe('writing.test.js', function () {
   tests.forEach(({ testName, execute = true, specsChanges = [], compareDirs = true }) => {

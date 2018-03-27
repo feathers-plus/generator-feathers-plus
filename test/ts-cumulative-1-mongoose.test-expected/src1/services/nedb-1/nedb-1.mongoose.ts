@@ -3,7 +3,7 @@
 // Defines Mongoose model for service `nedb1`. (Can be re-generated.)
 import merge from 'lodash.merge';
 // tslint:disable-next-line no-unused-variable
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 // !code: imports // !end
 // !code: init // !end
 
