@@ -26,7 +26,7 @@ export type App = Application<{
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
-  <%- __name %>: <%- upperFirst(specs.services[__name].nameSingular) %>,
+  '<%- specs.services[__name].fileName %>': <%- upperFirst(specs.services[__name].nameSingular) %>,
 <% }); -%>
 <%# --- forEach-2 ends above. -%>
   <%- insertFragment('moduleExports') %>

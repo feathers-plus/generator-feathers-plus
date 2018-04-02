@@ -40,25 +40,25 @@ let patch = merge({},
 )<%- sc %>
 <%- insertFragment('all_change') %>
 
-let validateCreate = <%- tplJsOrTs('options', '(options: any)') %> => {
+let validateCreate = <%- tplJsOrTs('options', '(options?: any)') %> => {
   <%- insertFragment('func_create', [
     `  return validateSchema(create, ajv, options)${sc}`,
   ]) %>
 }<%- sc %>
 
-let validateUpdate = <%- tplJsOrTs('options', '(options: any)') %> => {
+let validateUpdate = <%- tplJsOrTs('options', '(options?: any)') %> => {
   <%- insertFragment('func_update', [
     `  return validateSchema(update, ajv, options)${sc}`,
   ]) %>
 }<%- sc %>
 
-let validatePatch = <%- tplJsOrTs('options', '(options: any)') %> => {
+let validatePatch = <%- tplJsOrTs('options', '(options?: any)') %> => {
   <%- insertFragment('func_patch', [
     `  return validateSchema(patch, ajv, options)${sc}`,
   ]) %>
 }<%- sc %>
 
-let quickValidate = <%- tplJsOrTs('(method, data, options)', '(method: string, data: any, options: any)') %> => {
+let quickValidate = <%- tplJsOrTs('(method, data, options)', '(method: string, data: any, options?: any)') %> => {
   try {
     if (method === 'create') { validateCreate(options)({ type: 'before', method: 'create', data })<%- sc %> }
     if (method === 'update') { validateCreate(options)({ type: 'before', method: 'update', data })<%- sc %> }

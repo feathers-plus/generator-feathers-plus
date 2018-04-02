@@ -25,25 +25,35 @@ Check that public/serverUrl.js will point to this server.
     npm start
     ```
 
-## Starting the app
+The app will create the database
+and then run a short async test to confirm it is functioning correctly.
+
+## Starting the client test harness
 
 Point your browser at `localhost:3030` and you will see this test harness:
 
 ![test harness](./assets/test-harness.jpg)
 
+The client will authenticate with the server before enabling the `Run query` button.
+
 You can run any of the 10 provided queries.
-The query appears in the editable window on top.
+The query appears in the editable window on top
+and you can modify any of those queries before running them.
+
 The result (or error message) appears in the bottom window after you click `Run query`.
 
-You can modify any of those queries before running them.
+The examples show that GraphQL keywords are allowed in some of the resolvers.
+These keywords are similar to those used with FeathersJS services.
+- key: The same as FeathersJS `id`, a numeric or string.
+- query: The same as FeathersJS `params.query`.
+- params: The same as FeathersJS `params`.
 
-The keywords allowed with some of the resolvers are Feathers service-like:
-- key: The same as Feathers `id`, numeric or string.
-- query: The same as Feathers `params.query`.
-- params: The same as Feathers `params`.
+`$` is a reserved character in GraphQL, so Feathers props such as `$sort` and `$in`
+would result in GraphQL errors.
+You can instead use a double underscore (`__`) where ever you would use a `$` with FeathersJS. 
 
-`$` is a reserved character in GraphQL, so Feathers props such as `$sort` and `$in` will result in GraphQL errors.
-You can instead use a double underscore `__` where ever you would use a `$` with Feathers. 
+## Using Graphiql
+
 
 ## Database
 
@@ -56,6 +66,9 @@ Both databases have the same structure:
 and contain the same data:
 
 ![database data](./assets/tables.jpg)
+
+`uuid` fields are used as foreign keys for table relations
+so as to avoid differences between `id` and `_id` in different databases.
 
 ## What type of resolvers are being used?
 

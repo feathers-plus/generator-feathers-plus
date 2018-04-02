@@ -53,25 +53,25 @@ let patch = merge({},
 );
 // !code: all_change // !end
 
-let validateCreate = (options: any) => {
+let validateCreate = (options?: any) => {
   // !<DEFAULT> code: func_create
   return validateSchema(create, ajv, options);
   // !end
 };
 
-let validateUpdate = (options: any) => {
+let validateUpdate = (options?: any) => {
   // !<DEFAULT> code: func_update
   return validateSchema(update, ajv, options);
   // !end
 };
 
-let validatePatch = (options: any) => {
+let validatePatch = (options?: any) => {
   // !<DEFAULT> code: func_patch
   return validateSchema(patch, ajv, options);
   // !end
 };
 
-let quickValidate = (method: string, data: any, options: any) => {
+let quickValidate = (method: string, data: any, options?: any) => {
   try {
     if (method === 'create') { validateCreate(options)({ type: 'before', method: 'create', data }); }
     if (method === 'update') { validateCreate(options)({ type: 'before', method: 'update', data }); }

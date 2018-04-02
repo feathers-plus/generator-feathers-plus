@@ -20,9 +20,9 @@ import { Users1 } from './services/users-1/users-1.interface';
   });
  */
 export type App = Application<{
-  nedb1: Nedb1,
-  nedb2: Nedb2,
-  users1: Users1,
+  'nedb-1': Nedb1,
+  'nedb-2': Nedb2,
+  'users-1': Users1,
   // !code: moduleExports // !end
 }>;
 // !code: funcs // !end
