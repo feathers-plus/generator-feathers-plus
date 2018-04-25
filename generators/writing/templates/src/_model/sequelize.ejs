@@ -5,6 +5,7 @@
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
 <%- tplTsOnly([`import { Sequelize } from 'sequelize'${sc}`, '']) -%>
+<%- tplImports('merge', 'lodash.merge') -%>
 <%- insertFragment('sequelize_schema', [
   tplImports('sequelizeSchema', `../services/${kebabName}/${kebabName}.sequelize`),
 ]) %>
@@ -17,16 +18,18 @@
 
   const <%= camelName %> = sequelizeClient.define('<%= snakeName %>',
     <%- insertFragment('sequelize_model', ['    sequelizeSchema,']) %>
-    <%- insertFragment('sequelize_options', [
-      '    {',
-      '      hooks: {',
-      `        beforeCount(options${tplTsOnly(': any')}) {`,
-      `          options.raw = true${sc}`,
-      '        },',
-      `      }${tplTsOnly(' as any')},`,
-      '    },'
-    ]) %>
-    <%- insertFragment('sequelize_define') %>
+    merge(
+      <%- insertFragment('sequelize_options', [
+        '      {',
+        '        hooks: {',
+        `          beforeCount(options${tplTsOnly(': any')}) {`,
+        `            options.raw = true${sc}`,
+        '          },',
+        `        }${tplTsOnly(' as any')},`,
+        '      },'
+      ]) %>
+      <%- insertFragment('sequelize_define') %>
+    )
   )<%- sc %>
 
   // <%- lintDisableNextLineUnused %>
