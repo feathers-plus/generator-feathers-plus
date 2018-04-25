@@ -10,7 +10,7 @@
 class Service {
   constructor (options) {
     this.options = options || {}<%- sc %>
-    <%- insertFragment('constructor') %>
+    <%- insertFragment('constructor1') %>
   }
 
   <%- insertFragment('find', [
@@ -83,7 +83,7 @@ import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '
 
 export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   constructor (private options: ServiceOptions = {}) {
-    <%- insertFragment('constructor') %>
+    <%- insertFragment('constructor1') %>
   }
 
   <%- insertFragment('setup', [

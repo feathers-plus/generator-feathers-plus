@@ -8,7 +8,7 @@
 class Service {
   constructor (options) {
     this.options = options || {};
-    // !code: constructor // !end
+    // !code: constructor1 // !end
   }
 
   // !<DEFAULT> code: find

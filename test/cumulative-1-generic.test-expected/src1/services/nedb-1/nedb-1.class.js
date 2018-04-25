@@ -8,11 +8,12 @@
 class Service {
   constructor (options) {
     this.options = options || {};
-    // !code: constructor // !end
+    // !code: constructor1 // !end
   }
 
-  // !<DEFAULT> code: find
+  // !code: find
   async find (params) {
+    const aa = 1;
     return [];
   }
   // !end

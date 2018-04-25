@@ -14,7 +14,7 @@ interface ServiceOptions {}
 
 export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   constructor (private options: ServiceOptions = {}) {
-    // !code: constructor // !end
+    // !code: constructor1 // !end
   }
 
   // !<DEFAULT> code: setup

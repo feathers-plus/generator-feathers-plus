@@ -1,5 +1,5 @@
 
-// Class for the custom service `nedb2` on path `/nedb-2`. (Can be re-generated.)
+// Class for the custom service `nedb1` on path `/nedb-1`. (Can be re-generated.)
 /* eslint-disable no-unused-vars */
 
 // !code: imports // !end
@@ -11,8 +11,9 @@ class Service {
     // !code: constructor1 // !end
   }
 
-  // !<DEFAULT> code: find
+  // !<> code: find
   async find (params) {
+    const aa = 1;
     return [];
   }
   // !end
