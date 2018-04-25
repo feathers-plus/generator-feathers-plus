@@ -314,15 +314,32 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
   e.g. email/password exists in schema of user-entity when local auth selected.
 - what can we do with feathers-sync? 
 
-- add async init https://github.com/feathersjs/feathers/issues/509#issuecomment-358039365
-- add stress test https://blog.feathersjs.com/stress-testing-your-feathersjs-application-like-in-production-4b8611ee8d9e
-- create deployment    
 - create Knex schema
+- add async init https://github.com/feathersjs/feathers/issues/509
+- add stress test https://blog.feathersjs.com/stress-testing-your-feathersjs-application-like-in-production-4b8611ee8d9e
+- add async feathers startup
+- how to override ErrorHandler (a generator?)
 - create fastJoin definitions
-- create for swagger
+- create definitions for swagger
 - create rate limiter for socket.io. luc.claustres asked about one on Slack
+- expand generator for authentication
+    - optionally include feathers-authentication-management (which may use a refactoring)
+- create generator fcor deployment   
 - create workflow. luc.claustres asked about one on Slack.
+- validation pass over services/name.schema.*s
+- generate for feathers-client (Vue, Redux, etc)
 - bring dependencies up to date
+- "Hi, anyone knows how to make feathers-cli generate services in plural mode but model in singular mode?
+  its ok to use plural for services, but kind of wired for models"
+- Allow last hook to execute e.g.
+    .hooks({
+      before: {
+        all: [first],
+        find: [second]
+      }
+    }).hooks({
+      before: [ last ]
+    });
 
 - tests:
 describe('Feathers application tests', () => {
