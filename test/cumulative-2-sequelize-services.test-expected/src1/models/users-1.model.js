@@ -3,6 +3,7 @@
 //
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
+const merge = require('lodash.merge');
 // !<DEFAULT> code: sequelize_schema
 const sequelizeSchema = require('../services/users-1/users-1.sequelize');
 // !end
@@ -17,16 +18,18 @@ let moduleExports = function (app) {
     // !<DEFAULT> code: sequelize_model
     sequelizeSchema,
     // !end
-    // !<DEFAULT> code: sequelize_options
-    {
-      hooks: {
-        beforeCount(options) {
-          options.raw = true;
+    merge(
+      // !<DEFAULT> code: sequelize_options
+      {
+        hooks: {
+          beforeCount(options) {
+            options.raw = true;
+          },
         },
       },
-    },
-    // !end
-    // !code: sequelize_define // !end
+      // !end
+      // !code: sequelize_define // !end
+    )
   );
 
   // eslint-disable-next-line no-unused-vars

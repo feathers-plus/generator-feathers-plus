@@ -5,6 +5,7 @@ import { App } from '../app.interface';
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
 import { Sequelize } from 'sequelize';
+import merge from 'lodash.merge';
 // !<DEFAULT> code: sequelize_schema
 import sequelizeSchema from '../services/users-1/users-1.sequelize';
 // !end
@@ -19,16 +20,18 @@ let moduleExports = function (app: App) {
     // !<DEFAULT> code: sequelize_model
     sequelizeSchema,
     // !end
-    // !<DEFAULT> code: sequelize_options
-    {
-      hooks: {
-        beforeCount(options: any) {
-          options.raw = true;
-        },
-      } as any,
-    },
-    // !end
-    // !code: sequelize_define // !end
+    merge(
+      // !<DEFAULT> code: sequelize_options
+      {
+        hooks: {
+          beforeCount(options: any) {
+            options.raw = true;
+          },
+        } as any,
+      },
+      // !end
+      // !code: sequelize_define // !end
+    )
   );
 
   // tslint:disable-next-line no-unused-variable

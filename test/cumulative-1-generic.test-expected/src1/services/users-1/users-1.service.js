@@ -1,6 +1,6 @@
 
 // Initializes the `users1` service on path `/users-1`. (Can be re-generated.)
-const createService = require('./users-1.class.js');
+const createService = require('./users-1.class');
 const hooks = require('./users-1.hooks');
 // !code: imports // !end
 // !code: init // !end

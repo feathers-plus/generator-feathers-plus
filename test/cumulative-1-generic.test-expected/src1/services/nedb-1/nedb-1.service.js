@@ -1,6 +1,6 @@
 
 // Initializes the `nedb1` service on path `/nedb-1`. (Can be re-generated.)
-const createService = require('./nedb-1.class.js');
+const createService = require('./nedb-1.class');
 const hooks = require('./nedb-1.hooks');
 // !code: imports // !end
 // !code: init // !end

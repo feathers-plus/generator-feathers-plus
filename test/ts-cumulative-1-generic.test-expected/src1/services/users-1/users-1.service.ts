@@ -2,7 +2,7 @@
 // Initializes the `users1` service on path `/users-1`. (Can be re-generated.)
 import { App } from '../../app.interface';
 
-import createService from './users-1.class.ts';
+import createService from './users-1.class';
 import hooks from './users-1.hooks';
 // !code: imports // !end
 // !code: init // !end

@@ -2,7 +2,7 @@
 // Initializes the `nedb2` service on path `/nedb-2`. (Can be re-generated.)
 import { App } from '../../app.interface';
 
-import createService from './nedb-2.class.ts';
+import createService from './nedb-2.class';
 import hooks from './nedb-2.hooks';
 // !code: imports // !end
 // !code: init // !end
