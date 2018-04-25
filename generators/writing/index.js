@@ -420,7 +420,7 @@ module.exports = function generatorWriting (generator, what) {
     const isAuthEntityWithAuthentication = specsService.isAuthEntity ? specs.authentication : undefined;
 
     const moduleMappings = {
-      generic: `./${kebabName}.class.${js}`,
+      generic: `./${kebabName}.class`,
       memory: 'feathers-memory',
       nedb: 'feathers-nedb',
       mongodb: 'feathers-mongodb',
