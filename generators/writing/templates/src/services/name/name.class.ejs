@@ -82,12 +82,16 @@ import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '
 ]) %>
 
 export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
+  <%- insertFragment('properties', '  app!: App;') %>
+
   constructor (private options: ServiceOptions = {}) {
     <%- insertFragment('constructor1') %>
   }
 
   <%- insertFragment('setup', [
-    '  setup (app: App, path: string): void {}'
+    '  setup (app: App, path: string): void {',
+    `    this.app = app${sc}`,
+    '  }'
   ]) %>
 
   <%- insertFragment('find', [

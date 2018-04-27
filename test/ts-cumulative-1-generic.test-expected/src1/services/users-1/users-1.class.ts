@@ -13,12 +13,18 @@ interface ServiceOptions {}
 // !end
 
 export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
+  // !<DEFAULT> code: properties
+  app!: App;
+  // !end
+
   constructor (private options: ServiceOptions = {}) {
     // !code: constructor1 // !end
   }
 
   // !<DEFAULT> code: setup
-  setup (app: App, path: string): void {}
+  setup (app: App, path: string): void {
+    this.app = app;
+  }
   // !end
 
   // !<DEFAULT> code: find
