@@ -41,7 +41,9 @@
     "mocha:code": "mocha test/ --timeout 1200000 --exit --bail --grep \"writes code\"",
     "mocha:tests": "mocha test/ --timeout 1200000 --exit --bail --grep \"runs test\"",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
-    "test": "npm run lint && npm run coverage"
+    "test": "npm run lint && npm run coverage",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "semistandard": {
     "sourceType": "module",
@@ -74,6 +76,7 @@
     "request": "2.83.0",
     "request-promise": "4.2.2",
     "semistandard": "11.0.0",
+    "vuepress": "0.8.4",
     "yeoman-assert": "3.1.0",
     "yeoman-test": "1.7.0"
   }
