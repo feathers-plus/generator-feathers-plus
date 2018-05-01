@@ -27,22 +27,22 @@ The cli-plus is similar to @feathersjs/cli in that:
 
 However the similarities fundamentally end there.
 
-## [Regenerating apps](./docs/regenerating-apps.md)
+## [Regenerating apps](./docs-readme/regenerating-apps.md)
 
-## [Additional generators](./docs/additional-generators.md)
+## [Additional generators](./docs-readme/additional-generators.md)
 
-## [Retaining custom code](./docs/retaining-custom-code.md)
+## [Retaining custom code](./docs-readme/retaining-custom-code.md)
 
-## [Feathers service models](./docs/feathers-service-models.md)
+## [Feathers service models](./docs-readme/feathers-service-models.md)
 
-## [Writing JSON-schema](./docs/writing-json-schema.md)
+## [Writing JSON-schema](./docs-readme/writing-json-schema.md)
 
-## [GraphQL](./docs/graphql.md)
+## [GraphQL](./docs-readme/graphql.md)
 
-## [GraphQL example](./docs/graphql-example.md)
+## [GraphQL example](./docs-readme/graphql-example.md)
 
-## [GraphQL pagination proposal](./docs/graphql-pagination.md)
+## [GraphQL pagination proposal](./docs-readme/graphql-pagination.md)
 
-## [Tests](./docs/tests.md)
+## [Tests](./docs-readme/tests.md)
 
-## [Database Maintainers](./docs/database-maintainers.md)
+## [Database Maintainers](./docs-readme/database-maintainers.md)
