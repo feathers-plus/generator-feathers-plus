@@ -13,5 +13,5 @@ features:
   details: Generates either JavaScript or TrueScript code; with semicolons or without. Converts apps between JS and TS.
 - title: Round trip generator
   details: You can regenerate you app without losing changes you've made. Stay up-to-date with enhancements and fixes.
-footer: MIT Licensed | Copyright © 2018-present Evan You
+footer: MIT Licensed | Copyright © 2018-present John J. Szwaronek
 ---

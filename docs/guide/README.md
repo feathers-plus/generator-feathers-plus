@@ -599,53 +599,10 @@ so no need to code validators yourself.
 The [`validateSchema`](https://feathers-plus.github.io/v1/feathers-hooks-common/index.html#validateSchema)
 common hook already uses JSON-data for verification.
 
-### Swagger and OpenAPI
-
-Swagger and OpenAPI are 2 more reasons to use JSON-schema.
-
-[Swagger](https://swagger.io/)
-is a popular tool which allows you to describe the structure of your APIs
-so that machines can read them.
-
-Swagger uses a *subset* of JSON-schema to describe its data formats.
-
-:::tip
-You can use `feathers-swagger` to expose your Swagger definitions.
-:::
-
-The recent [OpenAPI Initiative](https://www.openapis.org/blog/2017/07/26/the-oai-announces-the-openapi-specification-3-0-0#)
-(OAI), a Linux Foundation project created to advance API technology,
-provides a foundation for developing interoperability of APIs and other technologies.
-Its members include Adobe, Google, IBM, Microsoft, Oracle, PayPal, RedHat and Salesforce.
-
-OAI v2 was essentially Swagger.
-The v3 release is the culmination of nearly two years of collaboration among senior API developers
-and architects from across multiple industries, such as payment and banking, cloud computing,
-the Internet of Things, and vendors building API solutions.
-
-OAI's data formats use JSON-schema.
-
-
-### Easy to get started
-
 JSON-schema is easy to write, and there are some great
 [tutorials](https://code.tutsplus.com/tutorials/validating-data-with-json-schema-part-1--cms-25343).
 
-Thankfully, you don't have to learn how to write JSON-schema before you can start writing your app.
-There is wide support for JSON-schema online, including utilities which you can leverage to write your Feathers Models.
-
-You can
-- Generate a Feathers Model online by pasting a JavaScript object.
-- Generate Feathers Models by providing a utility the contents of your database.
-- Generate Feathers Models from
-[Mongoose](http://mongoosejs.com/docs/schematypes.html) schemas or
-[Sequelize](http://docs.sequelizejs.com/class/lib/model.js~Model.html) models.
-- Generate Feathers Models from Walmart's [Joi](https://github.com/hapijs/joi)
-object validation schemas.
-
-Finally, you can test your JSON-schema by running a utility against your existing data.
-
-### More generated code
+#### More generated code
 
 Cli-plus will write useful modules when you provide a model for a Feathers service.
 These include:
@@ -659,7 +616,7 @@ These include:
   - Vue.
 
 
-## Writing JSON-schema
+### Writing JSON-schema
 
 Here is a typical JSON-schema which contains no field validation:
 ```javascript
@@ -711,175 +668,6 @@ We are not certifying the utilities and websites mentioned below work flawlessly
 They are part of the JSON-schema ecosystem and may prove useful.
 We welcome your feedback on them.
 :::
-
-### Exploring JSON-schema
-
-You can also convert a JSON object to JSON-schema online at
-[https://jsonschema.net](https://jsonschema.net).
-This provides an interesting way to explore JSON-schema.
-
-![initial online page](../assets/online-1.jpg)
-
-The first thing to do is change `ID Type` from `Relative` to `None`,
-followed by clicking `Generate Schema`.
-
-![standard online page](../assets/online-2.jpg)
-
-The `type` of each JSON data property is specified in the JSON-schema.
-The `tags` array is typed as an `array` with its `items`, i.e. elements, typed as `string`.
-
-You can play around with the input JSON, seeing how your changes affect the JSON-schema.
-
-### Exploring global options
-
-You can control options for the conversion in the area below `Generate Schema`.
-Enable `Number Options` and check `Use number, not integer`.
-
-![Number options](../assets/online-3a.jpg)
-
-Followed by clicking `Generate Schema`.
-
-![Number Options page](../assets/online-3b.jpg)
-
-You can see that `"type": "number"` is now used for all numeric values.
-
-:::tip
-Feathers Models should use `"type": "number"`.
-:::
-
-Now check the `Metadata` and `Show default attributes` boxes in `Global Options`,
-followed by clicking `Generate Schema`.
-
-![Global Options page](../assets/online-4.jpg)
-
-You can see how the JSON-schema grows in sophistication.
-
-### Exploring field options
-
-Refresh the page to get the original `https://jsonschema.net/#/editor` page.
-
-Once again change `ID Type` from `Relative` to `None`,
-followed by clicking `Generate Schema`.
-This let's us back to our starting point.
-
-![standard online page](../assets/online-2.jpg)
-
-Click the `Edit` icon to see options for each field in the JSON-schema.
-
-![field 1 page](../assets/online-5a.jpg)
-
-In the `@optional tags <array>` panel, click the down arrow in the inner `@optional <string>` panel
-to see all the options for the array `tags`.
-
-![field 2 page](../assets/online-5b.jpg)
-
-- `Min items` to 1.
-- `Max items` to 4.
-- `Minimum length` to 2.
-- `Maximum length` to 16 and **press the `tab` key to properly exit this input field.**
-
-![field 3 page](../assets/online-5c.jpg)
-
-- Click the diskette/drive icon in the `@optional tags <array>` panel to save your changes.
-- **Do not** click `Generate Schema`.
-- Click the `Pretty` button at the top of the page.
-
-![field 4 page](../assets/online-5d.jpg)
-
-You can see that validation rules have been added to the `tags` entry in the JSON-schema.
-
-### Using existing data collections
-
-Some records in a collection many differ from other records.
-In one record a field may have a numeric value, while in another it may be `null`.
-Some records may have fields which others do not.
-
-Utilities exist to scan all the records in your collection
-and produce a consolidated JSON-schema.
-You may find these useful in some situations.
-
-Here are two of them.
-
-#### [generate-schema](https://github.com/nijikokun/generate-schema)
-
-![generate-schema 1](../assets/generate-schema-1.jpg)
-
-![generate-schema 2](../assets/generate-schema-2.jpg)
-
-#### [json-schema-generator](https://github.com/krg7880/json-schema-generator)
-
-![json-schema-generator 1](../assets/json-schema-generator-1.jpg)
-
-![json-schema-generator 2](../assets/json-schema-generator-2.jpg)
-
-### Using existing database schemas
-
-If you have existing schemas
-and you'd like to take advantage of the new features of Feathers Models,
-there are utilities that will convert them into JSON-Schemas:
-
-[`mongoose-schema-jsonschema`](https://github.com/DScheglov/mongoose-schema-jsonschema)
-and [`mongoose-jsonschema`](https://www.npmjs.com/package/mongoose-jsonschema)
-convert Mongoose schema to JSON-schema.
-
-There are
-[several utilities available](https://www.google.com/search?q=sequelize+to+json+schema&oq=sequelize+to+json+schema&aqs=chrome..69i57j0j69i60.5582j0j4&sourceid=chrome&ie=UTF-8)
-available to convert Sequelize models.
-
-Search for utilities for other databases.
-
-### Verifying against JSON
-
-Once you have your JSON-schema, you can check it acts as expected
-by having it verify JSON which you know is valid by, for example,
-using the [online JSON Schema Lint](https://jsonschemalint.com)
-site.
-
-Click the `Samples dropdown and choose `Sample draft-06 schema and valid document`.
-
-![lint json 2](../assets/lint-online-2.jpg)
-
-Or `Sample draft-06 schema and **invalid** document`.
-
-![lint json 3](../assets/lint-online-3.jpg)
-
-:::tip
-You may have extracted your JSON from someplace and its hard to read.
-You have a long JSON which is invalid --- someplace.
-You may find [JSONLint](https://jsonlint.com/) useful to prettify and debug your JSON.
-:::
-
-### Linting you JSON-schema
-
-How do you check your JSON-schema is valid?
-Well every JSON-schema is itself a JSON object
-and the official standards [JSON-schema org](http://json-schema.org/)
-has meta-schemas which specify what JSON-schema should look like.
-
-So you can download the [Meta-schemas](http://json-schema.org/documentation.html)
-and use them to verify your JSON-schema, exactly the same way you'd use JSON-schema to verify JSON.
-
-### Verifying against data collections
-
-You can verify the compatibility of your JSON-schema and your data collection
-by using the JSON-schema to verify your collection.
-
-You can use the Feathers common hook
-[`validateSchema`](../../api/hooks-common#validate-schema.md).
-Or you may decide its more convenient to call
-[`ajv`](https://github.com/epoberezkin/ajv)
-directly.
-
-### Verification in tests and build chains
-
-You might some other ajv-based utilities useful.
-
-[`grunt-jsonschema-ajv`](https://github.com/SignpostMarv/grunt-jsonschema-ajv)
-is a [Grunt](https://en.wikipedia.org/wiki/Grunt_(software))
-plugin for validating files against JSON Schema with ajv.
-
-[`chai-ajv-json-schema`](https://github.com/peon374/chai-ajv-json-schema/blob/master/index.js)
-purports to verify data using the `expect` syntax.
 
 ### $ref: Modularizing definitions
 

@@ -29,6 +29,7 @@ module.exports = {
       '/quick-start/',
       '/guide/',
       '/api/',
+      '/json-schema/',
       '/maintainers/'
     ]
   },
