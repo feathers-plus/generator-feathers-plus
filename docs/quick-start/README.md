@@ -30,16 +30,16 @@ it into @feathers-plus/cli.
 
 ## Comparision to @feathersjs/cli
 
-The cli-plus is similar to @feathersjs/cli in that:
+@feathers-plus/cli, a.k.a. "cli-plus", is similar to @feathersjs/cli in that:
 - It uses the same commends, e.g. `generate service`.
 - It prompts with the same questions, e.g. "Which path should the service be registered on?"
-- It generates the same modules with pretty much identical code.
+- It generates the same modules with essentially identical code.
 
-However @feathers-plus/cli also:
-- JSON-schema models are converted to the DB model each service is currently configured for. 
-- Generates all the code needed for the GraphQL Query interface.
+However with cli-plus also:
+- Converts DB-agnostic JSON-schema models to the DB model each service is currently configured for. 
+- Generates all the code needed for your GraphQL Query interface.
 - Generates either JavaScript or TrueScript code; with semicolons or without. Converts apps between JS and TS.
-- You can regenerate you app without losing changes you've made. Stay up-to-date with enhancements and fixes.
+- Regenerates you app without losing changes you've made. You stay up-to-date with enhancements and fixes.
 
 ## What the Generator Does
 
@@ -70,8 +70,16 @@ The generated modules are structured as recommended by the Feathers team.
 The generators will generate code for different databases
 so you don't have to investigate how to do so.
 
+:::tip Switching between adapters.
+You can change a service's database adapter while regenerating it.
+This allows you, for example, to quickly mock up an app using the NeDB adapter,
+and then convert it to Mongoose.
+:::
+
 ## generate options
 
+Let's generate a project having users who may be members of one or more teams.
+We want to display teams with all their members
 
 We first create a folder to contain the app, and then set its generator options.
 
@@ -88,7 +96,7 @@ feathers-plus generate options
 - `Source scan took 0s 23ms`.
 The generator scans the app to identify any custom code.
 This will always be very fast,
-taking much less time than what `Yoeman` needs to start up.
+taking much less time than what the `Yoeman` tool needs to start up.
 
 - `The generator will not change the following modules`.
 The generator can refresh many of the modules in your app,
@@ -108,19 +116,19 @@ You can prevent a.k.a. "freeze" modules to prevent the generator from refreshing
 You normally would not do so but its useful to have the option.
 The frozen modules are listed here for convenience.
 
-- `Generate TypeScript code?` Otherwise JavaScript code is generated.
+- `Generate TypeScript code?` Defaults to no. Otherwise JavaScript code is generated.
 
-- `Use semicolons?` Otherwise semicolons are not generated at the end of statements.
+- `Use semicolons?` Defaults to yes. Otherwise semicolons are not generated at the end of statements.
 
 - `View module changes and control replacement (not recommended)?`
-Usually no.
+Defaults to no.
 This is a Yeoman feature which allows you to inspect the changes to be made to any module,
 and to decide whether to apply it.
 Its useful when you are exploring the raw details of what the generator writes.
 
 #### Directory
 
-The feathers-app directory now contains just one module.
+The feathers-app directory now contains one module.
 
 ![Generate options dir](../assets/quick-start/generate-options-dir.jpg)
 
@@ -147,36 +155,80 @@ It can regenerate your entire app from that and the custom code it finds in the 
 
 :::tip Regeneration.
 The generator will default to your previous choices if you rerun `feathers-plus generate options`.
-It will make any needed changes to the modules if you change any of the options.
+It will make any needed changes to all modules if you change any of the options.
 :::
 
-:::tip Defaults
-`feathers-plus generate options` does not have to run if your app will be in JavaScript with semicolons.
+:::tip Optional
+You need not run `feathers-plus generate options` if your app will be in JavaScript with semicolons.
 :::
 
 ## generate app
 
-Now let's write a new project using the Feathers generators.
+Next we generate the scaffolding for the app.
 
-This project will have users who may be members of one or more teams.
-We want to display teams with all their members.
-
-### Create the app
-
-The first thing we do is generate the basic app. For that, we will first have to create and move into a new folder:
-
-```
-mkdir feathers-app
-cd feathers-app
+```text
+feathers-plus generate app
 ```
 
-Then we can run:
+#### Prompts
 
-```
-feathers generate app
+![Generate options](../assets/quick-start/generate-app.jpg)
+
+The generator creates some
+[JS modules](https://github.com/feathersjs-x/generator-feathers-plus/blob/master/examples/js/02-app/feathers-app/)
+or [TS ones](https://github.com/feathersjs-x/generator-feathers-plus/blob/master/examples/ts/02-app/feathers-app/)
+reflecting your choices.
+The modules are properly wired together and structured as recommended by the Feathers team.
+
+#### Directory
+
+The app directory has now filled in.
+Below are the previous and the new contents when JavaScript is generated.
+
+![Generate options dir](../assets/quick-start/generate-app-dir-compare.jpg)
+
+and when TypeScript is generated.
+
+![Generate options dir](../assets/quick-start/ts-generate-app-dir-compare.jpg)
+
+#### feathers-gen-specs.json
+
+```js
+{
+  "options": {
+    "ver": "1.0.0",
+    "inspectConflicts": false,
+    "semicolons": true,
+    "freeze": [],
+    "ts": false
+  },
+  "app": {
+    "name": "feathers-app",
+    "description": "Quick start example app.",
+    "src": "src",
+    "packager": "npm@>= 3.0.0",
+    "providers": [
+      "rest",
+      "socketio"
+    ]
+  },
+  "services": {}
+}
 ```
 
-![Generate app](../assets/quick-start-old/gen-app.jpg)
+#### config/default.json
+
+```js
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  }
+}
+```
 
 The generator creates some
 [modules](https://github.com/feathersjs/feathers-docs/blob/master/examples/step/02/gen1/)
