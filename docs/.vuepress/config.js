@@ -26,7 +26,7 @@ module.exports = {
      */
     sidebarDepth: 2,
     sidebar: [
-      '/quick-start/',
+      '/get-started/',
       '/guide/',
       '/api/',
       '/json-schema/',

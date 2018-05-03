@@ -1,7 +1,7 @@
 ---
 home: true
 actionText: Get Started →
-actionLink: /quick-start/
+actionLink: /get-started/
 features:
 - title: Compatibility
   details: The same prompts and the same generated code as the FeathersJS CLI generator.
