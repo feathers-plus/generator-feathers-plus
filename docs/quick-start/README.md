@@ -38,7 +38,7 @@ it into @feathers-plus/cli.
 However with cli-plus also:
 - Converts DB-agnostic JSON-schema models to the DB model each service is currently configured for. 
 - Generates all the code needed for your GraphQL Query interface.
-- Generates either JavaScript or TrueScript code; with semicolons or without. Converts apps between JS and TS.
+- Generates either JavaScript or TypeScript code; with semicolons or without. Converts apps between JS and TS.
 - Regenerates you app without losing changes you've made. You stay up-to-date with enhancements and fixes.
 
 ## What the Generator Does
