@@ -258,6 +258,8 @@ OK - mention src/services/name/name.class.*s are not regenerated
 OK - alpha order for .ts and in front of the package.json
 OK - test f-auth-mgnt fields to graphql auth  
 OK - adapter-info: Make sure generic adapter can work somehow. 
+OK - test name.sequelize.js
+OK - adapter-info: Make sure generic adapter can work somehow.
 
 
 NO - hooks modules should be ifNew: true
@@ -282,19 +284,18 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
      to consider for stashing. Basically, if we regen middleware, we won't be regen'ing graphql, so
      scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
 
-
+- Generated README does not contain the correct cli-plus commands.
+- add
+  Update available 3.6.1 → 3.6.2        │
+  Run npm i -g @feathersjs/cli to update 
 - add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
 - Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
   for `uniqueItemProperties`? In say name.mongo.js?
 
 - test name.mongo.js
 - test name.validate.js
-- test name.sequelize.js
 - run tslint --fix / eslint --fix afterwards ?!? (watch for removal of trailing commas
   Alternatively have pretty-stringify produce single rather than double quotes.
-
-* - adapter-info: Make sure generic adapter can work somehow.
-
 - add comment in hooks regarding context.params.graphql for services included in graphql
 - add sort one 1 prop in array of objects, sort on multiple prop names to BatchLoader. See f-x/common-utils
 - what is feathersjs/cli/lib/shell.js

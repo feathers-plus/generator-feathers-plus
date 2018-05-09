@@ -1,0 +1,31 @@
+{
+  "name": "feathers-app",
+  "description": "Quick start example app.",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "John Szwaronek",
+    "email": "johnsz9999@gmail.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/"
+  },
+  "engines": {
+    "node": "^8.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run tslint && npm run mocha",
+    "tslint": "tslint -p tsconfig.json -c tslint.json && tslint -p tsconfig.test.json -c tslint.json",
+    "start": "ts-node src/",
+    "mocha": "ts-mocha -p tsconfig.test.json test/*.test.ts test/**/*.test.ts --timeout 10000 --exit",
+    "compile": "tsc -p tsconfig.json"
+  }
+}

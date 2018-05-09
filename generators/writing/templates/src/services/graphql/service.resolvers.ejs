@@ -43,24 +43,61 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
 <%# --- forEach-2 starts below. Loop thru the fields to be added. -%>
 <% Object.keys(__add).forEach(fieldName => {
   __addField = __add[fieldName];
+
+  if (__addField.isArray) {
+    __$sort = `$sort: ${!__addField.sort ? 'undefined' : '\n' + stringifyPlus(__addField.sort, { indentBy: 14 })}`;
+  } else {
+    __$sort = '';
+  }
 -%>
 
       // <%- fieldName %><%- __addField.args %>: <%- __addField.type %>
       <%- fieldName %>:
 <%# -%>
-<%# --- if/else-1 starts below. -%>
+<%# --- if/else-1 starts below. Whether field is a join or a calculated field. -%>
 <% if (__addField.serviceName) {
+  // Field in other table is not an array
+  if (!__addField.relation.otherTableIsArray) {
     __temp = [
-        '        (parent, args, content, ast) => {',
-        '          const feathersParams = convertArgs(args, content, ast, {',
-        `            query: { ${__addField.relation.otherTable}: `
-            + `${__addField.ourTableIsArray ? '{ $in: ' : ''}parent.${__addField.relation.ourTable}${__addField.ourTableIsArray ? ' }' : ''}`
-            + `${__addField.isArray ? `, $sort: undefined` : ''} }`
-            + ', paginate: false',
-        `          })${sc}`,
-        `          return ${__addField.serviceName}.find(feathersParams).then(${__addField.isArray ? "extractAllItems" : "extractFirstItem"})${sc}`,
+      '        (parent, args, content, ast) => {',
+      '          const feathersParams = convertArgs(args, content, ast, {',
+      `            query: { ${__addField.relation.otherTable}: `
+        + `${__addField.relation.ourTableIsArray ? '{ $in: ' : ''}parent.${__addField.relation.ourTable}${__addField.relation.ourTableIsArray ? ' }' : ''}`
+        + `${__$sort ? `, ${__$sort}` : ''} }, paginate: false`,
+      `          })${sc}`,
+      !__addField.isArray // If an array is being returned
+         ? `          return ${__addField.serviceName}.find(feathersParams).then(extractFirstItem)${sc}`
+         : `          return ${__addField.serviceName}.find(feathersParams).then(extractAllItems)${sc}`,
+      '        },'
+    ];
+  } else {
+  // Field in other table is an array
+    __temp = [
+      '        (parent, args, content, ast) => {',
+      '          const feathersParams = convertArgs(args, content, ast, {',
+      `            query: { ${__$sort} }, paginate: false`,
+      `          })${sc}`
+    ];
+
+    if (!__addField.isArray) {
+      __temp = __temp.concat([
+        `          return ${__addField.serviceName}.find(feathersParams).then(extractFirstItem)${sc}`,
         '        },'
-  ];
+      ]);
+    } else {
+      __temp = __temp.concat([
+        '',
+        `          if (!(content.cache.${graphqlName} && content.cache.${graphqlName}.${fieldName})) {`,
+        `            content.cache.${graphqlName} = content.cache.${graphqlName} || {}${sc}`,
+        `            content.cache.${graphqlName}.${fieldName} = ${__addField.serviceName}.find(feathersParams).then(extractAllItems)${sc}`,
+        `          }`,
+        '',
+        `          return Promise.resolve(content.cache.${graphqlName}.${fieldName})`,
+        `            .then(res => res.filter(rec => rec.${__addField.relation.otherTable}.indexOf(parent._id) !== -1))${sc}`,
+        '        },'
+      ]);
+    }
+  }
 -%>
         <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
 <% } else { -%>

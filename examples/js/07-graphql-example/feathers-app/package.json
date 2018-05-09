@@ -1,0 +1,72 @@
+{
+  "name": "feathers-app",
+  "description": "Quick start example app.",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "John Szwaronek",
+    "email": "johnsz9999@gmail.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/"
+  },
+  "engines": {
+    "node": "^8.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run eslint && npm run mocha",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "start": "node src/",
+    "mocha": "mocha test/ --recursive --exit --timeout 10000"
+  },
+  "dependencies": {
+    "@feathers-plus/graphql": "1.9.0",
+    "@feathersjs/authentication": "2.1.2",
+    "@feathersjs/authentication-jwt": "2.0.0",
+    "@feathersjs/authentication-local": "1.1.0",
+    "@feathersjs/authentication-oauth2": "1.0.3",
+    "@feathersjs/configuration": "1.0.2",
+    "@feathersjs/errors": "3.3.0",
+    "@feathersjs/express": "1.2.0",
+    "@feathersjs/feathers": "3.1.3",
+    "@feathersjs/socketio": "3.2.0",
+    "ajv": "6.4.0",
+    "compression": "1.7.2",
+    "cors": "2.8.4",
+    "feathers-hooks-common": "4.10.0",
+    "feathers-nedb": "3.0.0",
+    "graphql-resolvers-ast": "1.4.0",
+    "helmet": "3.12.0",
+    "lodash.merge": "4.6.1",
+    "merge-graphql-schemas": "1.5.0",
+    "nedb": "1.8.0",
+    "passport-auth0": "0.6.1",
+    "passport-facebook": "2.1.1",
+    "passport-github": "1.1.0",
+    "passport-google-oauth20": "1.0.0",
+    "serve-favicon": "2.4.5",
+    "winston": "2.4.1"
+  },
+  "devDependencies": {
+    "@types/feathersjs__authentication": "2.1.0",
+    "@types/feathersjs__authentication-jwt": "1.0.1",
+    "@types/feathersjs__authentication-local": "1.0.1",
+    "@types/feathersjs__authentication-oauth2": "1.0.1",
+    "@types/graphql": "0.12.5",
+    "@types/nedb": "1.8.5",
+    "@types/passport-facebook": "2.1.7",
+    "@types/passport-github": "1.1.2",
+    "eslint": "4.18.2",
+    "mocha": "5.0.5",
+    "request": "2.85.0",
+    "request-promise": "4.2.2"
+  }
+}

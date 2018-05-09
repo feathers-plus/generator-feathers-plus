@@ -815,6 +815,10 @@ module.exports = function generatorWriting (generator, what) {
       libDirectory: generator.libDirectory
     });
 
+    // inspector('\n... graphqlSchemas\n', context.graphqlSchemas.split('\n'));
+    // inspector('\n... mapping.graphqlService', context.mapping.graphqlService);
+    // inspector('\n... feathersSpecs', context.feathersSpecs);
+
     todos = [
       tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `graphql.test.${js}`], true),
       tmpl([qlPath, 'graphql.interfaces.ejs'], [libDir, 'services', 'graphql', 'graphql.interfaces.ts'], false, isJs),
@@ -995,7 +999,7 @@ function writeAuthenticationConfiguration (generator, context) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function inspector(desc, obj, depth = 5) {
+function inspector(desc, obj, depth = 6) {
   console.log(desc);
   console.log(inspect(obj, { colors: true, depth }));
 }
