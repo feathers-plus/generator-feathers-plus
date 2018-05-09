@@ -1110,3 +1110,370 @@ so you may make queries using either REST or GraphQL, even simultaneously.
 
 ## GraphQL example
 
+We've taken the app we've been working on and
+[produced a GraphQL example ](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/07-graphql-example/feathers-app).
+You can run it yourself with `npm i` and `npm start`.
+
+- We converted the services to NeDB so the example is easy to run.
+- We added some additional information to the service schemas.
+- We initialize the NeDB tables in src/index.?s.
+- We also run some GraphQL queries there.
+
+#### Types
+
+When you run
+::: warning STOP
+Don't run this command right now. Its shown here for illustrative purposes.
+:::
+
+```
+feathers-plus generate graphql
+```
+
+GraphQL types are generated, along with the fields on those types.
+The types generated for our example are:
+
+```
+type Role {
+  id: ID
+  name: String!
+}
+ 
+type Team {
+  id: ID
+  name: String!
+  memberIds: [String]
+  members: [User!]
+}
+ 
+type User {
+  id: ID
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String
+  roleId: ID!
+  fullName: String!
+  role(query: JSON, params: JSON, key: JSON): Role
+  teams(query: JSON, params: JSON, key: JSON): [Team!]
+}
+ 
+
+type Query {
+  getRole(key: JSON, query: JSON, params: JSON): Role
+  findRole(query: JSON, params: JSON): [Role]!
+  getTeam(key: JSON, query: JSON, params: JSON): Team
+  findTeam(query: JSON, params: JSON): [Team]!
+  getUser(key: JSON, query: JSON, params: JSON): User
+  findUser(query: JSON, params: JSON): [User]!
+}
+```
+
+The **getRole**, **findRole**, etc. are the GraphQL queries you can make.
+The other **type** expand what the queries can return.
+
+Notice the API for the types is the Feathers service API by default.
+**key** is the Feathers **id**, **query** is Feathers **params.query**,
+and **params** is anything else in Feathers **params**.
+
+Using the same API reduces what you have to learn,
+and makes the interface between Feathers and GraphQL seamless.
+
+::: tip JSON
+You may be perplexed by **JSON** as its not one of GraphQL's scalar types.
+It is a custom type added by cli-plus.
+:::
+
+In GraphQL notation
+- **String** is a string or **null**.
+- **String!** is a string.
+- **[String]** is an array of strings, some of which may be **null**. It may also be **null** instead of an array.
+- **[String]!** is similar to **[String]** but it cannot be **null**.
+- **[User!]** is an array of **User** objects. None of the elements may be **null**.
+
+#### Making our first request
+
+The client (or the server) can then make a request like
+```
+const graphql = app.service('graphql');
+const myQuery = '{
+  findUser(query: {}) {
+    firstName
+    lastName
+    fullName
+    email
+    role { name }
+    teams { name }
+  }
+}';
+                  
+const result = await graphql.find({ query: { query: myQuery } })
+```
+
+::: tip GraphiQL
+Why the two `query` in `{ query: { query: myQuery } }`?
+The first is needed by the Feathers service API of course.
+The second one is required to use [GraphiQL](https://github.com/graphql/graphiql),
+the popular graphical interactive in-browser GraphQL IDE.
+You can use GraphiQL to test your queries from the browser.
+:::
+
+The request returns data of the form:
+```
+{
+  total: 3,
+  limit: 10,
+  skip: 0,
+  data: {
+    findUser: [
+      {
+        firstName: 'Jack',
+        lastName: 'Doe',
+        fullName: 'Jack Doe',
+        email: 'jack-doe@gmail.com',
+        role: { name: 'normal' },
+        teams: [ { name: 'beta' } ]
+      }, {
+        firstName: 'Jane',
+        lastName: 'Doe',
+        fullName: 'Jane Doe',
+        email: 'jane-doe@gmail.com',
+        role: { name: 'normal' },
+        teams: [ { name: 'alpha' }, { name: 'beta' } ]
+      }, {
+        firstName: 'John',
+        lastName: 'Doe',
+        fullName: 'John Doe',
+        email: 'john-doe@gmail.com',
+        role: { name: 'admin' },
+        teams: [ { name: 'alpha' } ]
+      }
+    ]
+  }
+}
+```
+
+Some of the advantages of GraphQL are becoming clear:
+
+- The complete response was returned in a single request.
+- The client asks only for the data it needs.
+- The client does not know, nor does it care how the data is organized,
+or what needs to be done to accumulate the complete response.
+- No versioning exists.
+
+#### Making another request
+
+And a request like:
+```
+{
+  findTeam(query: {}) {
+    name
+    memberIds
+    members {
+      fullName
+      role { name }
+    }
+  }
+}
+```
+
+returns
+```
+{
+  total: 2,
+  limit: 10,
+  skip: 0,
+  data: {
+    findTeam: [
+      {
+        name: 'alpha',
+        memberIds: [ 'gXWQs77x3X1fZjVg', 'hVJjFMnxCfHnIBS0' ],
+        members: [
+          { fullName: 'Jane Doe', role: { name: 'normal' } },
+          { fullName: 'John Doe', role: { name: 'admin' } }
+        ]
+      }, {
+        name: 'beta',
+        memberIds: [ '6bJA2ONlIEpA8IX8', 'hVJjFMnxCfHnIBS0' ],
+        members: [
+          { fullName: 'Jack Doe', role: { name: 'normal' } },
+          { fullName: 'Jane Doe', role: { name: 'normal' } }
+        ]
+      }
+    ]
+  }
+}
+```
+
+#### Resolvers
+
+GraphQL expects to find **resolvers** to stitch the reponse together.
+Each resolver is a function which joins one type to another, or which calculates a dervived field.
+
+`feathers-plus generate graphql` generates the resolver code needed for your GraphQL endpoint,
+and it generates up to 3 versions of the resolvers
+- One uses [normal Feathers service calls](https://github.com/feathers-x/generator-feathers-plus/blob/master/examples/js/07-graphql-example/feathers-app/src/services/graphql/service.resolvers.js).
+- Another uses [batch-loaders](https://github.com/feathers-x/generator-feathers-plus/blob/master/examples/js/07-graphql-example/feathers-app/src/services/graphql/batchloader.resolvers.js).
+- And the final one uses raw SQL statements.
+
+The resolvers usually require a **lot** of code which must be meticulously correct.
+You will save a **lot** of time by having the generator write the resolvers.
+
+For example, this is the resolver code generated for our simplist example for the straightforward case ---
+using normal Feathers service calls.
+
+```js
+/* eslint-disable no-unused-vars, indent */
+// Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
+// !code: imports // !end
+// !code: init // !end
+
+let moduleExports = function serviceResolvers(app, options) {
+  const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options;
+  // !<DEFAULT> code: extra_auth_props
+  const convertArgs = convertArgsToFeathers([]);
+  // !end
+
+  // !<DEFAULT> code: services
+  let roles = app.service('/roles');
+  let teams = app.service('/teams');
+  let users = app.service('/users');
+  // !end
+
+  let returns = {
+
+    Role: {
+    },
+
+    Team: {
+
+      // members: [User!]
+      members:
+        // !<DEFAULT> code: resolver-Team-members
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { _id: { $in: parent.memberIds }, $sort: 
+              {
+                lastName: 1,
+                firstName: 1
+              } }, paginate: false
+          });
+          return users.find(feathersParams).then(extractAllItems);
+        },
+        // !end
+    },
+
+    User: {
+
+      // fullName: String!
+      fullName:
+        // !code: resolver-User-fullName-non
+        (parent, args, content, ast) => `${parent.firstName} ${parent.lastName}`,
+        // !end
+
+      // role(query: JSON, params: JSON, key: JSON): Role
+      role:
+        // !<DEFAULT> code: resolver-User-role
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { _id: parent.roleId }, paginate: false
+          });
+          return roles.find(feathersParams).then(extractFirstItem);
+        },
+        // !end
+
+      // teams(query: JSON, params: JSON, key: JSON): [Team!]
+      teams:
+        // !<DEFAULT> code: resolver-User-teams
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { $sort: 
+              {
+                name: 1
+              } }, paginate: false
+          });
+
+          if (!(content.cache.User && content.cache.User.teams)) {
+            content.cache.User = content.cache.User || {};
+            content.cache.User.teams = teams.find(feathersParams).then(extractAllItems);
+          }
+
+          return Promise.resolve(content.cache.User.teams)
+            .then(res => res.filter(rec => rec.memberIds.indexOf(parent._id) !== -1));
+        },
+        // !end
+    },
+
+    // !code: resolver_field_more // !end
+
+    Query: {
+
+      // !<DEFAULT> code: query-Role
+      // getRole(query: JSON, params: JSON, key: JSON): Role
+      getRole(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return roles.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findRole(query: JSON, params: JSON): [Role!]
+      findRole(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
+        return roles.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
+
+      // !<DEFAULT> code: query-Team
+      // getTeam(query: JSON, params: JSON, key: JSON): Team
+      getTeam(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return teams.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findTeam(query: JSON, params: JSON): [Team!]
+      findTeam(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
+        return teams.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
+
+      // !<DEFAULT> code: query-User
+      // getUser(query: JSON, params: JSON, key: JSON): User
+      getUser(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast);
+        return users.get(args.key, feathersParams).then(extractFirstItem);
+      },
+
+      // findUser(query: JSON, params: JSON): [User!]
+      findUser(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   lastName: 1,   firstName: 1 } } });
+        return users.find(feathersParams).then(paginate(content)).then(extractAllItems);
+      },
+      // !end
+      // !code: resolver_query_more // !end
+    },
+  };
+
+  // !code: func_return // !end
+  return returns;
+};
+
+// !code: more // !end
+
+// !code: exports // !end
+module.exports = moduleExports;
+
+function paginate(content) {
+  return result => {
+    content.pagination = !result.data ? undefined : {
+      total: result.total,
+      limit: result.limit,
+      skip: result.skip,
+    };
+
+    return result;
+  };
+}
+
+// !code: funcs // !end
+// !code: end // !end
+```
