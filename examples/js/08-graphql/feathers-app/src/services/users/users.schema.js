@@ -1,20 +1,23 @@
 
-// Define the Feathers schema for service `roles`. (Can be re-generated.)
+// Define the Feathers schema for service `users`. (Can be re-generated.)
 // !code: imports // !end
 // !code: init // !end
 
 // Define the model using JSON-schema
 let schema = {
   // !<DEFAULT> code: schema_header
-  title: 'Roles',
-  description: 'Roles database.',
+  title: 'Users',
+  description: 'Users database.',
   // !end
   // !code: schema_definitions // !end
 
   // Required fields.
   required: [
     // !code: schema_required
-    'name'
+    'email',
+    'firstName',
+    'lastName',
+    'roleId'
     // !end
   ],
   // Fields with unique values.
@@ -26,7 +29,11 @@ let schema = {
   properties: {
     // !code: schema_properties
     id: { type: 'ID' },
-    name: {}
+    email: {},
+    firstName: {},
+    lastName: {},
+    password: {},
+    roleId: { type: 'ID' }
     // !end
   },
   // !code: schema_more // !end
@@ -37,12 +44,12 @@ let extensions = {
   // GraphQL generation.
   graphql: {
     // !code: graphql_header
-    name: 'Role',
+    name: 'User',
     service: {
-      sort: { name: 1 },
+      sort: { lastName: 1, firstName: 1 },
     },
     // sql: {
-    //   sqlTable: 'Roles',
+    //   sqlTable: 'Users',
     //   uniqueKey: '_id',
     //   sqlColumn: {
     //     __authorId__: '__author_id__',
@@ -53,8 +60,11 @@ let extensions = {
       // !code: graphql_discard // !end
     ],
     add: {
-      // !<> code: graphql_add
-      users: { type: '[User!]', args: false, relation: { ourTable: '_id', otherTable: 'roleId' } },
+      // !code: graphql_add
+      fullName: { type: 'String!', args: false },
+      role: { type: 'Role', args: true, relation: { ourTable: 'roleId', otherTable: '_id' } },
+      teams: { type: '[Team!]', args: true, relation: { ourTable: '_id', otherTable: 'memberIds' },
+        sort: { name: 1 } },
       // !end
     },
     // !code: graphql_more // !end

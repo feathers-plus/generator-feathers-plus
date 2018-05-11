@@ -1,5 +1,5 @@
 ---
-sidebarDepth: 1
+sidebarDepth: 2
 ---
 
 # Get Started
@@ -1108,7 +1108,7 @@ Some take-aways are:
 **cli-plus** automatically generates a GraphQL endpoint for your Feathers services,
 so you may make queries using either REST or GraphQL, even simultaneously.
 
-## GraphQL example
+### Our app as an example
 
 We've taken the app we've been working on and
 [produced a GraphQL example ](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/07-graphql-example/feathers-app).
@@ -1477,3 +1477,415 @@ function paginate(content) {
 // !code: funcs // !end
 // !code: end // !end
 ```
+
+### Comprehensive example
+
+[@feathers-plus/cli-generator-example](https://github.com/feathers-x/cli-generator-example)
+contains a comprehensive GraphQL example produced with cli-plus.
+Its based on the following data schema
+
+![Generate options](../assets/get-started/schema.jpg)
+
+It has a test-harness running on the browser
+
+![Generate options](../assets/get-started/test-harness.jpg)
+
+You can select queries, modify them, run them and see the results.
+
+The repo contains examples in both JavaScript and TypeScript,
+implementing the same test harness for:
+- Feathers service resolvers used with the NeDB database.
+- BatchLoader based resolvers used with the NeDB database.
+- Feathers service resolvers used with Sequelize backed by the SQLite database.
+- BatchLoader based resolvers used with Sequelize backed by the SQLite database.
+- Resolvers producing raw SQL statements used with Sequelize backed by the SQLite database.
+ 
+You will note how many lines of code are required to implement GraphQL resolvers,
+and thankfully cli-plus generates them.
+
+## GraphQL extensions to models
+
+Now that we understand what we expect to implement with the GraphQL endpoint,
+so let's see how to accomplish it.
+
+src/services/users/users.schema.?s contains an outline of GraphQL extensions
+to the users Feathers model.
+```js
+// Define optional, non-JSON-schema extensions.
+let extensions = {
+  // GraphQL generation.
+  graphql: {
+    // !<DEFAULT> code: graphql_header
+    // name: 'User',
+    // service: {
+    //   sort: { _id: 1 },
+    // },
+    // sql: {
+    //   sqlTable: 'Users',
+    //   uniqueKey: '_id',
+    //   sqlColumn: {
+    //     __authorId__: '__author_id__',
+    //   },
+    // },
+    // !end
+    discard: [
+      // !code: graphql_discard // !end
+    ],
+    add: {
+      // !<DEFAULT> code: graphql_add
+      // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: '_id' } },
+      // !end
+    },
+    // !code: graphql_more // !end
+  },
+};
+```
+Let's start filling it in.
+
+### Metadata
+
+- **name** The name of the GraphQL type for this service. It defaults to your answer in *generate service* for
+*What would you call one row in the users database?*
+
+```js
+name: 'User',
+```
+
+:::tip Being included in the GraphQL endpoint
+The service will not be included in the GraphQL endpoint until its given a **name**.
+:::
+
+- **service** This property must be defined for Feathers service-based resolvers to be generated.
+
+    - **service.sort** How to sort the **users** records if **users** form the top level of the response.
+
+```js
+service: {
+  sort: { lastName: 1, firstName: 1 },
+},
+```
+    
+:::tip Queries
+Two queries are generated for each service.
+**getUser** is similar to Feathers users.get(id) and returns a single user.
+**findUser** is similar to users.find({ query: {...} }) and returns multiple users.
+
+You can implement other queries by adding custom code to the resolvers.
+:::   
+
+- **sql** This property must be defined for resolvers producing raw SQL statements to be generated.
+We will talk about SQL statement generation in another section.
+
+- **discard** Fields not to be included in the GraphQL endpoint.
+If our users service had included a password field, it would be reasonable to have
+```js
+discard: [
+  // !code: graphql_discard
+  'password' 
+  // !end
+],
+``` 
+
+- **add** defines how records are joined to the users service,
+and how any computed fields are calculated.
+
+Our Feathers model alone would produce the GraphQL type
+```js
+type User {
+  id: ID
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String
+  roleId: ID!
+}
+```
+
+Let's continue to expand the model to include joined records and a computed field.
+
+### Computed fields
+
+You need only mention that a computed field exists.
+```js
+    add: {
+      // !code: graphql_add
+      fullName: { type: 'String!', args: false },
+      // !end
+    },
+```
+
+- **fullName** The name of the computed field.
+- **String!** Its a string. null is not allowed.
+- **args: false** The field is not permitted arguments in the GraphQL Query.
+    
+Note we do not say how the field is calculated. cli-plus will generate a resolver function like
+```js
+User: {
+  // fullName: String!
+  fullName:
+    // !<DEFAULT>code: resolver-User-fullName-non
+    (parent, args, content, ast) => { throw Error('GraphQL fieldName User.fullName is not calculated.'); },
+    // !end
+}    
+```    
+
+And we customize it with the calculation. 
+```js
+User: {
+  // fullName: String!
+  fullName:
+    // !code: resolver-User-fullName-non
+    (parent, args, content, ast) => `${parent.firstName} ${parent.lastName}`,
+    // !end
+}    
+``` 
+
+After defining the calculated field, our GraphQL type is
+```
+type User {
+  id: ID
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String
+  roleId: ID!
+  fullName: String!
+}
+``` 
+
+### Joining records
+
+Our schema is
+
+![Our schema](../assets/get-started/our-schema.png)
+
+To each **users** record we can attach
+- The single **roles** record referred to in its **users.roleId**.
+- All the **teams** records containing its **users.id** in their **teams.memberIds[]**.
+
+To each **roles** record we can attach
+- All the **users** record containing its **roles.id** in **users.roleId**.
+
+To each **teams** record we can attach
+- All the **users** records whose **users.id** is contained in its **teams.memberIds**.
+
+#### Joining Roles record to Users
+
+Our users model contains **roleId**, a foreign key to the roles model.
+We can join the proper roles record to the user record with
+```js
+add: {
+  // !code: graphql_add
+  role: { type: 'Role', args: true, relation: { ourTable: 'roleId', otherTable: '_id' } },
+  // !end
+},
+```
+
+- **role** The property to contain the roles record.
+- **type** Identifies the type of object the resolver function will return.
+Here its returns a roles object or null.
+
+:::tip The GraphQL type system identifies the shape of a field
+- **Role** The field is a Role object. It may also be null.
+- **Role!** Its a Role object. null is not allowed.
+- **[Role]** Its an array of Role objects. An element may be null and, instead of an array, the field itself may be null.
+- **[Role!]** Like [Role] but the elements may not be null. null is still allowed instead of an array.
+- **{Role]!** Like [Role] but an array must exist.
+- **[Role!]!** Like [Role] but an array must exist and no element may be null.
+:::
+
+- **args** Determines if arguments are allowed for the field allowed in the GraphQL Query.
+cli-plus always generates Feathers compatible arguments:
+```
+role(query: JSON, params: JSON, key: JSON): Role
+```
+
+- Where
+    - **key** Equivalent to Feathers id, i.e. users.get(id).
+    - **query** Equivalent to Feathers query, i.e. users.find({ query: {...} }).
+    - **params** Equivalent to Feathers params, i.e. users.find(params).
+    The **query** and **params** arguments are merged together as expected for Feathers.
+    
+- **relation** The corresponding fields in each model which define the relationship.
+    - **ourTable** The field name in the model whose metadata we are defining.
+    - **otherTable** The field name in the other service.
+    
+:::tip Resolver functions
+If ourTable and otherTable are both scalars, the resolver function will similar to
+```js
+roles.find({ query: { _id: parent.roleId }, paginate: false })
+```
+
+If ourTable had been an array, then the resolver function would be like
+```js
+roles.find({ query: { _id: { $in: parent.roleIds } }, paginate: false })
+```
+
+If otherTable is an array, the resolver function will be similar to
+```js
+if (!(content.cache.User && content.cache.User.teams)) {
+ content.cache.User = content.cache.User || {};
+ content.cache.User.teams =
+   teams.find({ query: {...}, paginate: false })
+     .then(extractAllItems);
+}
+
+return Promise.resolve(content.cache.User.teams)
+ .then(res => res.filter(rec => rec.memberIds.indexOf(parent._id) !== -1));
+```
+:::
+:::danger STOP
+ourTable and otherTable cannot both be arrays.
+:::   
+
+After defining **roles**, our GraphQL type would be 
+```
+ type User {
+   id: ID
+   email: String!
+   firstName: String!
+   lastName: String!
+   password: String
+   roleId: ID!
+   fullName: String!
+   role(query: JSON, params: JSON, key: JSON): Role
+ }
+ ``` 
+
+#### Joining Teams records to Users
+
+We want to join all the **teams** records that a user belongs to.
+
+```js
+add: {
+  teams: { type: '[Team!]', args: true,
+    relation: { ourTable: '_id', otherTable: 'memberIds' }, sort: { name: 1 }
+  },
+},
+```
+
+We are joining multiple records rather than a single one.
+
+- **sort** optionally, how to sort the records being joined.
+
+After defining **teams**, our GraphQL type would be complete.
+
+```
+type User {
+  id: ID
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String
+  roleId: ID!
+  fullName: String!
+  role(query: JSON, params: JSON, key: JSON): Role
+  teams(query: JSON, params: JSON, key: JSON): [Team!]
+}
+```    
+
+The final result GraphQL extension for **users** is:
+```js
+// Define optional, non-JSON-schema extensions.
+let extensions = {
+  // GraphQL generation.
+  graphql: {
+    // !code: graphql_header
+    name: 'User',
+    service: {
+      sort: { lastName: 1, firstName: 1 },
+    },
+    // !end
+    discard: [
+      // !code: graphql_discard // !end
+    ],
+    add: {
+      // !code: graphql_add
+      fullName: { type: 'String!', args: false },
+      role: { type: 'Role', args: true,
+        relation: { ourTable: 'roleId', otherTable: '_id' }
+      },
+      teams: { type: '[Team!]', args: true,
+        relation: { ourTable: '_id', otherTable: 'memberIds' }, sort: { name: 1 }
+      },
+      // !end
+    },
+    // !code: graphql_more // !end
+  },
+};
+```
+
+#### Joins for the **roles** and **teams** service.
+
+The GraphQL extension for the **roles** service is similarly:
+```js
+// Define optional, non-JSON-schema extensions.
+let extensions = {
+  // GraphQL generation.
+  graphql: {
+    // !code: graphql_header
+    name: 'Role',
+    service: {
+      sort: { name: 1 },
+    },
+    // !end
+    discard: [
+      // !code: graphql_discard // !end
+    ],
+    add: {
+      // !code: graphql_add
+      users: { type: '[User!]', args: false,
+        relation: { ourTable: '_id', otherTable: 'roleId' }
+      },
+      // !end
+    },
+    // !code: graphql_more // !end
+  },
+};
+```
+
+And for **teams** is
+```js
+// Define optional, non-JSON-schema extensions.
+let extensions = {
+  // GraphQL generation.
+  graphql: {
+    // !code: graphql_header
+    name: 'Team',
+    service: {
+      sort: { name: 1 },
+    },
+    // !end
+    discard: [
+      // !code: graphql_discard // !end
+    ],
+    add: {
+      // !code: graphql_add
+      members: { type: '[User!]', args: false,
+        relation: { ourTable: 'memberIds', otherTable: '_id' },
+        sort: { lastName: 1, firstName: 1 }
+      },
+      // !end
+    },
+    // !code: graphql_more // !end
+  },
+};
+```
+
+## generate graphql
+
+We have the GraphQL extensions coded and, during *generate service*,
+we indicated which services are to be included in the GraphQL endpoint.
+We can now generate that endpoint.
+
+```
+feathers-plus generate graphql
+```
+
+![Generate graphql](../assets/get-started/generate-graphql.png)
+
+#### Folders
+
+The generator adds some modules to the
+[JS folder]()
+or [TS one]().
