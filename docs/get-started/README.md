@@ -1887,5 +1887,5 @@ feathers-plus generate graphql
 #### Folders
 
 The generator adds some modules to the
-[JS folder]()
+[JS folder](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/08-graphql/feathers-app)
 or [TS one]().
