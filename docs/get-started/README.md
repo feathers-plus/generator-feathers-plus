@@ -77,6 +77,18 @@ This allows you, for example, to quickly mock up an app using the NeDB adapter,
 and then convert it to Mongoose.
 :::
 
+### Use REST and GraphQL together
+
+REST and GraphQL are totally different. Each is dope *if used for the right thing.*
+
+cli-plus allows us to specify our services (a REST concept) along with their models and relations.
+It then generates an additional GraphQL endpoint.
+
+:::tip REST vs GraphQL 
+FeathersJS, using cli-plus, now supports both REST and GraphQL architectural concepts and their query languages.
+:::
+
+
 ## generate options
 
 Let's generate a project having users who may be members of one or more teams.
@@ -606,6 +618,15 @@ Those models are located here.
 knex.?s, mongodb.?s, rethinkdb.?s, sequelize.?s and sequelize-mssql.?s models would also be created as needed.
 
 - **test/service/users.test.?s** tests the service can be started. 
+
+:::tip All those modules
+Only one of users.mongo.?s, users.mongoose.?s, users.sequelize.?s is being used at any time.
+The code generated for users.service.?s and users.model.?s call the right modules for the **What kind of service is it?**
+selected.
+
+The modules are all generated so you may include all the custom code you need for all of them.
+This allows you to rerun *generate authentication* or *generate service* at any time to change databases.
+:::
 
 ## Feathers Models
 
@@ -1884,8 +1905,142 @@ feathers-plus generate graphql
 
 ![Generate graphql](../assets/get-started/generate-graphql.png)
 
+- **How should Queries be completed?** Different designs of GraphQL resolver funstions can be generated.
+    - **Using standalone Feathers service calls** is the default and the simplest approach.
+    It uses Feathers service calls without embellishment.
+    - **Using BatchLoaders** uses caching to eliminate multiple reads of the same information.
+    It also batches individual services calls together to reduce the number of database requests made.
+    BatchLoaders typically make an order of magnitude fewer requests, i.e. 3 instead of 30,
+    than the previous option.
+    - **Using dynamic SQL statements** is available only for SQL databases.
+    These resolvers generate a raw SQL statement, so the query is fullfilled by one request to the database.
+    
+:::warning SQL statments
+The raw SQL statement may be very large for a complex query,
+and that may result in performance problems for such queries.
+
+You should use this option usually when you have good SQL experience.
+You will also have to become familiar with [join-monster](https://join-monster.readthedocs.io/en/latest/)
+which is used by the generated code.
+:::
+
+:::tip Practicality
+We recommend you get your app working using the standalone services option because its the easiest to debug.
+You can switch to BatchLoaders if your server is under load or if you need better performance.
+
+It is not clear how more performant raw SQL statements are over BatchLoaders.
+You can evaluate them if you want better performance than that provided by BatchLoaders.
+:::  
+
+- **Which path should the service be registered on?** Default is `/graphql`.
+
+- **Does the service require authentication?** Default is no.
+As the query is being resolved, authentication is performed for any service being accessed,
+so these services are not exposed if the GraphQL endpoint itself is not secured.
+
+
 #### Folders
 
 The generator adds some modules to the
 [JS folder](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/08-graphql/feathers-app)
-or [TS one]().
+or [TS one](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/ts/08-graphql/feathers-app).
+
+Below are the previous and the new app contents when JavaScript is generated.
+![Generate graphql compare](../assets/get-started/generate-graphql-dir-compare.png)
+
+and when TypeScript is generated.
+![Generate graphql compare](../assets/get-started/ts-generate-graphql-dir-compare.png)
+
+- **graphql.schemas.?s** The GraphQL type definitions.
+- **graphql.service.?s** Configures the GraphQL service for the strategy chosen in the
+**How should Queries be completed?** question.
+- **graphql.hooks.?s** Feathers hooks for the GraphQL service.
+- **graphql.interfaces.ts** - ?????????????????????????????????????????????????????????????????????????????????????????????????????
+- **service.resolvers.?s** Resolver functions for the **Using standalone Feathers service calls** strategy.
+- **batchloader.resolvers.?s** Resolver functions for the **Using BatchLoaders** strategy.
+
+Several modules are used for the **Using dynamic SQL statements** strategy:
+
+- **sql.resolvers.?s** Resolver functions for the strategy.
+- **sql.metadata.?s** Meta data used by [join-monster](https://join-monster.readthedocs.io/en/latest/)
+to dynamically construct the raw SQL statement.
+- **sql.execute.sequelize.?s** Execute a raw SQL statement using Sequelize.
+- **sql.execute.knex.?s** Execute a raw SQL statement with Knex.
+- **sql.execute.custom.?s** Execute a raw SQL statement in a custom environment.
+
+:::tip All those modules
+Only one of service.resolvers.?s, batchloader.resolvers.?s or sql.**.?s is/are being used at any time.
+The code generated in graphql.service.?s calls the right modules for the **How should Queries be completed?**
+selected.
+
+The modules are all generated so you may include all the custom code you need for all of them.
+This allows you to rerun *generate graphql* at any time to change strategies.
+:::
+
+
+## What We Have Accomplished
+
+REST and GraphQL are totally different. Each is dope *if used for the right thing.*
+
+cli-plus allows us to specify our services (a REST concept) along with their models and relations.
+It then creates our GraphQL endpoint, and you'll infrequently have to customize that.
+
+:::tip In Short
+FeathersJS, using cli-plus, now supports both REST and GraphQL architectural concepts and their query languages.
+:::
+
+
+## generate all
+
+cli-plus will change over time: bug fixes, enhancements, retooling for new version of FeathersJS.
+You can upgrade you app to the latest version of cli-plus by running
+```
+feathers-plus generate all
+```
+
+![Generate all](../assets/get-started/generate-all.png)
+
+This will regenerate most of the modules, keeping you custom code, while generating the latest cli-plus boilerplate.
+
+:::tip Be Safe
+You may want to backup you project before running *generate all* until you feel comfortable no longer doing so.
+:::
+
+## Modules Regeneration
+
+cli-plus will not override certain modules if they already exist.
+We have already seen the names of these when we looked at *generate options*
+
+![Generate options](../assets/get-started/generate-options.png)
+
+#### Freezing modules
+
+You can prevent cli-plus from changing other modules it would otherwise regenerate.
+**feathers-gen-specs.json** contains all the information needed to recreate your app
+(in addition to your custom code of course). It starts with:
+
+```js
+{
+  "options": {
+    "ver": "1.0.0",
+    "inspectConflicts": false,
+    "semicolons": true,
+    "freeze": [],
+    "ts": false
+  },
+```
+
+cli-plus will not overrite any module names you add to *freeze*. For example
+```js
+"freeze": ["src/hooks/logger.js"]
+```
+
+#### Custom code
+
+You can list all the custom code in your app using
+
+```
+feathers-plus codelist
+```
+
+![Generate codelist](../assets/get-started/generate-codelist.png)

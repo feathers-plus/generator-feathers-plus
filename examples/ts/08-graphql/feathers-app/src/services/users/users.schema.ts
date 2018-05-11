@@ -41,9 +41,9 @@ let schema = {
 
 // Define optional, non-JSON-schema extensions.
 let extensions = {
-    // GraphQL generation.
-    graphql: {
-        // !code: graphql_header
+  // GraphQL generation.
+  graphql: {
+    // !code: graphql_header
         name: 'User',
         service: {
             sort: { lastName: 1, firstName: 1 },
@@ -56,19 +56,19 @@ let extensions = {
         //   },
         // },
         // !end
-        discard: [
-            // !code: graphql_discard // !end
-        ],
-        add: {
-            // !code: graphql_add
+    discard: [
+      // !code: graphql_discard // !end
+    ],
+    add: {
+      // !code: graphql_add
             fullName: { type: 'String!', args: false },
             role: { type: 'Role', args: true, relation: { ourTable: 'roleId', otherTable: '_id' } },
             teams: { type: '[Team!]', args: true, relation: { ourTable: '_id', otherTable: 'memberIds' },
                 sort: { name: 1 } },
             // !end
-        },
-        // !code: graphql_more // !end
     },
+    // !code: graphql_more // !end
+  },
 };
 
 // !code: more // !end
