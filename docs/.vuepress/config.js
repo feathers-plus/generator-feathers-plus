@@ -28,7 +28,6 @@ module.exports = {
     sidebar: [
       '/get-started/',
       '/guide/',
-      '/api/',
       '/json-schema/',
       '/maintainers/'
     ]
