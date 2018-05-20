@@ -1328,7 +1328,7 @@ returns
 
 #### Resolvers
 
-GraphQL expects to find **resolvers** to stitch the reponse together.
+GraphQL expects to find **resolvers** to stitch the response together.
 Each resolver is a function which joins one type to another, or which calculates a dervived field.
 
 `feathers-plus generate graphql` generates the resolver code needed for your GraphQL endpoint,
