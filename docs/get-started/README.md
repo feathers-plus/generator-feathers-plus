@@ -1503,7 +1503,7 @@ function paginate(content) {
 
 [@feathers-plus/cli-generator-example](https://github.com/feathers-x/cli-generator-example)
 contains a comprehensive GraphQL example produced with cli-plus.
-Its based on the following data schema
+It's based on the following data schema
 
 ![Generate options](../assets/get-started/schema.jpg)
 
@@ -1905,7 +1905,7 @@ feathers-plus generate graphql
 
 ![Generate graphql](../assets/get-started/generate-graphql.png)
 
-- **How should Queries be completed?** Different designs of GraphQL resolver funstions can be generated.
+- **How should Queries be completed?** Different designs of GraphQL resolver functions can be generated.
     - **Using standalone Feathers service calls** is the default and the simplest approach.
     It uses Feathers service calls without embellishment.
     - **Using BatchLoaders** uses caching to eliminate multiple reads of the same information.
@@ -1993,7 +1993,7 @@ FeathersJS, using cli-plus, now supports both REST and GraphQL architectural con
 ## generate all
 
 cli-plus will change over time: bug fixes, enhancements, retooling for new version of FeathersJS.
-You can upgrade you app to the latest version of cli-plus by running
+You can upgrade your app to the latest version of cli-plus by running
 ```
 feathers-plus generate all
 ```
@@ -2030,7 +2030,7 @@ You can prevent cli-plus from changing other modules it would otherwise regenera
   },
 ```
 
-cli-plus will not overrite any module names you add to *freeze*. For example
+cli-plus will not overwrite any module names you add to *freeze*. For example
 ```js
 "freeze": ["src/hooks/logger.js"]
 ```
