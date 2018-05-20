@@ -55,7 +55,7 @@ Generators will eliminate even more.
 
 :::tip Generators.
 Feathers generators produce very little code because Feathers is so succinct.
-You can easily understand the generated code because its no different from what we've been
+You can easily understand the generated code because it's no different from what we've been
 coding "by hand" so far.
 Some other frameworks make things “seem” easy by generating thousands of lines of code for you
 and, in the process, making it almost impossible to implement anything not supported out of the box
@@ -126,7 +126,7 @@ This list is displayed as a convenience, so you can refer to it anytime by runni
 
 - `You have additionally prevented the following modules from being changed.`
 You can prevent a.k.a. "freeze" modules to prevent the generator from refreshing them.
-You normally would not do so but its useful to have the option.
+You normally would not do so but it's useful to have the option.
 The frozen modules are listed here for convenience.
 
 - `Generate TypeScript code?` Defaults to no. Otherwise JavaScript code is generated.
@@ -408,7 +408,7 @@ We'll add that insertion point, and you just regenerate the app to be able to us
 
 #### More realistic code customization
 
-The previous example gets the idea across but its too trivial to appreciate the impact of the feature.
+The previous example gets the idea across but it's too trivial to appreciate the impact of the feature.
 
 Cli-plus generates a module for every service named `src/services/serviceName/serviceName. validate.js`.
 It contains JSON-schema which may be used to validate record contents before create, update and patch calls.
@@ -1201,7 +1201,7 @@ Using the same API reduces what you have to learn,
 and makes the interface between Feathers and GraphQL seamless.
 
 ::: tip JSON
-You may be perplexed by **JSON** as its not one of GraphQL's scalar types.
+You may be perplexed by **JSON** as it's not one of GraphQL's scalar types.
 It is a custom type added by cli-plus.
 :::
 
@@ -1573,7 +1573,7 @@ name: 'User',
 ```
 
 :::tip Being included in the GraphQL endpoint
-The service will not be included in the GraphQL endpoint until its given a **name**.
+The service will not be included in the GraphQL endpoint until it's given a **name**.
 :::
 
 - **service** This property must be defined for Feathers service-based resolvers to be generated.
@@ -1704,7 +1704,7 @@ add: {
 
 - **role** The property to contain the roles record.
 - **type** Identifies the type of object the resolver function will return.
-Here its returns a roles object or null.
+Here it returns a roles object or null.
 
 :::tip The GraphQL type system identifies the shape of a field
 - **Role** The field is a Role object. It may also be null.
@@ -1925,7 +1925,7 @@ which is used by the generated code.
 :::
 
 :::tip Practicality
-We recommend you get your app working using the standalone services option because its the easiest to debug.
+We recommend you get your app working using the standalone services option because it's the easiest to debug.
 You can switch to BatchLoaders if your server is under load or if you need better performance.
 
 It is not clear how more performant raw SQL statements are over BatchLoaders.
