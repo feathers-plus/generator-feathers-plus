@@ -1113,6 +1113,7 @@ There is a good deal of literature available on what GraphQL is, on why it is go
 and how it compares to REST.
 
 - [Why GraphQL](https://medium.com/@ajaysaini.official/why-graphql-886ba866ae75)
+- [Is GraphQL The Future?](http://artsy.github.io/blog/2018/05/08/is-graphql-the-future/)
 - [Why GraphQL is the future](https://dev-blog.apollodata.com/why-graphql-is-the-future-3bec28193807)
 And what it means for you.
 - [GraphQL vs. REST](https://dev-blog.apollodata.com/graphql-vs-rest-5d425123e34b)
@@ -1134,6 +1135,7 @@ so you may make queries using either REST or GraphQL, even simultaneously.
 We've taken the app we've been working on and
 [produced a GraphQL example ](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/07-graphql-example/feathers-app).
 You can run it yourself with `npm i` and `npm start`.
+git status
 
 - We converted the services to NeDB so the example is easy to run.
 - We added some additional information to the service schemas.
