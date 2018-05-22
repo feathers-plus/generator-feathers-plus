@@ -55,7 +55,7 @@ Generators will eliminate even more.
 
 :::tip Generators.
 Feathers generators produce very little code because Feathers is so succinct.
-You can easily understand the generated code because its no different from what we've been
+You can easily understand the generated code because it's no different from what we've been
 coding "by hand" so far.
 Some other frameworks make things “seem” easy by generating thousands of lines of code for you
 and, in the process, making it almost impossible to implement anything not supported out of the box
@@ -126,7 +126,7 @@ This list is displayed as a convenience, so you can refer to it anytime by runni
 
 - `You have additionally prevented the following modules from being changed.`
 You can prevent a.k.a. "freeze" modules to prevent the generator from refreshing them.
-You normally would not do so but its useful to have the option.
+You normally would not do so but it's useful to have the option.
 The frozen modules are listed here for convenience.
 
 - `Generate TypeScript code?` Defaults to no. Otherwise JavaScript code is generated.
@@ -248,9 +248,9 @@ A sample favicon and HTML file are included.
     
     - **channels.?s** contains the channels sending realtime events to clients.
     
-    - **app.interface.ts** `??????????????????????????????????????`
+    - **app.interface.ts** contains the global `App` interface needed to provide typed services.  
     
-    - **typings.d.ts** `??????????????????????????????????????????`
+    - **typings.d.ts** contains declarations of modules that come without typings.
  
 - **test/** contains the tests for the app.
 app.test.?s tests that the index page appears, as well as 404 errors for HTML pages and JSON.
@@ -274,11 +274,11 @@ It exists only if the npm option is selected.
 
 - **README.md** contains the documentation for the app.
 
-- **tsconfig.json** `??????????????????????????????????????????`
+- **tsconfig.json** contains the TypeScript compiler's configuration used for building the app.
 
-- **tsconfig.test.json** `??????????????????????????????????????????`
+- **tsconfig.test.json** contains the TypeScript compiler's configuration used for building tests.
 
-- **tslint.json** `??????????????????????????????????????????`
+- **tslint.json** contains tslint configuration.
 
 - **yarn.lock**  is created by yarn. It contains the versions of the module dependencies which are installed.
 It exists only if the yarn option is selected.
@@ -408,7 +408,7 @@ We'll add that insertion point, and you just regenerate the app to be able to us
 
 #### More realistic code customization
 
-The previous example gets the idea across but its too trivial to appreciate the impact of the feature.
+The previous example gets the idea across but it's too trivial to appreciate the impact of the feature.
 
 Cli-plus generates a module for every service named `src/services/serviceName/serviceName. validate.js`.
 It contains JSON-schema which may be used to validate record contents before create, update and patch calls.
@@ -610,7 +610,7 @@ Those models are located here.
     - **users.mongo.?s, users.mongoose.?s, users.sequelize.?s** contain the JSON-schema model
     in users.schema.?s converted to a MongoDB, Mongoose or Sequelize model.
     - **users.validate.?s** contains schemas to validate data for create, patch and update service calls.
-    - **users.interface.ts** `???????????????????????????????????????????????`
+    - **users.interface.ts** contains a TypeScript interface describing a single `user` entity.
     
 - **authentication.?s** contains the authentication code.
 
@@ -1201,7 +1201,7 @@ Using the same API reduces what you have to learn,
 and makes the interface between Feathers and GraphQL seamless.
 
 ::: tip JSON
-You may be perplexed by **JSON** as its not one of GraphQL's scalar types.
+You may be perplexed by **JSON** as it's not one of GraphQL's scalar types.
 It is a custom type added by cli-plus.
 :::
 
@@ -1328,8 +1328,8 @@ returns
 
 #### Resolvers
 
-GraphQL expects to find **resolvers** to stitch the reponse together.
-Each resolver is a function which joins one type to another, or which calculates a dervived field.
+GraphQL expects to find **resolvers** to stitch the response together.
+Each resolver is a function which joins one type to another, or which calculates a derived field.
 
 `feathers-plus generate graphql` generates the resolver code needed for your GraphQL endpoint,
 and it generates up to 3 versions of the resolvers
@@ -1503,7 +1503,7 @@ function paginate(content) {
 
 [@feathers-plus/cli-generator-example](https://github.com/feathers-x/cli-generator-example)
 contains a comprehensive GraphQL example produced with cli-plus.
-Its based on the following data schema
+It's based on the following data schema
 
 ![Generate options](../assets/get-started/schema.jpg)
 
@@ -1573,7 +1573,7 @@ name: 'User',
 ```
 
 :::tip Being included in the GraphQL endpoint
-The service will not be included in the GraphQL endpoint until its given a **name**.
+The service will not be included in the GraphQL endpoint until it's given a **name**.
 :::
 
 :::tip Queries
@@ -1764,7 +1764,7 @@ add: {
 
 - **role** The property added to users containing the roles record.
 - **type** Identifies the type of object the resolver function will return.
-Here its returns a roles object or null.
+Here it returns a roles object or null.
 
 :::tip The GraphQL type system identifies the shape of a field
 - **Role** The field is a Role object. It may also be null.
@@ -1984,7 +1984,7 @@ which is used by the generated code.
 :::
 
 :::tip Practicality
-We recommend you get your app working using the standalone services option because its the easiest to debug.
+We recommend you get your app working using the standalone services option because it's the easiest to debug.
 You can switch to BatchLoaders if your server is under load or if you need better performance.
 
 It is not clear how more performant raw SQL statements are over BatchLoaders.
@@ -2052,7 +2052,7 @@ FeathersJS, using cli-plus, now supports both REST and GraphQL architectural con
 ## generate all
 
 cli-plus will change over time: bug fixes, enhancements, retooling for new version of FeathersJS.
-You can upgrade you app to the latest version of cli-plus by running
+You can upgrade your app to the latest version of cli-plus by running
 ```
 feathers-plus generate all
 ```
@@ -2089,7 +2089,7 @@ You can prevent cli-plus from changing other modules it would otherwise regenera
   },
 ```
 
-cli-plus will not overrite any module names you add to *freeze*. For example
+cli-plus will not overwrite any module names you add to *freeze*. For example
 ```js
 "freeze": ["src/hooks/logger.js"]
 ```
