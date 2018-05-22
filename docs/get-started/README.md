@@ -1527,7 +1527,7 @@ and thankfully cli-plus generates them.
 ## GraphQL extensions to models
 
 Now that we understand what we expect to implement with the GraphQL endpoint,
-so let's see how to accomplish it.
+let's see how to accomplish it.
 
 src/services/users/users.schema.?s contains an outline of GraphQL extensions
 to the users Feathers model.
@@ -1562,7 +1562,7 @@ let extensions = {
 };
 ```
 Let's start filling it in.
-
+ 
 ### Metadata
 
 - **name** The name of the GraphQL type for this service. It defaults to your answer in *generate service* for
@@ -1576,6 +1576,14 @@ name: 'User',
 The service will not be included in the GraphQL endpoint until it's given a **name**.
 :::
 
+:::tip Queries
+Two queries are generated for each service.
+**getUser** is similar to Feathers users.get(id) and returns a single record.
+**findUser** is similar to users.find({ query: {...} }) and returns multiple records.
+
+You can implement other queries by adding custom code to the resolver modules.
+:::
+
 - **service** This property must be defined for Feathers service-based resolvers to be generated.
 
     - **service.sort** How to sort the **users** records if **users** form the top level of the response.
@@ -1585,17 +1593,32 @@ service: {
   sort: { lastName: 1, firstName: 1 },
 },
 ```
-    
-:::tip Queries
-Two queries are generated for each service.
-**getUser** is similar to Feathers users.get(id) and returns a single user.
-**findUser** is similar to users.find({ query: {...} }) and returns multiple users.
 
-You can implement other queries by adding custom code to the resolvers.
-:::   
+:::warning STOP
+The **service** property must be defined for Feathers service-based resolvers to be generated for this service.
+:::
 
 - **sql** This property must be defined for resolvers producing raw SQL statements to be generated.
-We will talk about SQL statement generation in another section.
+
+    - **sql.sqlTable** The name of the SQL table. Defaults to the service name.
+    - **sql.uniqueKey** The name of the SQL column containing the primary key.
+    - **sql.sqlColumn** Allows you to relate SQL column names to JavaScript variables if they differ,
+    e.g. the SQL column name **email_address** to the JavaScript **email**.
+```js
+sql : {
+  email: 'email_address'
+}
+```
+  
+:::warning STOP
+The **sql** property must be defined for resolvers producing raw SQL statements to be generated for this service.
+:::   
+
+:::warning join-monster
+The generator uses [join-monster](https://join-monster.readthedocs.io/en/latest/)
+to do the heavy lifting.
+You have to read and understand its documentation.
+:::
 
 - **discard** Fields not to be included in the GraphQL endpoint.
 If our users service had included a password field, it would be reasonable to have
@@ -1607,7 +1630,7 @@ discard: [
 ],
 ``` 
 
-- **add** defines how records are joined to the users service,
+- **add** defines how other records are joined to this service,
 and how any computed fields are calculated.
 
 Our Feathers model alone would produce the GraphQL type
@@ -1636,10 +1659,31 @@ You need only mention that a computed field exists.
 ```
 
 - **fullName** The name of the computed field.
-- **String!** Its a string. null is not allowed.
+- **type** The GraphQL type of the result.
 - **args: false** The field is not permitted arguments in the GraphQL Query.
+The next section has more information on **args**.
+
+:::tip GraphQL scalar types
+GraphQL comes with a set of default scalar types out of the box:
+
+- **Int** A signed 32‐bit integer.
+- **Float** A signed double-precision floating-point value.
+- **String** A UTF‐8 character sequence.
+- **Boolean** true or false.
+- **ID** The ID scalar type represents a unique identifier, often used to refetch an object or as the key for a cache. The ID type is serialized in the same way as a String; however, defining it as an ID signifies that it is not intended to be human‐readable.
+:::
+
+:::tip The GraphQL type system identifies the shape of a field
+- **String** The field is a String. It may also be null.
+- **String!** Its a String. null is not allowed.
+- **[String]** Its an array of Strings. An element may be null and, instead of an array, the field itself may be null.
+- **[String!]** Like [String] but the elements may not be null. null is still allowed instead of an array.
+- **{String]!** Like [String] but an array must exist.
+- **[String!]!** Like [String] but an array must exist and no element may be null.
+:::
     
-Note we do not say how the field is calculated. cli-plus will generate a resolver function like
+Note we do not say how the field is calculated. cli-plus will generate resolver functions
+in src/services/service.resolvers.?s and /batchloader.resolvers.?s like
 ```js
 User: {
   // fullName: String!
@@ -1660,6 +1704,22 @@ User: {
     // !end
 }    
 ``` 
+
+We would customize the SQL resolvers in src/services/graphql/sql.metadata.?s
+```js
+User: {
+  sqlTable: 'Users',
+  uniqueKey: 'uuid',
+  fields: {
+    // fullName: String!
+    fullName: {
+      // !code: fields-User-fullName-non
+      sqlExpr: (tableName, args) => `${tableName}.firstName || ' ' || ${tableName}.lastName`
+      // !end
+    },
+  },
+}  
+```
 
 After defining the calculated field, our GraphQL type is
 ```
@@ -1702,7 +1762,7 @@ add: {
 },
 ```
 
-- **role** The property to contain the roles record.
+- **role** The property added to users containing the roles record.
 - **type** Identifies the type of object the resolver function will return.
 Here it returns a roles object or null.
 
@@ -1725,14 +1785,14 @@ role(query: JSON, params: JSON, key: JSON): Role
     - **key** Equivalent to Feathers id, i.e. users.get(id).
     - **query** Equivalent to Feathers query, i.e. users.find({ query: {...} }).
     - **params** Equivalent to Feathers params, i.e. users.find(params).
-    The **query** and **params** arguments are merged together as expected for Feathers.
+    The **query** and **params** arguments are merged together as expected by Feathers.
     
 - **relation** The corresponding fields in each model which define the relationship.
     - **ourTable** The field name in the model whose metadata we are defining.
     - **otherTable** The field name in the other service.
     
 :::tip Resolver functions
-If ourTable and otherTable are both scalars, the resolver function will similar to
+If ourTable and otherTable are both scalars, the resolver function would be similar to
 ```js
 roles.find({ query: { _id: parent.roleId }, paginate: false })
 ```
@@ -1747,8 +1807,7 @@ If otherTable is an array, the resolver function will be similar to
 if (!(content.cache.User && content.cache.User.teams)) {
  content.cache.User = content.cache.User || {};
  content.cache.User.teams =
-   teams.find({ query: {...}, paginate: false })
-     .then(extractAllItems);
+   teams.find({ query: {...}, paginate: false }).then(extractAllItems);
 }
 
 return Promise.resolve(content.cache.User.teams)
@@ -1905,7 +1964,7 @@ feathers-plus generate graphql
 
 ![Generate graphql](../assets/get-started/generate-graphql.png)
 
-- **How should Queries be completed?** Different designs of GraphQL resolver functions can be generated.
+- **How should Queries be completed?** Different versions of GraphQL resolver functions may be generated.
     - **Using standalone Feathers service calls** is the default and the simplest approach.
     It uses Feathers service calls without embellishment.
     - **Using BatchLoaders** uses caching to eliminate multiple reads of the same information.
@@ -1919,7 +1978,7 @@ feathers-plus generate graphql
 The raw SQL statement may be very large for a complex query,
 and that may result in performance problems for such queries.
 
-You should use this option usually when you have good SQL experience.
+You should normally use this option when you have good SQL experience.
 You will also have to become familiar with [join-monster](https://join-monster.readthedocs.io/en/latest/)
 which is used by the generated code.
 :::
@@ -1953,13 +2012,13 @@ and when TypeScript is generated.
 
 - **graphql.schemas.?s** The GraphQL type definitions.
 - **graphql.service.?s** Configures the GraphQL service for the strategy chosen in the
-**How should Queries be completed?** question.
+*How should Queries be completed?* question.
 - **graphql.hooks.?s** Feathers hooks for the GraphQL service.
-- **graphql.interfaces.ts** - ?????????????????????????????????????????????????????????????????????????????????????????????????????
-- **service.resolvers.?s** Resolver functions for the **Using standalone Feathers service calls** strategy.
-- **batchloader.resolvers.?s** Resolver functions for the **Using BatchLoaders** strategy.
+- **graphql.interfaces.ts** - ?????????????????????????????????????????????
+- **service.resolvers.?s** Resolver functions for the *Using standalone Feathers service calls* strategy.
+- **batchloader.resolvers.?s** Resolver functions for the *Using BatchLoaders* strategy.
 
-Several modules are used for the **Using dynamic SQL statements** strategy:
+Several modules are used for the *Using dynamic SQL statements* strategy:
 
 - **sql.resolvers.?s** Resolver functions for the strategy.
 - **sql.metadata.?s** Meta data used by [join-monster](https://join-monster.readthedocs.io/en/latest/)
@@ -1970,7 +2029,7 @@ to dynamically construct the raw SQL statement.
 
 :::tip All those modules
 Only one of service.resolvers.?s, batchloader.resolvers.?s or sql.**.?s is/are being used at any time.
-The code generated in graphql.service.?s calls the right modules for the **How should Queries be completed?**
+The code generated in graphql.service.?s calls the right modules for the *How should Queries be completed?*
 selected.
 
 The modules are all generated so you may include all the custom code you need for all of them.
