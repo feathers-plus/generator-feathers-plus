@@ -1,8 +1,40 @@
 # Guide
 
+[[toc]]
+
+## Installation
+
+`npm i -g @feathers-x/cli`
+
+::: danger STOP
+`generator-feathers-plus` is not automatically installed as a dependency
+during the development period.
+
+Do the following so that any change you make in @feathers-x/generator-feathers-plus
+will be immediately reflected in @feathers-x/cli.
+
+- Clone `@feathers-x/generator-feathers-plus`.
+- [Symlink](https://medium.com/trisfera/the-magic-behind-npm-link-d94dcb3a81af)
+it into @feathers-x/cli.
+  - In @feathers-x/generator-feathers-plus, run `npm symlink`.
+  - In @feathers-x/cli, run `npm symlink @feathers-x/generator-feathers-plus`.
+  The location containing the global @feathers-x/cli will vary based on your OS.
+  You can run `npm list -g` to see where global libraries are installed.
+:::
+
+## Introduction
+
+The cli-plus is similar to @feathersjs/cli in that:
+- It uses the same commends, e.g. `generate service`.
+- It prompts with the same questions, e.g. "Which path should the service be registered on?"
+- It generates the same modules with pretty much identical code.
+
+However the similarities fundamentally end there.
+
+
 ## Regenerating apps
 
-@feathers-plus/cli, a.k.a. "cli-plus", persists a definition of the app in `project-name/feathers-gen-specs.json`.
+Cli-plus persists a definition of the app in `project-name/feathers-gen-specs.json`.
 This contains primarily the responses provided to the prompts used to create the app.
 
 An example is:
@@ -126,8 +158,7 @@ An example is:
 }
 ```
 
-With this, and any custom code you entered in your app,
-Cli-plus can regenerate part of, or all of the app at any time.
+Cli-plus can therefore regenerate part of, or all of the app at any time.
 Let's say you originally run `generate app` selecting only `socket.io` as a transport.
 Later on you find a need for `REST`.
 You can just rerun `generate app` and select both transports, and the code will be updated.
@@ -151,14 +182,40 @@ describe the generated modules. The generator can re-generate the project with t
 
 ## Additional generators
 
-Cli-plus comes with generators not in @feathersjs/cli.
-See the Get Started docs for details.
+@feathers-plus/cli comes with generators not in @feathersjs/cli.
 
 ### feathers-plus generate options
 
-JavaScript or TypeScript are generated based on one of the prompts.
-Another prompt determines if statements are terminated by semicolons or not.
-You can view on the console the difference between a new module and its previous version with another.
+```text
+The generator will not change the following modules in my-app
+  public/favicon.ico, index.html
+  src/
+    hooks/logger.js
+    middleware/ { all files other than index.js)
+    refs/common.json
+    services/serviceName/serviceName.class.js
+    channels.js
+  test
+    services/*.test.js
+    app.test.js
+  tsconfig.json, tsconfig.test.json, tslint.json
+  .editorconfig, .gitignore, LICENSE, README.md
+
+You have additionally prevented the following modules from being changed.
+You can modify this list by manually changing it in
+my-app/feathers-gen-specs.json##options.freeze.
+  - No files are frozen.
+
+This project was generated using version 1.0.0 of the generator.
+
+? Generate TypeScript code? No
+? Use semicolons? Yes
+? View module changes and control replacement (not recommended)? No
+```
+
+JavaScript or TypeScript are generated based on the first prompt.
+The second prompt determines if statements are terminated by semicolons or not.
+You can view the difference between a new module and its previous version with the third prompt.
 This is a good way to understand what changes are being made.
 
 The generator creates a few modules with default contents,
@@ -166,9 +223,14 @@ after which it will not change them.
 This leaves you free to modify them as you wish.
 
 You can optionally `freeze` additional modules by adding their paths to
-`options.freeze` in `my-app/feathers-gen-specs.json`, e.g.
-`src/services/comments/comments/validate.js`.
-The generator will not change nor remove these modules.
+`options.freeze` in `my-app/feathers-gen-specs.json`.
+For example `src/services/comments/comments/validate.js`.
+The generator will not change nor remove these.
+
+:::tip
+The generator defaults to JavaScript.
+You should run `generate options` before `generate app` if you want to generate a TypeScript project.
+:::
 
 #### Converting between JavaScript and TypeScript
 
@@ -190,10 +252,6 @@ as their duplicate custom code would be combined by the generator.
 
 You have to manually recode any modules you `froze` and remove the one in the original language.
 
-:::warning
-**Back up your project** before converting.
-:::
-
 ### feathers-plus generate all
 
 This regenerates the entire project.
@@ -205,7 +263,358 @@ This lists all the custom code in the project.
 This list, when combined with `feathers-gen-specs.json`, completely defines what the
 generated modules do.
 
+```text
+The custom code found in generated modules in dir my-app:
+
+> Module src/index.**
+> Location imports
+const initDb = require('../test-helpers/init-db');
+const testGraphql = require('./test-graphql');
+> Location listening_log
+  logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
+> Location end
+setTimeout(() => { //
+  initDb(app)
+    .then(() => testGraphql(app))
+    .catch(err => {
+      console.log(err.message);
+      console.log(err.stack);
+    });
+}, 1000);
+
+> Module src/services/comments/comments.schema.**
+> Location schema_definitions
+  definitions: {
+    id: {
+      description: 'unique identifier',
+      type: 'ID',
+      minLength: 1,
+      readOnly: true
+    }
+  },
+> Location schema_required
+    'uuid', 'authorUuid'
+> Location schema_properties
+    id: { $ref: '#/definitions/id' },
+    _id: { type: 'ID', a: 1 },
+    uuid: { type: 'integer' },
+    authorUuid: { type: 'integer' },
+    postUuid: { type: 'integer' },
+    body: { $ref: 'body.json' },
+    archived: { type: 'integer' }
+```
+
+
+## Retaining custom code
+
+`@feathersjs/cli`'s job ends when it generates the app scaffolding.
+It doesn't know what you do afterwards with it.
+
+`@feathers-plus/cli` (also known as `cli-plus`)is a `round-trip` generator.
+Round-trip generators can take previously generated code, identify custom changes made to it,
+and regenerate the code (maybe using different responses to the prompts)
+along with those custom changes.
+
+Cli-plus completes the round trip: `generate -> customize -> regenerate -> customize => ...`.
+
+The developer and cli-plus are in a more collaborative relationship.
+They can work co-operatively on the scaffolding code.
+
+### Retain developer modifications
+
+You will usually add your own code to the generated modules.
+Cli-plus can identify such additional code, as long as certain standards are followed,
+and it will retain that added code when regenerating modules.
+
+Some of the code generated by cli-plus is identified as default code which you may want to customize.
+Any customized code replacing the default code is also retained when modules are regenerated.
+
+Let's look at a trivial example of these features.
+An 'identical' module `src/index.js` is created by both @feathersjs/cli and cli-plus when `generate app` is run.
+The cli-plus module has some extra decorative comments:
+```js
+server.on('listening', () => {
+  // !<DEFAULT> code: listening_log
+  logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
+  // !end
+});
+
+// !code: end // !end
+```
+
+Starting the server produces the expected log:
+```text
+Feathers application started on http://localhost:3030
+```
+
+The lines between `// !<DEFAULT> code: listening_log` and `// !end` contain default code named `listening_log`.
+The `// !code: end // !end` line identifies a location named `end` where additional lines may be added.
+
+Let's change the code to:
+```js
+server.on('listening', () => {
+  // !code: listening_log <-- Note that <DEFAULT> was removed.
+  logger.info('Hello world on http://%s:%d', app.get('host'), port);
+  // !end
+});
+
+// !code: end
+logger.info('Initialization complete. Waiting for server to start.'); 
+// !end
+```
+
+Starting the server now logs:
+```text
+Initialization complete. Waiting for server to start.
+Hello world on http://localhost:3030
+```
+
+Let's say you originally ran `generate app` selecting only `socket.io` as a transport.
+You then changed the code in `src/index.js` as described above.
+Later on you realize you also need `REST` as a transport.
+You can just rerun `generate app` with cli-plus and select both transports.
+The regenerated modules will contain the code changes you made above.
+
+### Where can code be added?
+
+The short answer is "just about anywhere".
+Insertion points are available anywhere it makes any sense to add code.
+
+Here is a typical `src/services/index.js`:
+```js
+// Configure the Feathers services. (Can be re-generated.)
+let comment = require('./comment/comment.service');
+let like = require('./like/like.service');
+let post = require('./post/post.service');
+let relationship = require('./relationship/relationship.service');
+let user = require('./user/user.service');
+
+let graphql = require('./graphql/graphql.service');
+// !code: imports // !end
+// !code: init // !end
+
+let moduleExports = function (app) { // eslint-disable-line no-unused-vars
+  app.configure(comment);
+  app.configure(like);
+  app.configure(post);
+  app.configure(relationship);
+  app.configure(user);
+
+  app.configure(graphql);
+  // !code: func_return // !end
+};
+
+// !code: exports // !end
+module.exports = moduleExports;
+
+// !code: funcs // !end
+// !code: end // !end
+```
+
+All the modules follow the same standards, e.g. starting with `imports` and `init`,
+and ending with `funcs` and `end`.
+Functions tend to end with names like `func_return` so you can add code to them.
+You can replace or mutate the required modules at `init` as well as adding any initialization code.
+You can modify or replace the exported value at `exports`.
+
+Its trivial to add insertion points into the generator, so create an issue if you need additional ones.
+We'll add that insertion point, and you just regenerate the app to be able to use it.
+
+
+### More realistic code customization
+
+The previous example gets the idea across but its too trivial to appreciate the impact of the feature.
+
+Cli-plus generates a module for every service named `src/services/serviceName/serviceName.validate.js`.
+It contains JSON-schema which may be used to validate record contents before create, update and patch calls.
+Part of the code may be similar to:
+```js
+const base = merge({},
+  // !<DEFAULT> code: base
+  {
+    $schema: "http://json-schema.org/draft-05/schema",
+    title: "User",
+    description: "User database.",
+    required: [
+      "uuid",
+      "email",
+      "firstName",
+      "lastName"
+    ],
+    properties: {
+      _id: {
+        type: ID
+      },
+      uuid: {
+        type: ID
+      },
+      email: {
+        type: "string"
+      },
+      firstName: {
+        type: "string", maxLength: 30,
+      },
+      lastName: {
+        type: "string", maxLength: 30,
+      }
+    }
+  },
+  // !end
+  // !code: base_more // !end
+);
+```
+
+This 'base' JSON-schema is derived from the `service model`
+-- A new concept cli-plus introduces further explained below --
+and it is the basis for the validation schemas used for the different types of calls.
+
+The developer may replace the default code named `base` to suit his use case.
+
+It would probably be better however to mutate the default schema by adding, mutation or removing
+properties by adding custom code to `base_more`, e.g.:
+```js
+// !code: base_more
+{
+  properties: {
+    firstName: { minLength: 45 },
+    initial: { type: 'string', maxLength: 1 }
+  }
+}
+// !end
+```
+This would be better because, now, when you change the `service model`,
+cli-plus will make appropriate changes to the base schema in its default code.
+This is better than remembering to modify the base schema manually every time you change the service model.
+
+### GraphQL examples
+
+One of the main features of cli-plus is its ability to generate a GraphQL endpoint as well as the necessary resolvers.
+A large number of carefully coded resolvers need to defined in a reasonably sized project,
+so automatically generating these resolvers is a quality-of-life feature.
+
+However resolvers often have to be customized in unexpected ways.
+You may need to change the sort order.
+You may need to set props in `context.params` for certain hooks.
+There is no practical end to the customizations required.
+
+Here are some code snippets in src/services/graphql/service.resolvers.js
+which cli-plus may generate for a GraphQL endpoint:
+```js
+    // Feathers service resolvers
+    User: {
+
+      // comments: [Comment!]
+      comments:
+        // !<DEFAULT> code: resolver-User-comments
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { authorUuid: parent.uuid, $sort: undefined }, paginate: false
+          });
+          return comments.find(feathersParams).then(extractAllItems);
+        },
+        // !end
+
+      // fullName: String!
+      fullName:
+        // !<DEFAULT> code: resolver-User-fullName-non
+        (parent, args, content, ast) => { throw Error('GraphQL fieldName User.fullname is not calculated.'); },
+        // !end
+
+      // posts(query: JSON, params: JSON, key: JSON): [Post!]
+      posts:
+        // !<DEFAULT> code: resolver-User-posts
+        (parent, args, content, ast) => {
+          const feathersParams = convertArgs(args, content, ast, {
+            query: { authorUuid: parent.uuid, $sort: undefined }, paginate: false
+          });
+          return posts.find(feathersParams).then(extractAllItems);
+        },
+        // !end
+    },
+```
+You can customize them as you wish, by defining a `$sort` order for example.
+
+`fullname` is a calculated field.
+Cli-plus, rather than inventing some specialized way for you to indicate what the calculation is,
+just creates some default code for you to replace with the calculation.
+For example
+```js
+      // fullName: String!
+      fullName:
+        // !code: resolver-User-fullName-non
+        (parent, args, content, ast) => `${parent.firstName} ${parent.lastName}`,
+        // !end
+```
+
+### Avoiding customization
+
+@feathersjs/cli generates a module and doesn't care what you do thereafter.
+You can have cli-plus generate modules and then prevent it from making changes therafter to some of them,
+by using the `options.freeze` prop in `feathers-gen-specs.json`.
+
+### Some details
+
+The leaders for custom code may be : `// !code:`, `// !<> code:`, `//!code:`, or `// ! code:`.
+
+The trailers may be: `// !end`, or `//!end`
+
+
 ## Feathers Service Models
+
+Most database systems use a [schema](https://en.wikipedia.org/wiki/Database_schema)
+to describe how the data in a database table or collection is organized,
+as well as how the different schemas relate to one another.
+Unfortunately, schemas are normally not shareable between different databases.
+The Mongoose database adapter, for example, will not understand a schema
+written for the Sequelize database adapter.
+
+However if you use Feathers Service Models,
+@feathers-plus/cli can automatically convert your Feathers model into the schema expected by
+a particular database adapter.
+
+With Feathers service adapters and Feathers Models you can connect to the most popular databases and
+query them with a unified interface no matter which one you use.
+This makes it easy to swap databases and use entirely different DBs in the same app
+without changing your application code.
+
+### JSON-schema
+
+Feathers Models are based on [JSON-schema](http://json-schema.org/).
+JSON-schema is the most popular way to describe the structure of
+[JSON](https://en.wikipedia.org/wiki/JSON)
+data and, since JSON data is essentially just plain old JavaScript objects,
+this makes JSON-schema a great fit for Feathers Models.
+
+JSON-schema:
+
+- has the widest adoption among all standards for JSON validation.
+- is very mature (current version is 6).
+- covers a big part of validation scenarios.
+- uses easy-to-parse JSON documents for schemas.
+- is platform independent.
+- is easily extensible.
+- has 30+ validators for different languages, including 10+ for JavaScript,
+so no need to code validators yourself.
+
+The [`validateSchema`](https://feathers-plus.github.io/v1/feathers-hooks-common/index.html#validateSchema)
+common hook already uses JSON-data for verification.
+
+JSON-schema is easy to write, and there are some great
+[tutorials](https://code.tutsplus.com/tutorials/validating-data-with-json-schema-part-1--cms-25343).
+
+#### More generated code
+
+Cli-plus will write useful modules when you provide a model for a Feathers service.
+These include:
+- Schemas to valid your data for create, update and patch service calls. (available)
+- A GraphQL endpoint. (available).
+- Schemas for fastJoin to populate your data on the server. (TBA)
+- Generate test data. (TBA)
+- Help generating the UI for
+  - [React forms](https://github.com/mozilla-services/react-jsonschema-form).
+  - [React with redux-form](https://limenius.github.io/liform-react/#/).
+  - Vue.
+
 
 ### Writing JSON-schema
 

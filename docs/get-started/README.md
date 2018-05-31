@@ -289,7 +289,7 @@ It exists only if the yarn option is selected.
 `@feathersjs/cli`'s job ends when it generates the app scaffolding.
 It doesn't know what you do afterwards with it.
 
-`@feathers-plus/cli` (also known as `cli-plus`)is a `round-trip` generator.
+Cli-plus is a `round-trip` generator.
 Round-trip generators can take previously generated code, identify custom changes made to it,
 and regenerate the code (maybe using different responses to the prompts)
 along with those custom changes.
@@ -667,6 +667,11 @@ JSON-schema:
 The [`validateSchema`](https://feathers-plus.github.io/v1/feathers-hooks-common/index.html#validateSchema)
 common hook already uses JSON-data for verification.
 
+:::tip Ecosystem
+JSON-schema has a large ecosystem.
+The [JSON-schema manual](../json-schema/) serves as an introduction to it.
+:::
+
 #### Adding the Feathers Model
 
 The users service was created with an empty Feathers model, i.e. it has no fields.
@@ -717,6 +722,14 @@ let schema = {
 that is, the field contains the key to another record.
 
 - **type: {}** The default is 'string'.
+
+:::tip Centralizing field definitions
+Rather than defining the properties of the same type of field, e.g. *description*, in every model its defined in,
+you can define the field type once and refer to it from models using the **$ref** property.
+
+This is an important concept in JSON-schema and its
+[explained elsewhere.](../json-schema/#ref-modularizing-definitions)
+:::
 
 
 #### Regenerating the Service
@@ -1135,7 +1148,6 @@ so you may make queries using either REST or GraphQL, even simultaneously.
 We've taken the app we've been working on and
 [produced a GraphQL example ](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/07-graphql-example/feathers-app).
 You can run it yourself with `npm i` and `npm start`.
-git status
 
 - We converted the services to NeDB so the example is easy to run.
 - We added some additional information to the service schemas.
@@ -1144,10 +1156,11 @@ git status
 
 #### Types
 
-When you run
 ::: warning STOP
 Don't run this command right now. Its shown here for illustrative purposes.
 :::
+
+When you run
 
 ```
 feathers-plus generate graphql
@@ -1196,15 +1209,16 @@ The **getRole**, **findRole**, etc. are the GraphQL queries you can make.
 The other **type** expand what the queries can return.
 
 Notice the API for the types is the Feathers service API by default.
-**key** is the Feathers **id**, **query** is Feathers **params.query**,
-and **params** is anything else in Feathers **params**.
+- **key** is the Feathers **id**,
+- **query** is Feathers **params.query**,
+- **params** is anything else in Feathers **params**.
 
 Using the same API reduces what you have to learn,
 and makes the interface between Feathers and GraphQL seamless.
 
 ::: tip JSON
-You may be perplexed by **JSON** as it's not one of GraphQL's scalar types.
-It is a custom type added by cli-plus.
+You may be perplexed by the **JSON** type used above as it's not one of GraphQL's scalar types.
+It is a custom type added by @feathers-plus/graphql.
 :::
 
 In GraphQL notation
@@ -1236,9 +1250,22 @@ const result = await graphql.find({ query: { query: myQuery } })
 ::: tip GraphiQL
 Why the two `query` in `{ query: { query: myQuery } }`?
 The first is needed by the Feathers service API of course.
-The second one is required to use [GraphiQL](https://github.com/graphql/graphiql),
+The second one is necessary to allow you want to optionally use [GraphiQL](https://github.com/graphql/graphiql),
 the popular graphical interactive in-browser GraphQL IDE.
 You can use GraphiQL to test your queries from the browser.
+:::
+
+:::tip Darn that `$`
+`$` is a reserved char in GraphQL, so the following call will not behave as expected
+```js
+graphql.find({ query: { query: 'findUser(query: { $sort: { lastName: 1 } })' } })
+```
+@feathers-plus/graphql's workaround is to code double underscores `__` instead of a `$`.
+Instead of the above, we would use
+```js
+graphql.find({ query: { query: 'findUser(query: { __sort: { lastName: 1 } })' } })
+```
+In short, replace every `$` you would use in Feathers with `__` in the GraphQL request.
 :::
 
 The request returns data of the form:
