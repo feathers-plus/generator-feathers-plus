@@ -1,7 +1,7 @@
 {
   "name": "@feathers-x/generator-feathers-plus",
   "description": "A Yeoman generator to (re)generate a FeathersJS application.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/feathers-x/generator-feathers-plus",
   "main": "lib/",
   "keywords": [
