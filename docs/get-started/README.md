@@ -1995,7 +1995,7 @@ feathers-plus generate graphql
 
 - **How should Queries be completed?** Different versions of GraphQL resolver functions may be generated.
     - **Using standalone Feathers service calls** is the default and the simplest approach.
-    It uses Feathers service calls without embellishment.
+    It uses plain Feathers service calls.
     - **Using BatchLoaders** uses caching to eliminate multiple reads of the same information.
     It also batches individual services calls together to reduce the number of database requests made.
     BatchLoaders typically make an order of magnitude fewer requests, i.e. 3 instead of 30,

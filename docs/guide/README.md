@@ -227,7 +227,7 @@ const productJsonSchema = {
 }
 ```
 
-Feathers Models can default the `type` properties, so you can write more concisely:
+Feathers Models defaults the `type` property to `string`, so you can write more concisely:
 ```javascript
 const productJsonSchema = {
     properties: {
@@ -251,7 +251,7 @@ on JSON-schema written by the author of
 [`ajv`](https://github.com/epoberezkin/ajv).
 The Feathers common hook
 [`validateSchema`](../../api/hooks-common#validateSchema.md)
-uses `ajv` to validate data.
+uses JSON-schemna and `ajv` to validate data.
 :::
 
 :::tip
@@ -321,183 +321,7 @@ you need change it in only one place, and then regenerate the project.
 You can read about additional features of $ref in the
 [JSON-schema tutorial](https://code.tutsplus.com/tutorials/validating-data-with-json-schema-part-2--cms-25640).
 
-
-### Summary
-
-The [online JSON-schema editor](https://jsonschema.net)
-provides an easy introduction to JSON-schema,
-as well as a useful generator of simple JSON-schema.
-
-You will have to read the
-[tutorial](https://code.tutsplus.com/tutorials/validating-data-with-json-schema-part-1--cms-25343)
-sooner or later to understand how to add validation criteria.
-
-There are also ways to generate your JSON-schema from your data,
-and from existing database schemas.
-
-Finally you can decide to check your JSON-schema against your existing data.
-
-
 ## GraphQL
-
-You are asked `Should this be served by GraphQL?` when you (re)generate a service.
-This identifies which services you want included in the GraphQL endpoint.
-
-### GraphQL extension
-
-Additional information is required for each included service,
-and this is provided in the schema with `extensions.graphql`.
-```js
-// cli-generator-example/src/services/comment/comment.schema.js
-let schema = {
-  // ...
-  properties: {
-    id: { type: 'ID' },
-    _id: { type: 'ID' },
-    uuid: { type: 'ID' },
-    authorUuid: { type: 'ID' },
-    postUuid: { type: 'ID' },
-    body: {},
-    archived: { type: 'integer' }
-  },
-};
-
-let extensions = {
-  graphql: {
-    name: 'Comment',
-    service: { sort: { uuid: 1 } },
-    sql: {
-      sqlTable: 'Comments',
-      uniqueKey: 'uuid',
-      sqlColumn: {
-        authorUuid: 'author_uuid',
-        postUuid: 'post_uuid',
-      },
-    },
-    discard: [],
-    add: {
-      author: { type: 'User!', args: false, relation: { ourTable: 'authorUuid', otherTable: 'uuid' } },
-      likes: { type: '[Like!]', args: false, relation: { ourTable: 'uuid', otherTable: 'commentUuid' }  },
-    },
-  },
-};
-
-// Allows GraphQL queries like
-{
-  getComment(key: 10) {
-    uuid
-    authorUuid
-    postUuid
-    body
-    archived
-    author {
-      fullName
-    }
-    likes {
-      author {
-        fullName
-      }
-      comment {
-        body
-      }
-    }
-  }
-}
-
-// with results like
-{
-  "getComment": {
-    "uuid": "10",
-    "authorUuid": "0",
-    "postUuid": "90",
-    "body": "Comment 1",
-    "archived": 0,
-    "author": {
-      "fullName": "John Szwaronek",
-    },
-    "likes": [
-      {
-        "author": {
-          "fullName": "Jessica Szwaronek",
-        },
-        "comment": {
-          "body": "Comment 1",
-        }
-      },
-      // ...
-    ]
-  }
-}
-```
-
-- `name` - The name of the GraphQL type for this service.
-It defaults to the singular name you provided for the service, with the first letter capitalized.
-- `service` - This is required if you want to generate GraphQL resolvers using Feathers service,
-alone or with BatchLoaders.
-  - `sort` - The sort criteria used when this service is the top level of a GraphQL Query.
-- `sql` - This is required if you want to generate GraphQL resolvers which use raw SQL statements.
-  - `sqlTable`: The name of the SQL table in the database.
-  - `uniqueKey`: The name of the column containing the unique key for records in the table.
-  - `sqlColumn`: A hash containing the map of field names in comment.schema.js to column names in the SQL table.
-- `discard`: Field names to exclude from GraphQL queries.
-- `add`: Relations between this service and other services.
-  - property name, e.g. `author`: The name of the GraphQL type for this resolver. 
-  - `type`: The GraphQL type the resolver will return, along with its cardinality.
-    - `User`    - a User type or `null`.
-    - `User!`   - a User type. `null` is not allowed.
-    - `[User]`  - an array of User types, some of which may be null.
-    - `[User!]` - an array of User types.  
-  - `type`: It may also be GraphQL scalar type such as `String`.
-  In this case its assumed to be a calculated field.
-  You will customize the calculation by modifying its resolver in, say,
-  graphql/service.resolvers.js.  
-  - `args`: Resolvers may optionally have parameters, for example
-  `getComment` above has `key`, while `author` and `likes` have none.
-  A value of `false` eliminates parameters, while `true` or `undefined` allows them.
-  The parameters are the same as the Feathers service API:
-    - `key`: The same as the Feathers service `id` as used in `name.get(id)`.
-    - `query`: The same as the Feathers service query, e.g. `name.find({ query: query })`.
-    - `params`: The same as the Feathers service params, e.g. `name.find(params)`.
-    The `query` param will be merged into any `params` param.  
-```js
-{
-  getUser(key: 1) {
-    uuid
-    firstName
-    lastName
-    fullName
-    email
-    posts(query: {draft: 0}) {
-      uuid
-      authorUuid
-      body
-      draft
-    }
-```       
-  - `relation`: How the tables relate to one another.
-    - `ourTable`: The field in our schema which matches to the `type` schema.
-    - `otherTable`: The field in the `type` schema which matches the field in our schema.
-    
-### Generating the GraphQL endpoint
-
-You generate the GraphQL service by running `feathers-plus generate graphql`.
-This generates the `graphql` Feathers service.
-The prompts allow you to choose the name of the endpoint.
-
-These modules are always created:
-- `graphgl/service.resolvers.js`: Resolvers using Feathers services alone.
-- `graphgl/batchloader.resolvers.js`: Resolvers using Feathers services and BatchLoaders.
-- Several modules are created for resolvers using raw SQL statements.
-  - `graphql/sql.metadata.js`: Additional information required to form the raw SQL statements.
-  [join-monster](https://join-monster.readthedocs.io/en/latest/) is used for this,
-  and you definitely need to understand its documentation.
-  - `graphql/sql.resolvers.js`: Resolvers which call join-monster routines.
-  - `graphql/sql.execute.js`: You will have to modify this module.
-  It defaults to using a Sequelize instance.
-
-You are asked which type of resolvers you want to use when generating the endpoint.
-You can choose any for which your schemas have the required information.
-You can change the the resolvers used by regenerating the endpoint.
 
 ### Generated queries
 
@@ -505,12 +329,12 @@ GraphQL, in our opinion, is great for queries.
 However we feel Feathers is cleaner and easier for mutations and subscriptions.
 
 Two GraphQL CRUD queries are generated for each service.
-They would be `getComment` and `findComment` for the `comment`.
+They would be `getComment` and `findComment` for the `comment` service.
 - `getComment` requires the `key` parameter. The `params` one is optional.
 - `findComment` would usually include a `query` parameter. The `params` one is optional.
 
-You call the queries using `app.service('graphql').find({ query: { query: graphalQueryStr } })`,
-where `graphalQueryStr` is a GraphQL query **string** such as
+You call the queries using `app.service('graphql').find({ query: { query: graphqlQueryStr } })`,
+where `graphqlQueryStr` is a GraphQL query such as
 ```js
 '{
    getUser(key: 1) {
@@ -533,10 +357,11 @@ where `graphalQueryStr` is a GraphQL query **string** such as
 The `{ query: { query: graphalQueryStr } }` syntax is compatible with tools such as GraphiQL.
 :::
 
-`$` is a reserved character in GraphQL.
-So Feathers reserved words like $in, $sort, $skip, etc. cannot be used.
-You can instead replace the `$` with a double underscore `__` and use
+`$` is a reserved character in GraphQL queries, and GraphQL is very picky about it.
+So Feathers reserved words like $in, $sort, $skip, etc. cannot be used as is.
+You can instead replace their `$` with a double underscore `__` and use
 __in, __sort, __skip, etc. instead.
+The generated resolver functions will convert **any** `__` to `$` before making the Feathers service call.
 
 ### Calls to Feathers services
 
@@ -546,9 +371,10 @@ The following does not apply to BatchLoaders.
 
 The `key` argument is used for Feathers' `id`.
 
-The `query` and `params` arguments are merged for the Feathers `params` argument.
-`graphql: <Array>` is added to `params` to indicate the service call is part of a GraphQL query.
-Its contents are described in the following section.
+The `query` and `params` arguments are merged to form the Feathers `params` argument.
+
+`graphql: [...]` is added to Feathers' `params` to indicate the service call is part of a GraphQL query.
+The array contains the **resolver path** (explained below) which caused the resolver function to be called.
 
 The returned result is Feathers compatible.
 It will contain pagination information if the top level service is configured for pagination.
@@ -558,7 +384,14 @@ using __skip and __limit.
 
 ### Resolver paths
 
-Let's use this as an example:
+:::tip Practical Advice
+You will only be using resolver paths if you have to prevent certain users from querying specific information in their queries.
+
+It may be best to return to this section when you have some experience with generating GraphQL queries,
+and need more detailed control.
+:::
+
+Let's use this as an example GraphQL query.
 ```js
 '{
    findUser(query: {uuid: {__lt: 100000}}) {
@@ -573,9 +406,10 @@ Let's use this as an example:
 }'
 ```
 
-We can analyze the AST of the Query string to produce a "resolver path" to identify when and why a resolver
-is being called.
-In the above example, the findUser resolver would produce a resolver path of
+While GraphQL is processing the query,
+our resolver functions can produce a **resolver path** to identify when and why they are being called.
+
+In the above example, the findUser resolver function would produce a resolver path of
 ```json
 [ 'findUser', '[User]!' ]
 ```
@@ -583,9 +417,14 @@ In the above example, the findUser resolver would produce a resolver path of
 This 2-tuple means the resolver was called for the `findUser` GraphQL type,
 and its expected to return a `[User]!` result.
 
+:::tip Hooks
+This resolver path is added to the Feathers call and its available to your hooks as `context.grapql`.
+Your hooks can use it for authorization and for generally knowing what part of the GraphQL query is being handled.
+:::
+
 Let's say findUser returned with 4 records.
 We have to populate the posts for each, and each of the 4 populates would call the `posts` resolver.
-This would result in the paths
+This would result in the posts service being called 4 times with the paths
 ```json
 [ 'findUser', 0, 'User', 'posts', '[Post!]' ]
 [ 'findUser', 1, 'User', 'posts', '[Post!]' ]
@@ -599,31 +438,31 @@ followed by 2-tuple `'posts', '[Post!]'` which means that n-th record was popula
 resulting in a `[Post!]` result.
 
 Now each of those posts has to be populated by their comments.
-Let's say the first user had 2 posts, its resulting resolver paths would be
+Let's say the first user had 2 posts, the comments service would be called with the resolver paths
 ```json
 [ 'findUser', 0, 'User', 'posts', 0, '[Post!]', 'comments', '[Comment!]' ]
 [ 'findUser', 0, 'User', 'posts', 1, '[Post!]', 'comments', '[Comment!]' ]
 ```
 and the other user records would have their own resultant paths.
 
-In sum, these resolver paths would be produced
+In summary, these resolver paths would be provided
 ```json
-[ 'findUser', '[User]!' ]
-[ 'findUser', 0, 'User', 'posts', '[Post!]' ]
-[ 'findUser', 0, 'User', 'posts', 0, '[Post!]', 'comments', '[Comment!]' ]
-[ 'findUser', 0, 'User', 'posts', 1, '[Post!]', 'comments', '[Comment!]' ]
-[ 'findUser', 1, 'User', 'posts', '[Post!]' ]
-// ...
-[ 'findUser', 2, 'User', 'posts', '[Post!]' ]
-// ...
-[ 'findUser', 3, 'User', 'posts', '[Post!]' ]
-// ...
+[ 'findUser', '[User]!' ] // to user service
+[ 'findUser', 0, 'User', 'posts', '[Post!]' ] // to posts service
+[ 'findUser', 0, 'User', 'posts', 0, '[Post!]', 'comments', '[Comment!]' ] // comments
+[ 'findUser', 0, 'User', 'posts', 1, '[Post!]', 'comments', '[Comment!]' ] // comments
+[ 'findUser', 1, 'User', 'posts', '[Post!]' ] // to posts service
+// ... to comments service
+[ 'findUser', 2, 'User', 'posts', '[Post!]' ] // to posts service
+// ... to comments service
+[ 'findUser', 3, 'User', 'posts', '[Post!]' ] // to posts service
+// ... to comments service
 ```
 
 ### Provide resolver path to service hooks
 
-Feathers service hooks can reference `context.params.graphql = resolverPath }`
-so that the hook has more information about the GraphQL call.
+Feathers service hooks can reference `context.params.graphql`.
+Your hooks can use it for authorization and for generally knowing what part of the GraphQL query is being handled.
 
 ### Authentication
 
@@ -662,24 +501,34 @@ let maxBatchSize = defaultPaginate && typeof defaultPaginate.max === 'number' ?
 
 ## GraphQL example
 
-:::tip
-@feathers-plus/cli-generator-example: Example Feathers app using the @feathers-plus/cli generator and the @feathers-plus/graphql adapter to expose a GraphQL endpoint.
-:::
+**@feathers-plus/cli-generator-example** contains a Feathers app created with cli-plus containing a GraphQL endpoint.
+
+There are 10 versions of the app, each in its own folder
+folder name | language | database | resolver functions
+:-|:-|:-|:-|
+js-nedb-services | JavaScript | NeDB | plain Feathers calls
+js-nedb-batchloaders | JavaScript | NeDB | BatchLoader calls
+js-sequelize-services | JavaScript | Sequelize + SQLite | plain Feathers calls
+js-sequelize-batchloaders | JavaScript | Sequelize + SQLite | BatchLoader calls
+js-sequelize-sql | JavaScript | Sequelize + SQLite | raw SQL statements
+ts-nedb-services | TypeScript | NeDB | plain Feathers calls
+ts-nedb-batchloaders | TypeScript | NeDB | BatchLoader calls
+ts-sequelize-services | TypeScript | Sequelize + SQLite | plain Feathers calls
+ts-sequelize-batchloaders | TypeScript | Sequelize + SQLite | BatchLoader calls
+ts-sequelize-sql | TypeScript | Sequelize + SQLite | raw SQL statements
 
 ### Getting Started
 
-Getting up and running is as easy as 1, 2, 3.
-
-1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
+1. Fork @feathers-plus/cli-generator-example.
 2. Install your dependencies
 
     ```
-    cd path/to/cli-generator-example
+    cd path/to/cli-generator-example/the-folder-name
     npm install
     ```
 
-3. `cli-generator-example` starts a server listening to port 3030.
-Check that public/serverUrl.js will point to this server.
+3. The app starts a server listening on port 3030.
+Check that the-folder-name/public/serverUrl.js will point to this server.
 
 4. Start your app
 
@@ -687,12 +536,12 @@ Check that public/serverUrl.js will point to this server.
     npm start
     ```
 
-The app will create the database
-and then run a short async test to confirm it is functioning correctly.
+The app will initialize the database
+and then run a short async test to confirm the GraphQL endpoint is functioning correctly.
 
 ### Starting the client test harness
 
-Point your browser at `localhost:3030` and you will see this test harness:
+Point your browser at the server, e.g. `localhost:3030`, and you will see this test harness:
 
 ![test harness](../assets/test-harness.jpg)
 
@@ -716,12 +565,11 @@ You can instead use a double underscore (`__`) where ever you would use a `$` wi
 
 ### Using Graphiql
 
-To do. Basically Graphiql will just work.
+[Graphiql](https://github.com/graphql/graphiql) works with the generated GraphQL endpoint.
 
 ### Database
 
-This app can use either an NeDB or SQLite database, both of which reside in `./data`.
-
+These examples use either an NeDB or SQLite database, both of which reside in `./data`.
 Both databases have the same structure:
 
 ![database stucture](../assets/schema.jpg)
@@ -733,12 +581,3 @@ and contain the same data:
 `uuid` fields are used as foreign keys for table relations
 so as to avoid differences between `id` and `_id` in different databases.
 
-### What type of resolvers are being used?
-
-The repo on Github is (usually) configured to use Feathers service calls alone.
-You can reconfigure it to use either Feathers service calls with
-[BatchLoaders](https://feathers-plus.github.io/v1/batch-loader/guide.html)
-or with raw SQL statements by running @feathers-plus/cli's `generate graphql` command.
-
-Switching the resolvers being used like this is an interesting example of
-the advantages of round-trip regeneration.
