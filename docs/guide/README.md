@@ -572,12 +572,11 @@ You can instead use a double underscore (`__`) where ever you would use a `$` wi
 These examples use either an NeDB or SQLite database, both of which reside in `./data`.
 Both databases have the same structure:
 
-![database stucture](../assets/schema.jpg)
+<collapse-image title="Schema for Example" url="/assets/get-started/schema.jpg" />
 
 and contain the same data:
 
-![database data](../assets/tables.jpg)
+<collapse-image hidden title="Database Records for Example" url="/assets/guide/tables.jpg" />
 
 `uuid` fields are used as foreign keys for table relations
 so as to avoid differences between `id` and `_id` in different databases.
-

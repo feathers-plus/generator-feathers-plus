@@ -104,7 +104,7 @@ feathers-plus generate options
 
 #### Prompts
 
-![Generate options](../assets/get-started/generate-options.png)
+<collapse-image title="Prompts 'generate options'" url="/assets/get-started/generate-options.png" />
 
 - `Source scan took 0s 23ms`.
 The generator scans the app to identify any custom code.
@@ -143,7 +143,7 @@ Its useful when you are exploring the raw details of what the generator writes.
 
 The feathers-app folder now contains one module.
 
-![Generate options dir](../assets/get-started/generate-options-dir.png)
+<collapse-image title="Folders After 'generate options'" url="/assets/get-started/generate-options-dir.png" />
 
 - **feathers-gen-specs.json** contains the information used to generate the app.
 
@@ -185,7 +185,7 @@ feathers-plus generate app
 
 #### Prompts
 
-![Generate options](../assets/get-started/generate-app.png)
+<collapse-image title="Prompts 'generate app'" url="/assets/get-started/generate-app.png" />
 
 - `Project name`. Defaults to the folder name.
 
@@ -209,13 +209,8 @@ or [TS ones](https://github.com/feathers-x/generator-feathers-plus/tree/master/e
 reflecting your choices.
 The modules are properly wired together and structured as recommended by the Feathers team.
 
-Below are the previous and the new app contents when JavaScript is generated.
-
-![Generate options dir](../assets/get-started/generate-app-dir-compare.png)
-
-and when TypeScript is generated.
-
-![Generate options dir](../assets/get-started/ts-generate-app-dir-compare.png)
+<collapse-image hidden title="Folders After 'generate app' with JavaScript" url="/assets/get-started/generate-app-dir-compare.png" />
+<collapse-image hidden title="Folders After 'generate app' with TypeScript" url="/assets/get-started/ts-generate-app-dir-compare.png" />
 
 - **config/** contains the configuration files for the app.
 production.json values override default.json ones when in production mode,
@@ -556,7 +551,7 @@ feathers-plus generate authentication
 
 #### Prompts
 
-![Generate options](../assets/get-started/generate-authentication.png)
+<collapse-image title="Prompts 'generate authentication'" url="/assets/get-started/generate-authentication.png" />
 
 - Authentication questions:
 
@@ -587,13 +582,9 @@ The generator adds some modules to the
 [JS folder](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/03-authentication/feathers-app/)
 or [TS one](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/ts/03-authentication/feathers-app/).
 
-Below are the previous and the new app contents when JavaScript is generated.
+<collapse-image hidden title="Folders After 'generate authentication' with JavaScript" url="/assets/get-started/generate-authentication-dir-compare.png" />
+<collapse-image hidden title="Folders After 'generate authentication' with TypeScript" url="/assets/get-started/ts-generate-authentication-dir-compare.png" />
 
-![Generate options dir](../assets/get-started/generate-authentication-dir-compare.png)
-
-and when TypeScript is generated.
-
-![Generate options dir](../assets/get-started/ts-generate-authentication-dir-compare.png)
 
 - **models/**. Some database adapters require models for their tables.
 Those models are located here.
@@ -741,7 +732,8 @@ We can now regenerate the service. The generator will detect the Feathers model 
 feathers-plus generate service
 ```
 
-![Generate options](../assets/get-started/generate-authentication-model.png)
+<collapse-image title="Prompts 'generate authentication' with model" url="/assets/get-started/generate-authentication-model.png" />
+
 
 The responses used to create the users service are the defaults presented now.
 Just Enter through all the prompts.
@@ -933,7 +925,7 @@ If you need to create a new secret, run
 feathers-plus generate secret
 ```
 
-![Generate options](../assets/get-started/generate-secret.png)
+<collapse-image title="Prompts 'generate secret'" url="/assets/get-started/generate-secret.png" />
 
 and paste the new secret into package.json.
 
@@ -947,11 +939,11 @@ feathers-plus generate service
 
 First let's add a **roles** service.
 
-![Generate options](../assets/get-started/generate-service-roles.png)
+<collapse-image title="Prompts 'generate service' for Roles" url="/assets/get-started/generate-service-roles.png" />
 
 And then a **teams** service.
 
-![Generate options](../assets/get-started/generate-service-teams.png)
+<collapse-image title="Prompts 'generate service' for Teams" url="/assets/get-started/generate-service-teams.png" />
 
 #### Adding the Feathers Models
 
@@ -1034,11 +1026,11 @@ feathers-plus generate service
 
 For **roles**
 
-![Generate options](../assets/get-started/generate-service-roles-model.png)
+<collapse-image title="Prompts 'generate service' for Roles with Model" url="/assets/get-started/generate-service-roles-model.png" />
 
 and **teams**.
 
-![Generate options](../assets/get-started/generate-service-teams-model.png)
+<collapse-image title="Prompts 'generate service' for Roles with Model" url="/assets/get-started/generate-service-teams-model.png" />
 
 The Mongoose models now reflects the Feathers model:
 ```js
@@ -1106,13 +1098,8 @@ The generator adds some modules to the
 [JS folder](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/06-service/feathers-app/)
 or [TS one](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/ts/06-service/feathers-app/).
 
-Below are the previous and the new app contents when JavaScript is generated.
-
-![Generate options dir](../assets/get-started/generate-service-model-dir-compare.png)
-
-and when TypeScript is generated.
-
-![Generate options dir](../assets/get-started/ts-generate-service-model-dir-compare.png)
+<collapse-image hidden title="Folders After 'generate service' with JavaScript" url="/assets/get-started/generate-service-model-dir-compare.png" />
+<collapse-image hidden title="Folders After 'generate service' with TypeScript" url="/assets/get-started/ts-generate-service-model-dir-compare.png" />
 
 - **models/teams.model.?s** contains the model for teams.
 
@@ -1534,11 +1521,11 @@ function paginate(content) {
 contains a comprehensive GraphQL example produced with cli-plus.
 It's based on the following data schema
 
-![Generate options](../assets/get-started/schema.jpg)
+<collapse-image hidden title="Schema for Example" url="/assets/get-started/schema.jpg" />
 
 It has a test-harness running on the browser
 
-![Generate options](../assets/get-started/test-harness.jpg)
+<collapse-image hidden title="Test Harness for Example" url="/assets/get-started/test-harness.jpg" />
 
 You can select queries, modify them, run them and see the results.
 
@@ -1767,7 +1754,7 @@ type User {
 
 Our schema is
 
-![Our schema](../assets/get-started/our-schema.png)
+<collapse-image title="Schema Get Started Example" url="/assets/get-started/our-schema.png" />
 
 To each **users** record we can attach
 - The single **roles** record referred to in its **users.roleId**.
@@ -1991,7 +1978,7 @@ We can now generate that endpoint.
 feathers-plus generate graphql
 ```
 
-![Generate graphql](../assets/get-started/generate-graphql.png)
+<collapse-image title="Prompts 'generate graphql'" url="/assets/get-started/generate-graphql.png" />
 
 - **How should Queries be completed?** Different versions of GraphQL resolver functions may be generated.
     - **Using standalone Feathers service calls** is the default and the simplest approach.
@@ -2033,11 +2020,8 @@ The generator adds some modules to the
 [JS folder](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/08-graphql/feathers-app)
 or [TS one](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/ts/08-graphql/feathers-app).
 
-Below are the previous and the new app contents when JavaScript is generated.
-![Generate graphql compare](../assets/get-started/generate-graphql-dir-compare.png)
-
-and when TypeScript is generated.
-![Generate graphql compare](../assets/get-started/ts-generate-graphql-dir-compare.png)
+<collapse-image hidden title="Folders After 'generate graphql' with JavaScript" url="/assets/get-started/generate-graphql-dir-compare.png" />
+<collapse-image hidden title="Folders After 'generate graphql' with TypeScript" url="/assets/get-started/ts-generate-graphql-dir-compare.png" />
 
 - **graphql.schemas.?s** The GraphQL type definitions.
 - **graphql.service.?s** Configures the GraphQL service for the strategy chosen in the
@@ -2086,7 +2070,7 @@ You can upgrade your app to the latest version of cli-plus by running
 feathers-plus generate all
 ```
 
-![Generate all](../assets/get-started/generate-all.png)
+<collapse-image title="Prompts 'generate all'" url="/assets/get-started/generate-all.png" />
 
 This will regenerate most of the modules, keeping you custom code, while generating the latest cli-plus boilerplate.
 
@@ -2099,7 +2083,7 @@ You may want to backup you project before running *generate all* until you feel 
 cli-plus will not override certain modules if they already exist.
 We have already seen the names of these when we looked at *generate options*
 
-![Generate options](../assets/get-started/generate-options.png)
+<collapse-image title="Prompts 'generate options'" url="/assets/get-started/generate-options.png" />
 
 #### Freezing modules
 
@@ -2131,4 +2115,19 @@ You can list all the custom code in your app using
 feathers-plus codelist
 ```
 
-![Generate codelist](../assets/get-started/generate-codelist.png)
+<collapse-image title="Prompts 'generate codelist'" url="/assets/get-started/generate-codelist.png" />
+
+## Next Steps
+
+You should try generating a simple app now.
+Get it running first without a GraphQL endpoint, then add the endpoint in.
+
+You can find more specialized information in
+- **Guide** - More details on particular subjects.
+- **API** - The API for various functions called by the generated code.
+You may want to use them yourself in your your custom code.
+- **JSON-schema** - An introduction to the extensive JSON-schema ecosystem.
+- **Maintainers** - Useful information if you want to contribute to this project.
+Design ideas for future enhancements.
+
+**Good luck!**

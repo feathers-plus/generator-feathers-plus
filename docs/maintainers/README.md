@@ -1,7 +1,6 @@
 # Maintainers
 
-<tip-warning-danger title=" alt title " />
-<args1 start=100 />
+<collapse-image hidden title="Folders After 'generate options'" url="/assets/get-started/generate-options-dir.png" />
 
 
 ## Tests
