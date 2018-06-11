@@ -5,7 +5,8 @@
 @feathers-plus/cli, a.k.a. "cli-plus", persists a definition of the app in `project-name/feathers-gen-specs.json`.
 This contains primarily the responses provided to the prompts used to create the app.
 
-An example is:
+<collapse hidden title="A Sample feathers-gen-specs.json">
+
 ```json
 {
   "options": {
@@ -126,6 +127,8 @@ An example is:
 }
 ```
 
+</collapse>
+
 With this, and any custom code you entered in your app,
 Cli-plus can regenerate part of, or all of the app at any time.
 Let's say you originally run `generate app` selecting only `socket.io` as a transport.
@@ -149,12 +152,7 @@ describe the generated modules. The generator can re-generate the project with t
 :::
 
 
-## Additional generators
-
-Cli-plus comes with generators not in @feathersjs/cli.
-See the Get Started docs for details.
-
-### feathers-plus generate options
+## generate options
 
 JavaScript or TypeScript are generated based on one of the prompts.
 Another prompt determines if statements are terminated by semicolons or not.
@@ -193,17 +191,6 @@ You have to manually recode any modules you `froze` and remove the one in the or
 :::warning
 **Back up your project** before converting.
 :::
-
-### feathers-plus generate all
-
-This regenerates the entire project.
-Its a good way to refresh your project with the latest generator templates and bug fixes.
-
-### feathers-plus generate codelist
-
-This lists all the custom code in the project.
-This list, when combined with `feathers-gen-specs.json`, completely defines what the
-generated modules do.
 
 ## Feathers Service Models
 
@@ -244,22 +231,6 @@ const productJsonSchema = {
 As you can see, JSON-schema is fairly straightforward.
 It also has extensive capabilities for validating your data.
 
-:::tip
-You should read
-[this excellent tutorial](https://code.tutsplus.com/tutorials/validating-data-with-json-schema-part-1--cms-25343)
-on JSON-schema written by the author of
-[`ajv`](https://github.com/epoberezkin/ajv).
-The Feathers common hook
-[`validateSchema`](../../api/hooks-common#validateSchema.md)
-uses JSON-schemna and `ajv` to validate data.
-:::
-
-:::tip
-We are not certifying the utilities and websites mentioned below work flawlessly.
-They are part of the JSON-schema ecosystem and may prove useful.
-We welcome your feedback on them.
-:::
-
 ### $ref: Modularizing definitions
 
 The field `createdAt` may be used in several schemas.
@@ -268,6 +239,9 @@ It would be advantageous to define its characteristics
 in one place rather than everywhere its used.
 
 We can do this with the `$ref` keyword.
+
+<collapse hidden title="Using the $ref Keyword">
+
 ```json
 // src/services/comment/comment.schema.js refers to an external property definition
 {
@@ -311,6 +285,8 @@ const base = merge({},
   createdAt: String
 },
 ```
+
+</collapse>
 
 The definition of `createdAt` in common.json will be merged into the field in comment.schema.js.
 
@@ -504,6 +480,9 @@ let maxBatchSize = defaultPaginate && typeof defaultPaginate.max === 'number' ?
 **@feathers-plus/cli-generator-example** contains a Feathers app created with cli-plus containing a GraphQL endpoint.
 
 There are 10 versions of the app, each in its own folder
+
+<collapse hidden title="Versions of the app in the Example">
+
 folder name | language | database | resolver functions
 :-|:-|:-|:-|
 js-nedb-services | JavaScript | NeDB | plain Feathers calls
@@ -516,6 +495,8 @@ ts-nedb-batchloaders | TypeScript | NeDB | BatchLoader calls
 ts-sequelize-services | TypeScript | Sequelize + SQLite | plain Feathers calls
 ts-sequelize-batchloaders | TypeScript | Sequelize + SQLite | BatchLoader calls
 ts-sequelize-sql | TypeScript | Sequelize + SQLite | raw SQL statements
+
+</collapse>
 
 ### Getting Started
 

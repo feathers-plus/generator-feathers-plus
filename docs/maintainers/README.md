@@ -1,7 +1,11 @@
 # Maintainers
 
-<collapse-image hidden title="Folders After 'generate options'" url="/assets/get-started/generate-options-dir.png" />
+<collapse hidden title="Schema for Example">
 
+```js
+let a;
+```
+</collapse>
 
 ## Tests
 
@@ -55,6 +59,9 @@ The function's closure notably contains:
 
 - `specs`: the current app specs, expanded. The unexpanded specs are persisted in `project-name/feathers-gen-specs.json`.
 These specs may only be mutated by calling lib/specs.js.
+
+<collapse hidden title="specs">
+
 ```text
 { options: { ver: '1.0.0', inspectConflicts: false, freeze: [] },
   app: 
@@ -102,10 +109,16 @@ These specs may only be mutated by calling lib/specs.js.
      paginate: { default: 10, max: 50 } },
   _isRunningTests: true }
 ```
+
+</collapse>
+
 The props whose names begin with an underscore are not persisted in feathers-gen-specs.json.
 
 - `mapping`: A list of Feathers services plus mappings to GraphQL schemas.
 It is built in lib/service-specs-expand.js.
+
+<collapse hidden title="mapping">
+
 ```text
 { feathers: 
    { nedb1: { graphql: 'Nedb1', path: '/nedb-1' },
@@ -116,8 +129,13 @@ It is built in lib/service-specs-expand.js.
   graphqlSql: {} }
 ```
 
+</collapse>
+
 - `feathersSpecs[name]`: The expanded definition for the service.
 It is also built in lib/service-specs-expand.js.
+
+<collapse hidden title="feathersSpecs">
+
 ```text
 { '$schema': 'http://json-schema.org/draft-05/schema',
   title: 'Nedb2',
@@ -152,7 +170,12 @@ It is also built in lib/service-specs-expand.js.
         serviceSortParams: ', { query: { $sort: {   _id: 1 } } }' } } }
 ```
 
+</collapse>
+
 - `context`: What is passed to the templates.
+
+<collapse hidden title="context">
+
 ```text
 {
     specs,
@@ -183,6 +206,8 @@ It is also built in lib/service-specs-expand.js.
   }
 ```
 
+</collapse>
+
 - `mongooseSchema`: The model for mongoose.
 Its built in lib/service-specs-to-mongoose.js.
 Models for other databases should be similarly built.
@@ -194,6 +219,9 @@ They are mostly [ejs](http://ejs.co/) templates, along with some plain .js and .
 The templates for database model schemas are in `templates/src/services/name/name.<database name>.ejs`.
 
 A template is scheduled for building by adding an entry to `todos` in the function services:
+
+<collapse hidden title="Sample todos">
+
 ```js
     // src:    Location of template.
     // dest:   Destinate of generated module.
@@ -217,6 +245,8 @@ A template is scheduled for building by adding an entry to `todos` in the functi
       tmpl([serPath,    'index.ejs'],                 [libDir, 'services', 'index.js']               )
     ];
 ```
+
+</collapse>
 
 `todos` is processed by lib/generator-js.js.
 

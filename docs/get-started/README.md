@@ -479,6 +479,9 @@ There is no practical end to the potential customizations.
 
 Here are some code snippets in src/services/graphql/service.resolvers.js
 which cli-plus may generate for a GraphQL endpoint:
+
+<collapse hidden title="Sample GraphQL Resolver functions">
+
 ```js
     // Feathers service resolvers
     User: {
@@ -512,6 +515,9 @@ which cli-plus may generate for a GraphQL endpoint:
         // !end
     },
 ```
+
+</collapse>
+
 You can customize them as you wish, by defining a `$sort` order for example.
 
 `fullname` is a calculated field.
@@ -741,6 +747,8 @@ Just Enter through all the prompts.
 The folder organization will not change, however all modules now reflect the Feathers model.
 **src/services/users/users.mongoose.js** is an example:
 
+<collapse hidden title="Mongoose Model Module">
+
 ```js
 /* eslint quotes: 0 */
 // Defines Mongoose model for service `users`. (Can be re-generated.)
@@ -782,7 +790,11 @@ module.exports = moduleExports;
 // !code: end // !end
 ```
 
+</collapse>
+
 As is **src/services/users.users.validate.js**:
+
+<collapse hidden title="Validate Module">
 
 ```js
 /* eslint quotes: 0 */
@@ -899,6 +911,8 @@ module.exports = moduleExports;
 // !code: funcs // !end
 // !code: end // !end
 ```
+
+</collapse>
 
 ## generate secret
 
@@ -1354,6 +1368,8 @@ You will save a **lot** of time by having the generator write the resolvers.
 For example, this is the resolver code generated for our simplist example for the straightforward case ---
 using normal Feathers service calls.
 
+<collapse hidden title="Resolver Function Module Using Service Calls">
+
 ```js
 /* eslint-disable no-unused-vars, indent */
 // Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
@@ -1509,6 +1525,8 @@ function paginate(content) {
 // !code: funcs // !end
 // !code: end // !end
 ```
+
+</collapse>
 
 ### Comprehensive example
 
@@ -2110,7 +2128,7 @@ You can list all the custom code in your app using
 feathers-plus codelist
 ```
 
-<collapse-image title="Prompts 'generate codelist'" url="/assets/get-started/generate-codelist.png" />
+<collapse-image hidden title="Prompts 'generate codelist'" url="/assets/get-started/generate-codelist.png" />
 
 ## Next Steps
 
