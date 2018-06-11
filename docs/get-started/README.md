@@ -1024,12 +1024,7 @@ And regenerate, accepting the defaults by pressing Enter.
 feathers-plus generate service
 ```
 
-For **roles**
-
 <collapse-image title="Prompts 'generate service' for Roles with Model" url="/assets/get-started/generate-service-roles-model.png" />
-
-and **teams**.
-
 <collapse-image title="Prompts 'generate service' for Roles with Model" url="/assets/get-started/generate-service-teams-model.png" />
 
 The Mongoose models now reflects the Feathers model:
@@ -1521,7 +1516,7 @@ function paginate(content) {
 contains a comprehensive GraphQL example produced with cli-plus.
 It's based on the following data schema
 
-<collapse-image hidden title="Schema for Example" url="/assets/get-started/schema.jpg" />
+<collapse-image title="Schema for Example" url="/assets/get-started/schema.jpg" />
 
 It has a test-harness running on the browser
 

@@ -141,12 +141,12 @@ You can also convert a JSON object to JSON-schema online at
 [https://jsonschema.net](https://jsonschema.net).
 This provides an interesting way to explore JSON-schema.
 
-![initial online page](../assets/online-1.jpg)
+<collapse-image hidden title="Exploring page 1" url="/assets/json-schema/online-1.jpg" />
 
 The first thing to do is change `ID Type` from `Relative` to `None`,
 followed by clicking `Generate Schema`.
 
-![standard online page](../assets/online-2.jpg)
+<collapse-image hidden title="Exploring page 2" url="/assets/json-schema/online-2.jpg" />
 
 The `type` of each JSON data property is specified in the JSON-schema.
 The `tags` array is typed as an `array` with its `items`, i.e. elements, typed as `string`.
@@ -158,11 +158,11 @@ You can play around with the input JSON, seeing how your changes affect the JSON
 You can control options for the conversion in the area below `Generate Schema`.
 Enable `Number Options` and check `Use number, not integer`.
 
-![Number options](../assets/online-3a.jpg)
+<collapse-image hidden title="Exploring Number Options 1" url="/assets/json-schema/online-3a.jpg" />
 
 Followed by clicking `Generate Schema`.
 
-![Number Options page](../assets/online-3b.jpg)
+<collapse-image hidden title="Exploring Number Options 2" url="/assets/json-schema/online-3b.jpg" />
 
 You can see that `"type": "number"` is now used for all numeric values.
 
@@ -173,7 +173,7 @@ Feathers Models should use `"type": "number"`.
 Now check the `Metadata` and `Show default attributes` boxes in `Global Options`,
 followed by clicking `Generate Schema`.
 
-![Global Options page](../assets/online-4.jpg)
+<collapse-image hidden title="Exploring Global Options" url="/assets/json-schema/online-4.jpg" />
 
 You can see how the JSON-schema grows in sophistication.
 
@@ -185,29 +185,29 @@ Once again change `ID Type` from `Relative` to `None`,
 followed by clicking `Generate Schema`.
 This let's us back to our starting point.
 
-![standard online page](../assets/online-2.jpg)
+<collapse-image hidden title="Exploring page 2" url="/assets/json-schema/online-2.jpg" />
 
 Click the `Edit` icon to see options for each field in the JSON-schema.
 
-![field 1 page](../assets/online-5a.jpg)
+<collapse-image hidden title="Exploring Field Options 1" url="/assets/json-schema/online-5a.jpg" />
 
 In the `@optional tags <array>` panel, click the down arrow in the inner `@optional <string>` panel
 to see all the options for the array `tags`.
 
-![field 2 page](../assets/online-5b.jpg)
+<collapse-image hidden title="Exploring Field Options 2" url="/assets/json-schema/online-5b.jpg" />
 
 - `Min items` to 1.
 - `Max items` to 4.
 - `Minimum length` to 2.
 - `Maximum length` to 16 and **press the `tab` key to properly exit this input field.**
 
-![field 3 page](../assets/online-5c.jpg)
+<collapse-image hidden title="Exploring Field Options 3" url="/assets/json-schema/online-5c.jpg" />
 
 - Click the diskette/drive icon in the `@optional tags <array>` panel to save your changes.
 - **Do not** click `Generate Schema`.
 - Click the `Pretty` button at the top of the page.
 
-![field 4 page](../assets/online-5d.jpg)
+<collapse-image hidden title="Exploring Field Options 4" url="/assets/json-schema/online-5d.jpg" />
 
 You can see that validation rules have been added to the `tags` entry in the JSON-schema.
 
@@ -225,15 +225,13 @@ Here are two of them.
 
 ### [generate-schema](https://github.com/nijikokun/generate-schema)
 
-![generate-schema 1](../assets/generate-schema-1.jpg)
-
-![generate-schema 2](../assets/generate-schema-2.jpg)
+<collapse-image title="generate-schema" url="/assets/json-schema/generate-schema-1.jpg" />
+<collapse-image hidden title="generate-schema Example" url="/assets/json-schema/generate-schema-2.jpg" />
 
 ### [json-schema-generator](https://github.com/krg7880/json-schema-generator)
 
-![json-schema-generator 1](../assets/json-schema-generator-1.jpg)
-
-![json-schema-generator 2](../assets/json-schema-generator-2.jpg)
+<collapse-image title="json-schema-generator" url="/assets/json-schema/json-schema-generator-1.jpg" />
+<collapse-image hidden title="json-schema-generator Example" url="/assets/json-schema/json-schema-generator-2.jpg" />
 
 ## Using existing database schemas
 
@@ -260,11 +258,11 @@ site.
 
 Click the `Samples dropdown and choose `Sample draft-06 schema and valid document`.
 
-![lint json 2](../assets/lint-online-2.jpg)
+<collapse-image hidden title="Lint Online 1" url="/assets/json-schema/lint-online-2.jpg" />
 
 Or `Sample draft-06 schema and **invalid** document`.
 
-![lint json 3](../assets/lint-online-3.jpg)
+<collapse-image hidden title="Lint Online 2" url="/assets/json-schema/lint-online-3.jpg" />
 
 :::tip
 You may have extracted your JSON from someplace and its hard to read.

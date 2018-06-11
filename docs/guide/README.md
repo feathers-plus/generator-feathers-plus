@@ -543,7 +543,7 @@ and then run a short async test to confirm the GraphQL endpoint is functioning c
 
 Point your browser at the server, e.g. `localhost:3030`, and you will see this test harness:
 
-![test harness](../assets/test-harness.jpg)
+<collapse-image hidden title="Test Harness for Example" url="/assets/get-started/test-harness.jpg" />
 
 The client will authenticate with the server before enabling the `Run query` button.
 
