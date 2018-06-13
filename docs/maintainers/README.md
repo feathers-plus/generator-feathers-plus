@@ -1,12 +1,5 @@
 # Maintainers
 
-<collapse hidden title="Schema for Example">
-
-```js
-let a;
-```
-</collapse>
-
 ## Tests
 
 The contents of folders with names like app.test-copied are initially copied to the test dir
