@@ -297,6 +297,8 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 - Any custom code found that is not reinserted into regenerated modules is cached in a temp module so you can cut/paste it if needed.
 - Cache all default code created (and that's a lot) in a module. When scanning for custom code, compare any default code found to what was cached. This would find code where <DEFAULT> was not removed.
 
+- add elasticsearch support when generating a database
+
 - test name.mongo.js
 - test name.validate.js
 - run tslint --fix / eslint --fix afterwards ?!? (watch for removal of trailing commas
