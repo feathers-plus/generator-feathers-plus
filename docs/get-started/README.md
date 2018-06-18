@@ -242,6 +242,8 @@ A sample favicon and HTML file are included.
     - **app.hooks.?s** contains hooks which are run for **all** services.
     
     - **channels.?s** contains the channels sending realtime events to clients.
+        
+    - **logger.?s** configures the [Winston](https://github.com/winstonjs/winston) logger.
     
     - **app.interface.ts** contains the global `App` interface needed to provide typed services.  
     
