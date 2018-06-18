@@ -3,7 +3,7 @@
 <%- tplTsOnly(`import { HookMap, HooksObject } from '@feathersjs/feathers'${sc}${EOL}`) -%>
 <%- tplImports('commonHooks', 'feathers-hooks-common', 'as') %>
 <%- insertFragment('imports', [
-  tplImports('logger', './hooks/logger'),
+  tplImports('log', './hooks/log'),
 ]) %>
 
 <%- insertFragment('used', [
@@ -15,7 +15,7 @@
 <%- tplModuleExports('HooksObject') %>
   before: {
     <%- insertFragment('before', [
-      '    all: [ logger() ],',
+      '    all: [ log() ],',
       '    find: [],',
       '    get: [],',
       '    create: [],',
@@ -27,7 +27,7 @@
 
   after: {
     <%- insertFragment('after', [
-      '    all: [ logger() ],',
+      '    all: [ log() ],',
       '    find: [],',
       '    get: [],',
       '    create: [],',
@@ -39,7 +39,7 @@
 
   error: {
     <%- insertFragment('error', [
-      '    all: [ logger() ],',
+      '    all: [ log() ],',
       '    find: [],',
       '    get: [],',
       '    create: [],',

@@ -3,7 +3,7 @@
 import { HookMap, HooksObject } from '@feathersjs/feathers';
 import * as commonHooks from 'feathers-hooks-common';
 // !<DEFAULT> code: imports
-import logger from './hooks/logger';
+import log from './hooks/log';
 // !end
 
 // !<DEFAULT> code: used
@@ -15,7 +15,7 @@ const { iff } = commonHooks;
 let moduleExports: HooksObject = {
   before: {
     // !<DEFAULT> code: before
-    all: [ logger() ],
+    all: [ log() ],
     find: [],
     get: [],
     create: [],
@@ -27,7 +27,7 @@ let moduleExports: HooksObject = {
 
   after: {
     // !<DEFAULT> code: after
-    all: [ logger() ],
+    all: [ log() ],
     find: [],
     get: [],
     create: [],
@@ -39,7 +39,7 @@ let moduleExports: HooksObject = {
 
   error: {
     // !<DEFAULT> code: error
-    all: [ logger() ],
+    all: [ log() ],
     find: [],
     get: [],
     create: [],

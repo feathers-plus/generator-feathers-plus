@@ -297,7 +297,7 @@ module.exports = function generatorWriting (generator, what) {
 
       tmpl([tpl, 'test', 'app.test.ejs'], [testDir, `app.test.${js}`], true),
 
-      tmpl([tpl, 'src', 'hooks', 'logger.ejs'], [src, 'hooks', `logger.${js}`], true),
+      tmpl([tpl, 'src', 'hooks', 'log.ejs'], [src, 'hooks', `log.${js}`], true),
       copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], true),
       tmpl([tpl, 'src', 'channels.ejs'], [src, `channels.${js}`], true),
 
