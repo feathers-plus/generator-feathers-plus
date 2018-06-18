@@ -4,6 +4,7 @@
 // about the logger.
 <%- tplTsOnly(`import { Hook } from '@feathersjs/feathers'${sc}${EOL}`) -%>
 <%- tplImports('logger', 'winston', 'as') %>
+<%- tplImports('util', null, 'req') %>
 
 // To see more detailed messages, uncomment the following line:
 // logger.level = 'debug'<%- sc %>
@@ -14,8 +15,8 @@
     // You can customize the message (and logger) to your needs
     logger.debug(`${context.type} app.service('${context.path}').${context.method}()`)<%- sc %>
 
-    if (typeof <%- tplJsOrTs('context', '(context as any)') -%>.toJSON === 'function') {
-      logger.debug('Hook Context', JSON.stringify(context, null, '  '))<%- sc %>
+    if (typeof <%- tplJsOrTs('context', '(context as any)') -%>.toJSON === 'function' && logger.level === 'debug') {
+      logger.debug('Hook Context', util.inspect(context, { colors: false }))<%- sc %>
     }
 
     if (context.error) {
