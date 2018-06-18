@@ -1,0 +1,31 @@
+
+// Logger. (Can be re-generated.)
+<%- tplImports('{ createLogger, format, transports }', 'winston') %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+// Configure the Winston logger. For the complete documentation seee https://github.com/winstonjs/winston
+const moduleExports = createLogger({
+  <%- insertFragment('level', [
+    '  // To see more detailed errors, change this to \debug\'',
+    '  level: \'info\',',
+  ]) %>
+  <%- insertFragment('format', [
+    '  format: format.combine(',
+    '    format.splat(),',
+    '    format.simple()',
+    '  ),'
+  ]) %>
+  <%- insertFragment('transport', [
+    '  transports: [',
+    '    new transports.Console()',
+    '  ],',
+  ]) %>
+  <%- insertFragment('moduleExports') %>
+})<%- sc %>
+
+<%- insertFragment('exports') %>
+module.exports = moduleExports<%- sc %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

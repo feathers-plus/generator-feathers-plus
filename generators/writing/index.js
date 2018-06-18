@@ -288,25 +288,26 @@ module.exports = function generatorWriting (generator, what) {
     todos = [
       copy([tpl, '.editorconfig'], '.editorconfig', true),
       // This name hack is necessary because NPM does not publish `.gitignore` files
-      copy([tpl, '_gitignore'], '.gitignore', true),
-      copy([tpl, 'LICENSE'], 'LICENSE', true),
+      copy([tpl, '_gitignore'],    '.gitignore', true),
+      copy([tpl, 'LICENSE'],       'LICENSE', true),
       tmpl([tpl, 'README.md.ejs'], 'README.md', true),
 
       copy([tpl, 'public', 'favicon.ico'], ['public', 'favicon.ico'], true),
-      copy([tpl, 'public', 'index.html'], ['public', 'index.html'], true),
+      copy([tpl, 'public', 'index.html'],  ['public', 'index.html'], true),
 
-      tmpl([tpl, 'test', 'app.test.ejs'], [testDir, `app.test.${js}`], true),
+      tmpl([tpl, 'test', 'app.test.ejs'],  [testDir, `app.test.${js}`], true),
 
-      tmpl([tpl, 'src', 'hooks', 'log.ejs'], [src, 'hooks', `log.${js}`], true),
+      tmpl([tpl, 'src', 'hooks', 'log.ejs'],    [src, 'hooks', `log.${js}`], true),
       copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], true),
-      tmpl([tpl, 'src', 'channels.ejs'], [src, `channels.${js}`], true),
+      tmpl([tpl, 'src', 'channels.ejs'],        [src, `channels.${js}`], true),
 
-      json(pkg, 'package.json'),
+      json(pkg,           'package.json'),
       json(configDefault, ['config', 'default.json']),
-      json(configProd, ['config', 'production.json']),
+      json(configProd,    ['config', 'production.json']),
 
-      tmpl([tpl, 'src', 'index.ejs'], [src, `index.${js}`]),
+      tmpl([tpl, 'src', 'index.ejs'],     [src, `index.${js}`]),
       tmpl([tpl, 'src', 'app.hooks.ejs'], [src, `app.hooks.${js}`]),
+      tmpl([tpl, 'src', 'logger.ejs'],    [src, `logger.${js}`]),
 
       tmpl([mwPath, 'index.ejs'],             [src, 'middleware', `index.${js}`]            ),
       tmpl([srcPath, 'app.ejs'],              [src, `app.${js}`]                            ),
