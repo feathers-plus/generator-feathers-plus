@@ -38,7 +38,7 @@ let moduleExports = function (app: App) {
   const createdService = createService(options);
   app.use('/graphql', createdService);
 
-  // Get our initialized service so that we can register hooks and filters
+  // Get our initialized service so that we can register hooks
   const service = app.service('/graphql');
 
   service.hooks(hooks);

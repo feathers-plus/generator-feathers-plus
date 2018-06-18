@@ -114,7 +114,7 @@ let sqlJoins = <%- tplJsOrTs('(app, options)', '(app: App, options: SqlMetadataO
   const createdService = createService(options)<%- sc %>
   app.use('/graphql', createdService)<%- sc %>
 
-  // Get our initialized service so that we can register hooks and filters
+  // Get our initialized service so that we can register hooks
   const service = app.service('/graphql')<%- sc %>
 
   service.hooks(hooks)<%- sc %>

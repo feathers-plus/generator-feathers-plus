@@ -20,7 +20,7 @@ let moduleExports = function (app: App) {
   // Initialize our service with any options it requires
   app.use('/nedb-2', createService(options));
 
-  // Get our initialized service so that we can register hooks and filters
+  // Get our initialized service so that we can register hooks
   const service = app.service('nedb-2');
 
   mongoClient.then(db => {

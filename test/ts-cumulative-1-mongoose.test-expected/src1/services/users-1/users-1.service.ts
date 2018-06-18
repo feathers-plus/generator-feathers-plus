@@ -24,7 +24,7 @@ let moduleExports = function (app: App) {
   // Initialize our service with any options it requires
   app.use('/users-1', createService(options));
 
-  // Get our initialized service so that we can register hooks and filters
+  // Get our initialized service so that we can register hooks
   const service = app.service('users-1');
 
   service.hooks(hooks);
