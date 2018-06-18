@@ -20,7 +20,7 @@ export default function (): Hook {
     }
 
     if (context.error) {
-      logger.error(context.error);
+      logger.error(context.error.stack);
     }
   };
 }

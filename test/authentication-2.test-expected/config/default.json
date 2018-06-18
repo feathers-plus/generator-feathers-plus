@@ -33,7 +33,10 @@
       "clientID": "your auth0 client id",
       "clientSecret": "your auth0 client secret",
       "successRedirect": "/",
-      "domain": "mydomain.auth0.com"
+      "domain": "mydomain.auth0.com",
+      "scopes": [
+        "profile"
+      ]
     },
     "cookie": {
       "enabled": true,

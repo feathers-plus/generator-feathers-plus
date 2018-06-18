@@ -966,6 +966,7 @@ function writeAuthenticationConfiguration (generator, context) {
 
       if (strategy === 'auth0') {
         strategyConfig.domain = 'mydomain.auth0.com';
+        strategyConfig.scopes = [ 'profile' ];
       }
 
       if (strategy === 'facebook') {

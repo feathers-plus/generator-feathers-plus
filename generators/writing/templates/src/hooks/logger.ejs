@@ -20,7 +20,7 @@
     }
 
     if (context.error) {
-      logger.error(context.error)<%- sc %>
+      logger.error(context.error.stack)<%- sc %>
     }
   }<%- sc %>
 }<%- tplJsOnly(sc) %>
