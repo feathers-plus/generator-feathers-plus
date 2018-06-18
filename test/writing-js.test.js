@@ -42,7 +42,7 @@ const tests = [
 
   // t01, z01 Test creation of app.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
-    { testName: 'app.test' },
+   { testName: 'app.test' },
 
   // t02, z02 (z01 ->) Test service creation without authentication scaffolding.
   // Also test any missing specs.options props are created.

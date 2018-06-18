@@ -46,9 +46,9 @@ app.configure(configuration())<%- sc %>
   `app.set('generatorSpecs', generatorSpecs)${sc}`,
 ]) %>
 
-// Enable CORS, security, compression, favicon and body parsing
-app.use(cors())<%- sc %>
+// Enable security, CORS, compression, favicon and body parsing
 app.use(helmet())<%- sc %>
+app.use(cors())<%- sc %>
 app.use(compress())<%- sc %>
 app.use(express.json())<%- sc %>
 app.use(express.urlencoded({ extended: true }))<%- sc %>
