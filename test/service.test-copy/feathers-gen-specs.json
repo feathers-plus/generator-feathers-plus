@@ -18,6 +18,7 @@
     "nedb1": {
       "name": "nedb1",
       "nameSingular": "nedb1",
+      "subFolder": "",
       "fileName": "nedb-1",
       "adapter": "nedb",
       "path": "/nedb-1",
@@ -28,6 +29,7 @@
     "nedb2": {
       "name": "nedb2",
       "nameSingular": "nedb2",
+      "subFolder": "",
       "fileName": "nedb-2",
       "adapter": "nedb",
       "path": "/nedb-2",

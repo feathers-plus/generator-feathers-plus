@@ -132,6 +132,16 @@ module.exports = class ServiceGenerator extends Generator {
         return true;
       }
     }, {
+      name: 'subFolder',
+      message: 'The service is grouped under which name space, if any?',
+      default (answers) {
+        return answers.subFolder || props.subFolder;
+      },
+      validate (input) {
+        // https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
+        return true;
+      }
+    }, {
       type: 'list',
       name: 'adapter',
       message: 'What kind of service is it?',

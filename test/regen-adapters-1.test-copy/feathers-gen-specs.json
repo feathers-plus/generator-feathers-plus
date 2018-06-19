@@ -19,6 +19,7 @@
     "nedb1": {
       "name": "nedb1",
       "nameSingular": "nedb1",
+      "subFolder": "",
       "fileName": "nedb-1",
       "adapter": "mongodb",
       "path": "/nedb-1",

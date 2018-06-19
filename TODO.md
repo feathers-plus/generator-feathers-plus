@@ -322,6 +322,10 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
   e.g. email/password exists in schema of user-entity when local auth selected.
 - what can we do with feathers-sync? 
 
+- finalize and test support for Knex services.
+- add docs example with memberIds: [...] to tests
+- support memberIds: [...] in batchloaders
+
 - create Knex schema
 - add async init https://github.com/feathersjs/feathers/issues/509
 - add stress test https://blog.feathersjs.com/stress-testing-your-feathersjs-application-like-in-production-4b8611ee8d9e

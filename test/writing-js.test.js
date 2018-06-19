@@ -169,6 +169,7 @@ const tests = [
       users1: {
         name: 'users1',
         nameSingular: 'users1',
+        subFolder: '',
         fileName: 'users-1',
         adapter: 'nedb',
         path: '/users-1',
