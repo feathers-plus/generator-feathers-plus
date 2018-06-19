@@ -3,7 +3,7 @@
 // See https://github.com/winstonjs/winston for documentation
 // about the logger.
 <%- tplTsOnly(`import { Hook } from '@feathersjs/feathers'${sc}${EOL}`) -%>
-<%- tplImports('logger', 'winston', 'as') %>
+<%- tplImports('logger', '../logger') %>
 <%- tplImports('util', null, 'req') %>
 
 // To see more detailed messages, uncomment the following line:

@@ -18,8 +18,9 @@
   <%- insertFragment('func_init') %>
 
   let options = {
-    name: '<%= kebabName %>',<% if (modelName) { %>
-    Model,<% } %>
+<% if (modelName) { -%>
+    Model,
+<% } -%>
     paginate,
     <%- insertFragment('options_more') %>
   }<%- sc %>

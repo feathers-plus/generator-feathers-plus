@@ -14,7 +14,6 @@ let moduleExports = function (app: App) {
   // !code: func_init // !end
 
   let options = {
-    name: 'users-1',
     Model,
     paginate,
     // !code: options_more // !end

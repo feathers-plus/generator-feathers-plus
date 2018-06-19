@@ -44,7 +44,7 @@ export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   // !<DEFAULT> code: create
   async create (data: Partial<any> | Array<Partial<any>>, params?: Params): Promise<any> {
     if (Array.isArray(data)) {
-      return await Promise.all(data.map(current => this.create(current)));
+      return Promise.all(data.map(current => this.create(current, params)));
     }
 
     return data;

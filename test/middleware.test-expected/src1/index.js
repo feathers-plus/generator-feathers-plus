@@ -1,7 +1,7 @@
 
 /* eslint-disable no-console */
 // Start the server. (Can be re-generated.)
-const logger = require('winston');
+const logger = require('./logger');
 const app = require('./app');
 // !code: imports // !end
 // !code: init // !end

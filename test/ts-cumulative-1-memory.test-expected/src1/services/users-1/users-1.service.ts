@@ -13,7 +13,6 @@ let moduleExports = function (app: App) {
   // !code: func_init // !end
 
   let options = {
-    name: 'users-1',
     paginate,
     // !code: options_more // !end
   };

@@ -13,7 +13,6 @@ let moduleExports = function (app: App) {
   // !code: func_init // !end
 
   let options = {
-    name: 'nedb-2',
     paginate,
     // !code: options_more // !end
   };
