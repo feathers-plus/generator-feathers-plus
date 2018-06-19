@@ -1,0 +1,36 @@
+
+// Initializes the `<%= serviceName %>` service on path `/<%= path %>`
+// *** Knex support is not finalized
+<%- tplImports('createService', 'feathers-knex', 'req') %>
+<%- tplImports('createModel', `../../models/${modelName}`) %>
+<%- tplImports('hooks', `./${kebabName}.hooks`) %>
+<%- insertFragment('imports') %>
+<%- insertFragment('init') %>
+
+<%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
+  let Model = createModel(app)<%- sc %>
+  let paginate = app.get('paginate')<%- sc %>
+
+  let options = {
+    name: '<%= snakeName %>',
+    Model,
+    paginate
+  }<%- sc %>
+  <%- insertFragment('func_init') %>
+
+  // Initialize our service with any options it requires
+  app.use('/<%= path %>', createService(options))<%- sc %>
+
+  // Get our initialized service so that we can register hooks and filters
+  const service = app.service('<%= path %>')<%- sc %>
+
+  service.hooks(hooks)<%- sc %>
+  <%- insertFragment('func_return') %>
+}<%- sc %>
+<%- insertFragment('more') %>
+
+<%- insertFragment('exports') %>
+<%- `${tplExport('moduleExports')}${sc}` %>
+
+<%- insertFragment('funcs') %>
+<%- insertFragment('end') %>

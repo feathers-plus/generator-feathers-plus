@@ -502,11 +502,14 @@ module.exports = function generatorWriting (generator, what) {
     const devDependencies = [];
 
     switch (adapter) {
-      case 'nedb':
-        devDependencies.push('@types/nedb');
+      case 'knex':
+        devDependencies.push('@types/knex');
         break;
       case 'mongoose':
         devDependencies.push('@types/mongoose');
+        break;
+      case 'nedb':
+        devDependencies.push('@types/nedb');
         break;
       case 'sequelize':
         devDependencies.push('@types/sequelize');
