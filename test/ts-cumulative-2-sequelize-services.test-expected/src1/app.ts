@@ -5,7 +5,7 @@ import favicon from 'serve-favicon';
 import compress from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
-import * as logger from 'winston';
+import logger from './logger';
 
 import feathers from '@feathersjs/feathers';
 import configuration from '@feathersjs/configuration';

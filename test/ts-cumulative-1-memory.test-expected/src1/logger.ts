@@ -25,7 +25,7 @@ const moduleExports = createLogger({
 });
 
 // !code: exports // !end
-module.exports = moduleExports;
+export default moduleExports;
 
 // !code: funcs // !end
 // !code: end // !end

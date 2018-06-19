@@ -25,7 +25,7 @@ const moduleExports = createLogger({
 })<%- sc %>
 
 <%- insertFragment('exports') %>
-module.exports = moduleExports<%- sc %>
+<%- `${tplExport('moduleExports')}${sc}` %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

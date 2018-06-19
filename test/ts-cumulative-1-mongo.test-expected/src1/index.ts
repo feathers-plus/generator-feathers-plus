@@ -1,7 +1,7 @@
 
 /* tslint:disable no-console */
 // Start the server. (Can be re-generated.)
-import * as logger from 'winston';
+import logger from './logger';
 import app from './app';
 // !code: imports // !end
 // !code: init // !end

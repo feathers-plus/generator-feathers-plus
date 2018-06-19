@@ -111,7 +111,7 @@ export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   <%- insertFragment('create', [
     '  async create (data: Partial<any> | Array<Partial<any>>, params?: Params): Promise<any> {',
     '    if (Array.isArray(data)) {',
-    `      return await Promise.all(data.map(current => this.create(current)))${sc}`,
+    `      return Promise.all(data.map(current => this.create(current, params)))${sc}`,
     '    }',
     '',
     `    return data${sc}`,

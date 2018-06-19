@@ -3,7 +3,7 @@
 // See https://github.com/winstonjs/winston for documentation
 // about the logger.
 import { Hook } from '@feathersjs/feathers';
-import * as logger from 'winston';
+import logger from '../logger';
 import util from 'util';
 
 // To see more detailed messages, uncomment the following line:

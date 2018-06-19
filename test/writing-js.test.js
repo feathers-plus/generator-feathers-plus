@@ -196,22 +196,22 @@ const tests = [
   }] },
 
   // .ts version of cconst logger = require('./logger')umulative-1-nedb.test
-    //{ testName: 'ts-cumulative-1-nedb.test' },
+    { testName: 'ts-cumulative-1-nedb.test' },
 
   // .ts version of cumulative-1-generic.test
-    //{ testName: 'ts-cumulative-1-generic.test' },
+    { testName: 'ts-cumulative-1-generic.test' },
 
   // .ts version of cumulative-1-memory.test
-    //{ testName: 'ts-cumulative-1-memory.test' },
+    { testName: 'ts-cumulative-1-memory.test' },
 
   // .ts version of cumulative-1-mongo.test
-    //{ testName: 'ts-cumulative-1-mongo.test' },
+    { testName: 'ts-cumulative-1-mongo.test' },
 
   // .ts version of cumulative-1-mongoose.test
-    //{ testName: 'ts-cumulative-1-mongoose.test' },
+    { testName: 'ts-cumulative-1-mongoose.test' },
 
   // .ts version of cumulative-2-sequelize-services.test
-    //{ testName: 'ts-cumulative-2-sequelize-services.test' },
+    { testName: 'ts-cumulative-2-sequelize-services.test' },
 ];
 
 let appDir;
