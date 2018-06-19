@@ -343,7 +343,7 @@ module.exports = function generatorWriting (generator, what) {
       'helmet',
       'lodash.merge',
       'serve-favicon',
-      'winston',
+      'winston@^3.0.0',
     ];
 
     generator.devDependencies = [
