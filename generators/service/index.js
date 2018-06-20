@@ -84,14 +84,14 @@ module.exports = class ServiceGenerator extends Generator {
       },
       validate (input) {
         if (input.trim() === '') {
-          return 'Service name can not be empty';
+          return 'Service name cannot be empty';
         }
 
-        if (input.trim() === 'authentication') {
+        if (input.trim().toLowerCase() === 'authentication') {
           return '`authentication` is a reserved service name.';
         }
 
-        if (input.trim() === 'graphql') {
+        if (input.trim().toLowerCase() === 'graphql') {
           return '`graphql` is a reserved service name.';
         }
 
@@ -146,22 +146,7 @@ module.exports = class ServiceGenerator extends Generator {
         return true;
       }
     }, {
-      // if not empty, then force trailing /
-      name: 'subFolder',
-      message: 'The service is grouped under which name space, if any?',
-      default (answers) {
-        defaultSubFolder = answers.subFolder || props.subFolder;
-        return defaultSubFolder;
-      },
-      validate (input, answers) {
-        console.log('\nanswers', answers);
-        // https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
-        if (input === '' || input.substr(-1) === '/') return true;
-        answers.subFolder = answers.subFolder + '/';
-        console.log('answers.subFolder', answers.subFolder);
-        return true;
-      }
-    }, {
+
       type: 'list',
       name: 'adapter',
       message: 'What kind of service is it?',
@@ -196,10 +181,27 @@ module.exports = class ServiceGenerator extends Generator {
         }
       ]
     }, {
+      // https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
+      name: 'subFolder',
+      message: 'Generate service in which nested folder, e.g. `v1/blog`? (optional)',
+      default (answers) {
+        defaultSubFolder = answers.subFolder || props.subFolder;
+        return defaultSubFolder;
+      },
+      validate (input) {
+        if (input.trim().substr(0, 14).toLowerCase() === 'authentication') {
+          return 'Path cannot start with `authentication`.';
+        }
+
+        if (input.trim().substr(0, 7).toLowerCase() === 'graphql') {
+          return 'Path cannot start with `graphql`';
+        }
+        return true;
+      }
+    }, {
       name: 'path',
       message: 'Which path should the service be registered on?',
       default (answers) {
-        console.log('answers.subFolder 2', answers.subFolder);
         if (defaultSubFolder !== answers.subFolder) {
           return `/${generator.getNameSpace(answers.subFolder)[0]}${kebabCase(answers.name)}`;
         }
