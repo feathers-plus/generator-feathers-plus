@@ -5,8 +5,9 @@
 <%# --- forEach-1 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => {
   __fileName = specs.services[__name].fileName || __name;
+  __subFolder = getNameSpace(specs.services[__name].subFolder || '')[0];
 -%>
-<%- tplImports(__name, `./${__fileName}/${__fileName}.service`, null, 'let') %>
+<%- tplImports(__name, `./${__subFolder}${__fileName}/${__fileName}.service`, null, 'let') %>
 <% }); -%>
 <%# --- forEach-1 ends above. -%>
 

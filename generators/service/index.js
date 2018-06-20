@@ -17,6 +17,7 @@ module.exports = class ServiceGenerator extends Generator {
     const { props, _specs: specs } = this;
     const generator = this;
     let serviceSpecs; // The specs.service[] for the service
+    let defaultSubFolder;
 
     // Define defaults for prompts which may not be displayed
     // `generate authentication` calls us with { props: serviceName }
@@ -60,6 +61,19 @@ module.exports = class ServiceGenerator extends Generator {
         chalk.yellow.bold(parse(cwd()).base),
         ''
       ].join(''));
+    }
+
+    function getNameSpacexxx(subFolder) {
+      if (subFolder === '') {
+        return ['', [], ''];
+      }
+
+      const parts = subFolder.split('/').map(part => kebabCase(part));
+      if (subFolder.substr(-1) === '/') {
+        parts.pop();
+      }
+
+      return [`${parts.join('/')}/`, parts, '../'.repeat(parts.length)];
     }
 
     const prompts = [{
@@ -132,13 +146,19 @@ module.exports = class ServiceGenerator extends Generator {
         return true;
       }
     }, {
+      // if not empty, then force trailing /
       name: 'subFolder',
       message: 'The service is grouped under which name space, if any?',
       default (answers) {
-        return answers.subFolder || props.subFolder;
+        defaultSubFolder = answers.subFolder || props.subFolder;
+        return defaultSubFolder;
       },
-      validate (input) {
+      validate (input, answers) {
+        console.log('\nanswers', answers);
         // https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
+        if (input === '' || input.substr(-1) === '/') return true;
+        answers.subFolder = answers.subFolder + '/';
+        console.log('answers.subFolder', answers.subFolder);
         return true;
       }
     }, {
@@ -179,7 +199,11 @@ module.exports = class ServiceGenerator extends Generator {
       name: 'path',
       message: 'Which path should the service be registered on?',
       default (answers) {
-        return serviceSpecs.path || `/${kebabCase(answers.name || props.name)}`;
+        console.log('answers.subFolder 2', answers.subFolder);
+        if (defaultSubFolder !== answers.subFolder) {
+          return `/${generator.getNameSpace(answers.subFolder)[0]}${kebabCase(answers.name)}`;
+        }
+        return serviceSpecs.path || `/${kebabCase(answers.subFolder || props.subFolder)}${kebabCase(answers.name || props.name)}`;
       },
       validate (input) {
         if (input.trim() === '') {

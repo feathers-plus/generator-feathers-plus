@@ -164,6 +164,7 @@ module.exports = function generatorWriting (generator, what) {
     feathersSpecs,
     mapping,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
+    getNameSpace(str) { return generator.getNameSpace(str); },
 
     // TypeScript & semicolon helpers.
     js,
@@ -458,6 +459,9 @@ module.exports = function generatorWriting (generator, what) {
     context = Object.assign({}, context, {
       serviceName: name,
       serviceNameSingular: specsService.nameSingular,
+      subFolder: generator.getNameSpace(specsService.subFolder)[0],
+      subFolderArray: generator.getNameSpace(specsService.subFolder)[1],
+      subFolderReverse: generator.getNameSpace(specsService.subFolder)[2],
       primaryKey: feathersSpecs[name]._extensions.primaryKey,
       camelName,
       kebabName,
@@ -539,21 +543,22 @@ module.exports = function generatorWriting (generator, what) {
     const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))
       ? `name.service-${adapter}.ejs` : 'name.service.ejs';
     const kn = kebabName;
+    const sfa = context.subFolderArray;
 
     todos = [
-      tmpl([testPath,   'services', 'name.test.ejs'], [testDir, 'services', `${kn}.test.${js}`],         ),
-      tmpl([srcPath,    '_model',   modelTpl],        [libDir, 'models', `${context.modelName}.${js}`],  false, !context.modelName    ),
-      tmpl([serPath,    '_service', serviceTpl],      [libDir, 'services', kn, `${kn}.service.${js}`],   ),
-      tmpl([namePath,   'name.class.ejs'],            [libDir, 'services', kn, `${kn}.class.${js}`],     false, adapter !== 'generic' ),
-      tmpl([namePath,   'name.interface.ejs'],        [libDir, 'services', kn, `${kn}.interface.${js}`], false, isJs ),
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', ...sfa, `${kn}.test.${js}`],         ),
+      tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`],  false, !context.modelName    ),
+      tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, kn, `${kn}.service.${js}`],   ),
+      tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, kn, `${kn}.class.${js}`],     false, adapter !== 'generic' ),
+      tmpl([namePath, 'name.interface.ejs'],        [libDir,  'services', ...sfa, kn, `${kn}.interface.${js}`], false, isJs ),
 
-      tmpl([namePath,   'name.schema.ejs'],           [libDir, 'services', kn, `${kn}.schema.${js}`]     ),
-      tmpl([namePath,   'name.mongo.ejs'],            [libDir, 'services', kn, `${kn}.mongo.${js}`]      ),
-      tmpl([namePath,   'name.mongoose.ejs'],         [libDir, 'services', kn, `${kn}.mongoose.${js}`]   ),
-      tmpl([namePath,   'name.sequelize.ejs'],        [libDir, 'services', kn, `${kn}.sequelize.${js}`]  ),
-      tmpl([namePath,   'name.validate.ejs'],         [libDir, 'services', kn, `${kn}.validate.${js}`]   ),
-      tmpl([namePath,   'name.hooks.ejs'],            [libDir, 'services', kn, `${kn}.hooks.${js}`]      ),
-      tmpl([serPath,    'index.ejs'],                 [libDir, 'services', `index.${js}`]                ),
+      tmpl([namePath, 'name.schema.ejs'],           [libDir,  'services', ...sfa, kn, `${kn}.schema.${js}`]     ),
+      tmpl([namePath, 'name.mongo.ejs'],            [libDir,  'services', ...sfa, kn, `${kn}.mongo.${js}`]      ),
+      tmpl([namePath, 'name.mongoose.ejs'],         [libDir,  'services', ...sfa, kn, `${kn}.mongoose.${js}`]   ),
+      tmpl([namePath, 'name.sequelize.ejs'],        [libDir,  'services', ...sfa, kn, `${kn}.sequelize.${js}`]  ),
+      tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, kn, `${kn}.validate.${js}`]   ),
+      tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, kn, `${kn}.hooks.${js}`]      ),
+      tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                ),
     ];
 
     // Generate modules

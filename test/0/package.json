@@ -1,0 +1,54 @@
+{
+  "name": "z-1",
+  "description": "Project z-1",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src1",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "John Szwaronek",
+    "email": "johnsz9999@gmail.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src1",
+    "test": "test/"
+  },
+  "engines": {
+    "node": "^8.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run eslint && npm run mocha",
+    "eslint": "eslint src1/. test/. --config .eslintrc.json",
+    "start": "node src1/",
+    "mocha": "mocha test/ --recursive --exit --timeout 10000"
+  },
+  "dependencies": {
+    "@feathersjs/configuration": "1.0.2",
+    "@feathersjs/errors": "3.3.0",
+    "@feathersjs/express": "1.2.3",
+    "@feathersjs/feathers": "3.1.7",
+    "@feathersjs/socketio": "3.2.2",
+    "ajv": "6.5.1",
+    "compression": "1.7.2",
+    "cors": "2.8.4",
+    "feathers-hooks-common": "4.12.0",
+    "feathers-nedb": "3.0.1",
+    "helmet": "3.12.1",
+    "lodash.merge": "4.6.1",
+    "nedb": "1.8.0",
+    "serve-favicon": "2.5.0",
+    "winston": "3.0.0"
+  },
+  "devDependencies": {
+    "@types/nedb": "1.8.5",
+    "eslint": "4.19.1",
+    "mocha": "5.2.0",
+    "request": "2.87.0",
+    "request-promise": "4.2.2"
+  }
+}

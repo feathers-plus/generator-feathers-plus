@@ -5,7 +5,7 @@
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if(modelName) { -%>
-<%- tplImports('createModel', `../../models/${modelName}`) %>
+<%- tplImports('createModel', `../../${subFolderReverse}models/${subFolder}${modelName}`) %>
 <% } -%>
 <%# --- if-1 ends above. -%>
 <%- tplImports('hooks', `./${kebabName}.hooks`) %>

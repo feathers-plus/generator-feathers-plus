@@ -2,7 +2,7 @@
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
 // *** Knex support is not finalized
 <%- tplImports('createService', 'feathers-knex', 'req') %>
-<%- tplImports('createModel', `../../models/${modelName}`) %>
+<%- tplImports('createModel', `../../${subFolderReverse}models/${subFolder}${modelName}`) %>
 <%- tplImports('hooks', `./${kebabName}.hooks`) %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>

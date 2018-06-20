@@ -4,9 +4,10 @@
 <%- insertFragment('init') %>
 
 <%- insertFragment('nedb_interface', [
-    `export interface ${upperFirst(specs.services[camelName].nameSingular)} {`,
-    typescriptTypesStr,
-    '}',
+  '// tslint:disable-next-line no-empty-interface',
+  `export interface ${upperFirst(specs.services[camelName].nameSingular)} {`,
+  typescriptTypesStr,
+  '}',
 ]) %>
 
 <%- insertFragment('funcs') %>

@@ -196,6 +196,9 @@ const tests = [
     }
   }] },
 
+  // test service in sub-folders
+    { testName: 'name-space-1.test' },
+
   // .ts version of cconst logger = require('./logger')umulative-1-nedb.test
     { testName: 'ts-cumulative-1-nedb.test' },
 
@@ -216,7 +219,7 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = 'name-space-1.test' //null; //'cumulative-1-sequelize.test' //null;
 
 describe('writing.test.js', function () {
   tests.forEach(({ testName, execute = true, specsChanges = [], compareDirs = true }) => {
