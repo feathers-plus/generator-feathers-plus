@@ -1258,7 +1258,7 @@ const result = await graphql.find({ query: { query: myQuery } })
 ::: tip GraphiQL
 Why the two `query` in `{ query: { query: myQuery } }`?
 The first is needed by the Feathers service API of course.
-The second one is necessary to allow you want to optionally use [GraphiQL](https://github.com/graphql/graphiql),
+The second one is necessary in order to optionally use [GraphiQL](https://github.com/graphql/graphiql),
 the popular graphical interactive in-browser GraphQL IDE.
 You can use GraphiQL to test your queries from the browser.
 :::

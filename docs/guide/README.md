@@ -547,6 +547,7 @@ You can instead use a double underscore (`__`) where ever you would use a `$` wi
 ### Using Graphiql
 
 [Graphiql](https://github.com/graphql/graphiql) works with the generated GraphQL endpoint.
+Matt Chaffe's [article](https://medium.com/@mattchewone/4cc67e785bd) about cli-plus uses GraphiQL.
 
 ### Database
 
