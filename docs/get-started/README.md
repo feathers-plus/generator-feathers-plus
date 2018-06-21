@@ -574,17 +574,11 @@ feathers-plus generate authentication
     This response is used to form the names of GraphQL types e.g.`User` and `[User!]`.
     - `What kind of service is it?` Default is NeDB.
     Choose one of: Custom service, Memory, NeDB, MongoDB, Mongoose, Sequelize, KnexJS.
-    - `Generate service in which nested folder, e.g. `v1/blog`? (optional)`
-    Default is none.    
+    - `Generate service in which nested folder, e.g. v1/blog? (optional)`
+    Default is none. Nested folders are explained in `generate service`.
     - `Which path should the service be registered on?` Default `/users`.
     - `Should this be served by GraphQL?` Default yes.
     Should this service be included in GraphQL Queries?  
-    
-    :::tip Nested Folders
-    The generator will create modules `src/models/users*`, `src/service/users/*` and `test/service/users*` for the users service.
-    
-    However things 
-    :::    
     
 - Connection question:
 
@@ -968,6 +962,14 @@ First let's add a **roles** service.
 And then a **teams** service.
 
 <collapse-image title="Prompts 'generate service' for Teams" url="/assets/get-started/generate-service-teams.png" />
+
+#### Nested Folders
+
+The `Generate service in which nested folder, e.g. v1/blog? (optional)` prompt allows you to group related services together. 
+Their modules, models, tests and (optionally) service call paths will reflect the organization.
+
+<collapse-image hidden title="Services folder with and without nested folders" url="/assets/get-started/name-space.png" />
+
 
 #### Adding the Feathers Models
 

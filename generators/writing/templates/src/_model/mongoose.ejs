@@ -5,7 +5,7 @@
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 <%- insertFragment('mongoose_schema', [
-  tplImports('mongooseSchema', `../services/${kebabName}/${kebabName}.mongoose`)
+  tplImports('mongooseSchema', `../${subFolderReverse}services/${subFolder}${kebabName}/${kebabName}.mongoose`)
 ]) %>
 <%- insertFragment('mongoose_imports') %>
 <%- insertFragment('mongoose_init') %>

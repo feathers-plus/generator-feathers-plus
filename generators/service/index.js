@@ -203,7 +203,7 @@ module.exports = class ServiceGenerator extends Generator {
       message: 'Which path should the service be registered on?',
       default (answers) {
         if (defaultSubFolder !== answers.subFolder) {
-          return `/${generator.getNameSpace(answers.subFolder)[0]}${kebabCase(answers.name)}`;
+          return `/${generator.getNameSpace(answers.subFolder)[0]}${kebabCase(answers.name || props.name)}`;
         }
         return serviceSpecs.path || `/${kebabCase(answers.subFolder || props.subFolder)}${kebabCase(answers.name || props.name)}`;
       },

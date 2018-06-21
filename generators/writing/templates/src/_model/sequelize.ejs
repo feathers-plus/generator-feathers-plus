@@ -7,7 +7,7 @@
 <%- tplTsOnly([`import { Sequelize } from 'sequelize'${sc}`, '']) -%>
 <%- tplImports('merge', 'lodash.merge') %>
 <%- insertFragment('sequelize_schema', [
-  tplImports('sequelizeSchema', `../services/${kebabName}/${kebabName}.sequelize`),
+  tplImports('sequelizeSchema', `../${subFolderReverse}services/${subFolder}${kebabName}/${kebabName}.sequelize`),
 ]) %>
 <%- insertFragment('sequelize_imports') %>
 <%- insertFragment('sequelize_init') %>
