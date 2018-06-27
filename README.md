@@ -1,3 +1,3 @@
-# @feathers-plus/cli a.k.a. cli-plus
+# @feathers-plus/cli a.k.a. cli+
 
 [See documentation.](https://generator.feathers-plus.com)
