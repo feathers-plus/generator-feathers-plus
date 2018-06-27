@@ -1,3 +1,3 @@
-# @feathers-plus/cli a.k.a. cli+
+# @feathers-plus/generator-feathers-plus
 
-[See documentation.](https://generator.feathers-plus.com)
+This Yeoman generator is used with [@feathers-plus/cli](https://generator.feathers-plus.com).
