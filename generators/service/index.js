@@ -136,9 +136,6 @@ module.exports = class ServiceGenerator extends Generator {
         return `What would you call one row in the ${chalk.green(answers.name || props.name)} database?`;
       },
       default (answers) {
-        console.log('answers', answers);
-        console.log('props', props);
-        console.log('serviceSpecs', serviceSpecs);
         return serviceSpecs.nameSingular || singular(answers.name || props.name);
       },
       validate (input) {
