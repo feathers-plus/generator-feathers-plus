@@ -4,11 +4,6 @@ sidebarDepth: 2
 
 # Get Started
 
-::: danger STOP
-Until the generator is released, all references in the documentation to `@feathers-plus`
-should be replaced with `@feathers-x`.
-:::
-
 ## Comparing cli-plus to @feathersjs/cli
 
 @feathers-plus/cli, a.k.a. "cli-plus", is similar to @feathersjs/cli in that:
@@ -25,22 +20,6 @@ However cli-plus also:
 ## Installation
 
 `npm i -g @feathers-plus/cli`
-
-::: danger STOP
-`generator-feathers-plus` is not automatically installed as a dependency
-during the development period.
-
-Do the following so that any change you make in @feathers-plus/generator-feathers-plus
-will be immediately reflected in @feathers-plus/cli.
-
-- Clone `@feathers-plus/generator-feathers-plus`.
-- [Symlink](https://medium.com/trisfera/the-magic-behind-npm-link-d94dcb3a81af)
-it into @feathers-plus/cli.
-  - In @feathers-plus/generator-feathers-plus, run `npm link`.
-  - In @feathers-plus/cli, run `npm link @feathers-plus/generator-feathers-plus`.
-  The location containing the global @feathers-plus/cli will vary based on your OS.
-  You can run `npm list -g` to see where global libraries are installed.
-:::
 
 ## What the Generator Does
 
@@ -204,8 +183,8 @@ Default `src`. The name of the folder containing the server code.
 #### Folders
 
 The generator creates some
-[JS modules](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/02-app/feathers-app/)
-or [TS ones](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/ts/02-app/feathers-app/)
+[JS modules](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/02-app/feathers-app/)
+or [TS ones](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/02-app/feathers-app/)
 reflecting your choices.
 The modules are properly wired together and structured as recommended by the Feathers team.
 
@@ -589,8 +568,8 @@ feathers-plus generate authentication
 #### Folders
 
 The generator adds some modules to the
-[JS folder](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/03-authentication/feathers-app/)
-or [TS one](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/ts/03-authentication/feathers-app/).
+[JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/03-authentication/feathers-app/)
+or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/03-authentication/feathers-app/).
 
 <collapse-image hidden title="Folders After 'generate authentication' with JavaScript" url="/assets/get-started/generate-authentication-dir-compare.png" />
 <collapse-image hidden title="Folders After 'generate authentication' with TypeScript" url="/assets/get-started/ts-generate-authentication-dir-compare.png" />
@@ -1116,8 +1095,8 @@ module.exports = moduleExports;
 #### Folders
 
 The generator adds some modules to the
-[JS folder](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/06-service/feathers-app/)
-or [TS one](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/ts/06-service/feathers-app/).
+[JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/06-service/feathers-app/)
+or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/06-service/feathers-app/).
 
 <collapse-image hidden title="Folders After 'generate service' with JavaScript" url="/assets/get-started/generate-service-model-dir-compare.png" />
 <collapse-image hidden title="Folders After 'generate service' with TypeScript" url="/assets/get-started/ts-generate-service-model-dir-compare.png" />
@@ -1154,7 +1133,7 @@ so you may make queries using either REST or GraphQL, even simultaneously.
 ### Our app as an example
 
 We've taken the app we've been working on and
-[produced a GraphQL example ](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/07-graphql-example/feathers-app).
+[produced a GraphQL example ](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/07-graphql-example/feathers-app).
 You can run it yourself with `npm i` and `npm start`.
 
 - We converted the services to NeDB so the example is easy to run.
@@ -1370,8 +1349,8 @@ Each resolver is a function which joins one type to another, or which calculates
 
 `feathers-plus generate graphql` generates the resolver code needed for your GraphQL endpoint,
 and it generates up to 3 versions of the resolvers
-- One uses [normal Feathers service calls](https://github.com/feathers-x/generator-feathers-plus/blob/master/examples/js/07-graphql-example/feathers-app/src/services/graphql/service.resolvers.js).
-- Another uses [batch-loaders](https://github.com/feathers-x/generator-feathers-plus/blob/master/examples/js/07-graphql-example/feathers-app/src/services/graphql/batchloader.resolvers.js).
+- One uses [normal Feathers service calls](https://github.com/feathers-plus/generator-feathers-plus/blob/master/examples/js/07-graphql-example/feathers-app/src/services/graphql/service.resolvers.js).
+- Another uses [batch-loaders](https://github.com/feathers-plus/generator-feathers-plus/blob/master/examples/js/07-graphql-example/feathers-app/src/services/graphql/batchloader.resolvers.js).
 - And the final one uses raw SQL statements.
 
 The resolvers usually require a **lot** of code which must be meticulously correct.
@@ -1542,7 +1521,7 @@ function paginate(content) {
 
 ### Comprehensive example
 
-[@feathers-plus/cli-generator-example](https://github.com/feathers-x/cli-generator-example)
+[@feathers-plus/cli-generator-example](https://github.com/feathers-plus/cli-generator-example)
 contains a comprehensive GraphQL example produced with cli-plus.
 It's based on the following data schema
 
@@ -2042,8 +2021,8 @@ so these services are not exposed if the GraphQL endpoint itself is not secured.
 #### Folders
 
 The generator adds some modules to the
-[JS folder](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/js/08-graphql/feathers-app)
-or [TS one](https://github.com/feathers-x/generator-feathers-plus/tree/master/examples/ts/08-graphql/feathers-app).
+[JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/08-graphql/feathers-app)
+or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/08-graphql/feathers-app).
 
 <collapse-image hidden title="Folders After 'generate graphql' with JavaScript" url="/assets/get-started/generate-graphql-dir-compare.png" />
 <collapse-image hidden title="Folders After 'generate graphql' with TypeScript" url="/assets/get-started/ts-generate-graphql-dir-compare.png" />
