@@ -69,7 +69,9 @@ FeathersJS, using cli-plus, now supports both REST and GraphQL architectural con
 ## generate options
 
 Let's generate a project having users who may be members of one or more teams.
-We want to display teams with all their members
+We want to display teams with all their members.
+
+<collapse-image title="Prompts 'generate options'" url="/assets/get-started/our-schema.png" />
 
 We first create a folder to contain the app, and then set its generator options.
 
