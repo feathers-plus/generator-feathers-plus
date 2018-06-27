@@ -23,12 +23,10 @@ However cli-plus also:
 
 ## What the Generator Does
 
-We've been writing code "by hand" in order to understand how basic Feathers works.
-We will now start using Feathers generators since we have the background to understand what they produce.
 
 #### Generators help eliminate boilerplate.
 
-We've seen that Feathers, even when coded "by hand",
+Feathers, even when coded "by hand",
 eliminates the majority of the boilerplate typically in a CRUD project.
 Generators will eliminate even more.
 
