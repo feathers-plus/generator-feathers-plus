@@ -136,11 +136,11 @@ module.exports = class ServiceGenerator extends Generator {
         return `What would you call one row in the ${chalk.green(answers.name || props.name)} database?`;
       },
       default (answers) {
-        return singular(answers.name || props.name);
+        return answers.nameSingular || props.nameSingular || singular(answers.name || props.name);
       },
       validate (input) {
         if (input.trim() === '') {
-          return 'Service path can not be empty';
+          return 'Singular name cannot be empty';
         }
 
         return true;
