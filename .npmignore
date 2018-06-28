@@ -1,4 +1,4 @@
-.editorconfig
+/.editorconfig
 .jshintrc
 .travis.yml
 .istanbul.yml
