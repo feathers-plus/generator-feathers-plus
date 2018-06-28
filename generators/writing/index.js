@@ -813,6 +813,12 @@ module.exports = function generatorWriting (generator, what) {
     context = Object.assign({}, context, {
       name: 'graphql',
       serviceName: 'graphql',
+
+      serviceNameSingular: 'graphql',
+      subFolder: '',
+      subFolderArray: [],
+      subFolderReverse: '',
+
       path: stripSlashes(specs.graphql.path),
       authentication: false,
       isAuthEntityWithAuthentication: false,

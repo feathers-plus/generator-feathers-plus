@@ -924,7 +924,7 @@ feathers-plus generate secret
 
 <collapse-image title="Prompts 'generate secret'" url="/assets/get-started/generate-secret.png" />
 
-and paste the new secret into package.json.
+and paste the new secret into config/default.json.
 
 ## generate service
 
