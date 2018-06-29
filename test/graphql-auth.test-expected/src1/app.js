@@ -50,12 +50,12 @@ app.configure(socketio());
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
+// Configure authentication (see `authentication.js`)
+app.configure(authentication);
 // Set up our services (see `services/index.js`)
 app.configure(services);
 // Set up event channels (see channels.js)
 app.configure(channels);
-// Configure authentication (see `authentication.js`)
-app.configure(authentication);
 // !code: config_middle // !end
 
 // Configure a middleware for 404s and the error handler

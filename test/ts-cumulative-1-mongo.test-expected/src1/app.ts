@@ -54,12 +54,12 @@ app.configure(mongodb);
 
 // Configure other middleware (see `middleware/index.ts`)
 app.configure(middleware);
+// Configure authentication (see `authentication.ts`)
+app.configure(authentication);
 // Set up our services (see `services/index.ts`)
 app.configure(services);
 // Set up event channels (see channels.ts)
 app.configure(channels);
-// Configure authentication (see `authentication.ts`)
-app.configure(authentication);
 // !code: config_middle // !end
 
 // Configure a middleware for 404s and the error handler
