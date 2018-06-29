@@ -71,10 +71,6 @@ app.configure(<%- __adapter %>)<%- sc %>
 
 // Configure other middleware (see `middleware/index.<%- js %>`)
 app.configure(middleware)<%- sc %>
-// Set up our services (see `services/index.<%- js %>`)
-app.configure(services)<%- sc %>
-// Set up event channels (see channels.<%- js %>)
-app.configure(channels)<%- sc %>
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (specs.authentication) { -%>
@@ -82,6 +78,10 @@ app.configure(channels)<%- sc %>
 app.configure(authentication)<%- sc %>
 <% } -%>
 <%# --- if-2 ends above. -%>
+// Set up our services (see `services/index.<%- js %>`)
+app.configure(services)<%- sc %>
+// Set up event channels (see channels.<%- js %>)
+app.configure(channels)<%- sc %>
 <%- insertFragment('config_middle') %>
 
 // Configure a middleware for 404s and the error handler
