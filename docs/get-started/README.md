@@ -284,6 +284,7 @@ export type App = Application<{
 
 This makes TypeScript aware of the available services’ names, as well as their interfaces.
 Because of this `app.service('messages')` returns a typed service which in the end leaves you with a properly typed response.
+From a different example:
 
 ![app interface](/assets/get-started/app-interface-ts.png)
 :::
