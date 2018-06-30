@@ -25,5 +25,6 @@
       "error",
       "always"
     ]
-  }
+  },
+  "prop-for-testing": "1"
 }

@@ -260,6 +260,9 @@ OK - test f-auth-mgnt fields to graphql auth
 OK - adapter-info: Make sure generic adapter can work somehow. 
 OK - test name.sequelize.js
 OK - adapter-info: Make sure generic adapter can work somehow.
+OK - add
+OK   Update available 3.6.1 → 3.6.2        │
+OK   Run npm i -g @feathersjs/cli to update
 
 
 NO - hooks modules should be ifNew: true
@@ -285,17 +288,17 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
      scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
 
 - Generated README does not contain the correct cli-plus commands.
-- add
-  Update available 3.6.1 → 3.6.2        │
-  Run npm i -g @feathersjs/cli to update 
 - add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
 - Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
   for `uniqueItemProperties`? In say name.mongo.js?
 
 - uncomment extensions.graphql.name? how about extensions.graphql.service?
 - Handle memberIds[] for batchloaders.
-- Any custom code found that is not reinserted into regenerated modules is cached in a temp module so you can cut/paste it if needed.
-- Cache all default code created (and that's a lot) in a module. When scanning for custom code, compare any default code found to what was cached. This would find code where <DEFAULT> was not removed.
+- Any custom code found that is not reinserted into regenerated modules is cached in a temp module
+  so you can cut/paste it if needed.
+- Cache hashes for all default code created in a module.
+  When scanning for custom code, compare any default code found to the cached hash.
+  This would find code where <DEFAULT> was not removed.
 
 - add elasticsearch support when generating a database
 
