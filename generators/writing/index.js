@@ -265,7 +265,7 @@ module.exports = function generatorWriting (generator, what) {
 
     if (!Object.keys(eslintrc).length) {
       eslintrcExists = false;
-      eslintrc = generator.fs.readJSON(join(tpl, '.eslintrc.json'), {});
+      eslintrc = generator.fs.readJSON(join(tpl, '_eslintrc.json'), {});
     }
 
     const rules = eslintrc.rules = eslintrc.rules || {};
@@ -287,7 +287,7 @@ module.exports = function generatorWriting (generator, what) {
 
     // Modules to generate
     todos = [
-      copy([tpl, '.editorconfig'], '.editorconfig', true),
+      copy([tpl, '_editorconfig'], '.editorconfig', true),
       // This name hack is necessary because NPM does not publish `.gitignore` files
       copy([tpl, '_gitignore'],    '.gitignore', true),
       copy([tpl, 'LICENSE'],       'LICENSE', true),
