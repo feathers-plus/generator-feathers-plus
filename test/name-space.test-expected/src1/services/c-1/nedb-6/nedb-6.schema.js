@@ -32,10 +32,10 @@ let extensions = {
   // GraphQL generation.
   graphql: {
     // !<DEFAULT> code: graphql_header
-    // name: 'Nedb6',
-    // service: {
-    //   sort: { _id: 1 },
-    // },
+    name: 'Nedb6',
+    service: {
+      sort: { _id: 1 },
+    },
     // sql: {
     //   sqlTable: 'Nedb6',
     //   uniqueKey: '_id',

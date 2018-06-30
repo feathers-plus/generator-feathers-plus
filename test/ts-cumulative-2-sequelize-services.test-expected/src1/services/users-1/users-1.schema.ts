@@ -34,10 +34,10 @@ let extensions = {
   // GraphQL generation.
   graphql: {
     // !<DEFAULT> code: graphql_header
-    // name: 'Users1',
-    // service: {
-    //   sort: { id: 1 },
-    // },
+    name: 'Users1',
+    service: {
+      sort: { id: 1 },
+    },
     // sql: {
     //   sqlTable: 'Users1',
     //   uniqueKey: 'id',
