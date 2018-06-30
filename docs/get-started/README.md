@@ -263,28 +263,9 @@ It exists only if the yarn option is selected.
 
 :::tip TypeScript
 **src/app.interface.ts** contains a type named `App` made up of all the generated services’ interfaces.
-For example:
-
-```js
-import { Application } from '@feathersjs/express';
-import { Comment } from './services/comments/comments.interface';
-import { Like } from './services/likes/likes.interface';
-import { Post } from './services/posts/posts.interface';
-import { Relationship } from './services/relationships/relationships.interface';
-import { User } from './services/users/users.interface';
-
-export type App = Application<{
-  comments: Comment,
-  likes: Like,
-  posts: Post,
-  relationships: Relationship,
-  users: User,
-}>;
-```
-
 This makes TypeScript aware of the available services’ names, as well as their interfaces.
+
 Because of this `app.service('messages')` returns a typed service which in the end leaves you with a properly typed response.
-From a different example:
 
 ![app interface](/assets/get-started/app-interface-ts.png)
 :::
