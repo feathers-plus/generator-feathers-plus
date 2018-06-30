@@ -263,6 +263,14 @@ OK - adapter-info: Make sure generic adapter can work somehow.
 OK - add
 OK   Update available 3.6.1 → 3.6.2        │
 OK   Run npm i -g @feathersjs/cli to update
+OK - Hi, I’ve got a short question: is it possible to generate Typescript typings from the backend
+     from the services, that can be used to type the feathers-client? name.interface.ts
+OK - test name.mongo.js
+OK - Also test generic adapter for .js and .ts
+OK - New code locations any place its reasonable to add custom code.
+     Pay extra attention to the _adapters, _model, _service templates
+OK - Consider which generated code to instead make default code, creating a new code location there.
+OK - Generated README does not contain the correct cli-plus commands.
 
 
 NO - hooks modules should be ifNew: true
@@ -286,8 +294,11 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
      Main problem: If we regen a service, we have to know which modules contain custom code we have
      to consider for stashing. Basically, if we regen middleware, we won't be regen'ing graphql, so
      scanned graphql custom code would not be used in the regen. Yet we don't want to stash this.
+NO - Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/generator.js   
+NO - "Hi, anyone knows how to make feathers-cli generate services in plural mode but model in singular mode?
+     its ok to use plural for services, but kind of wired for models"  
 
-- Generated README does not contain the correct cli-plus commands.
+
 - add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
 - Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
   for `uniqueItemProperties`? In say name.mongo.js?
@@ -302,17 +313,13 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 
 - add elasticsearch support when generating a database
 
-- test name.mongo.js
 - test name.validate.js
-- run tslint --fix / eslint --fix afterwards ?!? (watch for removal of trailing commas
+- add option: run tslint --fix / eslint --fix afterwards ?!? (watch for removal of trailing commas
   Alternatively have pretty-stringify produce single rather than double quotes.
 - add comment in hooks regarding context.params.graphql for services included in graphql
 - add sort one 1 prop in array of objects, sort on multiple prop names to BatchLoader. See f-x/common-utils
 - what is feathersjs/cli/lib/shell.js
-- Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/generator.js
 
-- Hi, I’ve got a short question: is it possible to generate Typescript typings from the backend
-  from the services, that can be used to type the feathers-client? name.interface.ts
 - prompt for softDelete (after testing discard('password') on users with auth)
 - prompt and inert feathers-authentication-management. Need to handle arrays for SQL servers.
   - Will need to update feathersjs/authentication to check some extra fields
@@ -320,16 +327,17 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
   - Handle outstanding issue with repo.
   - Write sample emails.
 - prompt for i18n support  
+- what can we do with feathers-sync?
 
+- validation pass over services/name.schema.*s
 - error checking pass over specs (plus some custom code),
   e.g. email/password exists in schema of user-entity when local auth selected.
-- what can we do with feathers-sync? 
 
+- create Knex schema
 - finalize and test support for Knex services.
 - add docs example with memberIds: [...] to tests
 - support memberIds: [...] in batchloaders
 
-- create Knex schema
 - add async init https://github.com/feathersjs/feathers/issues/509
 - add stress test https://blog.feathersjs.com/stress-testing-your-feathersjs-application-like-in-production-4b8611ee8d9e
 - add async feathers startup
@@ -338,14 +346,13 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 - create definitions for swagger
 - create rate limiter for socket.io. luc.claustres asked about one on Slack
 - expand generator for authentication
+    - optionally include Basic Authentication ??!??
     - optionally include feathers-authentication-management (which may use a refactoring)
 - create generator fcor deployment   
 - create workflow. luc.claustres asked about one on Slack.
-- validation pass over services/name.schema.*s
 - generate for feathers-client (Vue, Redux, etc)
 - bring dependencies up to date
-- "Hi, anyone knows how to make feathers-cli generate services in plural mode but model in singular mode?
-  its ok to use plural for services, but kind of wired for models"
+
 - Allow last hook to execute e.g.
     .hooks({
       before: {
@@ -369,9 +376,7 @@ describe('Feathers application tests', () => {
 
 FINAL CHECKS
 - Consistency, e.g. name.sequelize.js lists needed fields for user-entity while others don't.
-- New code locations any place its reasonable to add custom code.
-  Pay extra attention to the _adapters, _model, _service templates
-- Consider which generated code to instead make default code, creating a new code location there.
+
 
 - Several templates may have the same app module as their destination. Each of these
   templates needs to be tested for .ts .
@@ -395,4 +400,4 @@ FINAL CHECKS
     - rethinkdb.*s
     - sequelize.*s for MS SQL Server
     OK - sequelize.*s for other DBs use a common template
-- Also test generic adapter for .js and .ts        
+        
