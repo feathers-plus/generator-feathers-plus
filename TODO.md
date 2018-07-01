@@ -271,6 +271,8 @@ OK - New code locations any place its reasonable to add custom code.
      Pay extra attention to the _adapters, _model, _service templates
 OK - Consider which generated code to instead make default code, creating a new code location there.
 OK - Generated README does not contain the correct cli-plus commands.
+OK - uncomment extensions.graphql.name and extensions.graphql.service?
+OK - document name.validate.?s
 
 
 NO - hooks modules should be ifNew: true
@@ -303,7 +305,6 @@ NO - "Hi, anyone knows how to make feathers-cli generate services in plural mode
 - Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
   for `uniqueItemProperties`? In say name.mongo.js?
 
-- uncomment extensions.graphql.name? how about extensions.graphql.service?
 - Handle memberIds[] for batchloaders.
 - Any custom code found that is not reinserted into regenerated modules is cached in a temp module
   so you can cut/paste it if needed.
@@ -348,7 +349,7 @@ NO - "Hi, anyone knows how to make feathers-cli generate services in plural mode
 - expand generator for authentication
     - optionally include Basic Authentication ??!??
     - optionally include feathers-authentication-management (which may use a refactoring)
-- create generator fcor deployment   
+- create generator for deployment   
 - create workflow. luc.claustres asked about one on Slack.
 - generate for feathers-client (Vue, Redux, etc)
 - bring dependencies up to date

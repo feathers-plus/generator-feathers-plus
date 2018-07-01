@@ -5,6 +5,121 @@ pageClass: custom-api-page
 
 <!--=============================================================================================-->
 
+## Generated Modules
+
+### src/service-name/service-name.validate.?s
+
+This module exports functions for validating data for that service name.
+- **Exports**
+
+  - `{Object} create`
+  - `{Object} update`
+  - `{Object} patch`
+  - `{Function} validateCreate`
+  - `{Function} validateUpdate`
+  - `{Function} validatePatch`
+  - `{Function} quickValidate`
+
+Argument | Type | Description
+:-|:-:|:-|:-
+`create` | `Object` |  JSON-schema for validation on create.
+`update` | `Object` |  JSON-schema for validation on update.
+`patch` | `Object` |  JSON-schema for validation on patch.
+`validateCreate` | `Function` |  Hook function for validation on create. Signature is `validateCreate(ajvOptions)`.
+`validateUpdate` | `Function` |  Hook function for validation on update. Signature is `validateUpdate(ajvOptions)`.
+`validatePatch` | `Function` |  Hook function for validation on patch. Signature is `validatePatch(ajvOptions)`.
+`quickValidate` | `Function` |  Generic validation function. Signature is `quickValidate(method, data, ajvOptions)`.
+
+`validate...` | Parameters | Default |Description
+:-|:-|:-:|:-
+. | `{Object} ajvOptions` |  | Options for [ajv](https://github.com/epoberezkin/ajv).
+
+`quickValidate` | Parameters | Default |Description
+:-|:-|:-:|:-
+. | `{String} method` |  | Type of validation: `create`, `update` or `patch`.
+. | `{Object} data` |  | The data record.
+. | `{Object} ajvOptions` |  | Options for [ajv](https://github.com/epoberezkin/ajv).
+
+- **Example**
+
+Obtaining the JSON-schema.
+
+<collapse hidden title="JSON-schema">
+
+```js
+const { create } = require('path/to/src/users/users.validate');
+console.log(create);
+```
+
+```js
+{
+    title: "Users",
+    description: "Users database.",
+    required: [
+      "uuid",
+      "email",
+      "firstName",
+      "lastName"
+    ],
+    uniqueItemProperties: [],
+    properties: {
+      _id: {
+        type: "string"
+      },
+      email: {
+        type: "string"
+      },
+      firstName: {
+        type: "string"
+      },
+      lastName: {
+        type: "string"
+      }
+    }
+  }
+```
+
+</collapse>
+
+Configuring hooks.
+
+<collapse hidden title="Hooks">
+
+```js
+const { validateCreate } = require('path/to/src/users/users.validate');
+module.exports = {
+  before: {
+    create: validateCreate(),
+  }
+};  
+```
+
+</collapse>
+
+Generic validation anywhere.
+
+<collapse hidden title="Generic validation">
+
+```js
+const { quickValidate } = require('path/to/src/users/users.validate');
+const isValid = quickValidate(
+  'create', { firstName: ..., lastName: ..., email: ... }, ajvOptions
+);
+```
+
+</collapse>
+
+- **Details**
+
+  There are some good [tutorials](https://code.tutsplus.com/tutorials/validating-data-with-json-schema-part-1--cms-25343)
+  on using JSON-Schema with [Ajv](https://github.com/epoberezkin/ajv).
+  
+  The hook functions call the common hook [validateSchema](https://feathers-plus.github.io/v1/feathers-hooks-common/index.html#validateschema).
+  
+  There is no validation module for the service for the GraphQL endpoint.
+
+<!--=============================================================================================-->
+
 ## Service Adapters
 
 ### graphql
