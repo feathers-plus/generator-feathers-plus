@@ -300,7 +300,7 @@ NO - Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/
 NO - "Hi, anyone knows how to make feathers-cli generate services in plural mode but model in singular mode?
      its ok to use plural for services, but kind of wired for models"  
 
-
+- prevent reserved words being used as service names. Exclude graphql also. https://www.npmjs.com/package/reserved-words
 - add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
 - Do we create `db.collection.createIndex({ fieldName: 1 }, { unique: true })`
   for `uniqueItemProperties`? In say name.mongo.js?

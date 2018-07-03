@@ -56,7 +56,6 @@ console.log(create);
     title: "Users",
     description: "Users database.",
     required: [
-      "uuid",
       "email",
       "firstName",
       "lastName"

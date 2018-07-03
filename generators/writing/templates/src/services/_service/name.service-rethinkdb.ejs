@@ -1,6 +1,6 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`
-<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
+<%- tplTsOnly([`import { App } from '../../${subFolderReverse}app.interface'${sc}`, '', '']) -%>
 <%- tplImports('createService', 'feathers-rethinkdb', 'req') %>
 <%- tplImports('hooks', `./${kebabName}.hooks`) %>
 <%- insertFragment('imports') %>

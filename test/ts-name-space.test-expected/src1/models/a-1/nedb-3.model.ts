@@ -1,6 +1,6 @@
 
 // nedb3-model.ts - An nedb model
-import { App } from '../app.interface';
+import { App } from '../../app.interface';
 
 import NeDB from 'nedb';
 import * as path from 'path';

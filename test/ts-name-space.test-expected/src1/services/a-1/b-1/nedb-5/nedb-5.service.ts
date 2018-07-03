@@ -1,6 +1,6 @@
 
 // Initializes the `nedb5` service on path `/nedb-5`. (Can be re-generated.)
-import { App } from '../../app.interface';
+import { App } from '../../../../app.interface';
 
 import createService from 'feathers-nedb';
 import createModel from '../../../../models/a-1/b-1/nedb-5.model';

@@ -1,6 +1,6 @@
 
 // <%= serviceName %>-model.<%- js %> - An nedb model
-<%- tplTsOnly([`import { App } from '../app.interface'${sc}`, '', '']) -%>
+<%- tplTsOnly([`import { App } from '../${subFolderReverse}app.interface'${sc}`, '', '']) -%>
 <%- tplImports('NeDB', 'nedb') %>
 <%- tplImports('path', null, 'as') %>
 <%- insertFragment('nedb_imports') %>

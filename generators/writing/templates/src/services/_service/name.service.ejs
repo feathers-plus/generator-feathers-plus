@@ -1,6 +1,6 @@
 
 // Initializes the `<%= serviceName %>` service on path `/<%= path %>`. (Can be re-generated.)
-<%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '', '']) -%>
+<%- tplTsOnly([`import { App } from '../../${subFolderReverse}app.interface'${sc}`, '', '']) -%>
 <%- tplImports('createService', serviceModule, 'req') %>
 <%# -%>
 <%# --- if-1 starts below. -%>
