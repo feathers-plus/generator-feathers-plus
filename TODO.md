@@ -313,6 +313,8 @@ NO - "Hi, anyone knows how to make feathers-cli generate services in plural mode
   This would find code where <DEFAULT> was not removed.
 
 - add elasticsearch support when generating a database
+- I think if we were to do migrations they shoudl be feathers based, i.e. db agnostic (as far as SQL vs NoSQL allows)
+- gen code if server is part of a set of microservices.
 
 - test name.validate.js
 - add option: run tslint --fix / eslint --fix afterwards ?!? (watch for removal of trailing commas

@@ -49,7 +49,9 @@
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
     "test": "npm run lint && npm run coverage",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "root": "npm root -g",
+    "list": "npm list -g"
   },
   "semistandard": {
     "sourceType": "module",

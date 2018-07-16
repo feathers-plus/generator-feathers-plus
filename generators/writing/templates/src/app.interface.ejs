@@ -3,8 +3,12 @@
 import { Application } from '@feathersjs/express';
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the services. -%>
-<% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
-import { <%- upperFirst(specs.services[__name].nameSingular) %> } from './services/<%- kebabCase(__name) %>/<%- kebabCase(__name) %>.interface'<%- sc %>
+<% Object.keys(specs.services || {}).sort().forEach(__name => {
+  __importName = upperFirst(specs.services[__name].nameSingular);
+  __subFolder = getNameSpace(specs.services[__name].subFolder)[0];
+  __kName = kebabCase(__name);
+-%>
+import { <%- __importName %> } from './services/<%- __subFolder %><%- __kName %>/<%- __kName %>.interface'<%- sc %>
 <% }); -%>
 <%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>

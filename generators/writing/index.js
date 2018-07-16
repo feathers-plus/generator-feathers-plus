@@ -285,6 +285,11 @@ module.exports = function generatorWriting (generator, what) {
       }
     }
 
+    // Custom template context.
+    context = Object.assign({}, context, {
+      getNameSpace: generator.getNameSpace
+    });
+
     // Modules to generate
     todos = [
       copy([tpl, '_editorconfig'], '.editorconfig', true),
