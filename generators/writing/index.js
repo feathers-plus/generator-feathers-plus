@@ -565,6 +565,9 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, kn, `${kn}.validate.${js}`]   ),
       tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, kn, `${kn}.hooks.${js}`]      ),
       tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                ),
+
+      tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
+      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
     ];
 
     // Generate modules
@@ -700,7 +703,8 @@ module.exports = function generatorWriting (generator, what) {
 
     const todos = !Object.keys(connections).length ? [] : [
       json(newConfig, ['config', 'default.json']),
-      tmpl([srcPath, 'app.ejs'], [libDir, `app.${js}`])
+      tmpl([srcPath, 'app.ejs'], [libDir, `app.${js}`]),
+      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
     ];
 
     Object.keys(_adapters).sort().forEach(adapter => {
@@ -805,7 +809,8 @@ module.exports = function generatorWriting (generator, what) {
     Object.keys(specs.middlewares || {}).sort().forEach(mwName => {
       const fileName = specs.middlewares[mwName].kebab;
       todos.push(
-        tmpl([mwPath, 'middleware.ejs'], [libDir, 'middleware', `${fileName}.${js}`], true, null, { mwName })
+        tmpl([mwPath, 'middleware.ejs'], [libDir, 'middleware', `${fileName}.${js}`], true, null, { mwName }),
+        tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
       );
     });
 
@@ -854,7 +859,9 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([qlPath, 'sql.execute.sequelize.ejs'], [libDir, 'services', 'graphql', `sql.execute.sequelize.${js}`]),
       tmpl([qlPath, 'sql.metadata.ejs'], [libDir, 'services', 'graphql', `sql.metadata.${js}`]),
       tmpl([qlPath, 'sql.resolvers.ejs'], [libDir, 'services', 'graphql', `sql.resolvers.${js}`]),
-      tmpl([serPath, 'index.ejs'], [libDir, 'services', `index.${js}`])
+      tmpl([serPath, 'index.ejs'], [libDir, 'services', `index.${js}`]),
+
+      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
     ];
 
     // Generate modules
