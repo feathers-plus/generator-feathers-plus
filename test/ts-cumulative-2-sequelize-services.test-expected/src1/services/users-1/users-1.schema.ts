@@ -33,14 +33,14 @@ let schema = {
 let extensions = {
   // GraphQL generation.
   graphql: {
-    // !<DEFAULT> code: graphql_header
-    name: 'Users1',
-    service: {
-      sort: { id: 1 },
-    },
+    // !code: graphql_header
+    // name: 'Users1',
+    // service: {
+    //   sort: { _id: 1 },
+    // },
     // sql: {
     //   sqlTable: 'Users1',
-    //   uniqueKey: 'id',
+    //   uniqueKey: '_id',
     //   sqlColumn: {
     //     __authorId__: '__author_id__',
     //   },

@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const Sequelize = require('sequelize');
 
 const { camelCase, kebabCase, snakeCase, upperFirst } = require('lodash');
-const { EOL } = require('os');
 const { existsSync } = require('fs');
 const { inspect } = require('util');
 const { join } = require('path');
@@ -22,6 +21,8 @@ const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript'
 const stringifyPlus = require('../../lib/stringify-plus');
 
 const { updateSpecs } = require('../../lib/specs');
+
+const EOL = '\n';
 
 const OAUTH2_STRATEGY_MAPPINGS = {
   auth0: 'passport-auth0',

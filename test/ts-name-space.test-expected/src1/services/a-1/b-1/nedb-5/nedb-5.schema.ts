@@ -31,7 +31,7 @@ let schema = {
 let extensions = {
   // GraphQL generation.
   graphql: {
-    // !<DEFAULT> code: graphql_header
+    // !code: graphql_header
     name: 'Nedb5',
     service: {
       sort: { _id: 1 },
