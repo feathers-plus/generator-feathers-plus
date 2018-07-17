@@ -6,12 +6,12 @@ export default function (app: App) {
     return;
   }
 
-  app.on('connection', (connection) => {
+  app.on('connection', (connection: any) => {
     // On a new real-time connection, add it to the anonymous channel
     app.channel('anonymous').join(connection);
   });
 
-  app.on('login', (authResult, { connection }) => {
+  app.on('login', (authResult: any, { connection }: any) => {
     // connection can be undefined if there is no
     // real-time connection, e.g. when logging in via REST
     if (connection) {
