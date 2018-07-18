@@ -34,7 +34,7 @@ const OAUTH2_STRATEGY_MAPPINGS = {
 const AUTH_TYPES = {
   local: '@types/feathersjs__authentication-local',
   auth0: '@types/feathersjs__authentication-oauth2',
-  // google:
+  google: '@types/feathersjs__authentication-oauth2',
   facebook: '@types/passport-facebook',
   github: '@types/passport-github',
 };
