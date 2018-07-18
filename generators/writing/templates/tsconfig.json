@@ -1,7 +1,7 @@
 {
   "include": [
-    "src/index.ts",
-    "src/typings.d.ts"
+    "<%- specs.app.src %>/index.ts",
+    "<%- specs.app.src %>/typings.d.ts"
   ],
   "compilerOptions": {
     /* Basic Options */

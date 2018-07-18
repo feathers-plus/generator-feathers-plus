@@ -330,7 +330,7 @@ module.exports = function generatorWriting (generator, what) {
     } else {
       todos = todos.concat(
         copy([tpl, 'tslint.json'], 'tslint.json', true),
-        copy([tpl, 'tsconfig.json'], 'tsconfig.json', true),
+        tmpl([tpl, 'tsconfig.json'], 'tsconfig.json', true),
         copy([tpl, 'tsconfig.test.json'], 'tsconfig.test.json', true),
       );
     }
