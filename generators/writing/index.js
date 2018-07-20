@@ -35,7 +35,7 @@ const AUTH_TYPES = {
   local: '@types/feathersjs__authentication-local',
   auth0: '@types/feathersjs__authentication-oauth2',
   google: '@types/feathersjs__authentication-oauth2',
-  facebook: '@types/passport-facebook',
+  facebook: ['@types/passport-facebook', '@types/feathersjs__authentication-oauth2'],
   github: '@types/passport-github',
 };
 
@@ -751,7 +751,7 @@ module.exports = function generatorWriting (generator, what) {
       '@feathersjs/authentication-jwt'
     ];
 
-    const devDependencies = [
+    let devDependencies = [
       '@types/feathersjs__authentication',
       '@types/feathersjs__authentication-jwt',
     ];
@@ -774,7 +774,8 @@ module.exports = function generatorWriting (generator, what) {
       }
 
       if (AUTH_TYPES[strategy]) {
-        devDependencies.push(AUTH_TYPES[strategy]);
+        //devDependencies.push(AUTH_TYPES[strategy]);
+        devDependencies = devDependencies.concat(AUTH_TYPES[strategy]);
       }
     });
 
