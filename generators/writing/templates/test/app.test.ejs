@@ -13,13 +13,15 @@ const getUrl = <%- tplJsOrTs('pathname', '(pathname?: string)') %> => url.format
 })<%- sc %>
 
 describe('Feathers application tests', () => {
+  let server<%- sc %>
+
   before(function (done) {
-    this.server = app.listen(port)<%- sc %>
-    this.server.once('listening', () => done())<%- sc %>
+    server = app.listen(port)<%- sc %>
+    server.once('listening', () => done())<%- sc %>
   })<%- sc %>
 
   after(function (done) {
-    this.server.close(done)<%- sc %>
+    server.close(done)<%- sc %>
   })<%- sc %>
 
   it('starts and shows the index page', () => {

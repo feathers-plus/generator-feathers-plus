@@ -13,13 +13,15 @@ const getUrl = pathname => url.format({
 })
 
 describe('Feathers application tests', () => {
+  let server
+
   before(function (done) {
-    this.server = app.listen(port)
-    this.server.once('listening', () => done())
+    server = app.listen(port)
+    server.once('listening', () => done())
   })
 
   after(function (done) {
-    this.server.close(done)
+    server.close(done)
   })
 
   it('starts and shows the index page', () => {
