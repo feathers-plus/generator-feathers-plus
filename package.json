@@ -47,7 +47,7 @@
     "mocha:code": "mocha test/ --timeout 1200000 --exit --bail --grep \"writes code\"",
     "mocha:tests": "mocha test/ --timeout 1200000 --exit --bail --grep \"runs test\"",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
-    "test": "npm run lint && npm run coverage",
+    "testxxx": "npm run lint && npm run coverage",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "root": "npm root -g",
