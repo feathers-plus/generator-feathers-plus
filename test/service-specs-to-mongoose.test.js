@@ -9,6 +9,8 @@ describe('Creates Mongoose Schemas', function () {
 
     assert.deepEqual(mongooseSchema.roles.enum, [ 'admin' ], 'roles enum was correctly applied');
 
+    assert.deepEqual(mongooseSchema.roles1.enum, [ 'admin' ], 'roles1 enum was correctly applied');
+
     assert.deepEqual(mongooseSchema.dept.enum, [ 'acct' ], 'dept enum was correctly applied');
   });
 });

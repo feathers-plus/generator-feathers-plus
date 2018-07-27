@@ -36,6 +36,14 @@ let schema = {
       }]
     },
 
+    roles1: {
+      type: 'array',
+      items: {
+        type: 'string',
+        enum: [ 'admin' ]
+      }
+    },
+
     dept: { enum: [ 'acct' ] }
     // !end
   },
