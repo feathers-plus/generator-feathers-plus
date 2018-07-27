@@ -227,8 +227,8 @@ const tests = [
 let appDir;
 const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
 
-describe('writing.test.js', function () {
-  tests.forEach(({ testName, execute = true, specsChanges = [], compareDirs = true }) => {
+describe('generators-writing.test.js', function () {
+  tests.forEach(({ testName, execute = false, specsChanges = [], compareDirs = true }) => {
     if (runJustThisTest && runJustThisTest !== testName) return;
 
     describe(testName, function () {
@@ -280,12 +280,14 @@ describe('writing.test.js', function () {
 
 // Run the first generator
 function runFirstGeneration (testName, withOptions) {
+  //console.log('>runFirstGeneration', testName, withOptions);
   return helpers.run(path.join(__dirname, '..', 'generators', 'all'))
     .inTmpDir(dir => {
       appDir = dir;
       // specs.app.name must be 'z-1' not 'z1' as Feathers-generate app converts the project name
       // to kebab-case during the prompt.
-      fs.copySync(path.join(__dirname, `${testName}-copy`), dir);
+      //console.log('288', path.join(__dirname, '..', 'test-expands', `${testName}-copy`), dir);
+      fs.copySync(path.join(__dirname, '..', 'test-expands', `${testName}-copy`), dir);
 
       resetSpecs();
     })
@@ -298,6 +300,7 @@ function runFirstGeneration (testName, withOptions) {
 
 // Run subsequent generators
 function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
+  //console.log('>runNextGenerator', dir);
   if (!specsChanges.length) return;
   const specsChg1 = specsChanges.shift();
   const specsChg = Array.isArray(specsChg1) ? specsChg1 : [() => {}, specsChg1];
@@ -309,12 +312,15 @@ function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
       appDir = dirNext;
       console.log(`      specs change ${index}`);
 
+      //console.log('314', dir, dirNext);
       fs.copySync(dir, dirNext);
 
+      //console.log('317', path.join(dir, 'feathers-gen-specs.json'));
       const prevJson = fs.readJsonSync(path.join(dir, 'feathers-gen-specs.json'));
       specsChg[0](prevJson);
       nextJson = merge(prevJson, specsChg[1]);
 
+      //console.log('322', path.join(dirNext, 'feathers-gen-specs.json'));
       fs.writeFileSync(path.join(dirNext, 'feathers-gen-specs.json'), JSON.stringify(nextJson, null, 2));
 
       resetSpecs();
@@ -336,6 +342,7 @@ function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
 
 // Run the 'test' script in package.json
 function runGeneratedTests (expectedText) {
+  //console.log('>runGeneratedTests');
   return runCommand(packageInstaller, ['test'], { cwd: appDir })
     .then(({ buffer }) => {
       if (buffer.indexOf(expectedText) === -1) {
@@ -351,6 +358,7 @@ function runGeneratedTests (expectedText) {
 // Start a process and wait either for it to exit
 // or to display a certain text
 function runCommand (cmd, args, options, text) {
+  //console.log('>runCommand', cmd, args);
   return new Promise((resolve, reject) => {
     let buffer = '';
 
@@ -378,8 +386,9 @@ function runCommand (cmd, args, options, text) {
 }
 
 function compareCode (appDir, testDir, compareDirs) {
+  //console.log('>compareCode', appDir, testDir, compareDirs);
   const appDirLen = appDir.length;
-  const expectedDir = path.join(__dirname, testDir);
+  const expectedDir = path.join(__dirname, '..', 'test-expands', testDir);
   const expectedDirLen = expectedDir.length;
 
   const expectedPaths = getFileNames(expectedDir);
@@ -402,9 +411,11 @@ function compareCode (appDir, testDir, compareDirs) {
   function compare(i, fileName) {
     let expected;
 
+    //console.log('410', `${appDir}${fileName}`);
     const actual = fs.readFileSync(`${appDir}${fileName}`, 'utf8');
 
     try {
+      //console.log('414', `${expectedDir}${fileName}`);
       expected = fs.readFileSync(`${expectedDir}${fileName}`, 'utf8');
     } catch (err) {
       console.log(actual);
@@ -419,6 +430,7 @@ function compareCode (appDir, testDir, compareDirs) {
 }
 
 function getFileNames (dir) {
+  //console.log('>getFileName', dir);
   const nodes = klawSync(dir, { nodir: true })
     .filter(obj => obj.path.indexOf('/node_modules/') === -1 && obj.path.indexOf('/data/') === -1);
 
