@@ -1,7 +1,7 @@
 
 const { assert } = require('chai');
 
-const stringify = require('../../lib/stringify-plus');
+const stringify = require('../lib/stringify-plus');
 
 describe('stringify-plus', () => {
   it('handles non-variable prop name', () => {
@@ -10,6 +10,6 @@ describe('stringify-plus', () => {
       { stringifyIndents: 2 });
 
     assert.equal(str,
-      `{\n  "^[a-zA-Z_][a-zA-Z0-9_]*$": {\n    type: "number"\n  }\n}`);
+      '{\n  "^[a-zA-Z_][a-zA-Z0-9_]*$": {\n    type: "number"\n  }\n}');
   });
 });
