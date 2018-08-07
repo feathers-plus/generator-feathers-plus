@@ -6,8 +6,16 @@
 <%- insertFragment('init') %>
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
-  mongoose.connect(app.get('mongodb'), {})<%- sc %>
   mongoose.Promise = global.Promise<%- sc %>
+  mongoose.connect(app.get('mongodb'), {})
+    .then(({ connection }<%- tplTsOnly([': any']) -%>) => {
+      console.log(`connected to "${connection.name}" database at ${connection.host}:${connection.port}`)<%- sc %>
+      return connection<%- sc %>
+    })
+    .catch(error => {
+      console.log(error)<%- sc %>
+      process.exit(1)<%- sc %>
+    })<%- sc %>
   <%- insertFragment('func_init') %>
 
   app.set('mongooseClient', mongoose)<%- sc %>

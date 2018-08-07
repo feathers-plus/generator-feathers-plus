@@ -6,8 +6,16 @@ import mongoose from 'mongoose';
 // !code: init // !end
 
 export default function (app: App) {
-  mongoose.connect(app.get('mongodb'), {});
   mongoose.Promise = global.Promise;
+  mongoose.connect(app.get('mongodb'), {})
+    .then(({ connection }: any) => {
+      console.log(`connected to "${connection.name}" database at ${connection.host}:${connection.port}`);
+      return connection;
+    })
+    .catch(error => {
+      console.log(error);
+      process.exit(1);
+    });
   // !code: func_init // !end
 
   app.set('mongooseClient', mongoose);

@@ -63,6 +63,19 @@ module.exports = class ServiceGenerator extends Generator {
       ].join(''));
     }
 
+    function getNameSpacexxx(subFolder) {
+      if (subFolder === '') {
+        return ['', [], ''];
+      }
+
+      const parts = subFolder.split('/').map(part => kebabCase(part));
+      if (subFolder.substr(-1) === '/') {
+        parts.pop();
+      }
+
+      return [`${parts.join('/')}/`, parts, '../'.repeat(parts.length)];
+    }
+
     const prompts = [{
       name: 'name',
       message: 'What is the name of the service?',
@@ -216,6 +229,45 @@ module.exports = class ServiceGenerator extends Generator {
       default () {
         return !!serviceSpecs.graphql;
       }
+    }, {
+      type: 'checkbox',
+      name: 'hooks',
+      message: 'Which common hooks do you want to include?',
+      default () {
+        prompts.push({
+          name: 'xxxx',
+          message: 'Should this be served by xxxx?',
+          type: 'confirm',
+          default () {
+            return !!serviceSpecs.graphql;
+          }
+        });
+        return serviceSpecs.adapter || 'nedb';
+      },
+      choices: [
+        {
+          name: 'cache: all',
+          value: 'cache-all'
+        }, {
+          name: 'setNow: create',
+          value: 'setNow-create'
+        }, {
+          name: 'setNow: update & patch',
+          value: 'setNow-update-patch'
+        }, {
+          name: 'setNow: remove',
+          value: 'setNow-remove'
+        }, {
+          name: 'stashBefore: update',
+          value: 'stashBefore-update'
+        }, {
+          name: 'stashBefore: patch',
+          value: 'stashBefore-patch'
+        }, {
+          name: 'stashBefore: remove',
+          value: 'stashBefore-remove'
+        }
+      ]
     }];
 
     return this.prompt(prompts).then(answers => {

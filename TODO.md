@@ -273,6 +273,24 @@ OK - Consider which generated code to instead make default code, creating a new 
 OK - Generated README does not contain the correct cli-plus commands.
 OK - uncomment extensions.graphql.name and extensions.graphql.service?
 OK - document name.validate.?s
+OK FINAL CHECKS
+   OK - Consistency, e.g. name.sequelize.js lists needed fields for user-entity while others don't.
+   - Several templates may have the same app module as their destination. Each of these
+     templates needs to be tested for .ts .
+     - src/models/name.model.*s
+       OK - mongoose for the user-entity service
+       OK - mongoose for other service
+       OK - nedb for the user-entity service
+       OK - nedb for other service
+       OK - sequelize for the user-entity service
+       OK - sequelize for other service
+     - src/services/name/name.service.*s
+       OK - mongo service
+       OK - other adapters use a common template
+     - src/*.*s
+       OK - mongodb.*s
+       OK - mongoose.*s
+       OK - sequelize.*s for other DBs use a common template
 
 
 NO - hooks modules should be ifNew: true
@@ -299,6 +317,24 @@ NO - If we gen an NeDB service & add custom code to name.service.js. Then we reg
 NO - Check node version is 8+ (6+) in feathers-plus/cli. Already checked in lib/generator.js   
 NO - "Hi, anyone knows how to make feathers-cli generate services in plural mode but model in singular mode?
      its ok to use plural for services, but kind of wired for models"  
+
+
+- add common hooks on generate service (specify for each on which types of calls)
+  disallow: 0 all, 0 find, 0 get, 0 create, 0
+  https://stackoverflow.com/questions/44328745/how-to-do-a-recursive-prompt-in-yeoman-with-promises
+  https://stackoverflow.com/questions/36223616/splitting-yeoman-prompts-into-multiple-separate-groups
+    - cache: Persistent cache for `get` calls.
+    - fastJoin: Join related records using service calls.
+    - fastJoin: Join related records using BatchLoaders.
+    - paramsFromClient: Allow clients to set `params` properties.
+    - softDelete2: Logically flag record instead of removing them.
+    - stashBefore: Stash current value of record before mutating it.
+    - validateSchema: Validate data.
+    - disableMultipleItemChange: Prevent `null` id in patch & remove calls.
+    - disableMultipleItemCreate: Prevent multi-item creates.
+    - disallow: Prevent calls for specific transports.
+    - setNow: Set fields to the current date-time.
+    - setUserID: Set fields to the current user id.
 
 - prevent reserved words being used as service names. Exclude graphql also. https://www.npmjs.com/package/reserved-words
 - add ?!? notNullFields: [] in JSON-schema? Need to update validation, mongodb, mongoose
@@ -378,7 +414,7 @@ describe('Feathers application tests', () => {
   });
 
 FINAL CHECKS
-- Consistency, e.g. name.sequelize.js lists needed fields for user-entity while others don't.
+OK - Consistency, e.g. name.sequelize.js lists needed fields for user-entity while others don't.
 
 
 - Several templates may have the same app module as their destination. Each of these
@@ -386,21 +422,10 @@ FINAL CHECKS
   - src/models/name.model.*s
     - knex for the user-entity service
     - knex for other service
-    OK - mongoose for the user-entity service
-    OK - mongoose for other service
-    OK - nedb for the user-entity service
-    OK - nedb for other service
-    OK - sequelize for the user-entity service
-    OK - sequelize for other service
   - src/services/name/name.service.*s
-    OK - mongo service
     - rethink service
-    OK - other adapters use a common template
   - src/*.*s
     - knex.*s
-    OK - mongodb.*s
-    OK - mongoose.*s
     - rethinkdb.*s
     - sequelize.*s for MS SQL Server
-    OK - sequelize.*s for other DBs use a common template
         

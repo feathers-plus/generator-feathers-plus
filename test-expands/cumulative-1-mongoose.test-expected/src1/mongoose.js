@@ -5,8 +5,16 @@ const mongoose = require('mongoose');
 // !code: init // !end
 
 module.exports = function (app) {
-  mongoose.connect(app.get('mongodb'), {});
   mongoose.Promise = global.Promise;
+  mongoose.connect(app.get('mongodb'), {})
+    .then(({ connection }) => {
+      console.log(`connected to "${connection.name}" database at ${connection.host}:${connection.port}`);
+      return connection;
+    })
+    .catch(error => {
+      console.log(error);
+      process.exit(1);
+    });
   // !code: func_init // !end
 
   app.set('mongooseClient', mongoose);
