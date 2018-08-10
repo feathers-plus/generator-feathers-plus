@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const merge = require('lodash.merge');
 const mongoose = require('mongoose');
+const jsonSchemaSeeder = require('json-schema-seeder');
 const Sequelize = require('sequelize');
 
 const { camelCase, kebabCase, snakeCase, upperFirst } = require('lodash');
@@ -10,7 +11,7 @@ const { existsSync } = require('fs');
 const { inspect } = require('util');
 const { join } = require('path');
 
-const { generatorFs } = require('../../lib/generator-fs');
+const doesFileExist = require('../../lib/does-file-exist');
 const makeConfig = require('./templates/_configs');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
@@ -20,6 +21,8 @@ const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
 const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript');
 const stringifyPlus = require('../../lib/stringify-plus');
 
+const { generatorFs } = require('../../lib/generator-fs');
+const { getFragment } = require('../../lib/code-fragments');
 const { updateSpecs } = require('../../lib/specs');
 
 const EOL = '\n';
@@ -134,6 +137,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // Abbreviations for paths used in building 'todos'.
   const tpl = join(__dirname, 'templates');
+  const configPath = join(tpl, '_configs');
   const src = specs.app.src;
   const srcPath = join(tpl, 'src');
   const mwPath = join(srcPath, 'middleware');
@@ -220,6 +224,8 @@ module.exports = function generatorWriting (generator, what) {
       ) {
         graphql(generator);
       }
+
+      fakes(generator);
       break;
     case 'app':
       app(generator);
@@ -238,6 +244,9 @@ module.exports = function generatorWriting (generator, what) {
       break;
     case 'graphql':
       graphql(generator);
+      break;
+    case 'fakes':
+      fakes(generator);
       break;
     default:
       throw new Error(`Unexpected generate ${what}. (writing`);
@@ -950,6 +959,46 @@ module.exports = function generatorWriting (generator, what) {
         make: hooks => `${hooks.length ? ' ' : ''}${hooks.join(', ')}${hooks.length ? ' ' : ''}`
       };
     }
+  }
+
+  // ===== fakes ===================================================================================
+  function fakes (generator) {
+    const schemas = {};
+    const adapters = {};
+
+    // Get the app's existing default.js or the default one.
+    const existingDefaultJsPath = generator.destinationPath(join('config', 'default.js'));
+    const defaultJsPath = doesFileExist(existingDefaultJsPath) ?
+      existingDefaultJsPath : `${configPath}/default`;
+
+    const defaultJs = require(defaultJsPath);
+
+    const jssOptions = merge({
+      faker: {
+        fk: str =>  `->${str}`,
+        exp: str => `=>${str}`,
+      },
+    }, defaultJs.fakeData || {});
+
+    Object.keys(specs.services || {}).forEach(serviceName => {
+      const specsServices = specs.services[serviceName];
+
+      if (specsServices.adapter !== 'generic') {
+        adapters[serviceName] = specsServices.adapter;
+        schemas[serviceName] = feathersSpecs[serviceName];
+      }
+    });
+
+    const seeder = jsonSchemaSeeder(jssOptions);
+    const data = seeder(schemas, adapters);
+
+    todos = [
+      copy([tpl, '_configs', 'default.js'], ['config', 'default.js'], true),
+      json(data, ['seeds', 'fakeData.json']),
+    ];
+
+    // Generate modules
+    generatorFs(generator, context, todos);
   }
 };
 

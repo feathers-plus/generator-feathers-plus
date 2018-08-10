@@ -1123,6 +1123,207 @@ or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master
 
 - **test/services/teams.test.?s** tests the team service is configured.
 
+## generate fakes
+
+So far we've generated the code for our application.
+However there isn't very much we can do with it because the services have no data.
+Let's look at how cli+ can generate some fake data for us
+including the foreign keys by which one record references another.
+
+### Generating appropriate data for fields
+
+We'd like the fake data to resemble what the real data would look like.
+We'd like email address fields to look like valid addresses.
+We'd like phone number fields to look like phone numbers occurring in the locale we're in.
+We'd like avatar references to point to real images.
+
+We can describe the type of fake data we want in each field by adding faker descriptions to fields.
+```js
+// Define the model using JSON-schema
+let schema = {
+  // !<DEFAULT> code: schema_header
+  title: 'Users',
+  description: 'Users database.',
+  // !end
+  // !code: schema_definitions
+  fakeRecords: 10,
+  // !end  
+  // Fields in the model.
+  properties: {
+    // !code: schema_properties
+    id: { type: 'ID' },
+    email: {
+      faker: 'internet.email',
+    },
+    firstName: {
+      faker: 'name.firstName',
+    },
+    lastName: {
+      faker: 'name.lastName',
+    },
+    password: {
+      chance: { hash: { length: 60 } },
+    },
+    roleId: {
+      type: 'ID',
+      faker: { fk: 'roles.random' },  
+    },
+    // !end
+  },
+};  
+```
+
+- **fakeRecords: 10** - Generate 10 faked records for this service.
+- **id or _id** - Key fields do not need faker descriptions.
+A key value will be generated that's suitable for the service's adapter.
+So MongoDB, Mongoose services will obtain ObjectId strings,
+while Sequelize, Knex ones will obtain increasing integers.
+- **faker: { exp: 'ctx.hashPassword("12345678")' }** - generates the same hash for the password "12345678" as FeathersJS would.
+- **faker: { fk: 'roles.random' }** - uses the key from a randomly generated record in the roles service. 
+
+There are about 150 different types of
+[**faker**](https://github.com/Marak/Faker.js#api-methods) descriptions which you can use,
+and they can be [localized](https://github.com/Marak/Faker.js#localization)
+for about 35 locales.
+
+There are also over 100 [chance](https://chancejs.com/basics/bool.html) descriptions you can use.
+
+:::tip Custom descriptions
+You can also create your own custom **faker** and **chance** descriptions.
+:::
+
+### Customizing generated data
+
+The generated fake data will satisfy the other JSON-schema specified for the field.
+So the more detailed your JSON-schema,
+the more the generated data will resemble what you expect in production.
+
+This more detailed JSON-schema would produce more satisfactory generated data.
+```js
+    email: {
+      minLength: 10,
+      maxLength: 30,
+      faker: 'internet.email',
+    },
+    firstName: {
+      minLength: 2,
+      maxLength: 20,  
+      faker: 'name.firstName',
+    },
+    lastName: {
+      minLength: 2,
+      maxLength: 40,  
+      faker: 'name.lastName',
+    },
+```
+
+:::tip It's a win, win.
+More detailed JSON-schema descriptions not only produce better generated data,
+they also produce better validation when used in service hooks.
+:::
+
+### Foreign keys
+
+Cli+ supports foreign keys unlike almost all other Node-based seeders.
+We previously saw
+```js
+    roleId: {
+      type: 'ID',
+      faker: { fk: 'roles.random' },  
+    },
+```
+
+**faker: { fk: 'roles.random' },** is a custom description provided by cli+
+which populates the field with the key from a randomly selected record from the roles service.
+
+The following syntax is supported:
+- **'roles.random.fieldName'** A random record is selected from the roles service;
+the value of its **fieldName** field is used.
+- **'roles.random'** - The value of the id or _id field is used.
+- **'roles'** - The same as **'roles.random'**.
+
+#### Arrays of distinct foreign keys
+
+The above cannot handle several needs we may have.
+First, we may have an array of foreign keys:
+```js
+// Define the model using JSON-schema
+let schema = {
+  // !<DEFAULT> code: schema_header
+  title: 'Teams',
+  description: 'Teams database.',
+  // !end
+  // ...
+  // Fields in the model.
+  properties: {
+    // !code: schema_properties
+    id: { type: 'ID' },
+    // ...
+    memberIds: {
+      type: 'array',
+      maxItems: 40,
+      items: [{
+        type: 'ID',
+        faker: { fk: 'users.next' },
+      }]
+    }
+    // !end
+  },
+  // ...
+};
+```
+
+The memberIds field may contain duplicate foreign keys if we use
+**faker: { fk: 'users' }** or **faker: { fk: 'users.random' }**.
+
+The keys for the generated records for the roles service are shuffled at the start of each teams record.
+The **faker: { fk: 'users.next' }** will use the next one of these shuffled keys.
+Keys will start to be reused only once all existing keys have been used.
+
+#### Extracting multiple fields from a foreign record
+
+We may have to copy the values of several fields from the same foreign record.
+For example we may need a result like
+```js
+memberIds: [{ id, firstName }, { id, firstName }, ... ]
+```
+
+We can implement this using
+```js
+// Define the model using JSON-schema
+let schema = {
+  // !<DEFAULT> code: schema_header
+  title: 'Teams',
+  description: 'Teams database.',
+  // !end
+  // ...
+  // Fields in the model.
+  properties: {
+    // !code: schema_properties
+    id: { type: 'ID' },
+    // ...
+    memberIds: {
+      type: 'array',
+      maxItems: 40,
+      items: [{
+        type: 'object',
+        properties: {
+          id: { type: 'ID', faker: { fk: 'users.next' } },
+          firstName: { type: 'string', faker: { fk: 'users.curr.firstName' } },
+        },
+      }]
+    }
+    // !end
+  },
+  // ...
+};
+```
+
+The **'users.next'** selects the next shuffled record
+and the **'users.curr.firstName'** refers to the current suffled record,
+that is, the same one which provided the id.
+
+
 ## GraphQL
 
 There is a good deal of literature available on what GraphQL is, on why it is good,
