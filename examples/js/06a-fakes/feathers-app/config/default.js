@@ -4,17 +4,14 @@ module.exports = {
   fakeData: {
     // Number of records to generate if JSON-schema does not have a fakeRecords property.
     defaultFakeRecords: 5,
-    // Don't generate fake data with "feathers-plus generate all" when true.
-    noFakesOnAll: false,
-    // Additional context passed to expressions
-    expContext: {
-      // Invoked with: faker: { exp: 'foo(...)'}
-      // foo: (bar, baz) => { return ... }
-    },
-    // Mutate fake data after its generated.
-    postGeneration: data => data,
     // https://github.com/json-schema-faker/json-schema-faker#custom-options
     jsf: {
+      // Don't throw exception when invalid type passed.
+      failOnInvalidTypes: false,
+      // Default value generated for a schema with invalid type (works only if failOnInvalidTypes is set to false)
+      defaultInvalidTypeProduct: 'string',
+      // Don't throw exception when invalid format passed.
+      failOnInvalidFormat: false,
       // Configure a maximum amount of items to generate in an array.
       // This will override the maximum items found inside a JSON Schema.
       maxItems: 15,

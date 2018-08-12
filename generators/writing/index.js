@@ -225,7 +225,9 @@ module.exports = function generatorWriting (generator, what) {
         graphql(generator);
       }
 
-      fakes(generator);
+      if (process.env.fakes) {
+        fakes(generator);
+      }
       break;
     case 'app':
       app(generator);
@@ -972,6 +974,7 @@ module.exports = function generatorWriting (generator, what) {
       existingDefaultJsPath : `${configPath}/default`;
 
     const defaultJs = require(defaultJsPath);
+    if (defaultJs.fakeData && defaultJs.fakeData.noFakesOnAll) return;
 
     const jssOptions = merge({
       faker: {
@@ -990,11 +993,13 @@ module.exports = function generatorWriting (generator, what) {
     });
 
     const seeder = jsonSchemaSeeder(jssOptions);
-    const data = seeder(schemas, adapters);
+    const data = seeder(schemas, adapters, { expContext: jssOptions.expContext });
+    const fakeData = jssOptions.postGeneration ?
+      jssOptions.postGeneration(data) : data;
 
     todos = [
       copy([tpl, '_configs', 'default.js'], ['config', 'default.js'], true),
-      json(data, ['seeds', 'fakeData.json']),
+      json(fakeData, ['seeds', 'fake-data.json']),
     ];
 
     // Generate modules

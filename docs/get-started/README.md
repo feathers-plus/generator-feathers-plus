@@ -1125,20 +1125,34 @@ or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master
 
 ## generate fakes
 
+:::danger In Development
+"feathers-plus generate fakes" is in beta test.
+There may be bugs. These docs may not be up to date.
+:::
+
 So far we've generated the code for our application.
 However there isn't very much we can do with it because the services have no data.
-Let's look at how cli+ can generate some fake data for us
-including the foreign keys by which one record references another.
 
-### Generating appropriate data for fields
+cli+ has comprehensive features for generating fake data based on your JSON-schema.
+This includes generating values for foreign key fields which refer to other generated records.
 
-We'd like the fake data to resemble what the real data would look like.
-We'd like email address fields to look like valid addresses.
-We'd like phone number fields to look like phone numbers occurring in the locale we're in.
-We'd like avatar references to point to real images.
+:::tip userID: '507f1f77bcf86cd799439011'
+cli+ is notable in that few other data generators can populate foreign key fields.
+:::
 
-We can describe the type of fake data we want in each field by adding faker descriptions to fields.
-```js
+### Generating appropriate fake data
+
+We'd like the fake data to resemble what our real data would look like.
+- email address fields that look like valid addresses.
+- phone number fields that look like phone numbers tailored for a particular locale.
+- avatar references that point to real images.
+
+We can describe the fake data we want
+by adding a `faker`, `chance` and `format` prop to each field's JSON-data.
+
+<collapse hidden title="JSON-schema with faker and chance props">
+
+```js{8,13,15,18,21,24,28}
 // Define the model using JSON-schema
 let schema = {
   // !<DEFAULT> code: schema_header
@@ -1146,7 +1160,7 @@ let schema = {
   description: 'Users database.',
   // !end
   // !code: schema_definitions
-  fakeRecords: 10,
+  fakeRecords: 6,
   // !end  
   // Fields in the model.
   properties: {
@@ -1166,35 +1180,208 @@ let schema = {
     },
     roleId: {
       type: 'ID',
-      faker: { fk: 'roles.random' },  
+      faker: { fk: 'roles:random' },  
     },
     // !end
   },
 };  
 ```
 
-- **fakeRecords: 10** - Generate 10 faked records for this service.
-- **id or _id** - Key fields do not need faker descriptions.
-A key value will be generated that's suitable for the service's adapter.
-So MongoDB, Mongoose services will obtain ObjectId strings,
-while Sequelize, Knex ones will obtain increasing integers.
-- **faker: { exp: 'ctx.hashPassword("12345678")' }** - generates the same hash for the password "12345678" as FeathersJS would.
-- **faker: { fk: 'roles.random' }** - uses the key from a randomly generated record in the roles service. 
+</collapse>
+
+- **fakeRecords: 6** - Generate 6 faked records for this service.
+The default, which you can change, is 5 records.
+- **id or _id** - The record's key field does not need a faking prop.
+
+:::tip Key values appropriate for the service adapter
+A key value will be generated that's suitable for that service's adapter.
+So MongoDB, Mongoose services use ObjectId strings,
+while Sequelize, Knex ones use increasing integers.
+:::
+
+- **chance: { hash: { length: 60 } }** - generates a 60 character hash value.
+- **faker: { fk: 'roles:random' }** - uses the key from a randomly generated record in the roles service. 
+
+#### A wealth of options
 
 There are about 150 different types of
-[**faker**](https://github.com/Marak/Faker.js#api-methods) descriptions which you can use,
+[**faker**](https://github.com/Marak/Faker.js#api-methods) props which you can use,
 and they can be [localized](https://github.com/Marak/Faker.js#localization)
 for about 35 locales.
 
-There are also over 100 [chance](https://chancejs.com/basics/bool.html) descriptions you can use.
+There are also over 100 [chance](https://chancejs.com/basics/bool.html) props.
 
-:::tip Custom descriptions
-You can also create your own custom **faker** and **chance** descriptions.
+:::tip Custom props
+You can also add your own custom faker, chance and format props.
 :::
 
-### Customizing generated data
+#### Prompts
 
-The generated fake data will satisfy the other JSON-schema specified for the field.
+Now that we've described what the fake data should look like, we can generate it.
+```js
+feathers-plus generate fakes
+```
+
+<collapse-image title="Prompts 'generate fakes'" url="/assets/get-started/generate-fakes.png" />
+
+#### Folders
+
+The generator adds two modules to the app.
+
+<collapse-image hidden title="Folders after 'generate authentication' with JavaScript" url="/assets/get-started/generate-fakes-dir-compare.png" />
+
+- `seeds/fake-data.json`. The generated fake data.
+- `config/defaults.js`. Contains the configuration used to generate the fake data.
+You can change any of its options and rerun `feathers-plus generate fakes`.
+
+<collapse hidden title="Generated fake users records with related roles records, for the MongoDB adapter">
+
+```js
+{
+  "users": [
+    {
+      "email": "Brandt.Kuhlman@yahoo.com",
+      "firstName": "Maddison",
+      "lastName": "Rau",
+      "roleId": "5b6efeb15471a6144e804c49",
+      "password": "9bd9d8d69a674e0f467cc8796ed151a05dfc2ddf7cc78ca1ba928fc81674",
+      "_id": "5b6efeb15471a6144e804c42"
+    },
+    {
+      "email": "Magnus29@hotmail.com",
+      "firstName": "Mitchell",
+      "lastName": "Wuckert",
+      "roleId": "5b6efeb15471a6144e804c49",
+      "password": "cb739205929396fea7596eb10faaa2352c5955907aff1a3a2fa946773925",
+      "_id": "5b6efeb15471a6144e804c43"
+    },
+    {
+      "email": "Torrey_Braun31@yahoo.com",
+      "firstName": "Bradly",
+      "lastName": "Ruecker",
+      "roleId": "5b6efeb15471a6144e804c49",
+      "password": "aa52c3f5ad019da1ffe78f097b0074f15471b5e6e13b99d488e1e91e450a",
+      "_id": "5b6efeb15471a6144e804c44"
+    },
+    {
+      "email": "Dayana.Becker58@gmail.com",
+      "firstName": "Maybelle",
+      "lastName": "Sawayn",
+      "roleId": "5b6efeb15471a6144e804c48",
+      "password": "2abd44269802d502a94bb4f63c969e9a3efa77dfb14cd66ae395efb9ba88",
+      "_id": "5b6efeb15471a6144e804c45"
+    },
+    {
+      "email": "Haven48@yahoo.com",
+      "firstName": "Alexandria",
+      "lastName": "McClure",
+      "roleId": "5b6efeb15471a6144e804c48",
+      "password": "3a66997074ba4469b6e2141959890afa563e2516fe4c8b711e5b7fd2ed02",
+      "_id": "5b6efeb15471a6144e804c46"
+    },
+    {
+      "email": "Destiny84@hotmail.com",
+      "firstName": "Nestor",
+      "lastName": "Kertzmann",
+      "roleId": "5b6efeb15471a6144e804c48",
+      "password": "921cddc692601fb576b0d5f0d30c5fbb2587053202c73d5fe9b90c28909b",
+      "_id": "5b6efeb15471a6144e804c47"
+    }
+  ],
+  "roles": [
+    {
+      "name": "Chief Interactions Agent",
+      "_id": "5b6efeb15471a6144e804c48"
+    },
+    {
+      "name": "Internal Security Developer",
+      "_id": "5b6efeb15471a6144e804c49"
+    },
+    {
+      "name": "Investor Optimization Manager",
+      "_id": "5b6efeb15471a6144e804c4a"
+    },
+    {
+      "name": "Senior Data Officer",
+      "_id": "5b6efeb15471a6144e804c4b"
+    }
+  ]
+}
+````
+
+</collapse>
+
+<collapse hidden title="Default configuration for generate fakes">
+
+```js
+module.exports = {
+  // Configuration for faking service data
+  fakeData: {
+    // Number of records to generate if JSON-schema does not have a fakeRecords property.
+    defaultFakeRecords: 5,
+    // Don't generate fake data with "feathers-plus generate all" when true.
+    noFakesOnAll: false,
+    // Additional context passed to expressions
+    expContext: {
+      // Invoked with: faker: { exp: 'foo(...)'}
+      // foo: (bar, baz) => { return ... }
+    },
+    // Mutate fake data after its generated.
+    postGeneration: data => data,
+    // https://github.com/json-schema-faker/json-schema-faker#custom-options
+    jsf: {
+      // Configure a maximum amount of items to generate in an array.
+      // This will override the maximum items found inside a JSON Schema.
+      maxItems: 15,
+      // Configure a maximum length to allow generating strings for.
+      // This will override the maximum length found inside a JSON Schema.
+      maxLength: 40,
+      // A replacement for Math.random to support pseudorandom number generation.
+      // random: () => (),
+      // A number from 0 to 1 indicating the probability to fake a non-required object property.
+      // When 0.0, only required properties are generated; when 1.0, all properties are generated.
+      optionalsProbability: 1.0,
+      // Support  JSONPath expressions such as jsonPath: '$..book[?(@.price<30 && @.category=="fiction")]'
+      // https://github.com/dchester/jsonpath
+      resolveJsonPath: true,
+      // Custom seeders.
+      extend: {
+        // Invoked with: format: 'foo'
+        // foo: () => jsf.random.randexp('\\d\\.\\d\\.[1-9]\\d?');,
+      },
+
+    },
+    // https://github.com/Marak/Faker.js#localization
+    faker: {
+      // If you want consistent results, you can set your own seed.
+      seed: undefined,
+      // Language to generate for.
+      locale: 'en',
+      // Fallback language for missing definitions.
+      localeFallback: 'en',
+      // Custom seeders.
+      // faz: {
+           // Invoked with: faker: 'faz.foo', faker: { 'faz.foo': 'bar' } or faker: { 'faz.foo': ['bar', 'baz'] }
+           // foo: (p1 = 'hello', p2 = 'world') => `${p1} ${p2}`,
+      // },
+    },
+    // http://chancejs.com/usage/seed.html
+    chance: {
+      // If you want consistent results, you can set your own seed.
+      seed: undefined,
+      // Custom seeders.
+      // Invoked with: chance: 'foo', chance: { foo: 'bar' } or chance: { foo: ['bar', 'baz'] }
+      // foo: (p1 = 'hello', p2 = 'world') => `${p1} ${p2}`,
+    },
+  }
+};
+```
+
+</collapse>
+
+#### Further customizing the generated data
+
+The generated fake data will also satisfy the other JSON-schema specified for the field.
 So the more detailed your JSON-schema,
 the more the generated data will resemble what you expect in production.
 
@@ -1218,35 +1405,50 @@ This more detailed JSON-schema would produce more satisfactory generated data.
 ```
 
 :::tip It's a win, win.
-More detailed JSON-schema descriptions not only produce better generated data,
-they also produce better validation when used in service hooks.
+Not only will a more detailed JSON-schema produce better generated data,
+it will also produce better validation checking
+in the automatically generated validation service hooks.
 :::
 
 ### Foreign keys
 
-Cli+ supports foreign keys unlike almost all other Node-based seeders.
+cli+ also supports foreign keys.
 We previously saw
 ```js
     roleId: {
       type: 'ID',
-      faker: { fk: 'roles.random' },  
+      faker: { fk: 'roles:random' },  
     },
 ```
 
-**faker: { fk: 'roles.random' },** is a custom description provided by cli+
-which populates the field with the key from a randomly selected record from the roles service.
+**faker: { fk: 'roles:random' }** is a custom prop defined by cli+.
+It populates the field with the key from a randomly selected record from the roles service.
+
+:::tip Circular foreign keys
+There are no restrictions on the  foreign keys.
+Services A and B may each have a foreign key referencing the other.
+Service A may reference service B, which references service C,
+which then references back to service A.
+:::
 
 The following syntax is supported:
-- **'roles.random.fieldName'** A random record is selected from the roles service;
-the value of its **fieldName** field is used.
-- **'roles.random'** - The value of the id or _id field is used.
-- **'roles'** - The same as **'roles.random'**.
+- **'roles:random:fieldName'** A random record is selected from the roles service.
+The value of its **fieldName** field is used.
+- **'roles:random'** - The value of the id or _id field is used.
+- **'roles'** - The same as **'roles:random'**.
+
+:::tip
+**fieldName** may be in dot notation, e.g. "address.city".
+:::
 
 #### Arrays of distinct foreign keys
 
-The above cannot handle several needs we may have.
+The above syntax cannot handle several needs we may have.
 First, we may have an array of foreign keys:
-```js
+
+<collapse hidden title="An array of foreign keys">
+
+```js{18}
 // Define the model using JSON-schema
 let schema = {
   // !<DEFAULT> code: schema_header
@@ -1264,7 +1466,7 @@ let schema = {
       maxItems: 40,
       items: [{
         type: 'ID',
-        faker: { fk: 'users.next' },
+        faker: { fk: 'users:next' },
       }]
     }
     // !end
@@ -1273,23 +1475,30 @@ let schema = {
 };
 ```
 
-The memberIds field may contain duplicate foreign keys if we use
-**faker: { fk: 'users' }** or **faker: { fk: 'users.random' }**.
+</collapse>
 
-The keys for the generated records for the roles service are shuffled at the start of each teams record.
-The **faker: { fk: 'users.next' }** will use the next one of these shuffled keys.
+The memberIds field may contain duplicate foreign keys if we use
+**faker: { fk: 'users' }** or **faker: { fk: 'users:random' }**.
+
+The list of keys for the roles service is shuffled at the start of each teams record.
+The **faker: { fk: 'users:next' }** will use the next one of these shuffled keys.
 Keys will start to be reused only once all existing keys have been used.
 
-#### Extracting multiple fields from a foreign record
+This ensures the foreign keys in memberIds are distinct.
 
-We may have to copy the values of several fields from the same foreign record.
+#### Extracting multiple fields from a related record
+
+We may need to copy the values of several fields from the same related record.
 For example we may need a result like
 ```js
 memberIds: [{ id, firstName }, { id, firstName }, ... ]
 ```
 
-We can implement this using
-```js
+We can request this as follows
+
+<collapse hidden title="References multiple fields in the same related record">
+
+```js{19,20}
 // Define the model using JSON-schema
 let schema = {
   // !<DEFAULT> code: schema_header
@@ -1308,8 +1517,8 @@ let schema = {
       items: [{
         type: 'object',
         properties: {
-          id: { type: 'ID', faker: { fk: 'users.next' } },
-          firstName: { type: 'string', faker: { fk: 'users.curr.firstName' } },
+          id: { type: 'ID', faker: { fk: 'users:next' } },
+          firstName: { type: 'string', faker: { fk: 'users:curr:firstName' } },
         },
       }]
     }
@@ -1319,9 +1528,98 @@ let schema = {
 };
 ```
 
-The **'users.next'** selects the next shuffled record
-and the **'users.curr.firstName'** refers to the current suffled record,
-that is, the same one which provided the id.
+</collapse>
+
+**'users:next'** selects the record containing the next shuffled key.
+Then **'users:curr:firstName'** refers to this current shuffled record,
+that is, the same one which provided the key.
+
+You can extract any number of fields from a related record using this technique.
+
+### Expressions
+
+- Sometimes an expression has to be calculated in order to populate a field.
+
+```js{7}
+  properties: {
+    // !code: schema_properties
+    id: { type: 'ID' },
+    // ...
+    dayOfWeek: {
+      type: 'integer',
+      faker: { exp: 'new Date("December 25, 2018").getDay()'}
+    }
+    // !end
+  },
+``` 
+
+**faker: { exp: 'new Date("December 25, 2018").getDay()'}** is a custom prop defined by cli+.
+It populates the field
+with the calculated day of the week.
+
+- You can reference other fields in the record within the expression.
+
+```js{10}
+  properties: {
+    // !code: schema_properties
+    id: { type: 'ID' },
+    // ...
+    date: {
+      faker: 'date.soon', // e.g. "2018-12-25T04:49:43.661Z"
+    },
+    dayOfWeek: {
+      type: 'integer',
+      faker: { exp: 'new Date(rec.date).getDay()' }
+    }
+    // !end
+  },
+``` 
+
+**rec** is an object passed to the expression containing the record being populated.
+You can use it in any valid JavaScript expression.
+
+- Other conveniences are also passed to the expression in the `ctx` object.
+    - **ctx.data** (Array< Object >) - All the generated records for all the services.
+    Values for foreign keys and expressions have been calculated up to the current record.
+    - **ctx.hashPassword** (Function(password)) - Calculates a password hash
+    compatible with Feathers' `hashPassword` hook.
+    This password will work correctly with Feathers local authentication.
+    - **fakeData.expContext** from module **config/default.js** is also merged into **ctx**.
+    You can refer to any of those merged properties in the expression.
+    - **ctx.tablesInfo** {Object) - A structure you can use to determine the current shuffled key
+    for each service. Its structure is:
+
+<collapse hidden title="Structure of tablesInfo">
+
+```js
+{ [serviceName]:       // The name of the service.
+    keyName,           // 'id' or '_id'.
+    len:               // The number of records generated for serviceName.
+    keys: [ ... ],     // The keys for those records, not in record order.
+    isShuffled: false, // Have these keys been shuffled for the current record?
+    currRec: -1,       // Index into keys for the ".curr" record. -1 if not yet shuffled.
+}
+``` 
+
+</collapse>
+
+### Passwords
+
+You can generate password hashes two ways
+- `faker: { exp: 'ctx.hashPassword("my secret password")' }` generates
+a Feathers compatible password you can use with local authentication.
+Its slow, taking over 1 second per password.
+- `chance: { hash: { length: 60 } }` quickly generates a random hash the same length as Feathers'.
+Its not compatible with Feathers' local authentication.
+
+### Customizing data generation
+
+You can define your own custom props for faker, chance and format.
+They are configured in config/default.js
+and that module contains documentation on how to define and use them. 
+    
+You can also modify the generated data before it is written to seeds/fakeData.json
+with the **postGeneration** property in config/default.js.
 
 
 ## GraphQL

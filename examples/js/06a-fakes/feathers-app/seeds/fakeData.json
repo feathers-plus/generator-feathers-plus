@@ -1,0 +1,212 @@
+{
+  "users": [
+    {
+      "uuid": 4943272568946689,
+      "email": "Liza34@hotmail.com",
+      "firstName": "Cyrus",
+      "lastName": "Herzog",
+      "_id": "000001"
+    },
+    {
+      "uuid": 5339869586915329,
+      "email": "Melba26@gmail.com",
+      "firstName": "Arjun",
+      "lastName": "Mertz",
+      "_id": "000002"
+    },
+    {
+      "uuid": 6441853115170817,
+      "email": "Marlee_Senger@gmail.com",
+      "firstName": "Cruz",
+      "lastName": "Beier",
+      "_id": "000003"
+    },
+    {
+      "uuid": 7604469780971521,
+      "email": "Ocie.Dibbert70@gmail.com",
+      "firstName": "Vincent",
+      "lastName": "Wunsch",
+      "_id": "000004"
+    },
+    {
+      "uuid": 5429209780453377,
+      "email": "Addie89@yahoo.com",
+      "firstName": "Malinda",
+      "lastName": "Deckow",
+      "_id": "000005"
+    }
+  ],
+  "comments": [
+    {
+      "uuid": 7727687147716609,
+      "authorUuid": 4943272568946689,
+      "_id": "000001",
+      "postUuid": 7131225131057153,
+      "body": "quis velit eu nulla",
+      "archived": 1
+    },
+    {
+      "uuid": 7631365216403457,
+      "authorUuid": 6441853115170817,
+      "_id": "000002",
+      "postUuid": 8337033304997889,
+      "body": "proident aute ex sunt",
+      "archived": 0
+    },
+    {
+      "uuid": 5616562461474817,
+      "authorUuid": 7604469780971521,
+      "_id": "000003",
+      "postUuid": 5116490571317249,
+      "body": "laboris officia reprehenderit",
+      "archived": 1
+    },
+    {
+      "uuid": 3462202635845633,
+      "authorUuid": 5429209780453377,
+      "_id": "000004",
+      "postUuid": 8337033304997889,
+      "body": "aute Excepteur",
+      "archived": 0
+    },
+    {
+      "uuid": 2679953474715649,
+      "authorUuid": 6441853115170817,
+      "_id": "000005",
+      "postUuid": 5116490571317249,
+      "body": "adipisicing commodo aliqua nulla ad",
+      "archived": 1
+    }
+  ],
+  "likes": [
+    {
+      "_id": "000001",
+      "uuid": 510825072689153,
+      "authorUuid": 5429209780453377,
+      "commentUuid": 2679953474715649
+    },
+    {
+      "_id": "000002",
+      "uuid": 8679902530240513,
+      "authorUuid": 6441853115170817,
+      "commentUuid": 7727687147716609
+    },
+    {
+      "_id": "000003",
+      "uuid": 2455869572775937,
+      "authorUuid": 7604469780971521,
+      "commentUuid": 7727687147716609
+    },
+    {
+      "_id": "000004",
+      "uuid": 3453734185074689,
+      "authorUuid": 5339869586915329,
+      "commentUuid": 2679953474715649
+    },
+    {
+      "_id": "000005",
+      "uuid": 4302424837718017,
+      "authorUuid": 7604469780971521,
+      "commentUuid": 2679953474715649
+    }
+  ],
+  "posts": [
+    {
+      "_id": "000001",
+      "uuid": 7131225131057153,
+      "authorUuid": 5339869586915329,
+      "body": "Sunt unde officia ullam consectetur autem possimus eum. Alias reiciendis facilis doloremque veritatis ad eaque. Rerum aut sed alias quibusdam nam nostrum et.",
+      "draft": 1
+    },
+    {
+      "_id": "000002",
+      "uuid": 4763861943058433,
+      "authorUuid": 5339869586915329,
+      "body": "Error quasi perspiciatis. Fugit incidunt nostrum unde quia nulla. Et laborum blanditiis sunt. Quas et sit nobis consequatur suscipit.",
+      "draft": 0
+    },
+    {
+      "_id": "000003",
+      "uuid": 5116490571317249,
+      "authorUuid": 5429209780453377,
+      "body": "Asperiores eum magnam. Corrupti quidem est quia quasi similique dolorem qui. Incidunt porro numquam harum quam et ipsam. Molestias soluta est. Porro natus eum molestias.",
+      "draft": 0
+    },
+    {
+      "_id": "000004",
+      "uuid": 8337033304997889,
+      "authorUuid": 6441853115170817,
+      "body": "Et voluptatem qui voluptatem placeat et tenetur quam a. Consequatur eos deleniti distinctio pariatur esse omnis. Dolor commodi necessitatibus hic nihil eligendi at. Tempora voluptates aut deserunt molestiae veniam. Perferendis eos nisi assumenda aut ipsum quia et asperiores est. Debitis ea architecto.",
+      "draft": 1
+    },
+    {
+      "_id": "000005",
+      "uuid": 639835935080449,
+      "authorUuid": 6441853115170817,
+      "body": "Esse maxime eos aspernatur. Eius voluptas similique aut vel sit facere officiis. Officiis expedita fugit voluptas totam esse quis odit explicabo. Quisquam recusandae qui labore vel id consectetur iusto sit delectus. Placeat placeat dolorem ea fugiat beatae eaque enim ut. Et sed cum.",
+      "draft": 0
+    }
+  ],
+  "relationships": [
+    {
+      "_id": "000001",
+      "uuid": 784790938714113,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    },
+    {
+      "_id": "000002",
+      "uuid": 5838213243469825,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    },
+    {
+      "_id": "000003",
+      "uuid": 182111149490177,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    },
+    {
+      "_id": "000004",
+      "uuid": 3316824900894721,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    },
+    {
+      "_id": "000005",
+      "uuid": 7499572827914241,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    },
+    {
+      "_id": "000006",
+      "uuid": 8621287192657921,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    },
+    {
+      "_id": "000007",
+      "uuid": 7009012960722945,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    },
+    {
+      "_id": "000008",
+      "uuid": 1264167417806849,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    },
+    {
+      "_id": "000009",
+      "uuid": 7836372746371073,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    },
+    {
+      "_id": "000010",
+      "uuid": 7837049239371777,
+      "followerUuid": 4943272568946689,
+      "followeeUuid": 5339869586915329
+    }
+  ]
+}
