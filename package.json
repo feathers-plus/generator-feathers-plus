@@ -65,6 +65,7 @@
     "@feathersjs/tools": "0.1.5",
     "faker": "^4.1.0",
     "json-schema-deref-sync": "0.4.0",
+    "json-schema-seeder": "^0.1.1",
     "lodash": "4.17.5",
     "lodash.merge": "4.6.1",
     "mongoose": "4.13.6",
