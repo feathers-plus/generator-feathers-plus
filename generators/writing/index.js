@@ -373,6 +373,7 @@ module.exports = function generatorWriting (generator, what) {
     if (isJs) {
       generator.devDependencies = generator.devDependencies.concat([
         'eslint',
+        'nodemon',
       ]);
     } else {
       generator.devDependencies = generator.devDependencies.concat([
