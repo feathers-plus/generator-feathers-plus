@@ -24,6 +24,7 @@
   "scripts": {
     "test": "npm run eslint && npm run mocha",
     "eslint": "eslint src1/. test/. --config .eslintrc.json",
+    "dev": "nodemon src1/",
     "start": "node src1/",
     "mocha": "mocha test/ --recursive --exit --timeout 10000"
   }

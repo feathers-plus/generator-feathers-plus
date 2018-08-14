@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 module.exports = function (app) {
   mongoose.Promise = global.Promise;
-  mongoose.connect(app.get('mongodb'), {})
+  mongoose.connect(app.get('mongodb'), { useNewUrlParser: true })
     .then(({ connection }) => {
       console.log(`connected to "${connection.name}" database at ${connection.host}:${connection.port}`);
       return connection;
