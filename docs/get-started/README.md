@@ -1131,9 +1131,9 @@ There may be bugs. These docs may not be up to date.
 :::
 
 So far we've generated the code for our application.
-However there isn't very much we can do with it because the services have no data.
+However there isn't very much we can do with that code because the services have no data.
 
-cli+ has comprehensive features for generating fake data based on your JSON-schema.
+cli+ skirts this issue by providing comprehensive features for generating fake data based on your JSON-schema models.
 This includes generating values for foreign key fields which refer to other generated records.
 
 :::tip userID: '507f1f77bcf86cd799439011'
@@ -1205,11 +1205,11 @@ while Sequelize, Knex ones use increasing integers.
 #### A wealth of options
 
 There are about 150 different types of
-[**faker**](https://github.com/Marak/Faker.js#api-methods) props which you can use,
-and they can be [localized](https://github.com/Marak/Faker.js#localization)
-for about 35 locales.
+[**faker**](https://github.com/Marak/Faker.js#api-methods) props avaliable.
+They can be [localized](https://github.com/Marak/Faker.js#localization)
+to about 35 locales so, for example, your fake data can be in Spanish or German.
 
-There are also over 100 [chance](https://chancejs.com/basics/bool.html) props.
+There are also over 100 [chance](https://chancejs.com/basics/bool.html) props available.
 
 :::tip Custom props
 You can also add your own custom faker, chance and format props.
@@ -1443,8 +1443,8 @@ The value of its **fieldName** field is used.
 
 #### Arrays of distinct foreign keys
 
-The above syntax cannot handle several needs we may have.
-First, we may have an array of foreign keys:
+The above syntax alone cannot handle several needs we may have.
+First, we may need an array of distinct foreign keys:
 
 <collapse hidden title="An array of foreign keys">
 

@@ -19,6 +19,7 @@ module.exports = class OptionsGenerator extends Generator {
       chalk.green.bold('The generator will not change the following modules in '),
       chalk.yellow.bold(parse(cwd()).base),
       '\n',
+      '  config/default.js',
       '  public/favicon.ico, index.html\n',
       '  src/\n',
       `    hooks/logger.${js}\n`,
