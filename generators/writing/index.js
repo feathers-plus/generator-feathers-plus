@@ -565,19 +565,19 @@ module.exports = function generatorWriting (generator, what) {
     const sfa = context.subFolderArray;
 
     todos = [
-      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', ...sfa, `${fn}.test.${js}`],         ),
-      tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`],  false, !context.modelName    ),
-      tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, fn, `${fn}.service.${js}`],   ),
-      tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.class.${js}`],     false, adapter !== 'generic' ),
-      tmpl([namePath, 'name.interface.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.interface.${js}`], false, isJs ),
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', ...sfa, `${fn}.test.${js}`,            true]                        ),
+      tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`], false, !context.modelName    ),
+      tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, fn, `${fn}.service.${js}`],    ),
+      tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.class.${js}`],      false, adapter !== 'generic' ),
+      tmpl([namePath, 'name.interface.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.interface.${js}`],  false, isJs ),
 
-      tmpl([namePath, 'name.schema.ejs'],           [libDir,  'services', ...sfa, fn, `${fn}.schema.${js}`]     ),
-      tmpl([namePath, 'name.mongo.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.mongo.${js}`]      ),
-      tmpl([namePath, 'name.mongoose.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.mongoose.${js}`]   ),
-      tmpl([namePath, 'name.sequelize.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.sequelize.${js}`]  ),
-      tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.validate.${js}`]   ),
-      tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.hooks.${js}`]      ),
-      tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                ),
+      tmpl([namePath, 'name.schema.ejs'],           [libDir,  'services', ...sfa, fn, `${fn}.schema.${js}`]      ),
+      tmpl([namePath, 'name.mongo.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.mongo.${js}`]       ),
+      tmpl([namePath, 'name.mongoose.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.mongoose.${js}`]    ),
+      tmpl([namePath, 'name.sequelize.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.sequelize.${js}`]   ),
+      tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.validate.${js}`]    ),
+      tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.hooks.${js}`]       ),
+      tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                         ),
 
       tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
       tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
