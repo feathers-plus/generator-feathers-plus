@@ -429,3 +429,24 @@ OK - Consistency, e.g. name.sequelize.js lists needed fields for user-entity whi
     - rethinkdb.*s
     - sequelize.*s for MS SQL Server
         
+
+- tests
+ - config
+    - For security: const nonTestingNodeEnv = ['production', 'staging', 'uat']
+    - Check *.json exists and has the same connection property names as does default.json.
+ - unit tests
+    - before hook for each prompt-selected method
+    - after hook for each prompt-selected method, paginated and not
+    - error hook ???
+    
+ - integration tests
+    - test each prompt-selected method returns expected data.
+    Developer seeds data (maybe with faked data) and provides expected result.
+     
+ - client-server integration tests
+   - test local-auth and jwt works on user-entity. Check feathers-gen-specs.json.
+     Optionally use one faked data record.
+   - test local-auth and jwt works for each prompt-selected method on service generated with auth.
+     Check feathers-gen-specs.json. Optionally use faked data records.
+   - test no auth works for each prompt-selected method on service generated without auth.
+     Optionally use faked data records.

@@ -565,7 +565,7 @@ module.exports = function generatorWriting (generator, what) {
     const sfa = context.subFolderArray;
 
     todos = [
-      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', ...sfa, `${fn}.test.${js}`,            true]                        ),
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', ...sfa, `${fn}.test.${js}`],           true                         ),
       tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`], false, !context.modelName    ),
       tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, fn, `${fn}.service.${js}`],    ),
       tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.class.${js}`],      false, adapter !== 'generic' ),
@@ -746,6 +746,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== authentication ==========================================================================
   function authentication (generator) {
+    console.log('auth', specs.authentication);
     if (!specs.authentication) return;
 
     // Custom template context
