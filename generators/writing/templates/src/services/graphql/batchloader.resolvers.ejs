@@ -141,7 +141,7 @@ let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)',
 -%>
 
     // <%- `${graphqlName}.${fieldName}${__addField.args}: ${__addField.type}` %>
-    <%- insertFragment(`bl-${graphqlName}-${fieldName}`, __temp) %>
+    <%- insertFragment(`bl-${graphqlName}-${fieldName}`, __temp, undefined, { indentEnd: 2 }) %>
 <% } -%>
 <%# --- if-c ends above. -%>
 <% }); -%>

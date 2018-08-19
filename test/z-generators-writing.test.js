@@ -34,11 +34,15 @@ const tests = [
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
-    { testName: 'scaffolding.test', specsChanges: [
+  { testName: 'scaffolding.test',
+    specsChanges: [
       [specs => { delete specs.app.providers; }, { app: { providers: ['primus'] } }],
       [specs => { delete specs.app.providers; }, { app: { providers: ['rest'] } }],
       [specs => { delete specs.app.providers; }, { app: { providers: ['rest', 'socketio'] } }],
-    ], compareDirs: true },
+    ],
+    compareDirs: true,
+    execute: false,
+  },
 
   // t01, z01 Test creation of app.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -81,7 +85,7 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-    { testName: 'graphql-auth.test', execute: false },
+    { testName: 'graphql-auth.test' },
 
   // t05, z05 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -152,6 +156,10 @@ const tests = [
   // Service names remain nedb1 & nedb2; use default connection string.
     { testName: 'cumulative-2-nedb-batchloaders.test' },
 
+  // Test switch from kebabCase naming of folders and files
+  // Its tests TEST AUTHENTICATION and should be periodically run with dependency loading
+    { testName: 'cumulative-2-test-auth.test' },
+
   // t21, z21 Test switching the user-entity
   // t21
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -199,8 +207,12 @@ const tests = [
     }
   }] },
 
+
   // test service in sub-folders
     { testName: 'name-space.test' },
+
+  // test old and new service folder/file naming
+    { testName: 'service-naming.test', /* execute: true */ },
 
   // .ts version of cconst logger = require('./logger')umulative-1-nedb.test
     { testName: 'ts-cumulative-1-nedb.test' },
@@ -225,7 +237,8 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = 'cumulative-2-test-auth.test' //null //'graphql.test' //'service-naming.test' //null; //'cumulative-1-sequelize.test' //null;
+const executeAll = true;
 
 describe('generators-writing.test.js', function () {
   tests.forEach(({ testName, execute = false, specsChanges = [], compareDirs = true }) => {
@@ -249,7 +262,7 @@ describe('generators-writing.test.js', function () {
           });
       });
 
-      if (execute) {
+      if (executeAll || execute) {
         it('runs test generated', () => {
           return runFirstGeneration(testName, { skipInstall: false })
             .then(dir => {
@@ -268,6 +281,7 @@ describe('generators-writing.test.js', function () {
                   .then(() => {
                     const pkg = require(path.join(dir, 'package.json'));
 
+                    // Weak test that dependencies were added
                     assert.ok(pkg.devDependencies.mocha, 'Added mocha as a devDependency');
                   });
               }
@@ -342,7 +356,7 @@ function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
 
 // Run the 'test' script in package.json
 function runGeneratedTests (expectedText) {
-  //console.log('>runGeneratedTests');
+  // console.log('>runGeneratedTests');
   return runCommand(packageInstaller, ['test'], { cwd: appDir })
     .then(({ buffer }) => {
       if (buffer.indexOf(expectedText) === -1) {
@@ -358,7 +372,7 @@ function runGeneratedTests (expectedText) {
 // Start a process and wait either for it to exit
 // or to display a certain text
 function runCommand (cmd, args, options, text) {
-  //console.log('>runCommand', cmd, args);
+  console.log('..run shell command', cmd, args);
   return new Promise((resolve, reject) => {
     let buffer = '';
 
@@ -386,10 +400,10 @@ function runCommand (cmd, args, options, text) {
 }
 
 function compareCode (appDir, testDir, compareDirs) {
-  //console.log('>compareCode', appDir, testDir, compareDirs);
+  // console.log('>compareCode', appDir, testDir, compareDirs);
+  console.log('... comparing code');
   const appDirLen = appDir.length;
   const expectedDir = path.join(__dirname, '..', 'test-expands', testDir);
-  const expectedDirLen = expectedDir.length;
 
   const expectedPaths = getFileNames(expectedDir);
   const actualPaths = getFileNames(appDir);
@@ -403,12 +417,14 @@ function compareCode (appDir, testDir, compareDirs) {
   });
 
   /*
+  const expectedDirLen = expectedDir.length;
   expectedPaths.paths.forEach((expectedPath, i) => {
     compare(i, expectedPath.path.substr(expectedDirLen));
   });
   */
 
   function compare(i, fileName) {
+    // console.log('compare files', fileName);
     let expected;
 
     //console.log('410', `${appDir}${fileName}`);
@@ -430,7 +446,7 @@ function compareCode (appDir, testDir, compareDirs) {
 }
 
 function getFileNames (dir) {
-  //console.log('>getFileName', dir);
+  //console.log('>getFileNames', dir);
   const nodes = klawSync(dir, { nodir: true })
     .filter(obj => obj.path.indexOf('/node_modules/') === -1 && obj.path.indexOf('/data/') === -1);
 

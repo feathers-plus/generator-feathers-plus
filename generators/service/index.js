@@ -67,7 +67,7 @@ module.exports = class ServiceGenerator extends Generator {
       name: 'name',
       message: 'What is the name of the service?',
       filter (input) {
-        return camelCase(input);
+        return generator.makeFileName(input);
       },
       validate (input) {
         if (input.trim() === '') {
@@ -133,7 +133,6 @@ module.exports = class ServiceGenerator extends Generator {
         return true;
       }
     }, {
-
       type: 'list',
       name: 'adapter',
       message: 'What kind of service is it?',
@@ -168,12 +167,14 @@ module.exports = class ServiceGenerator extends Generator {
         }
       ]
     }, {
-      // https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
       name: 'subFolder',
-      message: 'Generate service in which nested folder, e.g. `v1/blog`? (optional)',
+      message: 'Place service code in which nested folder, e.g. `v1/blog`? (optional)',
       default (answers) {
-        defaultSubFolder = answers.subFolder || props.subFolder;
+        defaultSubFolder = serviceSpecs.subFolder || answers.subFolder || props.subFolder;
         return defaultSubFolder;
+      },
+      filter (input) {
+        return generator.makeFilePath(input);
       },
       validate (input) {
         if (input.trim().substr(0, 14).toLowerCase() === 'authentication') {
@@ -189,10 +190,14 @@ module.exports = class ServiceGenerator extends Generator {
       name: 'path',
       message: 'Which path should the service be registered on?',
       default (answers) {
-        if (defaultSubFolder !== answers.subFolder) {
-          return `/${generator.getNameSpace(answers.subFolder)[0]}${kebabCase(answers.name || props.name)}`;
-        }
-        return serviceSpecs.path || `/${kebabCase(answers.subFolder || props.subFolder)}${kebabCase(answers.name || props.name)}`;
+        const rawPath = answers.name || props.name;
+        const pathName = generator.makeFilePath(rawPath);
+
+        return defaultSubFolder !== answers.subFolder ?
+          `/${pathName}` : (serviceSpecs.path || `/${pathName}`);
+      },
+      filter (input) {
+        return generator.makeFilePath(input);
       },
       validate (input) {
         if (input.trim() === '') {

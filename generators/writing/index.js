@@ -6,10 +6,12 @@ const mongoose = require('mongoose');
 const jsonSchemaSeeder = require('json-schema-seeder');
 const Sequelize = require('sequelize');
 
-const { camelCase, kebabCase, snakeCase, upperFirst } = require('lodash');
+const { camelCase, kebabCase: kebabCase1, snakeCase, upperFirst } = require('lodash');
 const { existsSync } = require('fs');
 const { inspect } = require('util');
 const { join } = require('path');
+
+const kebabCase = kebabCase1 //name => name === 'users1' ? name : kebabCase1(name);
 
 const doesFileExist = require('../../lib/does-file-exist');
 const makeConfig = require('./templates/_configs');
@@ -22,7 +24,6 @@ const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript'
 const stringifyPlus = require('../../lib/stringify-plus');
 
 const { generatorFs } = require('../../lib/generator-fs');
-const { getFragment } = require('../../lib/code-fragments');
 const { updateSpecs } = require('../../lib/specs');
 
 const EOL = '\n';
@@ -432,7 +433,7 @@ module.exports = function generatorWriting (generator, what) {
   // ===== service =================================================================================
   function service (generator, name) {
     const specsService = specs.services[name];
-    const kebabName = kebabCase(name);
+    const fileName = specsService.fileName;
     const camelName = camelCase(name);
     const snakeName = snakeCase(name);
     const adapter = specsService.adapter;
@@ -440,7 +441,7 @@ module.exports = function generatorWriting (generator, what) {
     const isAuthEntityWithAuthentication = specsService.isAuthEntity ? specs.authentication : undefined;
 
     const moduleMappings = {
-      generic: `./${kebabName}.class`,
+      generic: `./${fileName}.class`,
       memory: 'feathers-memory',
       nedb: 'feathers-nedb',
       mongodb: 'feathers-mongodb',
@@ -482,7 +483,7 @@ module.exports = function generatorWriting (generator, what) {
       subFolderReverse: generator.getNameSpace(specsService.subFolder)[2],
       primaryKey: feathersSpecs[name]._extensions.primaryKey,
       camelName,
-      kebabName,
+      kebabName: fileName,
       snakeName,
       adapter,
       path: stripSlashes(path),
@@ -493,7 +494,7 @@ module.exports = function generatorWriting (generator, what) {
       hooks: getHookInfo(name),
 
       libDirectory: specs.app.src,
-      modelName: hasModel ? `${kebabName}.model` : null,
+      modelName: hasModel ? `${fileName}.model` : null,
       serviceModule,
       mongoJsonSchema: serviceSpecsToMongoJsonSchema(feathersSpecs[name], feathersSpecs[name]._extensions),
       mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
@@ -560,22 +561,22 @@ module.exports = function generatorWriting (generator, what) {
     // Custom abbreviations for building 'todos'.
     const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))
       ? `name.service-${adapter}.ejs` : 'name.service.ejs';
-    const kn = kebabName;
+    const fn = fileName;
     const sfa = context.subFolderArray;
 
     todos = [
-      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', ...sfa, `${kn}.test.${js}`],         ),
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', ...sfa, `${fn}.test.${js}`],         ),
       tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`],  false, !context.modelName    ),
-      tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, kn, `${kn}.service.${js}`],   ),
-      tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, kn, `${kn}.class.${js}`],     false, adapter !== 'generic' ),
-      tmpl([namePath, 'name.interface.ejs'],        [libDir,  'services', ...sfa, kn, `${kn}.interface.${js}`], false, isJs ),
+      tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, fn, `${fn}.service.${js}`],   ),
+      tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.class.${js}`],     false, adapter !== 'generic' ),
+      tmpl([namePath, 'name.interface.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.interface.${js}`], false, isJs ),
 
-      tmpl([namePath, 'name.schema.ejs'],           [libDir,  'services', ...sfa, kn, `${kn}.schema.${js}`]     ),
-      tmpl([namePath, 'name.mongo.ejs'],            [libDir,  'services', ...sfa, kn, `${kn}.mongo.${js}`]      ),
-      tmpl([namePath, 'name.mongoose.ejs'],         [libDir,  'services', ...sfa, kn, `${kn}.mongoose.${js}`]   ),
-      tmpl([namePath, 'name.sequelize.ejs'],        [libDir,  'services', ...sfa, kn, `${kn}.sequelize.${js}`]  ),
-      tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, kn, `${kn}.validate.${js}`]   ),
-      tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, kn, `${kn}.hooks.${js}`]      ),
+      tmpl([namePath, 'name.schema.ejs'],           [libDir,  'services', ...sfa, fn, `${fn}.schema.${js}`]     ),
+      tmpl([namePath, 'name.mongo.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.mongo.${js}`]      ),
+      tmpl([namePath, 'name.mongoose.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.mongoose.${js}`]   ),
+      tmpl([namePath, 'name.sequelize.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.sequelize.${js}`]  ),
+      tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.validate.${js}`]   ),
+      tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.hooks.${js}`]      ),
       tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                ),
 
       tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
@@ -752,7 +753,8 @@ module.exports = function generatorWriting (generator, what) {
     const strategies = specs.authentication.strategies;
 
     context = Object.assign({}, context, {
-      kebabEntity: kebabCase(entity),
+      servicePath: specs.services[entity].path,
+      kebabEntity: entity,
       camelEntity: camelCase(entity),
       oauthProviders: [],
       strategies
@@ -1010,6 +1012,7 @@ module.exports = function generatorWriting (generator, what) {
 
 function writeAuthenticationConfiguration (generator, context) {
   const config = Object.assign({}, generator._specs._defaultJson);
+  const path = context.servicePath;
 
   config.authentication = {
     secret: generator._specs._isRunningTests
@@ -1017,7 +1020,7 @@ function writeAuthenticationConfiguration (generator, context) {
       : (config.authentication || {}).secret || crypto.randomBytes(256).toString('hex'),
     strategies: [ 'jwt' ],
     path: '/authentication',
-    service: context.kebabEntity,
+    service: path.substring(0,1) !== '/' ? path : context.servicePath.substring(1),
     jwt: {
       header: { typ: 'access' },
       audience: 'https://yourdomain.com',

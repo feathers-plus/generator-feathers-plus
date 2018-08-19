@@ -12,6 +12,7 @@ module.exports = class AppGenerator extends Generator {
   async prompting () {
     await Generator.asyncInit(this);
     const { props, _specs: specs } = this;
+    const generator = this;
     this._initialGeneration = !specs.app || !specs.app.src;
     initSpecs('app');
 
@@ -95,7 +96,8 @@ module.exports = class AppGenerator extends Generator {
       name: 'src',
       message: 'What folder should the source files live in?',
       default: props.src,
-      when: this._initialGeneration
+      when: this._initialGeneration,
+      filter: input => generator.makeFileName(input)
     }, {
       name: 'packager',
       type: 'list',

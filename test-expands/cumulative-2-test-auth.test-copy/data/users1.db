@@ -1,0 +1,2 @@
+{"uuid":0,"firstName":"John","lastName":"Szwaronek","email":"john@gmail.com","password":"$2a$13$yLJ5C2uckc7h4oDP9Jreh.uUMsQybypuuYfgSEHVEz8FS2kToqg3u","_id":"0K7uz0N8XOa6N90q"}
+{"$$indexCreated":{"fieldName":"email","unique":true,"sparse":false}}

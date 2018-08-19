@@ -30,7 +30,7 @@
     "nedb2": {
       "name": "nedb2",
       "nameSingular": "nedb2",
-      "subFolder": "a1/",
+      "subFolder": "a-1/",
       "fileName": "nedb-2",
       "adapter": "nedb",
       "path": "/nedb-2",
@@ -41,7 +41,7 @@
     "nedb3": {
       "name": "nedb3",
       "nameSingular": "nedb3",
-      "subFolder": "a1",
+      "subFolder": "a-1",
       "fileName": "nedb-3",
       "adapter": "nedb",
       "path": "/nedb-3",
@@ -52,7 +52,7 @@
     "nedb4": {
       "name": "nedb4",
       "nameSingular": "nedb4",
-      "subFolder": "a1/b1",
+      "subFolder": "a-1/b-1",
       "fileName": "nedb-4",
       "adapter": "nedb",
       "path": "/nedb-4",
@@ -63,7 +63,7 @@
     "nedb5": {
       "name": "nedb5",
       "nameSingular": "nedb5",
-      "subFolder": "a1/b1",
+      "subFolder": "a-1/b-1",
       "fileName": "nedb-5",
       "adapter": "nedb",
       "path": "/nedb-5",
@@ -74,7 +74,7 @@
     "nedb6": {
       "name": "nedb6",
       "nameSingular": "nedb6",
-      "subFolder": "c1",
+      "subFolder": "c-1",
       "fileName": "nedb-6",
       "adapter": "nedb",
       "path": "/nedb-6",

@@ -47,7 +47,7 @@ let resolvers = <%- tplJsOrTs('(app, options)', '(app: App, options: ServiceReso
 <% } -%>
 <%# --- if-4 ends above. -%>
 <%# -%>
-<%# --- if-5 starts below. NATCHLOADERS -%>
+<%# --- if-5 starts below. BATCHLOADERS -%>
 <% if (strategy === 'batchloaders') { -%>
 let resolvers = <%- tplJsOrTs('(app, options)', '(app: App, options: BatchloaderResolverOptions)') %> => merge({},
   generatedResolvers(app, options),

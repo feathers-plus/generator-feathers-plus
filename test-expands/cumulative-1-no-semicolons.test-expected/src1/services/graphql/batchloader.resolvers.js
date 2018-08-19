@@ -80,7 +80,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
         },
         maxBatchSize // Max #keys in a BatchLoader func call.
       )
-    // !end
+      // !end
 
     // Nedb2.nedb1: Nedb1!
     // !<DEFAULT> code: bl-Nedb2-nedb1
@@ -95,7 +95,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
         },
         maxBatchSize // Max #keys in a BatchLoader func call.
       )
-    // !end
+      // !end
 
     /* Throw on unknown BatchLoader name. */
     default:
