@@ -237,8 +237,8 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = 'cumulative-2-test-auth.test' //null //'graphql.test' //'service-naming.test' //null; //'cumulative-1-sequelize.test' //null;
-const executeAll = true;
+const runJustThisTest = null //'graphql.test' //'service-naming.test' //null; //'cumulative-1-sequelize.test' //null;
+const executeAll = false;
 
 describe('generators-writing.test.js', function () {
   tests.forEach(({ testName, execute = false, specsChanges = [], compareDirs = true }) => {

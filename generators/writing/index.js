@@ -1,5 +1,6 @@
 
 /* eslint-disable no-console */
+const chalk = require('chalk');
 const crypto = require('crypto');
 const merge = require('lodash.merge');
 const mongoose = require('mongoose');
@@ -746,15 +747,46 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== authentication ==========================================================================
   function authentication (generator) {
-    console.log('auth', specs.authentication);
     if (!specs.authentication) return;
 
-    // Custom template context
     const entity = specs.authentication.entity;
     const strategies = specs.authentication.strategies;
 
+    // Check for orphan authentication user-entity.
+    // This can happen if the generate service part of generate authentication throws.
+    if (!specs.services[entity]) {
+      generator.log('\npatch\n');
+      /*
+      generator.log('\n');
+      generator.log([
+        chalk.red('The '),
+        chalk.yellow('authentication'),
+        chalk.red(' property in '),
+        chalk.yellow('feathers-gen-specs.json'),
+        chalk.red(' specifies'),
+      ].join(''));
+      generator.log([
+        chalk.red('the user-entity service is '),
+        chalk.yellow(entity),
+        chalk.red('. However such a service has'),
+      ].join(''));
+      generator.log(chalk.red('not been generated. Consequently no code will be generated for authentication.'));
+      generator.log('');
+      generator.log([
+        chalk.red('You should manually delete that '),
+        chalk.yellow('authentication'),
+        chalk.red(' prop and '),
+      ].join(''));
+      generator.log(chalk.red('regenerate authentication and its user-entity service.'));
+      generator.log('');
+
+      return;
+      */
+    }
+
+    // Custom template context
     context = Object.assign({}, context, {
-      servicePath: specs.services[entity].path,
+      servicePath: specs.services[entity] ? specs.services[entity].path : entity, // PATCH $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       kebabEntity: entity,
       camelEntity: camelCase(entity),
       oauthProviders: [],
