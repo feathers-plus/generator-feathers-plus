@@ -562,3 +562,51 @@ and contain the same data:
 
 `uuid` fields are used as foreign keys for table relations
 so as to avoid differences between `id` and `_id` in different databases.
+
+### ts-node module resolution alias
+
+You can use `ts-node` together with [tsconfig-paths](https://www.npmjs.com/package/tsconfig-paths) to load modules according to the `paths` section in `tsconfig.json` and `tsconfig.test.json`.
+
+For module definitions, you can use [`paths`](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping):
+
+```json
+{
+  "compilerOptions": {
+     ...
+     "baseUrl": ".",                       /* Base directory to resolve non-absolute module names. */
+     "paths": {
+       "@models/*": ["src/models/*"],
+       "@middleware/*": ["src/middleware/*"],
+       "@services/*": ["src/services/*"],
+       "@src/*": ["src/*"]
+     },
+     ...
+}
+```
+and update your `package.json` script commands:
+
+```json
+{
+  "scripts": {
+     ...
+     "start": "ts-node  -r tsconfig-paths/register --files src/",
+     "mocha": "ts-mocha  -r tsconfig-paths/register  -p tsconfig.test.json \"test/**/*.test.ts\" --timeout 10000 --exit",
+     ...
+}
+```
+
+then after in your Typescript code you can forget to import your module with `./../../../mymodule` and use `@myalias/mymodule` 
+
+Example:
+
+```ts
+import { App } from '../../app.interface'
+```
+
+become
+
+
+```ts
+import { App } from '@src/app.interface'
+```
+
