@@ -10,6 +10,7 @@
     "description": "Project z-1",
     "src": "src1",
     "packager": "npm@>= 3.0.0",
+    "environmentsAllowingSeedData": "test",
     "providers": [
       "rest",
       "socketio"

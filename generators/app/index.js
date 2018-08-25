@@ -133,6 +133,14 @@ module.exports = class AppGenerator extends Generator {
         }
 
         return true;
+      },
+    }, {
+      name: 'environmentsAllowingSeedData',
+      message: 'DB data may be replaced by fake data only when NODE_ENV is (comma separated)',
+      default: specs.app.environmentsAllowingSeedData || 'test',
+      filter: input => {
+        const envs = input.split(',');
+        return (envs.map(str => kebabCase(str.trim()))).join(',');
       }
     }];
 

@@ -13,7 +13,8 @@
     "providers": [
       "rest",
       "socketio"
-    ]
+    ],
+    "environmentsAllowingSeedData": "test"
   },
   "services": {
     "nedb1": {

@@ -272,6 +272,11 @@ module.exports = function generatorWriting (generator, what) {
       generator.destinationPath('config/production.json'), makeConfig.configProduction(generator)
     );
 
+    // Update configs with current specs
+    configDefault.tests = configDefault.tests || {};
+    configDefault.tests.environmentsAllowingSeedData =
+      specs.app.environmentsAllowingSeedData.split(',') || ['tests'];
+
     // Modify .eslintrc for semicolon option
     let eslintrcExists = true;
     let eslintrcChanged = false;
@@ -786,7 +791,12 @@ module.exports = function generatorWriting (generator, what) {
 
     // Custom template context
     context = Object.assign({}, context, {
-      servicePath: specs.services[entity] ? specs.services[entity].path : entity, // PATCH $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+      // PATCH $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+      // The authentication generation needs to know the path used by then user-entity service,
+      // but that service is not configured at that point. So the code guesses the path will be
+      // the same as the user-entity name. The generated code won't run right if its different.
+      // But doing a generate all will fix it. Sad situation.
+      servicePath: specs.services[entity] ? specs.services[entity].path : entity,
       kebabEntity: entity,
       camelEntity: camelCase(entity),
       oauthProviders: [],

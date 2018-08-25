@@ -6,7 +6,8 @@ module.exports = function() {
     paginate: {
       default: 10,
       max: 50
-    }
+    },
+    tests: {}
   };
 
   return config;

@@ -1,0 +1,100 @@
+
+? What is the name of the hook?
+
+? What kind of hook should it be? (Use arrow keys)
+❯ I will add it myself
+  before
+  after
+  error
+
+? What service(s) should this hook be for (select none to add it yourself)?
+ (Press <space> to select, <a> to toggle all, <i> to invert selection)
+❯◯ Application wide (all services)
+ ◯ users
+
+? What methods should the hook be for (select none to add it yourself)? (Press <space> to
+ select, <a> to toggle all, <i> to invert selection)
+❯◯ all
+ ◯ find
+ ◯ get
+ ◯ create
+ ◯ update
+ ◯ patch
+ ◯ remove
+
+
+
+=== generate hook
+? What is the name of the hook?
+? The hook will be used with
+ ◯ multiple services (and reside in src/hooks/)
+ ◯ one service (and reside in src/services/serviceName/hooks/)
+
+-- if multiple services
+? Which services will this hook be used with (select none to add it yourself)?
+ (Press <space> to select, <a> to toggle all, <i> to invert selection)
+❯◯ All services (hook is used in src/app.hooks)
+ ◯ users (hook is used in src/services/users/users.hooks.js)
+ ◯ postings
+
+-- if not multiple services
+? Which service will this hook be used with?
+ ◯ users
+ ◯ postings
+
+== generate test
+? Which kind of test do you want?
+ ◯ hook - unit (tested as a function)
+ ◯ hook - integration (tested using a fake service)
+ ◯ service - unit (tested on the server)
+ ◯ service - integration (tested using client/server)
+ ◯ check health - authentication (client/server)
+ ◯ check health - services (client/server)
+
+--- prompts for hook
+? What is the name of the hook being tested?
+ ◯ hook1 (used with all services)
+ ◯ hook2
+
+--- prompts for service
+? What is the name of the service being tested?
+ ◯ service1 (the user-entity service)
+ ◯ service2
+
+--- informative message for client/server options.
+We are generating the first client/server test.
+Configuration options will be added to config/default.json##tests##client.
+The check health tests use them, you may also.
+You may customize this config as desired.
+
+--- informative message for "check health - authentication"
+This test uses the user-entity service to ensure that "local" and "jwt" authentication
+are working properly.
+
+The test only runs when NODE_ENV is a test environment.
+
+--- informative message for "check health - services"
+In practice most apps require manual changes to the generated authentication.
+This test checks the actual authentication is what you expect it to be
+by calling every Feathers method on every (non-custom) service.
+
+The test may also expose faults in the interaction between the client and the server.
+
+Authentication is assumed active on each method for services generated with authentication.
+No authentication is assumed active on each method for services generated without authentication.
+Of course you could change this by removing or adding, say, "authenticate('local') hooks.
+You could even use the "disallow" common hook to entirely disallow client access to some methods.
+Only such authentication or disallow changes need be specified
+in config/default.json##tests##client##overriddenAuth.
+For example:
+overriddenAuth: {
+  serviceNameWithAuth: {
+    update: 'noauth',  // authentication has been removed
+    remove: 'disallow' // client cannot call remove
+  },
+  serviceNameNoAuth: {
+    create: 'auth'     // authentication has been added
+  }
+}
+
+The test only runs when NODE_ENV is a test environment.

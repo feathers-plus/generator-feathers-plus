@@ -12,7 +12,8 @@
     "packager": "npm@>= 3.0.0",
     "providers": [
       "socketio"
-    ]
+    ],
+    "environmentsAllowingSeedData": "test"
   },
   "services": {}
 }

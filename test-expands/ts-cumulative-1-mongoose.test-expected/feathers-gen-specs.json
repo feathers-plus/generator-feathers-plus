@@ -14,7 +14,8 @@
     "providers": [
       "rest",
       "socketio"
-    ]
+    ],
+    "environmentsAllowingSeedData": "test"
   },
   "services": {
     "users1": {

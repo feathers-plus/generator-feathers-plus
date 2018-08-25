@@ -179,6 +179,14 @@ Default `src`. The name of the folder containing the server code.
     - `REST` - HTTP. Default.
     - `Realtime via Socket.io` - Default. 
     - `Realtime via Primus`
+    
+- `DB data may be replaced by fake data only when NODE_ENV is (comma separated)`
+Some generated tests might mutate the current DB records; you may also write such tests.
+It is important these tests not run when the Feathers services are using with production,
+staging or user acceptance testing DBs.
+Type a comma separated list of
+[NODE_ENV](https://stackoverflow.com/questions/16978256/what-is-node-env-in-express)
+environment variables during which such tests may run and mutate the DB tables.
 
 #### Folders
 

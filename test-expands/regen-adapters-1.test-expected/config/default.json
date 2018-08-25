@@ -7,5 +7,10 @@
     "max": 50
   },
   "mongodb": "mongodb://localhost:27017/z_1",
+  "tests": {
+    "environmentsAllowingSeedData": [
+      "test"
+    ]
+  },
   "nedb": "../data"
 }

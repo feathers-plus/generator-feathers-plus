@@ -6,6 +6,11 @@
     "default": 10,
     "max": 50
   },
+  "tests": {
+    "environmentsAllowingSeedData": [
+      "test"
+    ]
+  },
   "authentication": {
     "secret": "***** secret generated for tests *****",
     "strategies": [
