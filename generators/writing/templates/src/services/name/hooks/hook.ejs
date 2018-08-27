@@ -3,10 +3,10 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 
 <%- tplTsOnly([`import { Hook } from '@feathersjs/feathers'${sc}`]) %>
-<%- tplJsOrTs(`const`, `import`) %> { checkContext, getItems, replaceItems } = require('feathers-hooks-common')<%- sc %>
+<%- tplImports('{ checkContext, getItems, replaceItems }', 'feathers-hooks-common') %>
 
 // eslint-disable-next-line no-unused-vars
-module.exports = function (options = {})<%- tplTsOnly([': Hook']) -%> {
+<%- tplExport('function (options = {}) {', 'function (options: any = {}): Hook {') %>
 
   // Return the actual hook.
   return async (context) => {
