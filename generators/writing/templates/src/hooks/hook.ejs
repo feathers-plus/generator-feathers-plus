@@ -1,0 +1,38 @@
+
+// Use this hook to manipulate incoming or outgoing data.
+// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
+
+<%- tplTsOnly([`import { Hook } from '@feathersjs/feathers'${sc}`]) %>
+<%- tplJsOrTs(`const`, `import`) %> { checkContext, getItems, replaceItems } = require('feathers-hooks-common')<%- sc %>
+
+// eslint-disable-next-line no-unused-vars
+module.exports = function (options = {})<%- tplTsOnly([': Hook']) -%> {
+
+  // Return the actual hook.
+  return async (context) => {
+    // Throw if the hook is being called from an unexpected location.
+    checkContext(context, 'after', ['find', 'get', 'create', 'update', 'patch', 'remove'])<%- sc %>
+
+    // Get the authenticated user.
+    // eslint-disable-next-line no-unused-vars
+    const { user } = context.params<%- tplTsOnly(['!']) -%><%- sc %>
+    // Get the record(s) from context.data (before), context.result.data or context.result (after).
+    // getItems always returns an array to simplify your processing.
+    const records = getItems(context)<%- sc %>
+
+    /*
+    Modify records and/or context.
+     */
+
+    // Place the modified records back in the context.
+    replaceItems(context, records)<%- sc %>
+    // Best practice: hooks should always return the context.
+    return context<%- sc %>
+  }<%- sc %>
+}<%- sc %>
+
+// Throw on unrecoverable error.
+// eslint-disable-next-line no-unused-vars
+function error(msg<%- tplTsOnly([': string']) -%>) {
+  throw new Error(msg)<%- sc %>
+}

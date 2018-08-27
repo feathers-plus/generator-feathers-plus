@@ -2,6 +2,12 @@
 // Application hooks that run for every service. (Can be re-generated.)
 <%- tplTsOnly(`import { HookMap, HooksObject } from '@feathersjs/feathers'${sc}${EOL}`) -%>
 <%- tplImports('commonHooks', 'feathers-hooks-common', 'as') %>
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% _hooks.forEach(__hook => { -%>
+<%- tplImports(__hook.camelName, `${__hook.filePath}${__hook.fileName}`) %>
+<% }) -%>
+<%# --- if-1 ends above. -%>
 <%- insertFragment('imports', [
   tplImports('log', './hooks/log'),
 ]) %>

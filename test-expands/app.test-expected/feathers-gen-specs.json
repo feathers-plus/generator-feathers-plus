@@ -13,7 +13,7 @@
     "providers": [
       "socketio"
     ],
-    "environmentsAllowingSeedData": "test"
+    "environmentsAllowingSeedData": "testa"
   },
   "services": {}
 }

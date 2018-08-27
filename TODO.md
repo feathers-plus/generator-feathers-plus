@@ -450,3 +450,7 @@ OK - Consistency, e.g. name.sequelize.js lists needed fields for user-entity whi
      Check feathers-gen-specs.json. Optionally use faked data records.
    - test no auth works for each prompt-selected method on service generated without auth.
      Optionally use faked data records.
+     
+- https://blog.feathersjs.com/stress-testing-your-feathersjs-application-like-in-production-4b8611ee8d9e
+  Stress testing your FeathersJS application like in production
+       

@@ -127,6 +127,7 @@ function generatorsInclude (name) {
   return generators.indexOf(name) !== -1;
 }
 
+
 module.exports = function generatorWriting (generator, what) {
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator;
@@ -214,6 +215,10 @@ module.exports = function generatorWriting (generator, what) {
         service(generator, name);
       });
 
+      Object.keys(specs.hooks || {}).forEach(name => {
+        hook(generator, name);
+      });
+
       authentication(generator);
 
       connection(generator);
@@ -237,6 +242,14 @@ module.exports = function generatorWriting (generator, what) {
     case 'service':
       service(generator, props.name);
       break;
+    case 'hook':
+      hook(generator, props.name);
+      app(generator);
+
+      Object.keys(specs.services || {}).forEach(name => {
+        service(generator, name);
+      });
+      break;
     case 'connection':
       connection(generator);
       break;
@@ -258,7 +271,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== app =====================================================================================
   function app (generator) {
-    // Custom abbreviations for building 'todos'.
+    let configTest;
 
     // Configurations
     const pkg = generator.pkg = generator.fs.readJSON(
@@ -268,14 +281,25 @@ module.exports = function generatorWriting (generator, what) {
     const configDefault = specs._defaultJson = generator.fs.readJSON(
       generator.destinationPath('config/default.json'), makeConfig.configDefault(generator)
     );
+    // Update older configs with current specs
+    configDefault.tests = configDefault.tests || {};
+    configDefault.tests.environmentsAllowingSeedData =
+      specs.app.environmentsAllowingSeedData.split(',') || [];
+
     const configProd = generator.fs.readJSON(
       generator.destinationPath('config/production.json'), makeConfig.configProduction(generator)
     );
 
-    // Update configs with current specs
-    configDefault.tests = configDefault.tests || {};
-    configDefault.tests.environmentsAllowingSeedData =
-      specs.app.environmentsAllowingSeedData.split(',') || ['tests'];
+    const configTestEnv = configDefault.tests.environmentsAllowingSeedData[0];
+    if (configTestEnv) {
+      configTest = specs._testJson = generator.fs.readJSON(
+        generator.destinationPath(`config/${configTestEnv}.json`), makeConfig.configTest(generator)
+      );
+      const connectionStrings = ['mongodb', 'mysql', 'nedb', 'postgres', 'rethinkdb', 'sqlite', 'mssql'];
+      connectionStrings.forEach(name => {
+        configTest[name] = configTest[name] || '';
+      });
+    }
 
     // Modify .eslintrc for semicolon option
     let eslintrcExists = true;
@@ -306,7 +330,8 @@ module.exports = function generatorWriting (generator, what) {
 
     // Custom template context.
     context = Object.assign({}, context, {
-      getNameSpace: generator.getNameSpace
+      getNameSpace: generator.getNameSpace,
+      _hooks: specs._hooks['*app'] || [],
     });
 
     // Modules to generate
@@ -329,6 +354,7 @@ module.exports = function generatorWriting (generator, what) {
       json(pkg,           'package.json'),
       json(configDefault, ['config', 'default.json']),
       json(configProd,    ['config', 'production.json']),
+      json(configTest,    ['config', `${configTestEnv}.json`], false, !configTestEnv),
 
       tmpl([tpl, 'src', 'index.ejs'],     [src, `index.${js}`]),
       tmpl([tpl, 'src', 'app.hooks.ejs'], [src, `app.hooks.${js}`]),
@@ -498,6 +524,7 @@ module.exports = function generatorWriting (generator, what) {
       requiresAuth: specsService.requiresAuth,
       oauthProviders: [],
       hooks: getHookInfo(name),
+      _hooks: specs._hooks[name] || [],
 
       libDirectory: specs.app.src,
       modelName: hasModel ? `${fileName}.model` : null,
@@ -708,6 +735,30 @@ module.exports = function generatorWriting (generator, what) {
         make: hooks => `${hooks.length ? ' ' : ''}${hooks.join(', ')}${hooks.length ? ' ' : ''}`
       };
     }
+  }
+
+  // ===== hook ====================================================================================
+  function hook(generator, name) {
+    const hookSpec = specs.hooks[name];
+    const hookFile = hookSpec.fileName;
+    let todos;
+
+    if (hookSpec.ifMulti !== 'y') {
+      const specsService = specs.services[hookSpec.singleService];
+      const sn = specsService.fileName;
+      const sfa = generator.getNameSpace(specsService.subFolder)[1];
+
+      todos = [
+        tmpl([namePath, 'hooks', 'hook.ejs'], [libDir,  'services', ...sfa, sn, 'hooks', `${hookFile}.${js}`], true ),
+      ];
+    } else {
+      todos = [
+        tmpl([srcPath,  'hooks', 'hook.ejs'], [libDir,  'hooks', `${hookFile}.${js}`],                     true ),
+      ];
+    }
+
+    // Generate modules
+    generatorFs(generator, context, todos);
   }
 
   // ===== connection ==============================================================================

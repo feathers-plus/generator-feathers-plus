@@ -136,8 +136,8 @@ module.exports = class AppGenerator extends Generator {
       },
     }, {
       name: 'environmentsAllowingSeedData',
-      message: 'DB data may be replaced by fake data only when NODE_ENV is (comma separated)',
-      default: specs.app.environmentsAllowingSeedData || 'test',
+      message: 'DB data may be replaced by fake data only when NODE_ENV is (optional)',
+      default: specs.app.environmentsAllowingSeedData || '',
       filter: input => {
         const envs = input.split(',');
         return (envs.map(str => kebabCase(str.trim()))).join(',');

@@ -1,4 +1,4 @@
-
+=== David's generator
 ? What is the name of the hook?
 
 ? What kind of hook should it be? (Use arrow keys)
@@ -31,10 +31,11 @@
  ◯ one service (and reside in src/services/serviceName/hooks/)
 
 -- if multiple services
-? Which services will this hook be used with (select none to add it yourself)?
+? Which services will this hook be used with
  (Press <space> to select, <a> to toggle all, <i> to invert selection)
+ ◯ I will add the hook where its needed
 ❯◯ All services (hook is used in src/app.hooks)
- ◯ users (hook is used in src/services/users/users.hooks.js)
+ ◯ users
  ◯ postings
 
 -- if not multiple services
@@ -43,15 +44,17 @@
  ◯ postings
 
 == generate test
-? Which kind of test do you want?
+? Which kind of test is required?
  ◯ hook - unit (tested as a function)
  ◯ hook - integration (tested using a fake service)
  ◯ service - unit (tested on the server)
  ◯ service - integration (tested using client/server)
- ◯ check health - authentication (client/server)
- ◯ check health - services (client/server)
+ ◯ authentication - base (client/server)
+ ◯ authentication - services (client/server)
 
 --- prompts for hook
+This does not include manually created hooks. Should the prompts be changed?
+
 ? What is the name of the hook being tested?
  ◯ hook1 (used with all services)
  ◯ hook2
@@ -64,16 +67,16 @@
 --- informative message for client/server options.
 We are generating the first client/server test.
 Configuration options will be added to config/default.json##tests##client.
-The check health tests use them, you may also.
+The authentication tests use them, you may also.
 You may customize this config as desired.
 
---- informative message for "check health - authentication"
+--- informative message for "authentication - base"
 This test uses the user-entity service to ensure that "local" and "jwt" authentication
 are working properly.
 
-The test only runs when NODE_ENV is a test environment.
+The test only runs when NODE_ENV is the test environment.
 
---- informative message for "check health - services"
+--- informative message for "authentication - services"
 In practice most apps require manual changes to the generated authentication.
 This test checks the actual authentication is what you expect it to be
 by calling every Feathers method on every (non-custom) service.
@@ -81,7 +84,7 @@ by calling every Feathers method on every (non-custom) service.
 The test may also expose faults in the interaction between the client and the server.
 
 Authentication is assumed active on each method for services generated with authentication.
-No authentication is assumed active on each method for services generated without authentication.
+No authentication is assumed active on any method for services generated without authentication.
 Of course you could change this by removing or adding, say, "authenticate('local') hooks.
 You could even use the "disallow" common hook to entirely disallow client access to some methods.
 Only such authentication or disallow changes need be specified
@@ -97,4 +100,4 @@ overriddenAuth: {
   }
 }
 
-The test only runs when NODE_ENV is a test environment.
+The test only runs when NODE_ENV is the test environment.

@@ -1,0 +1,9 @@
+{
+  "mongodb": "aaa",
+  "mysql": "",
+  "nedb": "",
+  "postgres": "",
+  "rethinkdb": "",
+  "sqlite": "",
+  "mssql": ""
+}
