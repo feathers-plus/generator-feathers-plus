@@ -1,6 +1,6 @@
 <%- tplTsOnly(['/// <reference types="mocha"/>', '']) -%>
 <%- tplImports('assert', null, 'req') %>
-<%- tplImports('app', `../../${subFolderReverse}${libDirectory}/app`) %>
+<%- tplImports('app', `../../${libDirectory}/app`) %>
 
 describe('\'<%= serviceName %>\' service', () => {
   it('registered the service', () => {

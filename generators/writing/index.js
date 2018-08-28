@@ -1,6 +1,5 @@
 
 /* eslint-disable no-console */
-const chalk = require('chalk');
 const crypto = require('crypto');
 const merge = require('lodash.merge');
 const mongoose = require('mongoose');
@@ -12,7 +11,7 @@ const { existsSync } = require('fs');
 const { inspect } = require('util');
 const { join } = require('path');
 
-const kebabCase = kebabCase1 //name => name === 'users1' ? name : kebabCase1(name);
+const kebabCase = kebabCase1; //name => name === 'users1' ? name : kebabCase1(name);
 
 const doesFileExist = require('../../lib/does-file-exist');
 const makeConfig = require('./templates/_configs');
@@ -127,7 +126,6 @@ function generatorsInclude (name) {
   return generators.indexOf(name) !== -1;
 }
 
-
 module.exports = function generatorWriting (generator, what) {
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator;
@@ -241,6 +239,12 @@ module.exports = function generatorWriting (generator, what) {
       break;
     case 'service':
       service(generator, props.name);
+
+      // `generate authentication` from the prompt will generate the wrong path for
+      // the user-entity because of a chicken-and-egg problem. This fixes it.
+      if (specs.services[props.name].isAuthEntity) {
+        authentication(generator);
+      }
       break;
     case 'hook':
       hook(generator, props.name);
@@ -264,6 +268,9 @@ module.exports = function generatorWriting (generator, what) {
       break;
     case 'fakes':
       fakes(generator);
+      break;
+    case 'test':
+      test(generator);
       break;
     default:
       throw new Error(`Unexpected generate ${what}. (writing`);
@@ -598,7 +605,7 @@ module.exports = function generatorWriting (generator, what) {
     const sfa = context.subFolderArray;
 
     todos = [
-      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', ...sfa, `${fn}.test.${js}`],           true                         ),
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services',         `${fn}.test.${js}`],           true                         ),
       tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`], false, !context.modelName    ),
       tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, fn, `${fn}.service.${js}`],    ),
       tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.class.${js}`],      false, adapter !== 'generic' ),
@@ -735,30 +742,6 @@ module.exports = function generatorWriting (generator, what) {
         make: hooks => `${hooks.length ? ' ' : ''}${hooks.join(', ')}${hooks.length ? ' ' : ''}`
       };
     }
-  }
-
-  // ===== hook ====================================================================================
-  function hook(generator, name) {
-    const hookSpec = specs.hooks[name];
-    const hookFile = hookSpec.fileName;
-    let todos;
-
-    if (hookSpec.ifMulti !== 'y') {
-      const specsService = specs.services[hookSpec.singleService];
-      const sn = specsService.fileName;
-      const sfa = generator.getNameSpace(specsService.subFolder)[1];
-
-      todos = [
-        tmpl([namePath, 'hooks', 'hook.ejs'], [libDir,  'services', ...sfa, sn, 'hooks', `${hookFile}.${js}`], true ),
-      ];
-    } else {
-      todos = [
-        tmpl([srcPath,  'hooks', 'hook.ejs'], [libDir,  'hooks', `${hookFile}.${js}`],                     true ),
-      ];
-    }
-
-    // Generate modules
-    generatorFs(generator, context, todos);
   }
 
   // ===== connection ==============================================================================
@@ -1060,6 +1043,30 @@ module.exports = function generatorWriting (generator, what) {
     }
   }
 
+  // ===== hook ====================================================================================
+  function hook(generator, name) {
+    const hookSpec = specs.hooks[name];
+    const hookFile = hookSpec.fileName;
+    let todos;
+
+    if (hookSpec.ifMulti !== 'y') {
+      const specsService = specs.services[hookSpec.singleService];
+      const sn = specsService.fileName;
+      const sfa = generator.getNameSpace(specsService.subFolder)[1];
+
+      todos = [
+        tmpl([namePath, 'hooks', 'hook.ejs'], [libDir,  'services', ...sfa, sn, 'hooks', `${hookFile}.${js}`], true ),
+      ];
+    } else {
+      todos = [
+        tmpl([srcPath,  'hooks', 'hook.ejs'], [libDir,  'hooks', `${hookFile}.${js}`],                     true ),
+      ];
+    }
+
+    // Generate modules
+    generatorFs(generator, context, todos);
+  }
+
   // ===== fakes ===================================================================================
   function fakes (generator) {
     const schemas = {};
@@ -1098,6 +1105,63 @@ module.exports = function generatorWriting (generator, what) {
       copy([tpl, '_configs', 'default.js'], ['config', 'default.js'], true),
       json(fakeData, ['seeds', 'fake-data.json']),
     ];
+
+    // Generate modules
+    generatorFs(generator, context, todos);
+  }
+
+  // ===== test ====================================================================================
+  function test (generator) {
+    console.log('>>>>> test');
+    const hookInfo = props.hookInfo;
+    const testType = props.testType;
+    console.log('hookInfo', hookInfo);
+
+    // eslint-disable-next-line no-unused-vars
+    let specHook, hookFileName, hookName, specService, sn, x, sfa, sfBack;
+    let pathToHook, pathToTest, pathTestToHook, pathTestToApp;
+    let todos;
+
+    if (props.testType === 'hookUnit' || props.testType === 'hookInteg') {
+      specHook = specs.hooks[hookInfo.hookFileName];
+      console.log(hookInfo.hookFileName, Object.keys(specs.hooks));
+      console.log(specHook);
+
+      hookFileName = specHook.fileName;
+      hookName = specHook.camelName;
+
+      if (hookInfo.appLevelHook) {
+        pathToHook = `hooks/${hookFileName}.${js}`;
+        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + '.test' + pathToHook.substr(-3);
+        pathTestToHook = `../../${src}/${pathToHook}`;
+        pathTestToApp = '../../';
+      } else {
+        specService = specs.services[hookInfo.serviceName];
+        sn = specService.fileName;
+        [x, sfa, sfBack ] = generator.getNameSpace(specService.subFolder);
+
+        pathToHook = `services/${sfa.length ? `${sfa.join('/')}/` : ''}${sn}/hooks/${hookFileName}.${js}`;
+        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + '.test' + pathToHook.substr(-3);
+        pathTestToHook = `${sfBack}../../../../${src}/${pathToHook}`;
+        pathTestToApp = `${sfBack}../../../../`;
+      }
+      console.log('pathToHook', pathToHook);
+      console.log('pathToTest', pathToTest);
+      console.log('pathTestToHook', pathTestToHook);
+
+      context = Object.assign({}, context, {
+        hookName,
+        pathToHook,
+        pathToTest,
+        pathTestToHook,
+        pathTestToApp,
+      });
+
+      todos = [
+        tmpl([testPath, 'hooks', 'unit.test.ejs'],  ['test', pathToTest], true, testType !== 'hookUnit'),
+        tmpl([testPath, 'hooks', 'integ.test.ejs'], ['test', pathToTest], true, testType === 'hookUnit'),
+      ];
+    }
 
     // Generate modules
     generatorFs(generator, context, todos);

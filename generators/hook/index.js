@@ -1,12 +1,9 @@
 
 const chalk = require('chalk');
 const { camelCase } = require('lodash');
-const { cwd } = require('process');
-const { parse } = require('path');
 
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
-const { getFragments } = require('../../lib/code-fragments');
 const { initSpecs } = require('../../lib/specs');
 
 module.exports = class CodelistGenerator extends Generator {
@@ -19,8 +16,7 @@ module.exports = class CodelistGenerator extends Generator {
 
     let hookSpecs; // The specs.hooks[] for the hook
 
-    const serviceChoices = Object.keys(specs.services).sort().map((name, i) => {
-      const desc = specs.services[name].isAuthEntity
+    const serviceChoices = Object.keys(specs.services).sort().map(name => {
       return { name: name, value: name };
     });
 
@@ -37,7 +33,6 @@ module.exports = class CodelistGenerator extends Generator {
         hookSpecs = specs.hooks[input];
 
         if (isOld) {
-          const filePath =
           generator.log('\n');
           generator.log([
             chalk.green.bold('We are'),
@@ -97,7 +92,7 @@ module.exports = class CodelistGenerator extends Generator {
         }
       ].concat(serviceChoices),
       default () {
-        return hookSpecs.multiServices || ['*manual'];
+        return hookSpecs.multiServices || ['*none'];
       },
       validate (input) {
         if (input.length === 0) {

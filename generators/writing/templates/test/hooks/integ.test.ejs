@@ -1,0 +1,67 @@
+
+<%- tplTsOnly('/// <reference types="mocha"/>') -%>
+<%- tplTsOnly(`import feathers, { Params, Service, Application } from '@feathersjs/feathers'${sc}`) -%>
+<%- tplTsOnly('') -%>
+<%- tplImports('assert', null) %>
+<%- tplImports('feathers', '@feathersjs/feathers') %>
+<%- tplImports('jsonFile', 'jsonfile') %>
+<%- tplImports('{ join }', 'path') %>
+<%- tplImports('config', `${pathTestToApp}config/default.json`) %>
+<%- tplImports(hookName, pathTestToHook) %>
+
+// Determine if environment allows test to mutate existing DB data.
+const env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
+// eslint-disable-next-line no-unused-vars
+const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
+
+// Get generated fake data
+const fakeData = jsonFile.readFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json'), { throw: false }) || {}<%- sc %>
+
+describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
+  let app<%- tplTsOnly('Application') -%><%- sc %>
+  // eslint-disable-next-line no-unused-vars
+  let service<%- tplTsOnly('Service<any>') -%><%- sc %>
+  let params<%- tplTsOnly('Params') -%><%- sc %>
+
+  beforeEach(() => {
+    app = feathers()<%- sc %>
+
+    app.use('/test-service', {
+      async create(data<%- tplTsOnly(': any') -%>) {
+        return data<%- sc %>
+      }
+    })<%- sc %>
+
+    app.service('/test-service').hooks({
+      before: {
+        create: <%- hookName -%>()
+      }
+    })<%- sc %>
+
+    service = app.service('/test-service')<%- sc %>
+    params = {
+      user: fakeData['users1'][0] || {
+        email: 'test@example.com'
+      }
+    }<%- sc %>
+  })<%- sc %>
+
+
+  it('Hook exists', () => {
+    assert(typeof <%- hookName -%> === 'function', 'Hook is not a function.')<%- sc %>
+  })<%- sc %>
+
+  it('???', async () => {
+    params.provider = undefined<%- sc %>
+
+    /*
+    const result = await service.create({
+
+    }, params)<%- sc %>
+
+    assert.deepEqual(user, {
+
+    }, result)<%- sc %>
+    */
+  })<%- sc %>
+})<%- sc %>

@@ -1,0 +1,74 @@
+
+<%- tplTsOnly('/// <reference types="mocha"/>') -%>
+<%- tplTsOnly(`import { HookContext } from '@feathersjs/feathers'${sc}`) -%>
+<%- tplTsOnly('') -%>
+<%- tplImports('assert', null) %>
+<%- tplImports(hookName, pathTestToHook) %>
+
+
+describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
+  // eslint-disable-next-line no-unused-vars
+  let contextBefore<%- tplTsOnly('HookContext') -%>,
+    // eslint-disable-next-line no-unused-vars
+    contextAfter<%- tplTsOnly('HookContext') -%>,
+    // eslint-disable-next-line no-unused-vars
+    contextAfterMultiple<%- tplTsOnly('HookContext') -%>,
+    contextAfterPaginated<%- tplTsOnly('HookContext') -%><%- sc %>
+
+  beforeEach(() => {
+    contextBefore = {
+<%- tplTsOnly('      service: null!') -%>
+      type: 'before',
+      params: { provider: 'rest' },
+      data: {
+
+      }
+    }<%- sc %>
+
+    contextAfter = {
+<%- tplTsOnly('      service: null!') -%>
+      type: 'after',
+      params: { provider: 'rest' },
+      result: {
+
+      }
+    }<%- sc %>
+
+    contextAfterMultiple = {
+<%- tplTsOnly('      service: null!') -%>
+      type: 'after',
+      params: { provider: 'rest' },
+      result: [
+
+      ]
+    }<%- sc %>
+
+    contextAfterPaginated = {
+<%- tplTsOnly('      service: null!') -%>
+      type: 'after',
+      method: 'find',
+      params: { provider: 'rest' },
+      result: {
+        data: [
+
+        ]
+      } }<%- sc %>
+    contextAfterPaginated.result.total = contextAfterPaginated.result.data.length<%- sc %>
+  })<%- sc %>
+
+  it('Hook exists', () => {
+    assert(typeof <%- hookName -%> === 'function', 'Hook is not a function.')<%- sc %>
+  })<%- sc %>
+
+  it('???', () => {
+    contextBefore.method = 'create'<%- sc %>
+
+    /*
+    <%- hookName -%>()(contextBefore)<%- sc %>
+
+    assert.deepEqual(contextBefore.data, {
+
+    })<%- sc %>
+    */
+  })<%- sc %>
+})<%- sc %>
