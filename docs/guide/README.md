@@ -574,11 +574,8 @@ For module definitions, you can use [`paths`](https://www.typescriptlang.org/doc
   "compilerOptions": {
      ...
      "baseUrl": ".",                       /* Base directory to resolve non-absolute module names. */
-     "paths": {
-       "@models/*": ["src/models/*"],
-       "@middleware/*": ["src/middleware/*"],
-       "@services/*": ["src/services/*"],
-       "@src/*": ["src/*"]
+     "paths": {                            /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+       "@/*": ["src/*"]
      },
      ...
 }
@@ -607,6 +604,6 @@ become
 
 
 ```ts
-import { App } from '@src/app.interface'
+import { App } from '@/app.interface'
 ```
 
