@@ -17,31 +17,10 @@ module.exports = class CodelistGenerator extends Generator {
       const hookFileName = hookSpec.fileName;
 
       if (hookSpec.ifMulti !== 'y') {
-        const specsService = specs.services[hookSpec.singleService];
-        const sn = specsService.fileName;
-        const sfa = generator.getNameSpace(specsService.subFolder)[1];
-
-        return {
-          name: `${sn}/hooks/${hookFileName}.${js}`,
-          value: {
-            hookName: name,
-            appLevelHook: false,
-            serviceName: specsService.name,
-            hookFileName,
-            pathToHook: `services/${sfa.length ? `${sfa.join('/')}/` : ''}${sn}/hooks/${hookFileName}.${js}`
-          }
-        };
+        const sn = specs.services[hookSpec.singleService].fileName;
+        return { name: `${sn}/hooks/${hookFileName}.${js}`, value: name };
       } else {
-        return {
-          name: `/hooks/${hookFileName}.${js}`,
-          value: {
-            hookName: name,
-            appLevelHook: true,
-            serviceName: '*none',
-            hookFileName,
-            pathToHook: `hooks/${hookFileName}.${js}`
-          }
-        };
+        return { name: `/hooks/${hookFileName}.${js}`, value: name };
       }
     }).sort((a, b) => {
       if (a.name < b.name) return -1;
@@ -77,7 +56,7 @@ module.exports = class CodelistGenerator extends Generator {
         value: 'authServices'
       }]
     }, {
-      name: 'hookInfo',
+      name: 'hookName',
       message: 'Which hook is being tested?',
       type: 'list',
       when: answers => answers.testType === 'hookUnit' || answers.testType === 'hookInteg',

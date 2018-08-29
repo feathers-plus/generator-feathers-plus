@@ -26,7 +26,7 @@ describe('Feathers application tests', () => {
 
   it('starts and shows the index page', () => {
     return rp(getUrl()).then(<%- tplJsOrTs('body', '(body: string)') %> =>
-      assert.ok(body.indexOf('<html>') !== -1)
+      assert.ok(body.indexOf('<html>') !== -1, 'response does not contain <html>')
     )<%- sc %>
   })<%- sc %>
 
@@ -38,8 +38,8 @@ describe('Feathers application tests', () => {
           Accept: 'text/html'
         }
       }).catch(res => {
-        assert.equal(res.statusCode, 404)<%- sc %>
-        assert.ok(res.error.indexOf('<html>') !== -1)<%- sc %>
+        assert.equal(res.statusCode, 404, 'unexpected statusCode')<%- sc %>
+        assert.ok(res.error.indexOf('<html>') !== -1, 'error does not contain <html>')<%- sc %>
       })<%- sc %>
     })<%- sc %>
 
@@ -48,10 +48,10 @@ describe('Feathers application tests', () => {
         url: getUrl('path/to/nowhere'),
         json: true
       }).catch(res => {
-        assert.equal(res.statusCode, 404)<%- sc %>
-        assert.equal(res.error.code, 404)<%- sc %>
-        assert.equal(res.error.message, 'Page not found')<%- sc %>
-        assert.equal(res.error.name, 'NotFound')<%- sc %>
+        assert.equal(res.statusCode, 404, 'unexpected statusCode')<%- sc %>
+        assert.equal(res.error.code, 404, 'unexpected error.code')<%- sc %>
+        assert.equal(res.error.message, 'Page not found', 'unexpected error.message')<%- sc %>
+        assert.equal(res.error.name, 'NotFound', 'unexpected error.name')<%- sc %>
       })<%- sc %>
     })<%- sc %>
   })<%- sc %>

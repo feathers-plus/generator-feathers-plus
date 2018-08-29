@@ -791,45 +791,13 @@ module.exports = function generatorWriting (generator, what) {
     const entity = specs.authentication.entity;
     const strategies = specs.authentication.strategies;
 
-    // Check for orphan authentication user-entity.
-    // This can happen if the generate service part of generate authentication throws.
-    if (!specs.services[entity]) {
-      generator.log('\npatch\n');
-      /*
-      generator.log('\n');
-      generator.log([
-        chalk.red('The '),
-        chalk.yellow('authentication'),
-        chalk.red(' property in '),
-        chalk.yellow('feathers-gen-specs.json'),
-        chalk.red(' specifies'),
-      ].join(''));
-      generator.log([
-        chalk.red('the user-entity service is '),
-        chalk.yellow(entity),
-        chalk.red('. However such a service has'),
-      ].join(''));
-      generator.log(chalk.red('not been generated. Consequently no code will be generated for authentication.'));
-      generator.log('');
-      generator.log([
-        chalk.red('You should manually delete that '),
-        chalk.yellow('authentication'),
-        chalk.red(' prop and '),
-      ].join(''));
-      generator.log(chalk.red('regenerate authentication and its user-entity service.'));
-      generator.log('');
-
-      return;
-      */
-    }
-
     // Custom template context
     context = Object.assign({}, context, {
       // PATCH $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
       // The authentication generation needs to know the path used by then user-entity service,
       // but that service is not configured at that point. So the code guesses the path will be
       // the same as the user-entity name. The generated code won't run right if its different.
-      // But doing a generate all will fix it. Sad situation.
+      // The generation of the service-entity will call this routine so things are fixed right.
       servicePath: specs.services[entity] ? specs.services[entity].path : entity,
       kebabEntity: entity,
       camelEntity: camelCase(entity),
@@ -1112,42 +1080,61 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== test ====================================================================================
   function test (generator) {
-    console.log('>>>>> test');
-    const hookInfo = props.hookInfo;
     const testType = props.testType;
-    console.log('hookInfo', hookInfo);
-
-    // eslint-disable-next-line no-unused-vars
-    let specHook, hookFileName, hookName, specService, sn, x, sfa, sfBack;
-    let pathToHook, pathToTest, pathTestToHook, pathTestToApp;
     let todos;
 
-    if (props.testType === 'hookUnit' || props.testType === 'hookInteg') {
-      specHook = specs.hooks[hookInfo.hookFileName];
-      console.log(hookInfo.hookFileName, Object.keys(specs.hooks));
-      console.log(specHook);
+    if (testType === 'hookUnit' || testType === 'hookInteg') {
+      let sfa, sfBack, pathToHook, pathToTest, pathTestToHook, pathTestToApp;
+      // eslint-disable-next-line no-unused-vars
+      let x;
 
-      hookFileName = specHook.fileName;
-      hookName = specHook.camelName;
+      const hookName1 = props.hookName;
+      const hookSpec = specs.hooks[hookName1];
+      const hookFileName1 = hookSpec.fileName;
+      let hookInfo;
+
+      if (hookSpec.ifMulti !== 'y') {
+        const specsService = specs.services[hookSpec.singleService];
+        const sn1 = specsService.fileName;
+        const sfa1 = generator.getNameSpace(specsService.subFolder)[1];
+
+        hookInfo = {
+          hookName: hookName1,
+          appLevelHook: false,
+          serviceName: specsService.name,
+          hookFileName: hookFileName1,
+          pathToHook: `services/${sfa1.length ? `${sfa1.join('/')}/` : ''}${sn1}/hooks/${hookFileName1}.${js}`
+        };
+      } else {
+        hookInfo = {
+          hookName: hookName1,
+          appLevelHook: true,
+          serviceName: '*none',
+          hookFileName: hookFileName1,
+          pathToHook: `hooks/${hookFileName1}.${js}`
+        };
+      }
+
+      const specHook = specs.hooks[hookInfo.hookFileName];
+      const hookFileName = specHook.fileName;
+      const hookName = specHook.camelName;
+      const hookTestType = testType === 'hookUnit' ? '.unit' : '.integ';
 
       if (hookInfo.appLevelHook) {
         pathToHook = `hooks/${hookFileName}.${js}`;
-        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + '.test' + pathToHook.substr(-3);
+        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + `${hookTestType}.test` + pathToHook.substr(-3);
         pathTestToHook = `../../${src}/${pathToHook}`;
         pathTestToApp = '../../';
       } else {
-        specService = specs.services[hookInfo.serviceName];
-        sn = specService.fileName;
+        const specService = specs.services[hookInfo.serviceName];
+        const sn = specService.fileName;
         [x, sfa, sfBack ] = generator.getNameSpace(specService.subFolder);
 
         pathToHook = `services/${sfa.length ? `${sfa.join('/')}/` : ''}${sn}/hooks/${hookFileName}.${js}`;
-        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + '.test' + pathToHook.substr(-3);
+        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + `${hookTestType}.test` + pathToHook.substr(-3);
         pathTestToHook = `${sfBack}../../../../${src}/${pathToHook}`;
         pathTestToApp = `${sfBack}../../../../`;
       }
-      console.log('pathToHook', pathToHook);
-      console.log('pathToTest', pathToTest);
-      console.log('pathTestToHook', pathTestToHook);
 
       context = Object.assign({}, context, {
         hookName,
@@ -1155,6 +1142,7 @@ module.exports = function generatorWriting (generator, what) {
         pathToTest,
         pathTestToHook,
         pathTestToApp,
+        userEntity: specs.authentication ? specs.authentication.entity : null,
       });
 
       todos = [

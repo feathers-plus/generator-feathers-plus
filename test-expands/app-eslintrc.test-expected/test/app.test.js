@@ -26,7 +26,7 @@ describe('Feathers application tests', () => {
 
   it('starts and shows the index page', () => {
     return rp(getUrl()).then(body =>
-      assert.ok(body.indexOf('<html>') !== -1)
+      assert.ok(body.indexOf('<html>') !== -1, 'response does not contain <html>')
     );
   });
 
@@ -38,8 +38,8 @@ describe('Feathers application tests', () => {
           Accept: 'text/html'
         }
       }).catch(res => {
-        assert.equal(res.statusCode, 404);
-        assert.ok(res.error.indexOf('<html>') !== -1);
+        assert.equal(res.statusCode, 404, 'unexpected statusCode');
+        assert.ok(res.error.indexOf('<html>') !== -1, 'error does not contain <html>');
       });
     });
 
@@ -48,10 +48,10 @@ describe('Feathers application tests', () => {
         url: getUrl('path/to/nowhere'),
         json: true
       }).catch(res => {
-        assert.equal(res.statusCode, 404);
-        assert.equal(res.error.code, 404);
-        assert.equal(res.error.message, 'Page not found');
-        assert.equal(res.error.name, 'NotFound');
+        assert.equal(res.statusCode, 404, 'unexpected statusCode');
+        assert.equal(res.error.code, 404, 'unexpected error.code');
+        assert.equal(res.error.message, 'Page not found', 'unexpected error.message');
+        assert.equal(res.error.name, 'NotFound', 'unexpected error.name');
       });
     });
   });

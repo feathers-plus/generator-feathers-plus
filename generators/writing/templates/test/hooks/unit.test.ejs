@@ -19,7 +19,7 @@ describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
     contextBefore = {
 <%- tplTsOnly('      service: null!') -%>
       type: 'before',
-      params: { provider: 'rest' },
+      params: { provider: 'socketio' },
       data: {
 
       }
@@ -28,7 +28,7 @@ describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
     contextAfter = {
 <%- tplTsOnly('      service: null!') -%>
       type: 'after',
-      params: { provider: 'rest' },
+      params: { provider: 'socketio' },
       result: {
 
       }
@@ -37,7 +37,7 @@ describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
     contextAfterMultiple = {
 <%- tplTsOnly('      service: null!') -%>
       type: 'after',
-      params: { provider: 'rest' },
+      params: { provider: 'socketio' },
       result: [
 
       ]
@@ -47,7 +47,7 @@ describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
 <%- tplTsOnly('      service: null!') -%>
       type: 'after',
       method: 'find',
-      params: { provider: 'rest' },
+      params: { provider: 'socketio' },
       result: {
         data: [
 
@@ -62,6 +62,7 @@ describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
 
   it('???', () => {
     contextBefore.method = 'create'<%- sc %>
+    assert(true)<%- sc %>
 
     /*
     <%- hookName -%>()(contextBefore)<%- sc %>

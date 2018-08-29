@@ -6,16 +6,10 @@
 <%- tplImports('feathers', '@feathersjs/feathers') %>
 <%- tplImports('jsonFile', 'jsonfile') %>
 <%- tplImports('{ join }', 'path') %>
-<%- tplImports('config', `${pathTestToApp}config/default.json`) %>
 <%- tplImports(hookName, pathTestToHook) %>
 
-// Determine if environment allows test to mutate existing DB data.
-const env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
-// eslint-disable-next-line no-unused-vars
-const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
-
 // Get generated fake data
-const fakeData = jsonFile.readFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json'), { throw: false }) || {}<%- sc %>
+const fakeData = jsonFile.readFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json'), { throw: false }) || []<%- sc %>
 
 describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
   let app<%- tplTsOnly('Application') -%><%- sc %>
@@ -40,9 +34,15 @@ describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
 
     service = app.service('/test-service')<%- sc %>
     params = {
-      user: fakeData['users1'][0] || {
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (userEntity) { -%>
+      user: fakeData['<%- userEntity -%>%>'][0] || {
         email: 'test@example.com'
       }
+<% } -%>
+<%# --- if-1 ends above. -%>
+
     }<%- sc %>
   })<%- sc %>
 
@@ -53,6 +53,7 @@ describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
 
   it('???', async () => {
     params.provider = undefined<%- sc %>
+    assert(true);
 
     /*
     const result = await service.create({

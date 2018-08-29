@@ -1,10 +1,10 @@
 /// <reference types="mocha"/>
 import assert from 'assert';
-import app from '../../../src1/app';
+import app from '../../src1/app';
 
-describe('\'nedb3\' service', () => {
+describe('\'nedb5\' service', () => {
   it('registered the service', () => {
-    const service = app.service('nedb-3');
+    const service = app.service('nedb-5');
 
     assert.ok(service, 'Registered the service');
   });

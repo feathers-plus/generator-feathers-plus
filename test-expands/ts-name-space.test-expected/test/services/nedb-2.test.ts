@@ -1,6 +1,6 @@
 /// <reference types="mocha"/>
 import assert from 'assert';
-import app from '../../../src1/app';
+import app from '../../src1/app';
 
 describe('\'nedb2\' service', () => {
   it('registered the service', () => {

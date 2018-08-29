@@ -2,12 +2,12 @@
 // Hooks for service `<%= serviceName %>`. (Can be re-generated.)
 <%- hooks.imports.join(EOL) %>
 <%# -%>
-<%# --- if-1 starts below. -%>
+<%# --- forEach-1 starts below. -%>
 <% _hooks.forEach(__hook => { -%>
 // eslint-disable-next-line no-unused-vars
 <%- tplImports(__hook.camelName, `${__hook.filePath}${__hook.fileName}`) %>
 <% }) -%>
-<%# --- if-1 ends above. -%>
+<%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>
 
 <%- insertFragment('used', [
