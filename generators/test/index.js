@@ -49,10 +49,10 @@ module.exports = class CodelistGenerator extends Generator {
         name: 'n/a service - integration (tested using client/server)',
         value: 'serviceInteg'
       }, {
-        name: 'n/a authentication - base (client/server)',
+        name: 'authentication - base (client/server)',
         value: 'authBase'
       }, {
-        name: 'n/a authentication - services (client/server)',
+        name: 'authentication - services (client/server)',
         value: 'authServices'
       }]
     }, {
@@ -109,6 +109,35 @@ module.exports = class CodelistGenerator extends Generator {
           ].join(''));
         }
 
+        if (answers.testType === 'authServices') {
+          generator.log([
+            '',
+            'Authentication is assumed active on each method for services generated',
+            'with authentication. No authentication is assumed active on any method',
+            'for services generated without authentication.',
+            '',
+            'Of course you could change this manually by removing or adding, say,',
+            chalk.yellow.bold('authenticate(\'local\')') + ' hooks. You could even use the ' + chalk.yellow.bold('disallow'),
+            'common hook to entirely disallow client access.',
+            '',
+            'Only such authentication or disallow changes need be specified in file ',
+            chalk.yellow.bold('config/default.json') + ' as prop ' + chalk.yellow.bold('tests.client.overriddenAuth') + '.',
+            '',
+            'For example:',
+            chalk.yellow('overriddenAuth: {'),
+            chalk.yellow('  serviceNameWithAuth: {'),
+            chalk.yellow('    update: \'noauth\',  // authentication has been removed'),
+            chalk.yellow('    remove: \'disallow\' // client cannot call remove'),
+            chalk.yellow('  },'),
+            chalk.yellow('  serviceNameNoAuth: {'),
+            chalk.yellow('    create: \'auth\'     // authentication has been added'),
+            chalk.yellow('  }'),
+            chalk.yellow('}'),
+            '',
+            '',
+            ''
+          ].join('\n'));
+        }
       }
 
       Object.assign(this.props, answers);

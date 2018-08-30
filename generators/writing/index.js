@@ -902,6 +902,7 @@ module.exports = function generatorWriting (generator, what) {
       isAuthEntityWithAuthentication: false,
       requiresAuth: specs.graphql.requiresAuth,
       hooks: getHookInfo('graphql'),
+      _hooks: specs._hooks['graphql'] || [],
 
       strategy: specs.graphql.strategy,
       graphqlSchemas: serviceSpecsToGraphql(feathersSpecs),
@@ -1088,11 +1089,27 @@ module.exports = function generatorWriting (generator, what) {
   // ===== test ====================================================================================
   function test (generator) {
     // props = {
-    //   testType = ['hookUnit', 'hookInteg', 'serviceUnit', 'serviceInteg'],
+    //   testType = ['hookUnit', 'hookInteg', 'serviceUnit', 'serviceInteg', 'authBase', 'authServices'],
     //   hookName!, serviceName!
     // }
     const testType = props.testType;
     let todos = [];
+
+    if (testType === 'authBase') {
+      todos = [
+        tmpl([testPath, 'authentication.base.test.ejs'],  ['test', `authentication.base.test.${js}`])
+      ];
+
+      writeDefaultJsonClient(generator);
+    }
+
+    if (testType === 'authServices') {
+      todos = [
+        tmpl([testPath, 'authentication.services.test.ejs'],  ['test', `authentication.services.test.${js}`])
+      ];
+
+      writeDefaultJsonClient(generator);
+    }
 
     if (testType === 'hookUnit' || testType === 'hookInteg') {
       const hookName1 = props.hookName;
@@ -1274,6 +1291,36 @@ function writeAuthenticationConfiguration (generator, context) {
       secure: false
     };
   }
+
+  generator._specs._defaultJson = config;
+
+  generator.fs.writeJSON(
+    generator.destinationPath('config', 'default.json'),
+    config
+  );
+}
+
+function writeDefaultJsonClient (generator) {
+  const config = Object.assign({}, generator._specs._defaultJson);
+
+  merge(config, {
+    tests: {
+      environmentsAllowingSeedData: [
+      ],
+      client: {
+        port: 3030,
+        ioOptions: {
+          transports: [ 'websocket' ],
+          forceNew: true,
+          reconnection: false,
+          extraHeaders: {}
+        },
+        primusOptions: { transformer: 'ws' },
+        restOptions: { url: 'http://localhost:3030' },
+        overriddenAuth: {}
+      }
+    }
+  });
 
   generator._specs._defaultJson = config;
 

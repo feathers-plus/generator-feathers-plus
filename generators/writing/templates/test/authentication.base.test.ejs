@@ -1,0 +1,6 @@
+
+<%- tplImports('{ join }', 'path') %>
+<%- tplImports('checkHealthAuthTest', '../test-utils/authentication.base.test') %>
+const appRoot = join(__dirname, '..');
+
+checkHealthAuthTest(appRoot);
