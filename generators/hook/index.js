@@ -87,7 +87,7 @@ module.exports = class CodelistGenerator extends Generator {
           name: ' I will add the hook where its needed',
           value: '*none'
         }, {
-          name: ` All services (${srcFolder}/app.hooks)`,
+          name: ` Use with all services as an app hook (${srcFolder}/app.hooks)`,
           value: '*app'
         }
       ].concat(serviceChoices),

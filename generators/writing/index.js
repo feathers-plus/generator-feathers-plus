@@ -1087,50 +1087,55 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== test ====================================================================================
   function test (generator) {
-    console.log('>>> test', props);
-    // props = { testType, hookName! }
+    // props = {
+    //   testType = ['hookUnit', 'hookInteg', 'serviceUnit', 'serviceInteg'],
+    //   hookName!, serviceName!
+    // }
     const testType = props.testType;
-    let todos;
+    let todos = [];
 
     if (testType === 'hookUnit' || testType === 'hookInteg') {
       const hookName1 = props.hookName;
       const hookSpec = specs.hooks[hookName1];
-      const hookFileName1 = hookSpec.fileName;
-      const hookTestType = testType === 'hookUnit' ? '.unit' : '.integ';
+      const hookFileName = hookSpec.fileName;
+      const htt = testType === 'hookUnit' ? '.unit' : '.integ';
+      const specHook = specs.hooks[hookFileName];
+      const hookName = specHook.camelName;
 
-      let hookInfo, sfa, sfBack, pathToHook, pathToTest, pathTestToHook, pathTestToApp;
+      let hookInfo, sn1, sfa, sfBack, pathToHook, pathToTest, pathTestToHook, pathTestToApp;
       // eslint-disable-next-line no-unused-vars
       let x;
 
       if (hookSpec.ifMulti !== 'y') {
         const specsService = specs.services[hookSpec.singleService];
-        const sn1 = specsService.fileName;
+        sn1 = specsService.fileName;
         const sfa1 = generator.getNameSpace(specsService.subFolder)[1];
 
         hookInfo = {
           hookName: hookName1,
           appLevelHook: false,
           serviceName: specsService.name,
-          hookFileName: hookFileName1,
-          pathToHook: `services/${sfa1.length ? `${sfa1.join('/')}/` : ''}${sn1}/hooks/${hookFileName1}.${js}`
+          hookFileName,
+          pathToHook: `services/${sfa1.length ? `${sfa1.join('/')}/` : ''}${sn1}/hooks/${hookFileName}.${js}`
         };
+
+        generator._packagerInstall([
+          '@types/jsonfile',
+          'jsonfile'
+        ], { saveDev: true });
       } else {
         hookInfo = {
           hookName: hookName1,
           appLevelHook: true,
           serviceName: '*none',
-          hookFileName: hookFileName1,
-          pathToHook: `hooks/${hookFileName1}.${js}`
+          hookFileName,
+          pathToHook: `hooks/${hookFileName}.${js}`
         };
       }
 
-      const specHook = specs.hooks[hookInfo.hookFileName];
-      const hookFileName = specHook.fileName;
-      const hookName = specHook.camelName;
-
       if (hookInfo.appLevelHook) {
         pathToHook = `hooks/${hookFileName}.${js}`;
-        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + `${hookTestType}.test` + pathToHook.substr(-3);
+        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + `${htt}.test` + pathToHook.substr(-3);
         pathTestToHook = `../../${src}/${pathToHook}`;
         pathTestToApp = '../../';
       } else {
@@ -1139,24 +1144,62 @@ module.exports = function generatorWriting (generator, what) {
         [x, sfa, sfBack ] = generator.getNameSpace(specService.subFolder);
 
         pathToHook = `services/${sfa.length ? `${sfa.join('/')}/` : ''}${sn}/hooks/${hookFileName}.${js}`;
-        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + `${hookTestType}.test` + pathToHook.substr(-3);
+        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + `${htt}.test` + pathToHook.substr(-3);
         pathTestToHook = `${sfBack}../../../../${src}/${pathToHook}`;
         pathTestToApp = `${sfBack}../../../../`;
       }
 
       context = Object.assign({}, context, {
         hookName,
+        hookFileName: specHook.fileName,
+        htt,
         pathToHook,
         pathToTest,
         pathTestToHook,
         pathTestToApp,
         userEntity: specs.authentication ? specs.authentication.entity : null,
+        serviceFileName: `${hookSpec.ifMulti !== 'y' ? sn1 : ''}/hooks/`,
       });
 
       todos = [
-        tmpl([testPath, 'hooks', 'unit.test.ejs'],  ['test', pathToTest], true, testType !== 'hookUnit'),
-        tmpl([testPath, 'hooks', 'integ.test.ejs'], ['test', pathToTest], true, testType === 'hookUnit'),
+        tmpl([testPath, 'hooks', 'hook.unit.test.ejs'],  ['test', pathToTest], true, testType !== 'hookUnit'),
+        tmpl([testPath, 'hooks', 'hook.integ.test.ejs'], ['test', pathToTest], true, testType === 'hookUnit'),
       ];
+    }
+
+    if (testType === 'serviceUnit' || testType === 'serviceInteg') {
+      const serviceName = props.serviceName;
+      const serviceSpec = specs.services[serviceName];
+      const serviceFileName = serviceSpec.fileName;
+      const stt = testType === 'serviceUnit' ? '.unit' : '.integ';
+      // eslint-disable-next-line no-unused-vars
+      const [x, sfa, sfBack ] = generator.getNameSpace(serviceSpec.subFolder);
+      const ssf = sfa.length ? `${sfa.join('/')}/` : '';
+
+      const pathToService = `services/${ssf}${serviceFileName}/${serviceFileName}.service.${js}`;
+      const pathToTest = pathToService.substr(0, pathToService.length - 3) + `${stt}.test` + pathToService.substr(-3);
+      const pathTestToApp = `${sfBack}../../../`;
+
+      context = Object.assign({}, context, {
+        serviceName,
+        serviceFileName,
+        servicePath: serviceSpec.path,
+        stt,
+        pathToTest,
+        pathTestToApp,
+      });
+
+      todos = [
+        tmpl([testPath, 'services', 'name', 'service.unit.test.ejs'],  ['test', pathToTest], true, testType !== 'serviceUnit'),
+        tmpl([testPath, 'services', 'name', 'service.integ.test.ejs'], ['test', pathToTest], true, testType === 'serviceUnit'),
+      ];
+
+      if (testType === 'serviceInteg') {
+        generator._packagerInstall([
+          '@types/jsonfile',
+          'jsonfile'
+        ], { saveDev: true });
+      }
     }
 
     // Generate modules

@@ -1,0 +1,41 @@
+
+<%- tplTsOnly('/// <reference types="mocha"/>') -%>
+<%- tplTsOnly('') -%>
+<%- tplImports('assert', null) %>
+<%- tplImports('app', `${pathTestToApp}${specs.app.src}/app`) %>
+<%- tplImports('config', `${pathTestToApp}/config/default.json`) %>
+
+// Determine if environment allows test to mutate existing DB data.
+const env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
+const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
+if (!dbChangesAllowed) {
+  // eslint-disable-next-line no-console
+  console.log('SKIPPED - Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>')<%- sc %>
+<%- tplTsOnly('  // @ts-ignore') -%>
+  return<%- sc %>
+}
+
+describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>', () => {
+  it('registered the service', () => {
+    const service = app.service('<%- servicePath -%>')<%- sc %>
+
+    assert.ok(service, 'Registered the service')<%- sc %>
+  })<%- sc %>
+
+  it('???', async () => {
+    // Setting `provider` indicates an external request
+    // eslint-disable-next-line no-unused-vars
+    const params = { provider: 'socketio' }<%- sc %>
+    assert(true)<%- sc %>
+
+    /*
+    const record = await app.service('<%- servicePath -%>').create({
+
+    }, params)<%- sc %>
+
+    assert.deepEqual(record, {
+
+    })<%- sc %>
+    */
+  })<%- sc %>
+})<%- sc %>

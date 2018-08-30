@@ -1,0 +1,116 @@
+
+const assert = require('assert');
+const feathersClient = require('@feathersjs/client');
+const io = require('socket.io-client');
+const jsonFile = require('jsonfile');
+const { join } = require('path');
+
+const app = require('<%- pathTestToApp -%><%- specs.app.src -%>/app');
+const config = require('<%- pathTestToApp -%>/config/default.json');
+
+// Determine if environment allows test to mutate existing DB data.
+const env = (config.tests || {}).environmentsAllowingSeedData || [];
+const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1;
+if (!dbChangesAllowed) {
+  // eslint-disable-next-line no-console
+  console.log(`SKIPPED - Test ${__filename.substring(__dirname.length + 1)}`);
+  return;
+}
+
+// Get generated fake data
+// eslint-disable-next-line no-unused-vars
+const fakeData = jsonFile.readFileSync(join(__dirname, '<%- pathTestToApp -%>/seeds/fake-data.json'), { throw: false }) || [];
+
+const host = app.get('host');
+const port = app.get('port');
+const email = 'login@example.com';
+const password = 'login';
+
+describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>', () => {
+  let server;
+  let client;
+
+  before(async function () {
+    this.timeout(10000);
+
+    const result = await app.service('<%- servicePath -%>').find({ query: { email }});
+    if ((result.data || result).length === 0) {
+      await app.service('users-abc').create({ email, password });
+    }
+
+    server = app.listen(port);
+    await new Promise(resolve => {
+      server.on('listening', async () => {
+        client = await makeClient(host, port, email, password);
+        resolve();
+      });
+    });
+  });
+
+  after(() => {
+    client.logout();
+    server.close();
+  });
+
+  it('registered the service', () => {
+    const service = client.service('<%- servicePath -%>');
+
+    assert.ok(service, 'Registered the service');
+  });
+
+  it('???', async () => {
+    // Setting `provider` indicates an external request
+    // eslint-disable-next-line no-unused-vars
+    const params = { provider: 'socketio' };
+    assert(true);
+
+    /*
+    const record = await client.service('<%- servicePath -%>').create({
+
+    }, params);
+
+    assert.deepEqual(record, {
+
+    });
+    */
+  });
+});
+
+async function makeClient(host, port, email, password) {
+  const client = feathersClient();
+  const socket = io(`http://${host}:${port}`, {
+    transports: ['websocket'], forceNew: true, reconnection: false, extraHeaders: {}
+  });
+  client.configure(feathersClient.socketio(socket));
+  client.configure(feathersClient.authentication({
+    storage: localStorage()
+  }));
+
+  try {
+    await client.authenticate({
+      strategy: 'local',
+      email,
+      password,
+    });
+  } catch (err) {
+    throw new Error(`Unable to authenticate: ${err.message}`);
+  }
+
+  return client;
+}
+
+function localStorage () {
+  const store = {};
+
+  return {
+    setItem (key, value) {
+      store[key] = value;
+    },
+    getItem (key) {
+      return store[key];
+    },
+    removeItem (key) {
+      delete store[key];
+    }
+  };
+}

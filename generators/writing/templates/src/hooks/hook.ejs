@@ -31,7 +31,7 @@
   }<%- sc %>
 }<%- sc %>
 
-// Throw on unrecoverable error.
+// Throw to reject the service call, or on an unrecoverable error.
 // eslint-disable-next-line no-unused-vars
 function error(msg<%- tplTsOnly([': string']) -%>) {
   throw new Error(msg)<%- sc %>
