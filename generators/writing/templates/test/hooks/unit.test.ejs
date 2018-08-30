@@ -7,13 +7,9 @@
 
 
 describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
-  // eslint-disable-next-line no-unused-vars
-  let contextBefore<%- tplTsOnly('HookContext') -%>,
+  let contextBefore<%- tplTsOnly('HookContext') -%>, contextAfterPaginated<%- tplTsOnly('HookContext') -%>,
     // eslint-disable-next-line no-unused-vars
-    contextAfter<%- tplTsOnly('HookContext') -%>,
-    // eslint-disable-next-line no-unused-vars
-    contextAfterMultiple<%- tplTsOnly('HookContext') -%>,
-    contextAfterPaginated<%- tplTsOnly('HookContext') -%><%- sc %>
+    contextAfter<%- tplTsOnly('HookContext') -%>, contextAfterMultiple<%- tplTsOnly('HookContext') -%><%- sc %>
 
   beforeEach(() => {
     contextBefore = {

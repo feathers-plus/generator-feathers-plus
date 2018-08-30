@@ -215,6 +215,10 @@ module.exports = function generatorWriting (generator, what) {
 
       Object.keys(specs.hooks || {}).forEach(name => {
         hook(generator, name);
+
+        props.testType = 'hookUnit';
+        props.hookName = name;
+        test(generator);
       });
 
       authentication(generator);
@@ -223,8 +227,7 @@ module.exports = function generatorWriting (generator, what) {
 
       middleware(generator);
 
-      if (
-        specs.graphql &&
+      if (specs.graphql &&
         (Object.keys(mapping.graphqlService).length || Object.keys(mapping.graphqlSql).length)
       ) {
         graphql(generator);
@@ -249,6 +252,10 @@ module.exports = function generatorWriting (generator, what) {
     case 'hook':
       hook(generator, props.name);
       app(generator);
+
+      props.testType = 'hookUnit';
+      props.hookName = props.name;
+      test(generator);
 
       Object.keys(specs.services || {}).forEach(name => {
         service(generator, name);
@@ -1080,18 +1087,20 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== test ====================================================================================
   function test (generator) {
+    console.log('>>> test', props);
+    // props = { testType, hookName! }
     const testType = props.testType;
     let todos;
 
     if (testType === 'hookUnit' || testType === 'hookInteg') {
-      let sfa, sfBack, pathToHook, pathToTest, pathTestToHook, pathTestToApp;
-      // eslint-disable-next-line no-unused-vars
-      let x;
-
       const hookName1 = props.hookName;
       const hookSpec = specs.hooks[hookName1];
       const hookFileName1 = hookSpec.fileName;
-      let hookInfo;
+      const hookTestType = testType === 'hookUnit' ? '.unit' : '.integ';
+
+      let hookInfo, sfa, sfBack, pathToHook, pathToTest, pathTestToHook, pathTestToApp;
+      // eslint-disable-next-line no-unused-vars
+      let x;
 
       if (hookSpec.ifMulti !== 'y') {
         const specsService = specs.services[hookSpec.singleService];
@@ -1118,7 +1127,6 @@ module.exports = function generatorWriting (generator, what) {
       const specHook = specs.hooks[hookInfo.hookFileName];
       const hookFileName = specHook.fileName;
       const hookName = specHook.camelName;
-      const hookTestType = testType === 'hookUnit' ? '.unit' : '.integ';
 
       if (hookInfo.appLevelHook) {
         pathToHook = `hooks/${hookFileName}.${js}`;

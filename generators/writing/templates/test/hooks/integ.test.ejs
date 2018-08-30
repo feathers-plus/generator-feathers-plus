@@ -12,10 +12,9 @@
 const fakeData = jsonFile.readFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json'), { throw: false }) || []<%- sc %>
 
 describe(`Test ${__filename.substring(__dirname.length + 1)}`, () => {
-  let app<%- tplTsOnly('Application') -%><%- sc %>
+  let app<%- tplTsOnly(': Application') -%>, params<%- tplTsOnly(': Params') -%><%- sc %>
   // eslint-disable-next-line no-unused-vars
-  let service<%- tplTsOnly('Service<any>') -%><%- sc %>
-  let params<%- tplTsOnly('Params') -%><%- sc %>
+  let service<%- tplTsOnly(': Service<any>') -%><%- sc %>
 
   beforeEach(() => {
     app = feathers()<%- sc %>
