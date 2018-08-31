@@ -571,19 +571,21 @@ module.exports = function generatorWriting (generator, what) {
     const dependencies = ['ajv'];
     const devDependencies = [];
 
-    switch (adapter) {
-      case 'knex':
-        devDependencies.push('@types/knex');
-        break;
-      case 'mongoose':
-        devDependencies.push('@types/mongoose');
-        break;
-      case 'nedb':
-        devDependencies.push('@types/nedb');
-        break;
-      case 'sequelize':
-        devDependencies.push('@types/sequelize');
-        break;
+    if (!isJs) {
+      switch (adapter) {
+        case 'knex':
+          devDependencies.push('@types/knex');
+          break;
+        case 'mongoose':
+          devDependencies.push('@types/mongoose');
+          break;
+        case 'nedb':
+          devDependencies.push('@types/nedb');
+          break;
+        case 'sequelize':
+          devDependencies.push('@types/sequelize');
+          break;
+      }
     }
 
     // Set up strategies and add dependencies
@@ -817,7 +819,7 @@ module.exports = function generatorWriting (generator, what) {
       '@feathersjs/authentication-jwt'
     ];
 
-    let devDependencies = [
+    let devDependencies = isJs ? [] : [
       '@types/feathersjs__authentication',
       '@types/feathersjs__authentication-jwt',
     ];
@@ -839,8 +841,7 @@ module.exports = function generatorWriting (generator, what) {
         dependencies.push(`@feathersjs/authentication-${strategy}`); // usually `local`
       }
 
-      if (AUTH_TYPES[strategy]) {
-        //devDependencies.push(AUTH_TYPES[strategy]);
+      if (!isJs && AUTH_TYPES[strategy]) {
         devDependencies = devDependencies.concat(AUTH_TYPES[strategy]);
       }
     });
@@ -942,9 +943,11 @@ module.exports = function generatorWriting (generator, what) {
       'merge-graphql-schemas'
     ], { save: true });
 
-    generator._packagerInstall([
-      '@types/graphql'
-    ], { saveDev: true });
+    if (!isJs) {
+      generator._packagerInstall([
+        '@types/graphql'
+      ], { saveDev: true });
+    }
 
     // Determine which hooks are needed
     function getHookInfo() {
@@ -1136,7 +1139,9 @@ module.exports = function generatorWriting (generator, what) {
           pathToHook: `services/${sfa1.length ? `${sfa1.join('/')}/` : ''}${sn1}/hooks/${hookFileName}.${js}`
         };
 
-        generator._packagerInstall([
+        generator._packagerInstall(isJs ? [
+          'jsonfile'
+        ] : [
           '@types/jsonfile',
           'jsonfile'
         ], { saveDev: true });
@@ -1212,7 +1217,9 @@ module.exports = function generatorWriting (generator, what) {
       ];
 
       if (testType === 'serviceInteg') {
-        generator._packagerInstall([
+        generator._packagerInstall(isJs ? [
+          'jsonfile'
+        ] : [
           '@types/jsonfile',
           'jsonfile'
         ], { saveDev: true });
