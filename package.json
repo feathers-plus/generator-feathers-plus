@@ -103,6 +103,7 @@
     "@feathersjs/feathers": "^3.1.7",
     "@feathersjs/primus": "^3.2.1",
     "@feathersjs/socketio": "^3.2.2",
+    "@feathers-plus/test-utils": "^0.2.1",
     "@types/feathersjs__authentication": "^2.1.1",
     "@types/feathersjs__authentication-jwt": "^1.0.3",
     "@types/feathersjs__authentication-local": "^1.0.2",

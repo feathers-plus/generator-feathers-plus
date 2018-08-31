@@ -2,8 +2,8 @@
 const assert = require('assert');
 const feathersClient = require('@feathersjs/client');
 const io = require('socket.io-client');
-const jsonFile = require('jsonfile');
 const { join } = require('path');
+<%- tplImports('{ readJsonFileSync }', '@feathers-plus/test-utils') %>
 
 const app = require('<%- pathTestToApp -%><%- specs.app.src -%>/app');
 const config = require('<%- pathTestToApp -%>/config/default.json');
@@ -19,7 +19,7 @@ if (!dbChangesAllowed) {
 
 // Get generated fake data
 // eslint-disable-next-line no-unused-vars
-const fakeData = jsonFile.readFileSync(join(__dirname, '<%- pathTestToApp -%>/seeds/fake-data.json'), { throw: false }) || [];
+const fakeData = readJsonFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json')) || {}<%- sc %>
 
 const host = app.get('host');
 const port = app.get('port');

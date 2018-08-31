@@ -4,12 +4,12 @@
 <%- tplTsOnly('') -%>
 <%- tplImports('assert', null) %>
 <%- tplImports('feathers', '@feathersjs/feathers') %>
-<%- tplImports('jsonFile', 'jsonfile') %>
 <%- tplImports('{ join }', 'path') %>
+<%- tplImports('{ readJsonFileSync }', '@feathers-plus/test-utils') %>
 <%- tplImports(hookName, pathTestToHook) %>
 
 // Get generated fake data
-const fakeData = jsonFile.readFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json'), { throw: false }) || []<%- sc %>
+const fakeData = readJsonFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json')) || {}<%- sc %>
 
 describe('Test <%- serviceFileName -%><%- hookFileName -%><%- htt%>.test.<%- js -%>', () => {
   let app<%- tplTsOnly(': Application') -%>, params<%- tplTsOnly(': Params') -%><%- sc %>
@@ -36,7 +36,7 @@ describe('Test <%- serviceFileName -%><%- hookFileName -%><%- htt%>.test.<%- js 
 <%# -%>
 <%# --- if-1 starts below. -%>
 <% if (userEntity) { -%>
-      user: fakeData['<%- userEntity -%>%>'][0] || {
+      user: (fakeData['<%- userEntity -%>'] || [])[0] || {
         email: 'test@example.com'
       }
 <% } -%>

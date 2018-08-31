@@ -1183,10 +1183,10 @@ module.exports = function generatorWriting (generator, what) {
 
       if (testType === 'hookInteg') {
         generator._packagerInstall(isJs ? [
-          'jsonfile'
+          '@feathers-plus/test-utils'
         ] : [
-          '@types/jsonfile',
-          'jsonfile'
+          //'@types/???',
+          '@feathers-plus/test-utils'
         ], { saveDev: true });
       }
     }
@@ -1220,10 +1220,10 @@ module.exports = function generatorWriting (generator, what) {
 
       if (testType === 'serviceInteg') {
         generator._packagerInstall(isJs ? [
-          'jsonfile'
+          '@feathers-plus/test-utils'
         ] : [
-          '@types/jsonfile',
-          'jsonfile'
+          //'@types/???',
+          '@feathers-plus/test-utils'
         ], { saveDev: true });
       }
     }
@@ -1310,9 +1310,7 @@ function writeAuthenticationConfiguration (generator, context) {
 }
 
 function writeDefaultJsonClient (generator) {
-  const config = Object.assign({}, generator._specs._defaultJson);
-
-  merge(config, {
+  const config = merge({}, generator._specs._defaultJson, {
     tests: {
       environmentsAllowingSeedData: [
       ],
