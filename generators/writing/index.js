@@ -1138,13 +1138,6 @@ module.exports = function generatorWriting (generator, what) {
           hookFileName,
           pathToHook: `services/${sfa1.length ? `${sfa1.join('/')}/` : ''}${sn1}/hooks/${hookFileName}.${js}`
         };
-
-        generator._packagerInstall(isJs ? [
-          'jsonfile'
-        ] : [
-          '@types/jsonfile',
-          'jsonfile'
-        ], { saveDev: true });
       } else {
         hookInfo = {
           hookName: hookName1,
@@ -1187,6 +1180,15 @@ module.exports = function generatorWriting (generator, what) {
         tmpl([testPath, 'hooks', 'hook.unit.test.ejs'],  ['test', pathToTest], true, testType !== 'hookUnit'),
         tmpl([testPath, 'hooks', 'hook.integ.test.ejs'], ['test', pathToTest], true, testType === 'hookUnit'),
       ];
+
+      if (testType === 'hookInteg') {
+        generator._packagerInstall(isJs ? [
+          'jsonfile'
+        ] : [
+          '@types/jsonfile',
+          'jsonfile'
+        ], { saveDev: true });
+      }
     }
 
     if (testType === 'serviceUnit' || testType === 'serviceInteg') {
