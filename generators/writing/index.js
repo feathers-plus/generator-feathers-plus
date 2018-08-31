@@ -221,7 +221,7 @@ module.exports = function generatorWriting (generator, what) {
         test(generator);
       });
 
-      authentication(generator);
+      authentication(generator, true);
 
       connection(generator);
 
@@ -246,7 +246,7 @@ module.exports = function generatorWriting (generator, what) {
       // `generate authentication` from the prompt will generate the wrong path for
       // the user-entity because of a chicken-and-egg problem. This fixes it.
       if (specs.services[props.name].isAuthEntity) {
-        authentication(generator);
+        authentication(generator, true);
       }
       break;
     case 'hook':
@@ -792,7 +792,7 @@ module.exports = function generatorWriting (generator, what) {
   }
 
   // ===== authentication ==========================================================================
-  function authentication (generator) {
+  function authentication (generator, justRegen) {
     if (!specs.authentication) return;
 
     const entity = specs.authentication.entity;
@@ -846,7 +846,7 @@ module.exports = function generatorWriting (generator, what) {
     });
 
     // Create the users (entity) service
-    if (!generatorsInclude('all')) {
+    if (!justRegen) {
       generator.composeWith(require.resolve('../service'), { props: { name: entity } });
     }
 
