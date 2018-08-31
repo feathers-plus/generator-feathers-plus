@@ -6,7 +6,7 @@ const { join } = require('path');
 <%- tplImports('{ readJsonFileSync }', '@feathers-plus/test-utils') %>
 
 const app = require('<%- pathTestToApp -%><%- specs.app.src -%>/app');
-const config = require('<%- pathTestToApp -%>/config/default.json');
+const config = require('<%- pathTestToApp -%>config/default.json');
 
 // Determine if environment allows test to mutate existing DB data.
 const env = (config.tests || {}).environmentsAllowingSeedData || [];
@@ -35,7 +35,7 @@ describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.
 
     const result = await app.service('<%- servicePath -%>').find({ query: { email }});
     if ((result.data || result).length === 0) {
-      await app.service('users-abc').create({ email, password });
+      await app.service('<%- servicePath -%>').create({ email, password });
     }
 
     server = app.listen(port);
