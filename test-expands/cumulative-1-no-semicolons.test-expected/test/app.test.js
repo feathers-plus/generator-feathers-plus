@@ -17,11 +17,14 @@ describe('Feathers application tests', () => {
 
   before(function (done) {
     server = app.listen(port)
-    server.once('listening', () => done())
+    server.once('listening', () => {
+      setTimeout(() => done(), 500)
+    })
   })
 
   after(function (done) {
-    server.close(done)
+    server.close()
+    setTimeout(() => done(), 500)
   })
 
   it('starts and shows the index page', () => {

@@ -1,116 +1,117 @@
 
-const assert = require('assert');
-const feathersClient = require('@feathersjs/client');
-const io = require('socket.io-client');
-const { join } = require('path');
-<%- tplImports('{ readJsonFileSync }', '@feathers-plus/test-utils') %>
+<%- tplTsOnly('/// <reference types="mocha"/>') -%>
+<%- tplTsOnly('') -%>
+<%- tplImports('assert', null) %>
+<%- tplImports('feathersClient', '@feathersjs/client') %>
+<%- tplImports('io', 'socket.io-client') %>
+<%- tplTsOnly('import { Server } from \'http\'') -%>
+<%- tplImports('{ join }', 'path') %>
+<%- tplImports('{ localStorage, readJsonFileSync }', '@feathers-plus/test-utils') %>
 
-const app = require('<%- pathTestToApp -%><%- specs.app.src -%>/app');
-const config = require('<%- pathTestToApp -%>config/default.json');
+<%- tplImports('config', `${ pathTestToApp }config/default.json`) %>
+
+const delayAfterServerOnce = 500<%- sc %>
+const delayAfterServerClose = 500<%- sc %>
+const timeoutForStartingServerAndClient = 30000<%- sc %>
+const timeoutForClosingingServerAndClient = 30000<%- sc %>
+
+const email = 'login@example.com'<%- sc %>
+const password = 'login'<%- sc %>
 
 // Determine if environment allows test to mutate existing DB data.
-const env = (config.tests || {}).environmentsAllowingSeedData || [];
-const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1;
+const env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
+const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
 if (!dbChangesAllowed) {
   // eslint-disable-next-line no-console
-  console.log(`SKIPPED - Test ${__filename.substring(__dirname.length + 1)}`);
-  return;
+  console.log(`SKIPPED - Test ${__filename.substring(__dirname.length + 1)}`)<%- sc %>
+<%- tplTsOnly('  // @ts-ignore') -%>
+  return<%- sc %>
 }
 
 // Get generated fake data
 // eslint-disable-next-line no-unused-vars
 const fakeData = readJsonFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json')) || {}<%- sc %>
 
-const host = app.get('host');
-const port = app.get('port');
-const email = 'login@example.com';
-const password = 'login';
-
-describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>', () => {
-  let server;
-  let client;
+describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt %>.test.<%- js -%>', () => {
+  let server<%- tplTsOnly(': Server') -%><%- sc %>
+  let client<%- tplTsOnly(': any') -%><%- sc %>
 
   before(async function () {
-    this.timeout(10000);
+    this.timeout(timeoutForStartingServerAndClient)<%- sc %>
 
-    const result = await app.service('<%- servicePath -%>').find({ query: { email }});
-    if ((result.data || result).length === 0) {
-      await app.service('<%- servicePath -%>').create({ email, password });
+    // Restarting src/app.*s is required if the last mocha test did REST calls on its server.
+    delete require.cache[require.resolve('<%- pathTestToApp %><%- specs.app.src -%>/app')]<%- sc %>
+    <%- tplImports('app', `${pathTestToApp}${specs.app.src}/app`) %>
+
+    const host = app.get('host')<%- sc %>
+    const port = app.get('port')<%- sc %>
+
+    const result = await app.service('<%- servicePath -%>').find({ query: { email }})<%- sc %>
+    if ((<%- tplJsOrTs('result', '(result as any)') %>.data || result).length === 0) {
+      await app.service('<%- servicePath -%>').create({ email, password })<%- sc %>
     }
 
-    server = app.listen(port);
-    await new Promise(resolve => {
-      server.on('listening', async () => {
-        client = await makeClient(host, port, email, password);
-        resolve();
-      });
-    });
-  });
+    server = app.listen(port)<%- sc %>
+    return await new Promise(resolve => {
+      server.once('listening', () => {
+        setTimeout(async () => {
+          client = await makeClient(host, port, email, password)<%- sc %>
+          resolve()<%- sc %>
+        }, delayAfterServerOnce)<%- sc %>
+      })<%- sc %>
+    })<%- sc %>
+  })<%- sc %>
 
-  after(() => {
-    client.logout();
-    server.close();
-  });
+  after(function (done) {
+    this.timeout(timeoutForClosingingServerAndClient)<%- sc %>
+    client.logout()<%- sc %>
+    server.close()<%- sc %>
+    setTimeout(() => done(), delayAfterServerClose)<%- sc %>
+  })<%- sc %>
 
   it('registered the service', () => {
-    const service = client.service('<%- servicePath -%>');
+    const service = client.service('<%- servicePath -%>')<%- sc %>
 
-    assert.ok(service, 'Registered the service');
-  });
+    assert.ok(service, 'Registered the service')<%- sc %>
+  })<%- sc %>
 
   it('???', async () => {
     // Setting `provider` indicates an external request
     // eslint-disable-next-line no-unused-vars
-    const params = { provider: 'socketio' };
-    assert(true);
+    const params = { provider: 'socketio' }<%- sc %>
+    assert(true)<%- sc %>
 
     /*
     const record = await client.service('<%- servicePath -%>').create({
 
-    }, params);
+    }, params)<%- sc %>
 
     assert.deepEqual(record, {
 
-    });
+    })<%- sc %>
     */
-  });
-});
+  })<%- sc %>
+})<%- sc %>
 
-async function makeClient(host, port, email, password) {
-  const client = feathersClient();
+async function makeClient(host<%- tplTsOnly(': string') -%>, port<%- tplTsOnly(': number') -%>, email<%- tplTsOnly(': string') -%>, password<%- tplTsOnly(': string') -%>) {
+  const client = feathersClient()<%- sc %>
   const socket = io(`http://${host}:${port}`, {
     transports: ['websocket'], forceNew: true, reconnection: false, extraHeaders: {}
-  });
-  client.configure(feathersClient.socketio(socket));
+  })<%- sc %>
+  client.configure(feathersClient.socketio(socket))<%- sc %>
   client.configure(feathersClient.authentication({
-    storage: localStorage()
-  }));
+    storage: localStorage
+  }))<%- sc %>
 
   try {
     await client.authenticate({
       strategy: 'local',
       email,
       password,
-    });
+    })<%- sc %>
   } catch (err) {
-    throw new Error(`Unable to authenticate: ${err.message}`);
+    throw new Error(`Unable to authenticate: ${err.message}`)<%- sc %>
   }
 
-  return client;
-}
-
-function localStorage () {
-  const store = {};
-
-  return {
-    setItem (key, value) {
-      store[key] = value;
-    },
-    getItem (key) {
-      return store[key];
-    },
-    removeItem (key) {
-      delete store[key];
-    }
-  };
+  return client<%- sc %>
 }

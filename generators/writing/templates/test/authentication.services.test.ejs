@@ -1,6 +1,6 @@
 
 <%- tplImports('{ join }', 'path') %>
 <%- tplImports('{ authenticationServices }', '@feathers-plus/test-utils') %>
-const appRoot = join(__dirname, '..');
+const appRoot = join(__dirname, '..')<%- sc %>
 
-authenticationServices(appRoot);
+authenticationServices(appRoot)<%- sc %>

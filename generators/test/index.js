@@ -46,7 +46,7 @@ module.exports = class CodelistGenerator extends Generator {
         name: 'service - unit (tested on the server)',
         value: 'serviceUnit'
       }, {
-        name: 'n/a service - integration (tested using client/server)',
+        name: 'service - integration (tested using client/server)',
         value: 'serviceInteg'
       }, {
         name: 'authentication - base (client/server)',
