@@ -3,4 +3,9 @@
 <%- tplImports('{ authenticationBase }', '@feathers-plus/test-utils') %>
 const appRoot = join(__dirname, '..')<%- sc %>
 
-authenticationBase(appRoot)<%- sc %>
+authenticationBase(appRoot, {
+  delayAfterServerOnce: 500,
+  delayAfterServerClose: 500,
+  timeoutForStartingServerAndClient: 30000,
+  timeoutForClosingingServerAndClient: 30000
+})<%- sc %>
