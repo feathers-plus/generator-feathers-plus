@@ -88,7 +88,7 @@ feathers-plus generate options
 - `Source scan took 0s 23ms`.
 The generator scans the app to identify any custom code.
 This will always be very fast,
-taking much less time than what the `Yoeman` tool needs to start up.
+taking much less time than what the `Yeoman` tool needs to start up.
 
 - `The generator will not change the following modules`.
 The generator can refresh many of the modules in your app,
