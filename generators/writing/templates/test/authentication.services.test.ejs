@@ -9,7 +9,7 @@ const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
 if (!dbChangesAllowed) {
   // eslint-disable-next-line no-console
   console.log('SKIPPED - Test authentication.services.<%- js -%>')<%- sc %>
-<%- tplTsOnly('  // @ts-ignore') -%>
+<%- tplTsOnly('  // @ts-ignore') %>
   return<%- sc %>
 }
 

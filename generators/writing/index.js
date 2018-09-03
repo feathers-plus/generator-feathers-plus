@@ -1138,7 +1138,7 @@ module.exports = function generatorWriting (generator, what) {
           appLevelHook: false,
           serviceName: specsService.name,
           hookFileName,
-          pathToHook: `services/${sfa1.length ? `${sfa1.join('/')}/` : ''}${sn1}/hooks/${hookFileName}.${js}`
+          pathToHook: `services/${sfa1.length ? `${sfa1.join('/')}/` : ''}${sn1}/hooks/${hookFileName}`
         };
       } else {
         hookInfo = {
@@ -1146,13 +1146,13 @@ module.exports = function generatorWriting (generator, what) {
           appLevelHook: true,
           serviceName: '*none',
           hookFileName,
-          pathToHook: `hooks/${hookFileName}.${js}`
+          pathToHook: `hooks/${hookFileName}`
         };
       }
 
       if (hookInfo.appLevelHook) {
-        pathToHook = `hooks/${hookFileName}.${js}`;
-        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + `${htt}.test` + pathToHook.substr(-3);
+        pathToHook = `hooks/${hookFileName}`;
+        pathToTest = `${pathToHook}${htt}.test`;
         pathTestToHook = `../../${src}/${pathToHook}`;
         pathTestToApp = '../../';
       } else {
@@ -1160,8 +1160,8 @@ module.exports = function generatorWriting (generator, what) {
         const sn = specService.fileName;
         [x, sfa, sfBack ] = generator.getNameSpace(specService.subFolder);
 
-        pathToHook = `services/${sfa.length ? `${sfa.join('/')}/` : ''}${sn}/hooks/${hookFileName}.${js}`;
-        pathToTest = pathToHook.substr(0, pathToHook.length - 3) + `${htt}.test` + pathToHook.substr(-3);
+        pathToHook = `services/${sfa.length ? `${sfa.join('/')}/` : ''}${sn}/hooks/${hookFileName}`;
+        pathToTest = `${pathToHook}${htt}.test`;
         pathTestToHook = `${sfBack}../../../../${src}/${pathToHook}`;
         pathTestToApp = `${sfBack}../../../../`;
       }
@@ -1179,8 +1179,8 @@ module.exports = function generatorWriting (generator, what) {
       });
 
       todos = [
-        tmpl([testPath, 'hooks', 'hook.unit.test.ejs'],  ['test', pathToTest], true, testType !== 'hookUnit'),
-        tmpl([testPath, 'hooks', 'hook.integ.test.ejs'], ['test', pathToTest], true, testType === 'hookUnit'),
+        tmpl([testPath, 'hooks', 'hook.unit.test.ejs'],  ['test', `${pathToTest}.${js}`], true, testType !== 'hookUnit'),
+        tmpl([testPath, 'hooks', 'hook.integ.test.ejs'], ['test', `${pathToTest}.${js}`], true, testType === 'hookUnit'),
       ];
 
       if (testType === 'hookInteg') {

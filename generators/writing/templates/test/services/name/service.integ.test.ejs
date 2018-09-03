@@ -1,10 +1,10 @@
 
-<%- tplTsOnly('/// <reference types="mocha"/>') -%>
-<%- tplTsOnly('') -%>
+<%- tplTsOnly('/// <reference types="mocha"/>') %>
+<%- tplTsOnly('') %>
 <%- tplImports('assert', null) %>
 <%- tplImports('feathersClient', '@feathersjs/client') %>
 <%- tplImports('io', 'socket.io-client') %>
-<%- tplTsOnly('import { Server } from \'http\'') -%>
+<%- tplTsOnly('import { Server } from \'http\'') %>
 <%- tplImports('{ join }', 'path') %>
 <%- tplImports('{ localStorage, readJsonFileSync }', '@feathers-plus/test-utils') %>
 
@@ -24,7 +24,7 @@ const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
 if (!dbChangesAllowed) {
   // eslint-disable-next-line no-console
   console.log('SKIPPED - Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>')<%- sc %>
-<%- tplTsOnly('  // @ts-ignore') -%>
+<%- tplTsOnly('  // @ts-ignore') %>
   return<%- sc %>
 }
 
@@ -33,15 +33,17 @@ if (!dbChangesAllowed) {
 const fakeData = readJsonFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json')) || {}<%- sc %>
 
 describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt %>.test.<%- js -%>', () => {
-  let server<%- tplTsOnly(': Server') -%><%- sc %>
+  let app<%- sc %>
   let client<%- tplTsOnly(': any') -%><%- sc %>
+  let server<%- tplTsOnly(': Server') -%><%- sc %>
 
   before(async function () {
     this.timeout(timeoutForStartingServerAndClient)<%- sc %>
 
-    // Restarting src/app.*s is required if the last mocha test did REST calls on its server.
+    // Restarting src/app.*s is required if a previous server make a service call
+    // using the REST transport and we want to make one using a WebSocket transport.
     delete require.cache[require.resolve('<%- pathTestToApp %><%- specs.app.src -%>/app')]<%- sc %>
-    <%- tplImports('app', `${pathTestToApp}${specs.app.src}/app`) %>
+    app = require('<%- pathTestToApp %><%- specs.app.src %>/app')<%- sc %>
 
     const host = app.get('host')<%- sc %>
     const port = app.get('port')<%- sc %>

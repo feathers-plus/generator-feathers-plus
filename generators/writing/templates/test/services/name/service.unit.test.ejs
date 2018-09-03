@@ -1,9 +1,9 @@
 
-<%- tplTsOnly('/// <reference types="mocha"/>') -%>
-<%- tplTsOnly('') -%>
+<%- tplTsOnly('/// <reference types="mocha"/>') %>
+<%- tplTsOnly('') %>
 <%- tplImports('assert', null) %>
 <%- tplImports('app', `${pathTestToApp}${specs.app.src}/app`) %>
-<%- tplImports('config', `${pathTestToApp}/config/default.json`) %>
+<%- tplImports('config', `${pathTestToApp}config/default.json`) %>
 
 // Determine if environment allows test to mutate existing DB data.
 const env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
@@ -11,7 +11,7 @@ const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
 if (!dbChangesAllowed) {
   // eslint-disable-next-line no-console
   console.log('SKIPPED - Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>')<%- sc %>
-<%- tplTsOnly('  // @ts-ignore') -%>
+<%- tplTsOnly('  // @ts-ignore') %>
   return<%- sc %>
 }
 
