@@ -505,13 +505,14 @@ module.exports = function generatorWriting (generator, what) {
     if (!generatorsInclude('all')) {
       if (adapter !== 'generic' && adapter !== 'memory') {
 
-        // Do not `generate connection` on `generate service` if adapter already exists
-        // You can change that connection by running `generate connection`.
+        // Do not `generate connection` on `generate service` if adapter already exists.
         if (!specs.connections || !specs.connections[adapter]) {
           generator.composeWith(require.resolve('../connection'), { props: {
             adapter,
             service: name
           } });
+        } else {
+          connection(generator);
         }
       }
     }
@@ -787,6 +788,7 @@ module.exports = function generatorWriting (generator, what) {
     generatorFs(generator, context, todos);
 
     // Update dependencies
+    generator.dependencies = generator.dependencies || []; // needed
     generator.dependencies = generator.dependencies.concat(specs._connectionDeps);
     generator._packagerInstall(generator.dependencies, { save: true });
 
