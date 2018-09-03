@@ -23,7 +23,7 @@
   },
   "scripts": {
     "test": "npm run eslint && npm run mocha",
-    "test:all": "npm run eslint && NODE_ENV= npm run mocha",
+    "test:all": "npm run eslint && NODE_ENV=test npm run mocha",
     "eslint": "eslint src1/. test/. --config .eslintrc.json",
     "dev": "nodemon src1/",
     "start": "node src1/",

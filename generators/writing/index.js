@@ -285,6 +285,11 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== app =====================================================================================
   function app (generator) {
+    const [ packager, version ] = specs.app.packager.split('@');
+    const testAllJsFront = `${packager} run eslint && NODE_ENV=`;
+    const testAllJsBack = ' npm run mocha';
+    const testAllTsFront = `${packager} run tslint && NODE_ENV=`;
+    const testAllTsBack = ' npm run mocha';
     let configTest;
 
     // Configurations
@@ -295,10 +300,14 @@ module.exports = function generatorWriting (generator, what) {
     const configDefault = specs._defaultJson = generator.fs.readJSON(
       generator.destinationPath('config/default.json'), makeConfig.configDefault(generator)
     );
+
     // Update older configs with current specs
     configDefault.tests = configDefault.tests || {};
     configDefault.tests.environmentsAllowingSeedData =
       specs.app.environmentsAllowingSeedData.split(',') || [];
+    pkg.scripts['test:all'] = pkg.scripts['test:all'] || (isJS ?
+        `${testAllJsFront}${testAllJsBack}` : `${testAllTsFront}${testAllTsBack}`
+    );
 
     const configProd = generator.fs.readJSON(
       generator.destinationPath('config/production.json'), makeConfig.configProduction(generator)
@@ -306,6 +315,7 @@ module.exports = function generatorWriting (generator, what) {
 
     const configTestEnv = configDefault.tests.environmentsAllowingSeedData[0];
     if (configTestEnv) {
+      // write test.json file for primary test environment
       configTest = specs._testJson = generator.fs.readJSON(
         generator.destinationPath(`config/${configTestEnv}.json`), makeConfig.configTest(generator)
       );
@@ -313,6 +323,15 @@ module.exports = function generatorWriting (generator, what) {
       connectionStrings.forEach(name => {
         configTest[name] = configTest[name] || '';
       });
+
+      // update test:all script for primary environment
+      const testAll = pkg.scripts['test:all'];
+      const front = isJs ? testAllJsFront : testAllTsFront;
+      const back = isJs ? testAllJsBack : testAllTsBack;
+
+      if (testAll.substr(0, front.length) === front && testAll.substr(-back.length) === back) {
+        pkg.scripts['test:all'] = `${front}${configTestEnv}${back}`;
+      }
     }
 
     // Modify .eslintrc for semicolon option

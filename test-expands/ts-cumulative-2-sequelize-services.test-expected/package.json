@@ -23,7 +23,7 @@
   },
   "scripts": {
     "test": "npm run tslint && npm run mocha",
-    "test:all": "npm run tslint && NODE_ENV= npm run mocha",
+    "test:all": "npm run tslint && NODE_ENV=test npm run mocha",
     "tslint": "tslint -p tsconfig.json -c tslint.json && tslint -p tsconfig.test.json -c tslint.json",
     "start": "ts-node --files src1/",
     "mocha": "ts-mocha -p tsconfig.test.json \"test/**/*.test.ts\" --timeout 10000 --exit",

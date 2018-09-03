@@ -40,7 +40,7 @@ module.exports = function(generator) {
     compile: 'tsc -p tsconfig.json',
   } : {
     test: `${packager} run eslint && ${packager} run mocha`,
-    'test:all': 'npm run eslint && NODE_ENV= npm run mocha',
+    'test:all': `${packager} run eslint && NODE_ENV= npm run mocha`,
     eslint: `eslint ${specs.app.src}/. test/. --config .eslintrc.json`,
     dev: `nodemon ${specs.app.src}/`,
     start: `node ${specs.app.src}/`,
