@@ -32,13 +32,15 @@ module.exports = function(generator) {
   };
 
   pkg.scripts = Object.assign(pkg.scripts, specs.options.ts ? {
-    test: 'npm run tslint && npm run mocha',
+    test: `${packager} run tslint && npm run mocha`,
+    'test:all': `${packager} run tslint && NODE_ENV= npm run mocha`,
     tslint: 'tslint -p tsconfig.json -c tslint.json && tslint -p tsconfig.test.json -c tslint.json',
     start: `ts-node --files ${specs.app.src}/`,
     mocha: 'ts-mocha -p tsconfig.test.json "test/**/*.test.ts" --timeout 10000 --exit',
     compile: 'tsc -p tsconfig.json',
   } : {
     test: `${packager} run eslint && ${packager} run mocha`,
+    'test:all': 'npm run eslint && NODE_ENV= npm run mocha',
     eslint: `eslint ${specs.app.src}/. test/. --config .eslintrc.json`,
     dev: `nodemon ${specs.app.src}/`,
     start: `node ${specs.app.src}/`,

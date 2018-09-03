@@ -23,7 +23,7 @@ const env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
 const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
 if (!dbChangesAllowed) {
   // eslint-disable-next-line no-console
-  console.log(`SKIPPED - Test ${__filename.substring(__dirname.length + 1)}`)<%- sc %>
+  console.log('SKIPPED - Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>')<%- sc %>
 <%- tplTsOnly('  // @ts-ignore') -%>
   return<%- sc %>
 }
