@@ -10,7 +10,7 @@ module.exports = class CodelistGenerator extends Generator {
     await Generator.asyncInit(this);
     const { _specs: specs } = this;
     const generator = this;
-    const js = specs.app.ts ? 'ts' : 'js';
+    const js = specs.options.ts ? 'ts' : 'js';
 
     const hookChoices = Object.keys(specs.hooks || {}).map(name => {
       const hookSpec = specs.hooks[name];
