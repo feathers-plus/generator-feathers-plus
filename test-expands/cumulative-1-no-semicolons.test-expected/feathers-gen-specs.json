@@ -3,7 +3,8 @@
     "ver": "1.0.0",
     "inspectConflicts": false,
     "semicolons": false,
-    "freeze": []
+    "freeze": [],
+    "ts": false
   },
   "app": {
     "name": "z-1",
