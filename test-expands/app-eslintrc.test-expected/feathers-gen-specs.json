@@ -14,7 +14,8 @@
     "providers": [
       "socketio"
     ],
-    "environmentsAllowingSeedData": "test"
+    "environmentsAllowingSeedData": "test",
+    "seedData": false
   },
   "services": {}
 }

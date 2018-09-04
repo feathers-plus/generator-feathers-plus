@@ -12,6 +12,7 @@
     "src": "src1",
     "packager": "npm@>= 3.0.0",
     "environmentsAllowingSeedData": "test",
+    "seedData": false,
     "providers": [
       "rest",
       "socketio"

@@ -142,10 +142,19 @@ module.exports = class AppGenerator extends Generator {
         const envs = input.split(',');
         return (envs.map(str => kebabCase(str.trim()))).join(',');
       }
+    }, {
+      name: 'seedData',
+      message: 'Seed services\' data for command line argument --seed?',
+      type: 'confirm',
+      when: answers => !!answers.environmentsAllowingSeedData,
+      default () {
+        return !!specs.app.seedData;
+      },
     }];
 
     return this.prompt(prompts)
       .then(answers => {
+        answers.seedData = answers.environmentsAllowingSeedData ? answers.seedData : false;
         Object.assign(this.props, answers);
       });
   }

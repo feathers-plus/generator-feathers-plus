@@ -36,6 +36,7 @@ module.exports = function(generator) {
     'test:all': `${packager} run tslint && NODE_ENV= npm run mocha`,
     tslint: 'tslint -p tsconfig.json -c tslint.json && tslint -p tsconfig.test.json -c tslint.json',
     start: `ts-node --files ${specs.app.src}/`,
+    'start:seed': 'NODE_ENV= ts-node --seed --files src/',
     mocha: 'ts-mocha -p tsconfig.test.json "test/**/*.test.ts" --timeout 10000 --exit',
     compile: 'tsc -p tsconfig.json',
   } : {
@@ -44,6 +45,7 @@ module.exports = function(generator) {
     eslint: `eslint ${specs.app.src}/. test/. --config .eslintrc.json`,
     dev: `nodemon ${specs.app.src}/`,
     start: `node ${specs.app.src}/`,
+    'start:seed': 'NODE_ENV= node src/ --seed',
     mocha: 'mocha test/ --recursive --exit --timeout 10000'
   });
 

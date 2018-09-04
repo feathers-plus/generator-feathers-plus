@@ -15,7 +15,8 @@
       "rest",
       "socketio"
     ],
-    "environmentsAllowingSeedData": "test"
+    "environmentsAllowingSeedData": "test",
+    "seedData": false
   },
   "services": {
     "nedb1": {

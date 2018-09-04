@@ -3,6 +3,12 @@
 // Start the server. (Can be re-generated.)
 <%- tplImports('logger', './logger') %>
 <%- tplImports('app', './app') %>
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (specs.app.seedData) { -%>
+<%- tplImports('seedData', './seed-data') %>
+<% } -%>
+<%# --- if-1 ends above. -%>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
@@ -22,6 +28,12 @@ server.on('listening', () => {
     `  logger.info(\'Feathers application started on http://%s:%d\', app.get(\'host\'), port)${sc}`,
   ]) %>
   <%- insertFragment('listening') %>
+<%# -%>
+<%# --- if-2 starts below. -%>
+<% if (specs.app.seedData) { -%>
+  seedData(app);
+<% } -%>
+<%# --- if-2 ends above. -%>
 })<%- sc %>
 
 <%- insertFragment('funcs') %>
