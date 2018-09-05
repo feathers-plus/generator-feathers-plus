@@ -136,7 +136,7 @@ module.exports = class AppGenerator extends Generator {
       },
     }, {
       name: 'environmentsAllowingSeedData',
-      message: 'DB data may be replaced by fake data only when NODE_ENV is (optional)',
+      message: 'Data mutating tests and seeding may run when NODE_ENV is one of (optional)',
       default: specs.app.environmentsAllowingSeedData || '',
       filter: input => {
         const envs = input.split(',');
@@ -144,7 +144,7 @@ module.exports = class AppGenerator extends Generator {
       }
     }, {
       name: 'seedData',
-      message: 'Seed services\' data for command line argument --seed?',
+      message: 'Seed data records on startup when command line includes --seed?',
       type: 'confirm',
       when: answers => !!answers.environmentsAllowingSeedData,
       default () {

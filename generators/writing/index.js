@@ -296,7 +296,6 @@ module.exports = function generatorWriting (generator, what) {
     const startSeedTsBack = ' ts-node --seed --files src/';
 
     let back;
-    let configTest;
 
     // Configurations
     const pkg = generator.pkg = generator.fs.readJSON(
@@ -310,7 +309,7 @@ module.exports = function generatorWriting (generator, what) {
     // Update older configs with current specs
     configDefault.tests = configDefault.tests || {};
     configDefault.tests.environmentsAllowingSeedData =
-      specs.app.environmentsAllowingSeedData.split(',') || [];
+      specs.app.environmentsAllowingSeedData.split(',');
     pkg.scripts['test:all'] = pkg.scripts['test:all'] || (isJs ?
         `${testAllJsFront}${testAllJsBack}` : `${testAllTsFront}${testAllTsBack}`
     );
@@ -323,13 +322,13 @@ module.exports = function generatorWriting (generator, what) {
     );
 
     // update test:all script for first test environment
-    const configTestEnv = configDefault.tests.environmentsAllowingSeedData[0];
+    const firstTestEnv = configDefault.tests.environmentsAllowingSeedData[0];
     const testAll = pkg.scripts['test:all'];
     const front = isJs ? testAllJsFront : testAllTsFront;
     back = isJs ? testAllJsBack : testAllTsBack;
 
     if (testAll.substr(0, front.length) === front && testAll.substr(-back.length) === back) {
-      pkg.scripts['test:all'] = `${front}${configTestEnv}${back}`;
+      pkg.scripts['test:all'] = `${front}${firstTestEnv}${back}`;
     }
 
     // update start:seed script for first test environment
@@ -340,18 +339,7 @@ module.exports = function generatorWriting (generator, what) {
       startSeed.substr(0, startSeedFront.length) === startSeedFront
       && startSeed.substr(-back.length) === back
     ) {
-      pkg.scripts['start:seed'] = `${startSeedFront}${configTestEnv}${back}`;
-    }
-
-    // write test.json file for primary test environment
-    if (configTestEnv) {
-      configTest = specs._testJson = generator.fs.readJSON(
-        generator.destinationPath(`config/${configTestEnv}.json`), makeConfig.configTest(generator)
-      );
-      const connectionStrings = ['mongodb', 'mysql', 'nedb', 'postgres', 'rethinkdb', 'sqlite', 'mssql'];
-      connectionStrings.forEach(name => {
-        configTest[name] = configTest[name] || '';
-      });
+      pkg.scripts['start:seed'] = `${startSeedFront}${firstTestEnv}${back}`;
     }
 
     // Modify .eslintrc for semicolon option
@@ -408,7 +396,6 @@ module.exports = function generatorWriting (generator, what) {
       json(pkg,           'package.json'),
       json(configDefault, ['config', 'default.json']),
       json(configProd,    ['config', 'production.json']),
-      json(configTest,    ['config', `${configTestEnv}.json`], false, !configTestEnv),
 
       tmpl([tpl, 'src', 'index.ejs'],     [src, `index.${js}`]),
       tmpl([tpl, 'src', 'app.hooks.ejs'], [src, `app.hooks.${js}`]),
@@ -420,6 +407,22 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
       tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
     ];
+
+    // generate name.json files for test environments
+    configDefault.tests.environmentsAllowingSeedData.forEach(envName => {
+      const configTest = specs._testJson = generator.fs.readJSON(
+        generator.destinationPath(`config/${envName}.json`), makeConfig.configTest(generator)
+      );
+
+      const connectionStrings = ['mongodb', 'mysql', 'nedb', 'postgres', 'rethinkdb', 'sqlite', 'mssql'];
+      connectionStrings.forEach(name => {
+        configTest[name] = configTest[name] || '';
+      });
+
+      todos.push(
+        json(configTest,    ['config', `${envName}.json`], false, !envName),
+      )
+    });
 
     if (isJs) {
       todos = todos.concat(

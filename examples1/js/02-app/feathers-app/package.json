@@ -1,0 +1,33 @@
+{
+  "name": "feathers-app",
+  "description": "Quick start example app.",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "John Szwaronek",
+    "email": "johnsz9999@gmail.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/"
+  },
+  "engines": {
+    "node": "^8.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run eslint && npm run mocha",
+    "test:all": "npm run eslint && NODE_ENV=test npm run mocha",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "dev": "nodemon src/",
+    "start": "node src/",
+    "start:seed": "NODE_ENV=test node src/ --seed",
+    "mocha": "mocha test/ --recursive --exit --timeout 10000"
+  }
+}

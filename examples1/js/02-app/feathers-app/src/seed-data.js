@@ -1,17 +1,16 @@
 
-<%- tplJsOrTs('/* eslint no-console: 0 */', '/* tslint:disable:no-console */') %>
-<%- tplImports('{ join }', 'path') %>
-<%- tplImports('{ readJsonFileSync }', '@feathers-plus/test-utils') %>
-<%- tplImports('config', '../config/default.json') %>
-<%- tplTsOnly('import { App } from \'../src/app.interface\'') %>
+/* eslint no-console: 0 */
+const { join } = require('path');
+const { readJsonFileSync } = require('@feathers-plus/test-utils');
+const config = require('../config/default.json');
 // !code: imports // !end
 
 // Determine if command line argument exists for seeding data
-let ifSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str));
+let ifSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).indexOf(str) !== -1);
 
 // Determine if environment allows test to mutate existing DB data.
 let env = (config.tests || {}).environmentsAllowingSeedData || [];
-let ifDbChangesAllowed = env.includes(process.env.NODE_ENV);
+let ifDbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1;
 
 // Get generated fake data
 let fakeData = readJsonFileSync(join(__dirname, '../seeds/fake-data.json')) || {};
@@ -20,7 +19,7 @@ let fakeData = readJsonFileSync(join(__dirname, '../seeds/fake-data.json')) || {
 let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) || {}).services;
 // !code: init // !end>
 
-module.exports = async function (app<%- tplTsOnly(': App') %>) {
+module.exports = async function (app) {
   // !code: func_init // !end
   if (!ifSeedServices) return;
   if (!ifDbChangesAllowed) return;
