@@ -180,7 +180,7 @@ Default `src`. The name of the folder containing the server code.
     - `Realtime via Socket.io` - Default. 
     - `Realtime via Primus`
     
-- `Record mutating tests and seeding may run when NODE_ENV is one of (optional)`.
+- `Data mutating tests and seeding may run when NODE_ENV is one of (optional)`.
 
 A Feathers app runs in an environment set by the
 [NODE_ENV](https://stackoverflow.com/questions/16978256/what-is-node-env-in-express)
@@ -212,7 +212,7 @@ You can remove all current environment names by typing a space at the prompt.
 - `Seed service records on startup when command line includes --seed?`.
 
 Code to seed the services data on startup is generated only if yes is selected.
-This code will only run in the NODE_ENV environment selected in the previous prompt **and**
+This code will only run in one of the NODE_ENV environments selected in the previous prompt **and**
 only if the node command line contains a **--seed** argument.
 An example of such a command would be `NODE_ENV=test node src/ --seed`.
 
@@ -230,6 +230,22 @@ The modules are properly wired together and structured as recommended by the Fea
 - **config/** contains the configuration files for the app.
 production.json values override default.json ones when in production mode,
 i.e. when you run `NODE_ENV=production node path/to/your/server.js`.
+
+- **config/test.json** was created because we specified test as the environment where we can
+seed and change data during testing. test.json initially contains
+```js
+{
+  "mongodb": "",
+  "mysql": "",
+  "nedb": "",
+  "postgres": "",
+  "rethinkdb": "",
+  "sqlite": "",
+  "mssql": ""
+}
+```
+This overrides the database connection strings in **default.json** and prevents unwanted data changes.
+
 
 - **node_modules/**. The generator installs the project dependencies here using either
 npm, or yarn if that's installed.
@@ -259,6 +275,8 @@ A sample favicon and HTML file are included.
     - **channels.?s** contains the channels sending realtime events to clients.
         
     - **logger.?s** configures the [Winston](https://github.com/winstonjs/winston) logger.
+    
+    - **seed-data.?s** seeds data when the app starts.
     
     - **app.interface.ts** contains the global `App` interface needed to provide typed services.  
     

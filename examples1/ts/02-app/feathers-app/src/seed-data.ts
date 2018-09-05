@@ -1,9 +1,9 @@
 
-/* eslint no-console: 0 */
-const { join } = require('path');
-const { readJsonFileSync } = require('@feathers-plus/test-utils');
-const config = require('../config/default.json');
-
+/* tslint:disable:no-console */
+import { join } from 'path';
+import { readJsonFileSync } from '@feathers-plus/test-utils';
+import config from '../config/default.json';
+import { App } from '../src/app.interface'
 // !code: imports // !end
 
 // Determine if command line argument exists for seeding data
@@ -20,7 +20,7 @@ let fakeData = readJsonFileSync(join(__dirname, '../seeds/fake-data.json')) || {
 let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) || {}).services;
 // !code: init // !end>
 
-module.exports = async function (app) {
+module.exports = async function (app: App) {
   // !code: func_init // !end
   if (!ifSeedServices) return;
   if (!ifDbChangesAllowed) return;

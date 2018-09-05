@@ -6,7 +6,18 @@
     "freeze": [],
     "ts": true
   },
-  "app": {},
+  "app": {
+    "environmentsAllowingSeedData": "test",
+    "seedData": true,
+    "name": "feathers-app",
+    "description": "Project feathers-app",
+    "src": "src",
+    "packager": "npm@>= 3.0.0",
+    "providers": [
+      "rest",
+      "socketio"
+    ]
+  },
   "services": {},
   "hooks": {}
 }
