@@ -95,7 +95,7 @@ describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt %>
   })<%- sc %>
 })<%- sc %>
 
-async function makeClient(host<%- tplTsOnly(': string') -%>, port<%- tplTsOnly(': number') -%>, email<%- tplTsOnly(': string') -%>, password<%- tplTsOnly(': string') -%>) {
+async function makeClient(host<%- tplTsOnly(': string') -%>, port<%- tplTsOnly(': number') -%>, email1<%- tplTsOnly(': string') -%>, password1<%- tplTsOnly(': string') -%>) {
   const client = feathersClient()<%- sc %>
   const socket = io(`http://${host}:${port}`, {
     transports: ['websocket'], forceNew: true, reconnection: false, extraHeaders: {}
@@ -108,8 +108,8 @@ async function makeClient(host<%- tplTsOnly(': string') -%>, port<%- tplTsOnly('
   try {
     await client.authenticate({
       strategy: 'local',
-      email,
-      password,
+      email: email1,
+      password: password1,
     })<%- sc %>
   } catch (err) {
     throw new Error(`Unable to authenticate: ${err.message}`)<%- sc %>

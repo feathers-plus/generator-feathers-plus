@@ -48,8 +48,8 @@ if (authenticatedServiceName) {
         error = err<%- sc %>
       }
 
-      assert.equal(result, undefined)<%- sc %>
-      assert.equal(error, 'NotAuthenticated: No auth token')<%- sc %>
+      assert.strictEqual(result, undefined)<%- sc %>
+      assert.strictEqual(error, 'NotAuthenticated: No auth token')<%- sc %>
     })<%- sc %>
 
     it('runs create for authorized users', async () => {

@@ -44,7 +44,7 @@
     "lint": "semistandard generators/*.js generators/**/*.js lib/*.js lib/**/*.js test/*.js --fix | snazzy",
     "mocha:tests": "mocha test/ --timeout 1200000 --exit --bail --grep \"runs test\"",
     "coverage": "istanbul cover node_modules/mocha/bin/_mocha -- --opts mocha.opts",
-    "test": "fakes=1 mocha test/ --timeout 1200000 --exit --bail",
+    "test": "mocha test/ --timeout 1200000 --exit --bail",
     "testxxx": "npm run lint && npm run coverage",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",

@@ -2,6 +2,7 @@
 
 import assert from 'assert';
 import rp from 'request-promise';
+import { Server } from 'http';
 import url from 'url';
 import app from '../src1/app';
 
@@ -14,7 +15,7 @@ const getUrl = (pathname?: string) => url.format({
 });
 
 describe('Feathers application tests', () => {
-  let server;
+  let server: Server;
 
   before(function (done) {
     server = app.listen(port);
@@ -42,7 +43,7 @@ describe('Feathers application tests', () => {
           Accept: 'text/html'
         }
       }).catch(res => {
-        assert.equal(res.statusCode, 404, 'unexpected statusCode');
+        assert.strictEqual(res.statusCode, 404, 'unexpected statusCode');
         assert.ok(res.error.indexOf('<html>') !== -1, 'error does not contain <html>');
       });
     });
@@ -52,10 +53,10 @@ describe('Feathers application tests', () => {
         url: getUrl('path/to/nowhere'),
         json: true
       }).catch(res => {
-        assert.equal(res.statusCode, 404, 'unexpected statusCode');
-        assert.equal(res.error.code, 404, 'unexpected error.code');
-        assert.equal(res.error.message, 'Page not found', 'unexpected error.message');
-        assert.equal(res.error.name, 'NotFound', 'unexpected error.name');
+        assert.strictEqual(res.statusCode, 404, 'unexpected statusCode');
+        assert.strictEqual(res.error.code, 404, 'unexpected error.code');
+        assert.strictEqual(res.error.message, 'Page not found', 'unexpected error.message');
+        assert.strictEqual(res.error.name, 'NotFound', 'unexpected error.name');
       });
     });
   });
