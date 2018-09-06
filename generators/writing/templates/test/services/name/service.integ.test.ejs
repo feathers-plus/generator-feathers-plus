@@ -22,14 +22,14 @@ const password = 'login'<%- sc %>
 const env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
 const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
 if (!dbChangesAllowed) {
-  // eslint-disable-next-line no-console
+  // <%- lintDisableNextLineNoConsole %>
   console.log('SKIPPED - Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>')<%- sc %>
 <%- tplTsOnly('  // @ts-ignore') %>
   return<%- sc %>
 }
 
 // Get generated fake data
-// eslint-disable-next-line no-unused-vars
+// <%- lintDisableNextLineUnused %>
 const fakeData = readJsonFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json')) || {}<%- sc %>
 
 describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt %>.test.<%- js -%>', () => {
@@ -79,7 +79,7 @@ describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt %>
 
   it('???', async () => {
     // Setting `provider` indicates an external request
-    // eslint-disable-next-line no-unused-vars
+    // <%- lintDisableNextLineUnused %>
     const params = { provider: 'socketio' }<%- sc %>
     assert(true)<%- sc %>
 

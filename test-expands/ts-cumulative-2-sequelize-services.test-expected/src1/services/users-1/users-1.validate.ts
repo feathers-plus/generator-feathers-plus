@@ -8,7 +8,7 @@ import ajv from 'ajv';
 // !code: init // !end
 
 // !<DEFAULT> code: set_id_type
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const ID = 'integer';
 // !end
 

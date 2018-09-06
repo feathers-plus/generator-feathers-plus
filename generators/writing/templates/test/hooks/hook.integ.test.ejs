@@ -9,12 +9,12 @@
 <%- tplImports(hookName, pathTestToHook) %>
 
 // Get generated fake data
-// eslint-disable-next-line no-unused-vars
+// <%- lintDisableNextLineUnused %>
 const fakeData = readJsonFileSync(join(__dirname, '<%- pathTestToApp -%>seeds/fake-data.json')) || {}<%- sc %>
 
 describe('Test <%- serviceFileName -%><%- hookFileName -%><%- htt%>.test.<%- js -%>', () => {
   let app<%- tplTsOnly(': Application') -%>, params<%- tplTsOnly(': Params') -%><%- sc %>
-  // eslint-disable-next-line no-unused-vars
+  // <%- lintDisableNextLineUnused %>
   let service<%- tplTsOnly(': Service<any>') -%><%- sc %>
 
   beforeEach(() => {

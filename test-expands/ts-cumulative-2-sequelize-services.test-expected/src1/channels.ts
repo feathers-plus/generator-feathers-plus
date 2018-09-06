@@ -38,7 +38,7 @@ export default function (app: App) {
     }
   });
 
-  // tslint:disable-next-line no-unused-variable
+  // tslint:disable-next-line:no-unused-variable
   app.publish((data, hook) => {
     // Here you can add event publishers to channels set up in `channels.ts`
     // To publish only for a specific event use `app.publish(eventname, () => {})`

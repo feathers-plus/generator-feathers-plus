@@ -31,7 +31,7 @@ let dialects<%- tplTsOnly(': any') -%> = {
     `  let executeSql = ${tplJsOrTs('sql', '(sql: string)')} => {`,
     '    return knex.raw(sql)',
     `      .catch(${tplJsOrTs('err', '(err: Error)')} => {`,
-    `        // ${lintDisableNextLine} no-console`,
+    `        // ${lintDisableNextLineNoConsole}`,
     `        console.log('executeSql error=', err.message)${sc}`,
     `        throw err${sc}`,
     `      })${sc}`,

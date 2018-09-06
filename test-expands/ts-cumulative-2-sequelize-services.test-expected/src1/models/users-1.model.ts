@@ -34,7 +34,7 @@ let moduleExports = function (app: App) {
     )
   );
 
-  // tslint:disable-next-line no-unused-variable
+  // tslint:disable-next-line:no-unused-variable
   users1.associate = function (models) {
     // Define associations here for foreign keys
     //   - No foreign keys defined.

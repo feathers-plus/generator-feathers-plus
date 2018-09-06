@@ -2,7 +2,7 @@
 /* tslint:disable:quotemark */
 // Defines Mongoose model for service `nedb3`. (Can be re-generated.)
 import merge from 'lodash.merge';
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 import mongoose from 'mongoose';
 // !code: imports // !end
 // !code: init // !end

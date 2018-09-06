@@ -32,7 +32,7 @@ let dialects<%- tplTsOnly(': any') -%> = {
   '    return sequelize.query(sql)',
   '      .then(([result]) => result)',
   `      .catch(${tplJsOrTs('err', '(err: Error)')} => {`,
-  `        // ${lintDisableNextLine} no-console`,
+  `        // ${lintDisableNextLineNoConsole}`,
   `        console.log('executeSql error=', err.message)${sc}`,
   `        throw err${sc}`,
   `      })${sc}`,

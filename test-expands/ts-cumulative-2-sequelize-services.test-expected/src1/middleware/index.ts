@@ -7,7 +7,7 @@ import mw2 from './mw-2';
 // !code: imports // !end
 // !code: init // !end
 
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 let moduleExports = function (app: App) {
   // !code: func_init // !end
   // Add your custom middleware here. Remember that

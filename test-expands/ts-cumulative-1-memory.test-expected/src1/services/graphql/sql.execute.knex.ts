@@ -31,7 +31,7 @@ let moduleExports = function sqlExecuteKnex(app: App) {
   let executeSql = (sql: string) => {
     return knex.raw(sql)
       .catch((err: Error) => {
-        // tslint:disable-next-line no-console
+        // tslint:disable-next-line:no-console
         console.log('executeSql error=', err.message);
         throw err;
       });

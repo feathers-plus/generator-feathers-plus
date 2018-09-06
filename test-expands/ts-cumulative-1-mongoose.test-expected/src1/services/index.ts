@@ -9,7 +9,7 @@ import graphql from './graphql/graphql.service';
 // !code: imports // !end
 // !code: init // !end
 
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 let moduleExports = function (app: App) {
   app.configure(nedb1);
   app.configure(nedb2);

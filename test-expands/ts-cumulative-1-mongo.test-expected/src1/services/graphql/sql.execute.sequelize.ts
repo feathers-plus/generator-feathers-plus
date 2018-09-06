@@ -32,7 +32,7 @@ let moduleExports = function sqlExecuteSequelize(app: App) {
     return sequelize.query(sql)
       .then(([result]) => result)
       .catch((err: Error) => {
-        // tslint:disable-next-line no-console
+        // tslint:disable-next-line:no-console
         console.log('executeSql error=', err.message);
         throw err;
       });

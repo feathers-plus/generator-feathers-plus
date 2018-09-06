@@ -2,7 +2,7 @@
 // <%- lintDisableNextLineUnused %>
 <%- tplExport('function (options = {}) {', 'function (options: any = {}): RequestHandler {') %>
   return function <%= specs.middlewares[mwName].camel %>(req, res, next) {
-    // <%- lintDisableNextLine -%> no-console
+    // <%- lintDisableNextLineNoConsole %>
     console.log('<%= mwName %> middleware is running')<%- sc %>
     next()<%- sc %>
   }<%- sc %>

@@ -3,7 +3,7 @@
 // Defines Sequelize model for service `nedb2`. (Can be re-generated.)
 import merge from 'lodash.merge';
 import Sequelize, { DefineAttributes } from 'sequelize';
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const DataTypes = (Sequelize as any).DataTypes as Sequelize.DataTypes;
 // !code: imports // !end
 // !code: init // !end

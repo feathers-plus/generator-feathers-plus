@@ -29,7 +29,7 @@
 <%- insertFragment('imports') %>
 
 const strategy = '<%- strategy %>'<%- sc %>
-// <%- lintDisableNextLine -%> no-console
+// <%- lintDisableNextLineNoConsole %>
 console.log(`\n===== configuring graphql service for ${strategy}.\n`)<%- sc %>
 
 let schemas = mergeTypes([

@@ -11,7 +11,7 @@ import hooks from './graphql.hooks';
 // !code: imports // !end
 
 const strategy = 'services';
-// tslint:disable-next-line no-console
+// tslint:disable-next-line:no-console
 console.log(`\n===== configuring graphql service for ${strategy}.\n`);
 
 let schemas = mergeTypes([

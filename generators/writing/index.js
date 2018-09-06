@@ -183,7 +183,9 @@ module.exports = function generatorWriting (generator, what) {
     lintDisableUnused: isJs ? 'eslint-disable no-unused-vars' : 'tslint:disable no-unused-variable',
     lintDisableNextLine: isJs ?  'eslint-disable-next-line' : 'tslint:disable-next-line',
     lintDisableNextLineUnused: isJs ?
-      'eslint-disable-next-line no-unused-vars' : 'tslint:disable-next-line no-unused-variable',
+      'eslint-disable-next-line no-unused-vars' : 'tslint:disable-next-line:no-unused-variable',
+    lintDisableNextLineNoConsole: isJs ?
+      'eslint-disable-next-line no-console' : 'tslint:disable-next-line:no-console',
     ruleQuoteDisable: isJs ? 'quotes: 0' : 'disable:quotemark',
 
     // Abstract .js and .ts statements.
@@ -744,7 +746,7 @@ module.exports = function generatorWriting (generator, what) {
             imports.push('// eslint-disable-next-line no-unused-vars');
             imports.push(`const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks${sc}`);
           } else {
-            imports.push('// tslint:disable-next-line no-unused-variable');
+            imports.push('// tslint:disable-next-line:no-unused-variable');
             imports.push(`import { hooks as localAuthHooks } from '@feathersjs/authentication-local'${sc}`);
             imports.push(`const { hashPassword, protect } = localAuthHooks${sc}`);
           }

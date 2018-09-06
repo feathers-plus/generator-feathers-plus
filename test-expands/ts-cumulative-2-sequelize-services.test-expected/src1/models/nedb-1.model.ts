@@ -34,7 +34,7 @@ let moduleExports = function (app: App) {
     )
   );
 
-  // tslint:disable-next-line no-unused-variable
+  // tslint:disable-next-line:no-unused-variable
   nedb1.associate = function (models) {
     // Define associations here for foreign keys
     //   - nedb2Id

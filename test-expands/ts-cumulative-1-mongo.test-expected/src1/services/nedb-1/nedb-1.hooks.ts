@@ -8,11 +8,11 @@ import { ObjectID } from 'mongodb';
 // !code: imports // !end
 
 // !<DEFAULT> code: used
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const { iff, mongoKeys } = commonHooks;
 // !end
 // !<DEFAULT> code: foreign_keys
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const foreignKeys: string | string[] = [
   'id',
   '_id',

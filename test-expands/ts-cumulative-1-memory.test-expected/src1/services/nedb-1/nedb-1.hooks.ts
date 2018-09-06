@@ -7,7 +7,7 @@ const { authenticate } = authHooks;
 // !code: imports // !end
 
 // !<DEFAULT> code: used
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const { iff } = commonHooks;
 // !end
 

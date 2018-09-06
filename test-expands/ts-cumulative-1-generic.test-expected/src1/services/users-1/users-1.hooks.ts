@@ -4,13 +4,13 @@ import * as commonHooks from 'feathers-hooks-common';
 import { HooksObject } from '@feathersjs/feathers';
 import { hooks as authHooks } from '@feathersjs/authentication';
 const { authenticate } = authHooks;
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 import { hooks as localAuthHooks } from '@feathersjs/authentication-local';
 const { hashPassword, protect } = localAuthHooks;
 // !code: imports // !end
 
 // !<DEFAULT> code: used
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const { iff } = commonHooks;
 // !end
 

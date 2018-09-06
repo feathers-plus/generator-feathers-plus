@@ -5,7 +5,7 @@ import { HooksObject } from '@feathersjs/feathers';
 // !code: imports // !end
 
 // !<DEFAULT> code: used
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const { iff } = commonHooks;
 // !end
 

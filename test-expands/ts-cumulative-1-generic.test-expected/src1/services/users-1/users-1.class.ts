@@ -8,7 +8,7 @@ import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '
 // !code: init // !end
 
 // !<DEFAULT> code: interface
-// tslint:disable-next-line no-empty-interface
+// tslint:disable-next-line:no-empty-interface
 interface ServiceOptions {}
 // !end
 

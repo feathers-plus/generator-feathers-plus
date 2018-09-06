@@ -7,7 +7,7 @@ import log from './hooks/log';
 // !end
 
 // !<DEFAULT> code: used
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const { iff } = commonHooks;
 // !end
 // !code: init // !end
