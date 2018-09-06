@@ -12,6 +12,8 @@ const { hashPassword, protect } = localAuthHooks;
 // !<DEFAULT> code: used
 // tslint:disable-next-line:no-unused-variable
 const { iff } = commonHooks;
+// tslint:disable-next-line:no-unused-variable
+import { create, update, patch, validateCreate, validateUpdate, validatePatch } from './users-1.validate';
 // !end
 
 // !code: init // !end

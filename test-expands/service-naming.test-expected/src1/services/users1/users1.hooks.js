@@ -9,6 +9,8 @@ const { hashPassword, protect } = require('@feathersjs/authentication-local').ho
 // !<DEFAULT> code: used
 // eslint-disable-next-line no-unused-vars
 const { iff } = commonHooks;
+// eslint-disable-next-line no-unused-vars
+const { create, update, patch, validateCreate, validateUpdate, validatePatch } = require('./users1.validate');
 // !end
 
 // !code: init // !end

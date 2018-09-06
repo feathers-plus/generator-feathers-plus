@@ -7,6 +7,8 @@ const { authenticate } = require('@feathersjs/authentication').hooks
 // !<DEFAULT> code: used
 // eslint-disable-next-line no-unused-vars
 const { iff } = commonHooks
+// eslint-disable-next-line no-unused-vars
+const { create, update, patch, validateCreate, validateUpdate, validatePatch } = require('./nedb-1.validate')
 // !end
 
 // !code: init // !end

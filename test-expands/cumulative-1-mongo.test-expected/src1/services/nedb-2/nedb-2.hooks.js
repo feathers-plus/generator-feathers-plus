@@ -7,6 +7,8 @@ const { ObjectID } = require('mongodb');
 // !<DEFAULT> code: used
 // eslint-disable-next-line no-unused-vars
 const { iff, mongoKeys } = commonHooks;
+// eslint-disable-next-line no-unused-vars
+const { create, update, patch, validateCreate, validateUpdate, validatePatch } = require('./nedb-2.validate');
 // !end
 // !<DEFAULT> code: foreign_keys
 // eslint-disable-next-line no-unused-vars

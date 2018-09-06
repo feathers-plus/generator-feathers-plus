@@ -7,6 +7,8 @@ import { HooksObject } from '@feathersjs/feathers';
 // !<DEFAULT> code: used
 // tslint:disable-next-line:no-unused-variable
 const { iff } = commonHooks;
+// tslint:disable-next-line:no-unused-variable
+import { create, update, patch, validateCreate, validateUpdate, validatePatch } from './nedb-6.validate';
 // !end
 
 // !code: init // !end
