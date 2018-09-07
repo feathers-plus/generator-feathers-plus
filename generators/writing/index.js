@@ -418,7 +418,7 @@ module.exports = function generatorWriting (generator, what) {
 
       const connectionStrings = ['mongodb', 'mysql', 'nedb', 'postgres', 'rethinkdb', 'sqlite', 'mssql'];
       connectionStrings.forEach(name => {
-        configTest[name] = configTest[name] || '';
+        configTest[name] = configTest[name] || ' ';
       });
 
       todos.push(
