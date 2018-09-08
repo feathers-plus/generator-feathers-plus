@@ -1,9 +1,9 @@
 {
   "mongodb": "aaa",
-  "mysql": "",
-  "nedb": "",
-  "postgres": "",
-  "rethinkdb": "",
-  "sqlite": "",
-  "mssql": ""
+  "mysql": " ",
+  "nedb": " ",
+  "postgres": " ",
+  "rethinkdb": " ",
+  "sqlite": " ",
+  "mssql": " "
 }
