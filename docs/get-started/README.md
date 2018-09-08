@@ -235,13 +235,13 @@ i.e. when you run `NODE_ENV=production node path/to/your/server.js`.
 seed and change data during testing. test.json initially contains
 ```js
 {
-  "mongodb": "",
-  "mysql": "",
-  "nedb": "",
-  "postgres": "",
-  "rethinkdb": "",
-  "sqlite": "",
-  "mssql": ""
+  "mongodb": " ",
+  "mysql": " ",
+  "nedb": " ",
+  "postgres": " ",
+  "rethinkdb": " ",
+  "sqlite": " ",
+  "mssql": " "
 }
 ```
 This overrides the database connection strings in **default.json** and prevents unwanted data changes.
@@ -1518,10 +1518,10 @@ let schema = {
     memberIds: {
       type: 'array',
       maxItems: 40,
-      items: [{
+      items: {
         type: 'ID',
         faker: { fk: 'users:next' },
-      }]
+      }
     }
     // !end
   },
@@ -1539,6 +1539,14 @@ The **faker: { fk: 'users:next' }** will use the next one of these shuffled keys
 Keys will start to be reused only once all existing keys have been used.
 
 This ensures the foreign keys in memberIds are distinct.
+
+::: warning Arrays
+The syntax for items is very specific, if you give an array of schemas you'll get them as result,
+one-by-one, e.g. `{ items: [{ type: 'string' }] }`.
+
+If you give an object instead, then the given schema will be used for all the generated items,
+e.g. `{ items: { type: 'string' } }`.
+:::
 
 #### Extracting multiple fields from a related record
 
