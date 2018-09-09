@@ -10,8 +10,9 @@ import { ObjectID } from 'mongodb';
 // !<DEFAULT> code: used
 // tslint:disable-next-line:no-unused-variable
 const { iff, mongoKeys } = commonHooks;
+import validate from './nedb-1.validate';
 // tslint:disable-next-line:no-unused-variable
-import { create, update, patch, validateCreate, validateUpdate, validatePatch } from './nedb-1.validate';
+const { create, update, patch, validateCreate, validateUpdate, validatePatch } = validate;
 // !end
 // !<DEFAULT> code: foreign_keys
 // tslint:disable-next-line:no-unused-variable

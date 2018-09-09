@@ -9,8 +9,9 @@ const { authenticate } = authHooks;
 // !<DEFAULT> code: used
 // tslint:disable-next-line:no-unused-variable
 const { iff } = commonHooks;
+import validate from './nedb-1.validate';
 // tslint:disable-next-line:no-unused-variable
-import { create, update, patch, validateCreate, validateUpdate, validatePatch } from './nedb-1.validate';
+const { create, update, patch, validateCreate, validateUpdate, validatePatch } = validate;
 // !end
 
 // !code: init // !end

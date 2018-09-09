@@ -10,12 +10,19 @@
 <%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>
 
-<%- insertFragment('used', serviceName !== 'graphql' ? [
-      `// ${lintDisableNextLineUnused}`,
-      `const { ${hooks.hooks.join(', ')} } = commonHooks${sc}`,
-      `// ${lintDisableNextLineUnused}`,
-      `// ${tplImports('{ create, update, patch, validateCreate, validateUpdate, validatePatch }', `./${kebabName}.validate`)}`
-    ] : [
+<% __validate = isJs ? [
+    `// ${lintDisableNextLineUnused}`,
+    `const { ${hooks.hooks.join(', ')} } = commonHooks${sc}`,
+    `// ${lintDisableNextLineUnused}`,
+    `${tplImports('{ create, update, patch, validateCreate, validateUpdate, validatePatch }', `./${kebabName}.validate`)}`
+] : [
+    `// ${lintDisableNextLineUnused}`,
+    `const { ${hooks.hooks.join(', ')} } = commonHooks${sc}`,
+    tplImports('validate', `./${kebabName}.validate`),
+    `// ${lintDisableNextLineUnused}`,
+    `const { create, update, patch, validateCreate, validateUpdate, validatePatch } = validate${sc}`
+] -%>
+<%- insertFragment('used', serviceName !== 'graphql' ? __validate : [
       `// ${lintDisableNextLineUnused}`,
       `const { ${hooks.hooks.join(', ')} } = commonHooks${sc}`,
     ]
