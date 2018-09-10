@@ -4,7 +4,6 @@
 // !code: init // !end
 
 // Application.
-declare module 'feathers-hooks-common';
 
 // Authentication.
 declare module 'passport-auth0';

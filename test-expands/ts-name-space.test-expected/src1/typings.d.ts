@@ -4,7 +4,6 @@
 // !code: init // !end
 
 // Application.
-declare module 'feathers-hooks-common';
 
 // Services.
 declare module 'feathers-nedb';
