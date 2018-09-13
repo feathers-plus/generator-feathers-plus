@@ -15,8 +15,8 @@ module.exports = function(generator) {
       'feathers'
     ],
     author: {
-      name: generator.user.git.name(),
-      email: generator.user.git.email()
+      name: (specs.overrides || {}).authorName || generator.user.git.name(),
+      email: (specs.overrides || {}).authorEmail || generator.user.git.email()
     },
     contributors: [],
     bugs: {},

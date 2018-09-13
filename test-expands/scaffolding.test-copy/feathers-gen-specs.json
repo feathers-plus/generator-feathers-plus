@@ -1,4 +1,8 @@
 {
+  "overrides": {
+    "authorName": "John Szwaronek",
+    "authorEmail": "johnsz9999@gmail.com"
+  },
   "options": {},
   "app": {
     "name": "z-1",
