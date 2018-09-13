@@ -160,6 +160,9 @@ const tests = [
   // Its tests TEST AUTHENTICATION and should be periodically run with dependency loading
     { testName: 'cumulative-2-test-auth.test' },
 
+  // Test hook generation with associated tests
+    { testName: 'cumulative-2-hooks.test' },
+
   // t21, z21 Test switching the user-entity
   // t21
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -231,6 +234,9 @@ const tests = [
 
   // .ts version of cumulative-2-sequelize-services.test
     { testName: 'ts-cumulative-2-sequelize-services.test' },
+
+  // Test hook generation with associated tests
+    { testName: 'ts-cumulative-2-hooks.test' },
 
   // test service in sub-folders
     { testName: 'ts-name-space.test' },
