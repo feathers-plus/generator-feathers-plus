@@ -1,0 +1,148 @@
+{
+  "users": [
+    {
+      "email": "Trisha_Beatty1@yahoo.com",
+      "firstName": "Julian",
+      "lastName": "Cummings",
+      "roleId": "5b9921925eb75a12151d93b9",
+      "password": "9bd9d8d69a674e0f467cc8796ed151a05dfc2ddf7cc78ca1ba928fc81674",
+      "_id": "5b9921925eb75a12151d93b0"
+    },
+    {
+      "email": "Fletcher51@yahoo.com",
+      "firstName": "Max",
+      "lastName": "Stiedemann",
+      "roleId": "5b9921925eb75a12151d93b9",
+      "password": "cb739205929396fea7596eb10faaa2352c5955907aff1a3a2fa946773925",
+      "_id": "5b9921925eb75a12151d93b1"
+    },
+    {
+      "email": "Hobart90@yahoo.com",
+      "firstName": "Josephine",
+      "lastName": "Wyman",
+      "roleId": "5b9921925eb75a12151d93b8",
+      "password": "aa52c3f5ad019da1ffe78f097b0074f15471b5e6e13b99d488e1e91e450a",
+      "_id": "5b9921925eb75a12151d93b2"
+    },
+    {
+      "email": "Macey85@yahoo.com",
+      "firstName": "Sabrina",
+      "lastName": "Abshire",
+      "roleId": "5b9921925eb75a12151d93b8",
+      "password": "2abd44269802d502a94bb4f63c969e9a3efa77dfb14cd66ae395efb9ba88",
+      "_id": "5b9921925eb75a12151d93b3"
+    },
+    {
+      "email": "Karianne.Quitzon@hotmail.com",
+      "firstName": "Jayden",
+      "lastName": "Swaniawski",
+      "roleId": "5b9921925eb75a12151d93b6",
+      "password": "3a66997074ba4469b6e2141959890afa563e2516fe4c8b711e5b7fd2ed02",
+      "_id": "5b9921925eb75a12151d93b4"
+    }
+  ],
+  "roles": [
+    {
+      "name": "International Markets Associate",
+      "_id": "5b9921925eb75a12151d93b5"
+    },
+    {
+      "name": "Lead Factors Associate",
+      "_id": "5b9921925eb75a12151d93b6"
+    },
+    {
+      "name": "Dynamic Quality Liaison",
+      "_id": "5b9921925eb75a12151d93b7"
+    },
+    {
+      "name": "Lead Branding Producer",
+      "_id": "5b9921925eb75a12151d93b8"
+    },
+    {
+      "name": "Central Applications Designer",
+      "_id": "5b9921925eb75a12151d93b9"
+    }
+  ],
+  "teams": [
+    {
+      "name": "in veritatis autem",
+      "memberIds": [
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b0"
+      ],
+      "_id": "5b9921925eb75a12151d93ba"
+    },
+    {
+      "name": "atque ratione deleniti",
+      "memberIds": [
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b0"
+      ],
+      "_id": "5b9921925eb75a12151d93bb"
+    },
+    {
+      "name": "explicabo quam quia",
+      "memberIds": [
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b2"
+      ],
+      "_id": "5b9921925eb75a12151d93bc"
+    },
+    {
+      "name": "aut dolores ut",
+      "memberIds": [
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b2"
+      ],
+      "_id": "5b9921925eb75a12151d93bd"
+    },
+    {
+      "name": "id autem itaque",
+      "memberIds": [
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b4"
+      ],
+      "_id": "5b9921925eb75a12151d93be"
+    }
+  ]
+}

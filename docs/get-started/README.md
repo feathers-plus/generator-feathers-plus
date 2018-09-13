@@ -216,6 +216,11 @@ This code will only run in one of the NODE_ENV environments selected in the prev
 only if the node command line contains a **--seed** argument.
 An example of such a command would be `NODE_ENV=test node src/ --seed`.
 
+:::tip More information
+This [article](https://medium.com/feathers-plus/automatically-seeding-data-with-feathers-plus-cli-336302adfe3)
+explains how the generated code handles the securing of the application based on NODE_ENV. 
+:::
+
 #### Folders
 
 The generator creates some
@@ -1084,7 +1089,7 @@ let schema = {
     name: {},
     members: {
       type: 'array',
-      items: [{ type: 'ID' }]
+      items: { type: 'ID' }
     }
     // !end
   },
@@ -1179,11 +1184,6 @@ or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master
 
 ## generate fakes
 
-:::danger In Development
-"feathers-plus generate fakes" is in beta test.
-There may be bugs. These docs may not be up to date.
-:::
-
 So far we've generated the code for our application.
 However there isn't very much we can do with that code because the services have no data.
 
@@ -1204,7 +1204,7 @@ We'd like the fake data to resemble what our real data would look like.
 We can describe the fake data we want
 by adding a `faker`, `chance` and `format` prop to each field's JSON-data.
 
-<collapse hidden title="JSON-schema with faker and chance props">
+<collapse hidden title="users model with faker and chance props">
 
 ```js{8,13,15,18,21,24,28}
 // Define the model using JSON-schema
@@ -1219,23 +1219,12 @@ let schema = {
   // Fields in the model.
   properties: {
     // !code: schema_properties
-    id: { type: 'ID' },
-    email: {
-      faker: 'internet.email',
-    },
-    firstName: {
-      faker: 'name.firstName',
-    },
-    lastName: {
-      faker: 'name.lastName',
-    },
-    password: {
-      chance: { hash: { length: 60 } },
-    },
-    roleId: {
-      type: 'ID',
-      faker: { fk: 'roles:random' },  
-    },
+    id:        { type: 'ID' },
+    email:     { minLength: 8, maxLength: 40, faker: 'internet.email' },
+    firstName: { minLength: 2, maxLength: 15, faker: 'name.firstName' },
+    lastName:  { minLength: 2, maxLength: 30, faker: 'name.lastName' },
+    password:  { chance: { hash: { length: 60 } } },
+    roleId:    { type: 'ID', faker: { fk: 'roles:random' } },
     // !end
   },
 };  
@@ -1256,6 +1245,43 @@ while Sequelize, Knex ones use increasing integers.
 - **chance: { hash: { length: 60 } }** - generates a 60 character hash value.
 - **faker: { fk: 'roles:random' }** - uses the key from a randomly generated record in the roles service. 
 
+<collapse hidden title="roles model">
+
+```js{6}
+let schema = {
+  // ...
+  properties: {
+    // !code: schema_properties
+    id:   {type: 'ID' },
+    name: { faker: 'name.title'}
+    // !end
+  },
+};  
+```
+
+</collapse>
+
+<collapse hidden title="teams model">
+
+```js{6,10}
+let schema = {
+  // ...
+  properties: {
+    // !code: schema_properties
+    id:        { type: 'ID' },
+    name:      { minLength: 2, maxLength: 30, faker: 'lorem.words' },
+    memberIds: {
+      type: 'array',
+      maxItems: 10,
+      items:   { type: 'ID', faker: { fk: 'users:next' } },
+    }
+    // !end
+  },
+};  
+```
+
+</collapse>
+
 #### A wealth of options
 
 There are about 150 different types of
@@ -1267,6 +1293,18 @@ There are also over 100 [chance](https://chancejs.com/basics/bool.html) props av
 
 :::tip Custom props
 You can also add your own custom faker, chance and format props.
+:::
+
+#### Further customizing the generated data
+
+The generated fake data will also satisfy the other JSON-schema specified for the field.
+So the more detailed your JSON-schema,
+the more the generated data will resemble what you expect in production.
+
+:::tip It's a win, win.
+Not only will a more detailed JSON-schema produce better generated data,
+it will also produce better validation checking
+in the automatically generated validation service hooks.
 :::
 
 #### Prompts
@@ -1282,82 +1320,160 @@ feathers-plus generate fakes
 
 The generator adds two modules to the app.
 
-<collapse-image hidden title="Folders after 'generate authentication' with JavaScript" url="/assets/get-started/generate-fakes-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate fakes' with JavaScript" url="/assets/get-started/generate-fakes-dir-compare.png" />
 
 - `seeds/fake-data.json`. The generated fake data.
 - `config/defaults.js`. Contains the configuration used to generate the fake data.
 You can change any of its options and rerun `feathers-plus generate fakes`.
 
-<collapse hidden title="Generated fake users records with related roles records, for the MongoDB adapter">
+<collapse hidden title="Generated fake data for the MongoDB adapter">
 
 ```js
 {
   "users": [
     {
-      "email": "Brandt.Kuhlman@yahoo.com",
-      "firstName": "Maddison",
-      "lastName": "Rau",
-      "roleId": "5b6efeb15471a6144e804c49",
+      "email": "Trisha_Beatty1@yahoo.com",
+      "firstName": "Julian",
+      "lastName": "Cummings",
+      "roleId": "5b9921925eb75a12151d93b9",
       "password": "9bd9d8d69a674e0f467cc8796ed151a05dfc2ddf7cc78ca1ba928fc81674",
-      "_id": "5b6efeb15471a6144e804c42"
+      "_id": "5b9921925eb75a12151d93b0"
     },
     {
-      "email": "Magnus29@hotmail.com",
-      "firstName": "Mitchell",
-      "lastName": "Wuckert",
-      "roleId": "5b6efeb15471a6144e804c49",
+      "email": "Fletcher51@yahoo.com",
+      "firstName": "Max",
+      "lastName": "Stiedemann",
+      "roleId": "5b9921925eb75a12151d93b9",
       "password": "cb739205929396fea7596eb10faaa2352c5955907aff1a3a2fa946773925",
-      "_id": "5b6efeb15471a6144e804c43"
+      "_id": "5b9921925eb75a12151d93b1"
     },
     {
-      "email": "Torrey_Braun31@yahoo.com",
-      "firstName": "Bradly",
-      "lastName": "Ruecker",
-      "roleId": "5b6efeb15471a6144e804c49",
+      "email": "Hobart90@yahoo.com",
+      "firstName": "Josephine",
+      "lastName": "Wyman",
+      "roleId": "5b9921925eb75a12151d93b8",
       "password": "aa52c3f5ad019da1ffe78f097b0074f15471b5e6e13b99d488e1e91e450a",
-      "_id": "5b6efeb15471a6144e804c44"
+      "_id": "5b9921925eb75a12151d93b2"
     },
     {
-      "email": "Dayana.Becker58@gmail.com",
-      "firstName": "Maybelle",
-      "lastName": "Sawayn",
-      "roleId": "5b6efeb15471a6144e804c48",
+      "email": "Macey85@yahoo.com",
+      "firstName": "Sabrina",
+      "lastName": "Abshire",
+      "roleId": "5b9921925eb75a12151d93b8",
       "password": "2abd44269802d502a94bb4f63c969e9a3efa77dfb14cd66ae395efb9ba88",
-      "_id": "5b6efeb15471a6144e804c45"
+      "_id": "5b9921925eb75a12151d93b3"
     },
     {
-      "email": "Haven48@yahoo.com",
-      "firstName": "Alexandria",
-      "lastName": "McClure",
-      "roleId": "5b6efeb15471a6144e804c48",
+      "email": "Karianne.Quitzon@hotmail.com",
+      "firstName": "Jayden",
+      "lastName": "Swaniawski",
+      "roleId": "5b9921925eb75a12151d93b6",
       "password": "3a66997074ba4469b6e2141959890afa563e2516fe4c8b711e5b7fd2ed02",
-      "_id": "5b6efeb15471a6144e804c46"
-    },
-    {
-      "email": "Destiny84@hotmail.com",
-      "firstName": "Nestor",
-      "lastName": "Kertzmann",
-      "roleId": "5b6efeb15471a6144e804c48",
-      "password": "921cddc692601fb576b0d5f0d30c5fbb2587053202c73d5fe9b90c28909b",
-      "_id": "5b6efeb15471a6144e804c47"
+      "_id": "5b9921925eb75a12151d93b4"
     }
   ],
   "roles": [
     {
-      "name": "Chief Interactions Agent",
-      "_id": "5b6efeb15471a6144e804c48"
+      "name": "International Markets Associate",
+      "_id": "5b9921925eb75a12151d93b5"
     },
     {
-      "name": "Internal Security Developer",
-      "_id": "5b6efeb15471a6144e804c49"
+      "name": "Lead Factors Associate",
+      "_id": "5b9921925eb75a12151d93b6"
     },
     {
-      "name": "Investor Optimization Manager",
-      "_id": "5b6efeb15471a6144e804c4a"
+      "name": "Dynamic Quality Liaison",
+      "_id": "5b9921925eb75a12151d93b7"
     },
     {
-      "name": "Senior Data Officer",
-      "_id": "5b6efeb15471a6144e804c4b"
+      "name": "Lead Branding Producer",
+      "_id": "5b9921925eb75a12151d93b8"
+    },
+    {
+      "name": "Central Applications Designer",
+      "_id": "5b9921925eb75a12151d93b9"
+    }
+  ],
+  "teams": [
+    {
+      "name": "in veritatis autem",
+      "memberIds": [
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b0"
+      ],
+      "_id": "5b9921925eb75a12151d93ba"
+    },
+    {
+      "name": "atque ratione deleniti",
+      "memberIds": [
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b0"
+      ],
+      "_id": "5b9921925eb75a12151d93bb"
+    },
+    {
+      "name": "explicabo quam quia",
+      "memberIds": [
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b2"
+      ],
+      "_id": "5b9921925eb75a12151d93bc"
+    },
+    {
+      "name": "aut dolores ut",
+      "memberIds": [
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b2"
+      ],
+      "_id": "5b9921925eb75a12151d93bd"
+    },
+    {
+      "name": "id autem itaque",
+      "memberIds": [
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b4",
+        "5b9921925eb75a12151d93b1",
+        "5b9921925eb75a12151d93b3",
+        "5b9921925eb75a12151d93b0",
+        "5b9921925eb75a12151d93b2",
+        "5b9921925eb75a12151d93b4"
+      ],
+      "_id": "5b9921925eb75a12151d93be"
     }
   ]
 }
@@ -1432,37 +1548,6 @@ module.exports = {
 ```
 
 </collapse>
-
-#### Further customizing the generated data
-
-The generated fake data will also satisfy the other JSON-schema specified for the field.
-So the more detailed your JSON-schema,
-the more the generated data will resemble what you expect in production.
-
-This more detailed JSON-schema would produce more satisfactory generated data.
-```js
-    email: {
-      minLength: 10,
-      maxLength: 30,
-      faker: 'internet.email',
-    },
-    firstName: {
-      minLength: 2,
-      maxLength: 20,  
-      faker: 'name.firstName',
-    },
-    lastName: {
-      minLength: 2,
-      maxLength: 40,  
-      faker: 'name.lastName',
-    },
-```
-
-:::tip It's a win, win.
-Not only will a more detailed JSON-schema produce better generated data,
-it will also produce better validation checking
-in the automatically generated validation service hooks.
-:::
 
 ### Foreign keys
 
@@ -1683,6 +1768,10 @@ and that module contains documentation on how to define and use them.
 You can also modify the generated data before it is written to seeds/fakeData.json
 with the **postGeneration** property in config/default.js.
 
+:::tip More information
+This [article](https://medium.com/feathers-plus/fake-data-with-feathers-plus-cli-e668b0e16a8)
+contains more information about generating fake data.
+:::
 
 ## GraphQL
 
@@ -2213,7 +2302,7 @@ The **sql** property must be defined for resolvers producing raw SQL statements 
 
 :::warning join-monster
 The generator uses [join-monster](https://join-monster.readthedocs.io/en/latest/)
-to do the heavy lifting.
+to do the heavy lifting for SQL.
 You have to read and understand its documentation.
 :::
 
