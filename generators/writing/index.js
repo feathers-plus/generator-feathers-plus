@@ -943,6 +943,7 @@ module.exports = function generatorWriting (generator, what) {
     context = Object.assign({}, context, {
       name: 'graphql',
       serviceName: 'graphql',
+      kebabName: 'graphql',
 
       serviceNameSingular: 'graphql',
       subFolder: '',
