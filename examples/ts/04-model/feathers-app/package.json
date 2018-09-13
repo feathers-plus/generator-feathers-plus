@@ -1,6 +1,6 @@
 {
   "name": "feathers-app",
-  "description": "Quick start example app.",
+  "description": "Project feathers-app",
   "version": "0.0.0",
   "homepage": "",
   "main": "src",
@@ -23,9 +23,11 @@
   },
   "scripts": {
     "test": "npm run tslint && npm run mocha",
+    "test:all": "npm run tslint && NODE_ENV=test npm run mocha",
     "tslint": "tslint -p tsconfig.json -c tslint.json && tslint -p tsconfig.test.json -c tslint.json",
-    "start": "ts-node src/",
-    "mocha": "ts-mocha -p tsconfig.test.json test/*.test.ts test/**/*.test.ts --timeout 10000 --exit",
+    "start": "ts-node --files src/",
+    "start:seed": "NODE_ENV=test ts-node --seed --files src/",
+    "mocha": "ts-mocha -p tsconfig.test.json \"test/**/*.test.ts\" --timeout 10000 --exit",
     "compile": "tsc -p tsconfig.json"
   }
 }

@@ -23,28 +23,11 @@
   },
   "scripts": {
     "test": "npm run eslint && npm run mocha",
+    "test:all": "npm run eslint && NODE_ENV=test npm run mocha",
     "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "dev": "nodemon src/",
     "start": "node src/",
+    "start:seed": "NODE_ENV=test node src/ --seed",
     "mocha": "mocha test/ --recursive --exit --timeout 10000"
-  },
-  "dependencies": {
-    "@feathersjs/configuration": "1.0.2",
-    "@feathersjs/errors": "3.3.0",
-    "@feathersjs/express": "1.2.0",
-    "@feathersjs/feathers": "3.1.3",
-    "@feathersjs/socketio": "3.2.0",
-    "compression": "1.7.2",
-    "cors": "2.8.4",
-    "feathers-hooks-common": "4.10.0",
-    "helmet": "3.12.0",
-    "lodash.merge": "4.6.1",
-    "serve-favicon": "2.4.5",
-    "winston": "2.4.1"
-  },
-  "devDependencies": {
-    "eslint": "4.18.2",
-    "mocha": "5.0.5",
-    "request": "2.85.0",
-    "request-promise": "4.2.2"
   }
 }

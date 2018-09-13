@@ -36,11 +36,11 @@ let schema = {
 let extensions = {
   // GraphQL generation.
   graphql: {
-    // !<DEFAULT> code: graphql_header
-    // name: 'Role',
-    // service: {
-    //   sort: { _id: 1 },
-    // },
+    // !code: graphql_header
+    name: 'Role',
+    service: {
+      sort: { _id: 1 },
+    },
     // sql: {
     //   sqlTable: 'Roles',
     //   uniqueKey: '_id',

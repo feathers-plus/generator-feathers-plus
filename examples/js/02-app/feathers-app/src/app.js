@@ -5,7 +5,7 @@ const favicon = require('serve-favicon');
 const compress = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
-const logger = require('winston');
+const logger = require('./logger');
 
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
@@ -30,9 +30,9 @@ app.configure(configuration());
 app.set('generatorSpecs', generatorSpecs);
 // !end
 
-// Enable CORS, security, compression, favicon and body parsing
-app.use(cors());
+// Enable security, CORS, compression, favicon and body parsing
 app.use(helmet());
+app.use(cors());
 app.use(compress());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -2,7 +2,6 @@
 // Configure authentication. (Can be re-generated.)
 const authentication = require('@feathersjs/authentication');
 const jwt = require('@feathersjs/authentication-jwt');
-const local = require('@feathersjs/authentication-local');
 const oauth2 = require('@feathersjs/authentication-oauth2');
 const Auth0Strategy = require('passport-auth0');
 const GoogleStrategy = require('passport-google-oauth20');
@@ -18,7 +17,6 @@ let moduleExports = function (app) {
   // Set up authentication with the secret
   app.configure(authentication(config));
   app.configure(jwt());
-  app.configure(local());
   // !code: loc_1 // !end
 
   app.configure(oauth2(Object.assign({

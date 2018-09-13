@@ -1,8 +1,9 @@
 
 /* eslint-disable no-console */
 // Start the server. (Can be re-generated.)
-const logger = require('winston');
+const logger = require('./logger');
 const app = require('./app');
+const seedData = require('./seed-data');
 // !code: imports // !end
 // !code: init // !end
 
@@ -22,6 +23,7 @@ server.on('listening', () => {
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   // !end
   // !code: listening // !end
+  seedData(app);
 });
 
 // !code: funcs // !end

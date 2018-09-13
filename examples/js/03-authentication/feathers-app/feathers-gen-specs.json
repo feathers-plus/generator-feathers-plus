@@ -7,6 +7,8 @@
     "ts": false
   },
   "app": {
+    "environmentsAllowingSeedData": "test",
+    "seedData": true,
     "name": "feathers-app",
     "description": "Quick start example app.",
     "src": "src",
@@ -20,6 +22,7 @@
     "users": {
       "name": "users",
       "nameSingular": "user",
+      "subFolder": "",
       "fileName": "users",
       "adapter": "mongoose",
       "path": "/users",
@@ -28,9 +31,9 @@
       "graphql": true
     }
   },
+  "hooks": {},
   "authentication": {
     "strategies": [
-      "local",
       "auth0",
       "google",
       "facebook",
@@ -38,6 +41,7 @@
     ],
     "entity": "users"
   },
+  "_hooks": {},
   "connections": {
     "mongoose": {
       "database": "mongodb",

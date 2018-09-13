@@ -5,7 +5,7 @@ import favicon from 'serve-favicon';
 import compress from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
-import * as logger from 'winston';
+import logger from './logger';
 
 import feathers from '@feathersjs/feathers';
 import configuration from '@feathersjs/configuration';
@@ -31,9 +31,9 @@ app.configure(configuration());
 app.set('generatorSpecs', generatorSpecs);
 // !end
 
-// Enable CORS, security, compression, favicon and body parsing
-app.use(cors());
+// Enable security, CORS, compression, favicon and body parsing
 app.use(helmet());
+app.use(cors());
 app.use(compress());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -6,11 +6,15 @@
     "default": 10,
     "max": 50
   },
+  "tests": {
+    "environmentsAllowingSeedData": [
+      "test"
+    ]
+  },
   "authentication": {
-    "secret": "0d3672497782578ed3f0ce2ca9763401be96c9c8493ee37699bd5cb94bca3341bc3d43d5b24602f5d5c6429322ac67a0caa248b9b2c0ad0e868a57d5355471f27f3fecdc1c052f6321a747b27210050be00a2efe6474b34cdf8bc9d333edfb3bda2146ada78ae404f05dff659c3e6a0d46ee8ca258e9ae798242ef0a8d6518224a3916565bdb8b1b0a9978d3c8ae44da47207e7b690412c0b729d1e759aeac892ed8af26fdc9e85ad2b22bd1d19a2c8a7215a26b0fb3459b89ff3f0a903094f999ceccd0f7e6f568afe3d7f721e9dd9f40229c7a15fcd939f19256d43d1f6e7ead58309f1eda463982d4a91cd679cec979805d9b595bfa9fb7f54faee78ae238",
+    "secret": "c5b044e9ce100d7e19150ee635576a9e7cefbf1a8f0df980f93870d5f19959eb682d1fe4dc63dbf042cb3e5ecc698c2e9ec64c92e8e7153b604c14880d01d736009b86cb84907c5bfb478757dc029eb425a9ab11106fcfa724a67919b4cf878efa2fc254e56eb9c2df7c8f4ab69e3345225ee7786c46b9212c46ac104bb4e9388134a3aa8089886e07d3ed4316adbd3d5be823b84b7b032566509f98944f4bdcaf1476af17d3f54feefe0614f77af6a520cc4d2925800d21b1ae68fc715397aa86a88ec80a0805aa6db23fc16ae20fead948f89ea822f479deff5376ce57ce754bea2034496de0bb700e16e5936f07004128bc6a62c668ec9203d5a7f441bf56",
     "strategies": [
-      "jwt",
-      "local"
+      "jwt"
     ],
     "path": "/authentication",
     "service": "users",
@@ -24,16 +28,14 @@
       "algorithm": "HS256",
       "expiresIn": "1d"
     },
-    "local": {
-      "entity": "user",
-      "usernameField": "email",
-      "passwordField": "password"
-    },
     "auth0": {
       "clientID": "your auth0 client id",
       "clientSecret": "your auth0 client secret",
       "successRedirect": "/",
-      "domain": "mydomain.auth0.com"
+      "domain": "mydomain.auth0.com",
+      "scopes": [
+        "profile"
+      ]
     },
     "google": {
       "clientID": "your google client id",

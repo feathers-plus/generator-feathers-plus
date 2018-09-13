@@ -17,9 +17,28 @@ let base = merge({},
   {
     title: "Teams",
     description: "Teams database.",
-    required: [],
+    required: [
+      "name",
+      "members"
+    ],
     uniqueItemProperties: [],
-    properties: {}
+    properties: {
+      id: {
+        type: ID
+      },
+      name: {
+        type: "string"
+      },
+      members: {
+        type: "array",
+        items: {
+          "0": {
+            type: "string"
+          },
+          type: ID
+        }
+      }
+    }
   },
   // !end
   // !code: base_more // !end

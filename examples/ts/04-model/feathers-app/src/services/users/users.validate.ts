@@ -8,7 +8,7 @@ import ajv from 'ajv';
 // !code: init // !end
 
 // !<DEFAULT> code: set_id_type
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const ID = 'string';
 // !end
 
@@ -17,33 +17,9 @@ let base = merge({},
   {
     title: "Users",
     description: "Users database.",
-    required: [
-      "email",
-      "firstName",
-      "lastName",
-      "roleId"
-    ],
+    required: [],
     uniqueItemProperties: [],
-    properties: {
-      id: {
-        type: ID
-      },
-      email: {
-        type: "string"
-      },
-      firstName: {
-        type: "string"
-      },
-      lastName: {
-        type: "string"
-      },
-      password: {
-        type: "string"
-      },
-      roleId: {
-        type: ID
-      }
-    }
+    properties: {}
   },
   // !end
   // !code: base_more // !end

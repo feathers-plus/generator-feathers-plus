@@ -6,12 +6,12 @@ export default function (app: App) {
     return;
   }
 
-  app.on('connection', (connection) => {
+  app.on('connection', (connection: any) => {
     // On a new real-time connection, add it to the anonymous channel
     app.channel('anonymous').join(connection);
   });
 
-  app.on('login', (authResult, { connection }) => {
+  app.on('login', (authResult: any, { connection }: any) => {
     // connection can be undefined if there is no
     // real-time connection, e.g. when logging in via REST
     if (connection) {
@@ -51,7 +51,7 @@ export default function (app: App) {
   });
 
   // Here you can also add service specific event publishers
-  // e..g the publish the `users` service `created` event to the `admins` channel
+  // e.g. the publish the `users` service `created` event to the `admins` channel
   // app.service('users').publish('created', () => app.channel('admins'));
 
   // With the userid and email organization from above you can easily select involved users

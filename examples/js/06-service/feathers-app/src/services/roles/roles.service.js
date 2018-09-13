@@ -12,7 +12,6 @@ let moduleExports = function (app) {
   // !code: func_init // !end
 
   let options = {
-    name: 'roles',
     Model,
     paginate,
     // !code: options_more // !end
@@ -22,7 +21,7 @@ let moduleExports = function (app) {
   // Initialize our service with any options it requires
   app.use('/roles', createService(options));
 
-  // Get our initialized service so that we can register hooks and filters
+  // Get our initialized service so that we can register hooks
   const service = app.service('roles');
 
   service.hooks(hooks);

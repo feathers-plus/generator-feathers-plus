@@ -1,8 +1,9 @@
 
 /* tslint:disable no-console */
 // Start the server. (Can be re-generated.)
-import * as logger from 'winston';
+import logger from './logger';
 import app from './app';
+import seedData from './seed-data';
 // !code: imports // !end
 // !code: init // !end
 
@@ -22,6 +23,7 @@ server.on('listening', () => {
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   // !end
   // !code: listening // !end
+  seedData(app);
 });
 
 // !code: funcs // !end

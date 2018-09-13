@@ -1,6 +1,9 @@
 
 // Application interface. (Can be re-generated.)
 import { Application } from '@feathersjs/express';
+import { Role } from './services/roles/roles.interface';
+import { Team } from './services/teams/teams.interface';
+import { User } from './services/users/users.interface';
 // !code: imports // !end
 // !code: init // !end
 
@@ -17,6 +20,9 @@ import { Application } from '@feathersjs/express';
   });
  */
 export type App = Application<{
+  'roles': Role,
+  'teams': Team,
+  'users': User,
   // !code: moduleExports // !end
 }>;
 // !code: funcs // !end

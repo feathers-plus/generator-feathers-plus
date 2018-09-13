@@ -7,8 +7,11 @@ const { authenticate } = authHooks;
 // !code: imports // !end
 
 // !<DEFAULT> code: used
-// tslint:disable-next-line no-unused-variable
+// tslint:disable-next-line:no-unused-variable
 const { iff } = commonHooks;
+import validate from './roles.validate';
+// tslint:disable-next-line:no-unused-variable
+const { create, update, patch, validateCreate, validateUpdate, validatePatch } = validate;
 // !end
 
 // !code: init // !end

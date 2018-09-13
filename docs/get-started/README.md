@@ -13,6 +13,8 @@ sidebarDepth: 2
 
 However cli-plus also:
 - Converts DB-agnostic JSON-schema models to the DB model each service is currently configured for. 
+- Generates quality fake data and optionally seeds your DB with it.
+- Generates unit and client/server tests for your hooks, services and authentication.
 - Generates all the code needed for your GraphQL Query interface.
 - Generates either JavaScript or TypeScript code; with semicolons or without. Converts apps between JS and TS.
 - Regenerates you app without losing changes you've made. You stay up-to-date with enhancements and fixes.
@@ -2697,7 +2699,7 @@ or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master
 - **graphql.service.?s** Configures the GraphQL service for the strategy chosen in the
 *How should Queries be completed?* question.
 - **graphql.hooks.?s** Feathers hooks for the GraphQL service.
-- **graphql.interfaces.ts** - ?????????????????????????????????????????????
+- **graphql.interfaces.ts** - TypeScript interfaces for GraphQL resolvers.
 - **service.resolvers.?s** Resolver functions for the *Using standalone Feathers service calls* strategy.
 - **batchloader.resolvers.?s** Resolver functions for the *Using BatchLoaders* strategy.
 

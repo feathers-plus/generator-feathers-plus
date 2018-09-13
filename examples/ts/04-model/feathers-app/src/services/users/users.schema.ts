@@ -5,29 +5,29 @@
 
 // Define the model using JSON-schema
 let schema = {
-  // !<DEFAULT> code: schema_header
-  title: 'Users',
-  description: 'Users database.',
-  // !end
-  // !code: schema_definitions // !end
+    // !<DEFAULT> code: schema_header
+    title: 'Users',
+    description: 'Users database.',
+    // !end
+    // !code: schema_definitions // !end
 
-  // Required fields.
-  required: [
-    // !code: schema_required
+    // Required fields.
+    required: [
+        // !code: schema_required
         'email',
         'firstName',
         'lastName',
         'roleId'
         // !end
-  ],
-  // Fields with unique values.
-  uniqueItemProperties: [
-    // !code: schema_unique // !end
-  ],
+    ],
+    // Fields with unique values.
+    uniqueItemProperties: [
+        // !code: schema_unique // !end
+    ],
 
-  // Fields in the model.
-  properties: {
-    // !code: schema_properties
+    // Fields in the model.
+    properties: {
+        // !code: schema_properties
         id: { type: 'ID' },
         email: {},
         firstName: {},
@@ -35,19 +35,19 @@ let schema = {
         password: {},
         roleId: { type: 'ID' }
         // !end
-  },
-  // !code: schema_more // !end
+    },
+    // !code: schema_more // !end
 };
 
 // Define optional, non-JSON-schema extensions.
 let extensions = {
   // GraphQL generation.
   graphql: {
-    // !<DEFAULT> code: graphql_header
-    // name: 'User',
-    // service: {
-    //   sort: { _id: 1 },
-    // },
+    // !code: graphql_header
+    name: 'User',
+    service: {
+      sort: { _id: 1 },
+    },
     // sql: {
     //   sqlTable: 'Users',
     //   uniqueKey: '_id',

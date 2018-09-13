@@ -13,7 +13,10 @@ let schema = {
 
   // Required fields.
   required: [
-    // !code: schema_required // !end
+    // !code: schema_required
+        'name',
+        'members'
+        // !end
   ],
   // Fields with unique values.
   uniqueItemProperties: [
@@ -22,7 +25,14 @@ let schema = {
 
   // Fields in the model.
   properties: {
-    // !code: schema_properties // !end
+    // !code: schema_properties
+    id: { type: 'ID' },
+    name: {},
+    members: {
+      type: 'array',
+      items: { type: 'ID' }
+    }
+    // !end
   },
   // !code: schema_more // !end
 };
@@ -31,11 +41,11 @@ let schema = {
 let extensions = {
   // GraphQL generation.
   graphql: {
-    // !<DEFAULT> code: graphql_header
-    // name: 'Team',
-    // service: {
-    //   sort: { _id: 1 },
-    // },
+    // !code: graphql_header
+    name: 'Team',
+    service: {
+      sort: { _id: 1 },
+    },
     // sql: {
     //   sqlTable: 'Teams',
     //   uniqueKey: '_id',
