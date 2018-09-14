@@ -1247,7 +1247,7 @@ module.exports = function generatorWriting (generator, what) {
       const serviceName = props.serviceName;
       const serviceSpec = specs.services[serviceName];
       const serviceFileName = serviceSpec.fileName;
-      const stt = testType === 'serviceUnit' ? '.unit' : '.integ';
+      const stt = testType === 'serviceUnit' ? '.server' : '.client';
       // eslint-disable-next-line no-unused-vars
       const [x, sfa, sfBack ] = generator.getNameSpace(serviceSpec.subFolder);
       const ssf = sfa.length ? `${sfa.join('/')}/` : '';
@@ -1266,8 +1266,8 @@ module.exports = function generatorWriting (generator, what) {
       });
 
       todos = [
-        tmpl([testPath, 'services', 'name', 'service.unit.test.ejs'],  ['test', pathToTest], true, testType !== 'serviceUnit'),
-        tmpl([testPath, 'services', 'name', 'service.integ.test.ejs'], ['test', pathToTest], true, testType === 'serviceUnit'),
+        tmpl([testPath, 'services', 'name', 'service.server.test.ejs'],  ['test', pathToTest], true, testType !== 'serviceUnit'),
+        tmpl([testPath, 'services', 'name', 'service.client.test.ejs'], ['test', pathToTest], true, testType === 'serviceUnit'),
       ];
 
       if (testType === 'serviceInteg') {

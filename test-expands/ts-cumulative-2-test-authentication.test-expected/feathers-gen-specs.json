@@ -1,0 +1,139 @@
+{
+  "overrides": {
+    "authorName": "John Szwaronek",
+    "authorEmail": "johnsz9999@gmail.com"
+  },
+  "options": {
+    "ver": "1.0.0",
+    "inspectConflicts": false,
+    "semicolons": true,
+    "freeze": [],
+    "ts": true
+  },
+  "app": {
+    "name": "z-1",
+    "description": "Project z-1",
+    "src": "src1",
+    "packager": "npm@>= 3.0.0",
+    "providers": [
+      "rest",
+      "socketio"
+    ],
+    "environmentsAllowingSeedData": "test",
+    "seedData": true
+  },
+  "services": {
+    "users1": {
+      "name": "users1",
+      "nameSingular": "users1",
+      "subFolder": "",
+      "fileName": "users-1",
+      "adapter": "nedb",
+      "path": "/users-1",
+      "isAuthEntity": true,
+      "graphql": false
+    },
+    "nedb1": {
+      "name": "nedb1",
+      "nameSingular": "nedb1",
+      "subFolder": "",
+      "fileName": "nedb-1",
+      "adapter": "nedb",
+      "path": "/nedb-1",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "graphql": true
+    },
+    "nedb2": {
+      "name": "nedb2",
+      "nameSingular": "nedb2",
+      "subFolder": "",
+      "fileName": "nedb-2",
+      "adapter": "nedb",
+      "path": "/nedb-2",
+      "isAuthEntity": false,
+      "requiresAuth": false,
+      "graphql": true
+    }
+  },
+  "authentication": {
+    "strategies": [
+      "local",
+      "auth0",
+      "google",
+      "facebook",
+      "github"
+    ],
+    "entity": "users1"
+  },
+  "connections": {
+    "nedb": {
+      "database": "nedb",
+      "adapter": "nedb",
+      "connectionString": "../data"
+    }
+  },
+  "middlewares": {
+    "mw1": {
+      "path": "*",
+      "camel": "mw1",
+      "kebab": "mw-1"
+    },
+    "mw2": {
+      "path": "mw2",
+      "camel": "mw2",
+      "kebab": "mw-2"
+    }
+  },
+  "graphql": {
+    "name": "graphql",
+    "path": "/graphql",
+    "strategy": "services",
+    "sqlInterface": null,
+    "requiresAuth": false
+  },
+  "hooks": {
+    "hook.app1": {
+      "fileName": "hook.app1",
+      "camelName": "hookApp1",
+      "ifMulti": "y",
+      "multiServices": [
+        "*app"
+      ],
+      "singleService": ""
+    },
+    "hook.nedb12": {
+      "fileName": "hook.nedb12",
+      "camelName": "hookNedb12",
+      "ifMulti": "y",
+      "multiServices": [
+        "nedb1",
+        "nedb2"
+      ],
+      "singleService": ""
+    },
+    "hook.manual": {
+      "fileName": "hook.manual",
+      "camelName": "hookManual",
+      "ifMulti": "y",
+      "multiServices": [
+        "*none"
+      ],
+      "singleService": ""
+    },
+    "hook.nedb1": {
+      "fileName": "hook.nedb1",
+      "camelName": "hookNedb1",
+      "ifMulti": "n",
+      "multiServices": [],
+      "singleService": "nedb1"
+    },
+    "hook.nedb2": {
+      "fileName": "hook.nedb2",
+      "camelName": "hookNedb2",
+      "ifMulti": "n",
+      "multiServices": [],
+      "singleService": "nedb2"
+    }
+  }
+}

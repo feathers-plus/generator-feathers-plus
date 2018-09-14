@@ -36,9 +36,10 @@ const tests = [
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   { testName: 'scaffolding.test',
     specsChanges: [
-      [specs => { delete specs.app.providers; }, { app: { providers: ['primus'] } }],
-      [specs => { delete specs.app.providers; }, { app: { providers: ['rest'] } }],
-      [specs => { delete specs.app.providers; }, { app: { providers: ['rest', 'socketio'] } }],
+      { generate: 'all', before: specs => delete specs.app.providers, merge: { app: { providers: ['primus'] } } },
+      { generate: 'all', before: specs => delete specs.app.providers, merge: { app: { providers: ['rest'] } } },
+      { generate: 'all', before: specs => delete specs.app.providers, merge: { app: { providers: ['rest', 'socketio'] } } },
+      { generate: 'all', prompts: { confirmation: true } }
     ],
     compareDirs: true,
     execute: false,
@@ -163,6 +164,54 @@ const tests = [
   // Test hook generation with associated tests
     { testName: 'cumulative-2-hooks.test' },
 
+  // Test generating unit hook tests
+    { testName: 'cumulative-2-test-hook-unit.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.app1' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb12' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.manual' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb1' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb2' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
+
+  // Test generating integration hook tests
+    { testName: 'cumulative-2-test-hook-integ.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.app1' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb12' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.manual' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb1' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb2' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
+
+  // Test generating service tests
+    { testName: 'cumulative-2-test-service.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb1' } },
+        { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb2' } },
+        { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'nedb1' } },
+        { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'users1' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
+
+  // Test generating authentication tests
+    { testName: 'cumulative-2-test-authentication.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'authBase' } },
+        { generate: 'test', prompts: { testType: 'authServices' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
+
   // t21, z21 Test switching the user-entity
   // t21
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -176,40 +225,47 @@ const tests = [
   //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
   //                            users1, Nedb, /users-1, nedb://../data, auth Y, graphql N
   //  generate service        # NeDB, nedb1, /nedb-1, auth Y (line not needed in test as test regens whole app)
-  { testName: 'regen-user-entity.test', specsChanges: [{
-    authentication: { entity: 'users1' },
-    services: {
-      nedb1: { isAuthEntity: false },
-      users1: {
-        name: 'users1',
-        nameSingular: 'users1',
-        subFolder: '',
-        fileName: 'users-1',
-        adapter: 'nedb',
-        path: '/users-1',
-        isAuthEntity: true,
-        requiresAuth: true,
-        graphql: false
-      },
-    }},
-  ] },
+  { testName: 'regen-user-entity.test',
+    specsChanges: [
+      { generate: 'all', merge: {
+          authentication: { entity: 'users1' },
+          services: {
+            nedb1: { isAuthEntity: false },
+            users1: {
+              name: 'users1',
+              nameSingular: 'users1',
+              subFolder: '',
+              fileName: 'users-1',
+              adapter: 'nedb',
+              path: '/users-1',
+              isAuthEntity: true,
+              requiresAuth: true,
+              graphql: false
+            },
+          }
+        } },
+    ]
+  },
 
   // z22 Test that app.js does not require templates/src/_adapters/* unless they are currently being used.
   // Also tests that existing package.json, config/default.json & config/production.json contents are retained.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # MongoDB, nedb1, /nedb-1, mongodb://localhost:27017/z_1, auth N, graphql Y
   //  generate service        # NeDB,    nedb1, /nedb-1, nedb://../data,                auth N, graphql Y
-  { testName: 'regen-adapters-1.test', specsChanges: [{
-    services: { nedb1: { adapter: 'nedb' } },
-    connections: {
-      'nedb': {
-        database: 'nedb',
-        adapter: 'nedb',
-        connectionString: 'nedb://../data'
-      }
-    }
-  }] },
-
+    { testName: 'regen-adapters-1.test',
+      specsChanges: [
+        { generate: 'all', merge: {
+            services: { nedb1: { adapter: 'nedb' } },
+            connections: {
+              'nedb': {
+                database: 'nedb',
+                adapter: 'nedb',
+                connectionString: 'nedb://../data'
+              }
+            }
+          } },
+      ]
+    },
 
   // test service in sub-folders
     { testName: 'name-space.test' },
@@ -238,12 +294,61 @@ const tests = [
   // Test hook generation with associated tests
     { testName: 'ts-cumulative-2-hooks.test' },
 
+  // Test generating unit hook tests
+    { testName: 'ts-cumulative-2-test-hook-unit.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.app1' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb12' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.manual' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb1' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb2' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
+
+  // Test generating integration hook tests
+    { testName: 'ts-cumulative-2-test-hook-integ.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.app1' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb12' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.manual' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb1' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb2' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
+
+  // Test generating service tests
+    { testName: 'ts-cumulative-2-test-service.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb1' } },
+        { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb2' } },
+        { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'nedb1' } },
+        { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'users1' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
+
+  // Test generating authentication tests
+    { testName: 'ts-cumulative-2-test-authentication.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'authBase' } },
+        { generate: 'test', prompts: { testType: 'authServices' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
+
+
   // test service in sub-folders
     { testName: 'ts-name-space.test' },
 ];
 
 let appDir;
-const runJustThisTest = null //'graphql.test' //'service-naming.test' //null; //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
 const executeAll = false;
 
 describe('generators-writing.test.js', function () {
@@ -319,45 +424,81 @@ function runFirstGeneration (testName, withOptions) {
 }
 
 // Run subsequent generators
+// Return working directory containing last generated app.
 function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
   //console.log('>runNextGenerator', dir);
   if (!specsChanges.length) return;
-  const specsChg1 = specsChanges.shift();
-  const specsChg = Array.isArray(specsChg1) ? specsChg1 : [() => {}, specsChg1];
+  const specsChg = specsChanges.shift();
 
-  return helpers.run(path.join(__dirname, '..', 'generators', 'all'))
-    .inTmpDir(dirNext => {
-      let nextJson;
+  if (specsChg.prompts) {
+    return doGenerate(specsChg);
+  } else {
+    return doSpecChange(specsChg);
+  }
 
-      appDir = dirNext;
-      console.log(`      specs change ${index}`);
+  function doGenerate(specsChg) {
+    return helpers.run(path.join(__dirname, '..', 'generators', specsChg.generate))
+      .inTmpDir(dirNext => {
+        appDir = dirNext;
+        console.log(`      ${index + 1} "generate ${specsChg.generate}" with ${JSON.stringify(specsChg.prompts).substr(0, 65)}`);
 
-      //console.log('314', dir, dirNext);
-      fs.copySync(dir, dirNext);
+        //console.log('314', dir, dirNext);
+        fs.copySync(dir, dirNext);
 
-      //console.log('317', path.join(dir, 'feathers-gen-specs.json'));
-      const prevJson = fs.readJsonSync(path.join(dir, 'feathers-gen-specs.json'));
-      specsChg[0](prevJson);
-      nextJson = merge(prevJson, specsChg[1]);
+        resetSpecs();
+      })
+      .withPrompts(Object.assign({},
+        specsChg.prompts,
+        { action: 'force' }, // force file overwrites
+      ))
+      .withOptions(withOptions)
+      .then(dir => {
+        // There are no more generation steps
+        if (!specsChanges.length) {
+          return dir;
+        }
 
-      //console.log('322', path.join(dirNext, 'feathers-gen-specs.json'));
-      fs.writeFileSync(path.join(dirNext, 'feathers-gen-specs.json'), JSON.stringify(nextJson, null, 2));
+        return runNextGenerator(dir, specsChanges, withOptions, ++index);
+      });
+  }
 
-      resetSpecs();
-    })
-    .withPrompts({
-      confirmation: true,
-      action: 'force' // force file overwrites
-    })
-    .withOptions(withOptions)
-    .then(dir => {
-      // There are no more generation steps
-      if (!specsChanges.length) {
-        return dir;
-      }
+  function doSpecChange(specsChg) {
+    return helpers.run(path.join(__dirname, '..', 'generators', 'all'))
+      .inTmpDir(dirNext => {
+        let nextJson;
 
-      return runNextGenerator(dir, specsChanges, withOptions, ++index);
-    });
+        appDir = dirNext;
+        console.log(`      ${index + 1} change specs ${JSON.stringify(specsChg.merge).substr(0, 65)}`);
+
+        //console.log('314', dir, dirNext);
+        fs.copySync(dir, dirNext);
+
+        //console.log('317', path.join(dir, 'feathers-gen-specs.json'));
+        const prevJson = fs.readJsonSync(path.join(dir, 'feathers-gen-specs.json'));
+        if (specsChg.before) {
+          specsChg.before(prevJson);
+        }
+        nextJson = specsChg.merge ? merge(prevJson, specsChg.merge) : prevJson;
+
+        //console.log('322', path.join(dirNext, 'feathers-gen-specs.json'));
+        fs.writeFileSync(path.join(dirNext, 'feathers-gen-specs.json'), JSON.stringify(nextJson, null, 2));
+
+        resetSpecs();
+      })
+      .withPrompts({
+        confirmation: true,
+        action: 'force' // force file overwrites
+      })
+      .withOptions(withOptions)
+      .then(dir => {
+        // There are no more generation steps
+        if (!specsChanges.length) {
+          return dir;
+        }
+
+        return runNextGenerator(dir, specsChanges, withOptions, ++index);
+      });
+  }
 }
 
 // Run the 'test' script in package.json
