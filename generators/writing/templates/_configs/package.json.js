@@ -22,7 +22,8 @@ module.exports = function(generator) {
     bugs: {},
     directories: {
       lib: specs.app.src,
-      test: 'test/'
+      test: 'test/',
+      // config: specs.app.config || 'config'
     },
     engines: {
       node: `^${major}.0.0`,

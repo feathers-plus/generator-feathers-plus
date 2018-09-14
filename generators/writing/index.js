@@ -126,6 +126,8 @@ function generatorsInclude (name) {
   return generators.indexOf(name) !== -1;
 }
 
+let appConfigPath;
+
 module.exports = function generatorWriting (generator, what) {
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator;
@@ -136,7 +138,7 @@ module.exports = function generatorWriting (generator, what) {
   // Get unique generators which have been run
   generators = [...new Set(specs._generators)].sort();
 
-  // Abbreviations for paths used in building 'todos'.
+  // Abbreviations for paths to templates used in building 'todos'.
   const tpl = join(__dirname, 'templates');
   const configPath = join(tpl, '_configs');
   const src = specs.app.src;
@@ -146,6 +148,8 @@ module.exports = function generatorWriting (generator, what) {
   const namePath = join(serPath, 'name');
   const qlPath = join(serPath, 'graphql');
   const testPath = join(tpl, 'test');
+
+  appConfigPath = specs.app.config || 'config';
 
   const js = specs.options.ts ? 'ts' : 'js';
   const isJs = !specs.options.ts;
@@ -171,6 +175,7 @@ module.exports = function generatorWriting (generator, what) {
     mapping,
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
     getNameSpace(str) { return generator.getNameSpace(str); },
+    appConfigPath,
 
     // TypeScript & semicolon helpers.
     js,
@@ -305,7 +310,7 @@ module.exports = function generatorWriting (generator, what) {
     );
 
     const configDefault = specs._defaultJson = generator.fs.readJSON(
-      generator.destinationPath('config/default.json'), makeConfig.configDefault(generator)
+      generator.destinationPath(`${appConfigPath}/default.json`), makeConfig.configDefault(generator)
     );
 
     // Update older configs with current specs
@@ -320,7 +325,7 @@ module.exports = function generatorWriting (generator, what) {
     );
 
     const configProd = generator.fs.readJSON(
-      generator.destinationPath('config/production.json'), makeConfig.configProduction(generator)
+      generator.destinationPath(`${appConfigPath}/production.json`), makeConfig.configProduction(generator)
     );
 
     // update test:all script for first test environment
@@ -396,8 +401,8 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([tpl, 'src', 'seed-data.ejs'],        [src, `seed-data.${js}`], false, !specs.app.seedData),
 
       json(pkg,           'package.json'),
-      json(configDefault, ['config', 'default.json']),
-      json(configProd,    ['config', 'production.json']),
+      json(configDefault, [appConfigPath, 'default.json']),
+      json(configProd,    [appConfigPath, 'production.json']),
 
       tmpl([tpl, 'src', 'index.ejs'],     [src, `index.${js}`]),
       tmpl([tpl, 'src', 'app.hooks.ejs'], [src, `app.hooks.${js}`]),
@@ -413,7 +418,7 @@ module.exports = function generatorWriting (generator, what) {
     // generate name.json files for test environments
     configDefault.tests.environmentsAllowingSeedData.forEach(envName => {
       const configTest = specs._testJson = generator.fs.readJSON(
-        generator.destinationPath(`config/${envName}.json`), makeConfig.configTest(generator)
+        generator.destinationPath(`${appConfigPath}/${envName}.json`), makeConfig.configTest(generator)
       );
 
       const connectionStrings = ['mongodb', 'mysql', 'nedb', 'postgres', 'rethinkdb', 'sqlite', 'mssql'];
@@ -422,7 +427,7 @@ module.exports = function generatorWriting (generator, what) {
       });
 
       todos.push(
-        json(configTest,    ['config', `${envName}.json`], false, !envName),
+        json(configTest,    [appConfigPath, `${envName}.json`], false, !envName),
       )
     });
 
@@ -814,7 +819,7 @@ module.exports = function generatorWriting (generator, what) {
     const isGenerateConnection = generatorsInclude('connection') && !generatorsInclude('service');
 
     const todos = !Object.keys(connections).length ? [] : [
-      json(newConfig, ['config', 'default.json']),
+      json(newConfig, [appConfigPath, 'default.json']),
       tmpl([srcPath, 'app.ejs'], [libDir, `app.${js}`]),
       tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
     ];
@@ -1104,7 +1109,7 @@ module.exports = function generatorWriting (generator, what) {
     const adapters = {};
 
     // Get the app's existing default.js or the default one.
-    const existingDefaultJsPath = generator.destinationPath(join('config', 'default.js'));
+    const existingDefaultJsPath = generator.destinationPath(join(appConfigPath, 'default.js'));
     const defaultJsPath = doesFileExist(existingDefaultJsPath) ?
       existingDefaultJsPath : `${configPath}/default`;
 
@@ -1133,7 +1138,7 @@ module.exports = function generatorWriting (generator, what) {
       jssOptions.postGeneration(data) : data;
 
     todos = [
-      copy([tpl, '_configs', 'default.js'], ['config', 'default.js'], true),
+      copy([tpl, '_configs', 'default.js'], [appConfigPath, 'default.js'], true),
       json(fakeData, ['seeds', 'fake-data.json']),
     ];
 
@@ -1356,7 +1361,7 @@ function writeAuthenticationConfiguration (generator, context) {
   generator._specs._defaultJson = config;
 
   generator.fs.writeJSON(
-    generator.destinationPath('config', 'default.json'),
+    generator.destinationPath(appConfigPath, 'default.json'),
     config
   );
 }
@@ -1384,7 +1389,7 @@ function writeDefaultJsonClient (generator) {
   generator._specs._defaultJson = config;
 
   generator.fs.writeJSON(
-    generator.destinationPath('config', 'default.json'),
+    generator.destinationPath(appConfigPath, 'default.json'),
     config
   );
 }

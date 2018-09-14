@@ -8,6 +8,12 @@
 <%- tplImports('logger', './logger') %>
 
 <%- tplImports('feathers', '@feathersjs/feathers') %>
+<%# -%>
+<%# --- if-1 starts below. -%>
+<% if (appConfigPath !== 'config') { -%>
+process.env['NODE_CONFIG_DIR'] = './<%- appConfigPath %>'<%- sc %>
+<% } -%>
+<%# --- if-1 ends above. -%>
 <%- tplImports('configuration', '@feathersjs/configuration') %>
 <%- tplImports('express', '@feathersjs/express') %>
 <%- hasProvider('socketio') ? tplImports('socketio', '@feathersjs/socketio') : '' %>
