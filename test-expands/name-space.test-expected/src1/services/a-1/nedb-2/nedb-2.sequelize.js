@@ -10,7 +10,16 @@ const DataTypes = Sequelize.DataTypes;
 
 let moduleExports = merge({},
   // !<DEFAULT> code: sequelize_model
-  {},
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    nedb1Id: {
+      type: DataTypes.INTEGER
+    }
+  },
   // !end
   // !code: moduleExports // !end
 );

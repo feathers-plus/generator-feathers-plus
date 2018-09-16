@@ -1801,7 +1801,7 @@ so you may make queries using either REST or GraphQL, even simultaneously.
 ### Our app as an example
 
 We've taken the app we've been working on and
-[produced a GraphQL example ](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/07-graphql-example/feathers-app).
+[produced a GraphQL example ](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/09-graphql-example/feathers-app).
 You can run it yourself with `npm i` and `npm start`.
 
 - We converted the services to NeDB so the example is easy to run.
@@ -2017,8 +2017,8 @@ Each resolver is a function which joins one type to another, or which calculates
 
 `feathers-plus generate graphql` generates the resolver code needed for your GraphQL endpoint,
 and it generates up to 3 versions of the resolvers
-- One uses [normal Feathers service calls](https://github.com/feathers-plus/generator-feathers-plus/blob/master/examples/js/07-graphql-example/feathers-app/src/services/graphql/service.resolvers.js).
-- Another uses [batch-loaders](https://github.com/feathers-plus/generator-feathers-plus/blob/master/examples/js/07-graphql-example/feathers-app/src/services/graphql/batchloader.resolvers.js).
+- One uses [normal Feathers service calls](https://github.com/feathers-plus/generator-feathers-plus/blob/master/examples/js/09-graphql-example/feathers-app/src/services/graphql/service.resolvers.js).
+- Another uses [batch-loaders](https://github.com/feathers-plus/generator-feathers-plus/blob/master/examples/js/09-graphql-example/feathers-app/src/services/graphql/batchloader.resolvers.js).
 - And the final one uses raw SQL statements.
 
 The resolvers usually require a **lot** of code which must be meticulously correct.
@@ -2721,6 +2721,67 @@ The modules are all generated so you may include all the custom code you need fo
 This allows you to rerun *generate graphql* at any time to change strategies.
 :::
 
+## generate hook
+
+????????????????????????
+
+### Generate a hook for one service
+
+```
+feathers-plus generate hook
+```
+
+<collapse-image title="Prompts 'generate hook'" url="/assets/get-started/generate-hook-service.png" />
+
+- **?????** ?????
+
+#### Folders
+
+The generator adds some modules to the
+[JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/10-hook/feathers-app/)
+or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/10-hook/feathers-app/).
+
+<collapse-image hidden title="Folders After 'generate hook' for users service, with JavaScript" url="/assets/get-started/generate-hook-service-dir-compare.png" />
+<collapse-image hidden title="Folders After 'generate hook' for users service, with TypeScript" url="/assets/get-started/ts-generate-hook-service-dir-compare.png" />
+
+- **?????** ?????
+
+```js{6}
+// src/services/users/users.hooks.js
+// Hooks for service `users`. (Can be re-generated.)
+const commonHooks = require('feathers-hooks-common');
+const { authenticate } = require('@feathersjs/authentication').hooks;
+// eslint-disable-next-line no-unused-vars
+const verifyEmail = require('./hooks/verify-email');
+// !code: imports // !end
+```
+
+### Generate a hook for all services
+
+<collapse-image title="Prompts 'generate hook'" url="/assets/get-started/generate-hook-app.png" />
+
+- **?????** ?????
+
+#### Folders
+
+The generator adds some modules to the
+[JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/10-hook/feathers-app/)
+or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/10-hook/feathers-app/).
+
+<collapse-image hidden title="Folders After 'generate hook' for app, with JavaScript" url="/assets/get-started/generate-hook-app-dir-compare.png" />
+<collapse-image hidden title="Folders After 'generate hook' for app, with TypeScript" url="/assets/get-started/ts-generate-hook-app-dir-compare.png" />
+
+- **?????** ?????
+
+- **?????** ?????
+
+```js{5}
+// src/app.hooks.js
+// Application hooks that run for every service. (Can be re-generated.)
+const commonHooks = require('feathers-hooks-common');
+// eslint-disable-next-line no-unused-vars
+const normalizeQuery = require('./hooks/normalize-query');
+```
 
 ## What We Have Accomplished
 

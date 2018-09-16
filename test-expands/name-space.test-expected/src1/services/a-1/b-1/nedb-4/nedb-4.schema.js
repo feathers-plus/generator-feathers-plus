@@ -22,7 +22,11 @@ let schema = {
 
   // Fields in the model.
   properties: {
-    // !code: schema_properties // !end
+    // !code: schema_properties
+    id: { type: 'ID' },
+    _id: { type: 'ID' },
+    nedb2Id: { type: 'ID' },
+    // !end
   },
   // !code: schema_more // !end
 };
@@ -48,8 +52,8 @@ let extensions = {
       // !code: graphql_discard // !end
     ],
     add: {
-      // !<DEFAULT> code: graphql_add
-      // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: '_id' } },
+      // !code: graphql_add
+      nedb2: { type: 'Nedb2!', args: false, relation: { ourTable: 'nedb2Id', otherTable: '_id' } },
       // !end
     },
     // !code: graphql_more // !end

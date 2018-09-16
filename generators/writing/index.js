@@ -165,7 +165,7 @@ module.exports = function generatorWriting (generator, what) {
   }
 
   // Get expanded Feathers service specs
-  const { mapping, feathersSpecs } = serviceSpecsExpand(specs);
+  const { mapping, feathersSpecs } = serviceSpecsExpand(specs, generator);
 
   // Basic context used with templates.
   let context = Object.assign({}, {
