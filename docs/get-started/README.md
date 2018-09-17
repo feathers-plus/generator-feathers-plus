@@ -124,7 +124,7 @@ Its useful when you are exploring the raw details of what the generator writes.
 
 The feathers-app folder now contains one module.
 
-<collapse-image title="Folders After 'generate options'" url="/assets/get-started/generate-options-dir.png" />
+<collapse-image title="Folders after 'generate options'" url="/assets/get-started/generate-options-dir.png" />
 
 - **feathers-gen-specs.json** contains the information used to generate the app.
 
@@ -231,8 +231,8 @@ or [TS ones](https://github.com/feathers-plus/generator-feathers-plus/tree/maste
 reflecting your choices.
 The modules are properly wired together and structured as recommended by the Feathers team.
 
-<collapse-image hidden title="Folders After 'generate app' with JavaScript" url="/assets/get-started/generate-app-dir-compare.png" />
-<collapse-image hidden title="Folders After 'generate app' with TypeScript" url="/assets/get-started/ts-generate-app-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate app' with JavaScript" url="/assets/get-started/generate-app-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate app' with TypeScript" url="/assets/get-started/ts-generate-app-dir-compare.png" />
 
 - **config/** contains the configuration files for the app.
 production.json values override default.json ones when in production mode,
@@ -648,8 +648,8 @@ The generator adds some modules to the
 [JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/03-authentication/feathers-app/)
 or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/03-authentication/feathers-app/).
 
-<collapse-image hidden title="Folders After 'generate authentication' with JavaScript" url="/assets/get-started/generate-authentication-dir-compare.png" />
-<collapse-image hidden title="Folders After 'generate authentication' with TypeScript" url="/assets/get-started/ts-generate-authentication-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate authentication' with JavaScript" url="/assets/get-started/generate-authentication-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate authentication' with TypeScript" url="/assets/get-started/ts-generate-authentication-dir-compare.png" />
 
 
 - **models/**. Some database adapters require models for their tables.
@@ -1175,8 +1175,8 @@ The generator adds some modules to the
 [JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/06-service/feathers-app/)
 or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/06-service/feathers-app/).
 
-<collapse-image hidden title="Folders After 'generate service' with JavaScript" url="/assets/get-started/generate-service-model-dir-compare.png" />
-<collapse-image hidden title="Folders After 'generate service' with TypeScript" url="/assets/get-started/ts-generate-service-model-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate service' with JavaScript" url="/assets/get-started/generate-service-model-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate service' with TypeScript" url="/assets/get-started/ts-generate-service-model-dir-compare.png" />
 
 - **models/teams.model.?s** contains the model for teams.
 
@@ -2692,8 +2692,8 @@ The generator adds some modules to the
 [JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/08-graphql/feathers-app)
 or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/08-graphql/feathers-app).
 
-<collapse-image hidden title="Folders After 'generate graphql' with JavaScript" url="/assets/get-started/generate-graphql-dir-compare.png" />
-<collapse-image hidden title="Folders After 'generate graphql' with TypeScript" url="/assets/get-started/ts-generate-graphql-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate graphql' with JavaScript" url="/assets/get-started/generate-graphql-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate graphql' with TypeScript" url="/assets/get-started/ts-generate-graphql-dir-compare.png" />
 
 - **graphql.schemas.?s** The GraphQL type definitions.
 - **graphql.service.?s** Configures the GraphQL service for the strategy chosen in the
@@ -2723,17 +2723,22 @@ This allows you to rerun *generate graphql* at any time to change strategies.
 
 ## generate hook
 
-????????????????????????
+We can generate hooks designed either to work with one particular service,
+or to be used with multiple services.
 
 ### Generate a hook for one service
+
+Let's create a hook intended to verify the **email** fields in the **users** service.
 
 ```
 feathers-plus generate hook
 ```
 
-<collapse-image title="Prompts 'generate hook'" url="/assets/get-started/generate-hook-service.png" />
+<collapse-image title="Prompts 'generate hook' for one service" url="/assets/get-started/generate-hook-service.png" />
 
-- **?????** ?????
+- **What is the name of the hook?** A valid file name or a camel-case name.
+- **The hook will be used with**: Choose **One service**.
+- **Which service will this hook be used with?** Select from the list of generated services.
 
 #### Folders
 
@@ -2741,11 +2746,16 @@ The generator adds some modules to the
 [JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/10-hook/feathers-app/)
 or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/10-hook/feathers-app/).
 
-<collapse-image hidden title="Folders After 'generate hook' for users service, with JavaScript" url="/assets/get-started/generate-hook-service-dir-compare.png" />
-<collapse-image hidden title="Folders After 'generate hook' for users service, with TypeScript" url="/assets/get-started/ts-generate-hook-service-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate hook' for users service, with JavaScript" url="/assets/get-started/generate-hook-service-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate hook' for users service, with TypeScript" url="/assets/get-started/ts-generate-hook-service-dir-compare.png" />
 
-- **?????** ?????
+- **src/services/users/hooks/verify-email.?s**
+Hooks for a single service are located within the folder for that service.
+- **test/services/users/hooks/verify-email.unit.test.?s**
+A unit test module is also generated for the hook.
+You can read more about hook unit tests in the [generate test](#generate-test) section.
 
+The hook is automatically imported in the **users.hooks.?s** module.
 ```js{6}
 // src/services/users/users.hooks.js
 // Hooks for service `users`. (Can be re-generated.)
@@ -2756,11 +2766,28 @@ const verifyEmail = require('./hooks/verify-email');
 // !code: imports // !end
 ```
 
-### Generate a hook for all services
+:::tip Positioning hooks
+The generator cannot know in which order you want the hook to execute.
+It would be uncommon for the right location be at the end of, say, the before hooks.
+So its your responsibly to use the imported hook where it belongs.
+:::
 
-<collapse-image title="Prompts 'generate hook'" url="/assets/get-started/generate-hook-app.png" />
+### Generate a hook for all/multiple services
 
-- **?????** ?????
+Let's create a hook intended to convert strings like **'null'** found in REST requests
+to the JavaScript scalar **null** required by service calls.
+
+<collapse-image title="Prompts 'generate hook' for all/multiple services" url="/assets/get-started/generate-hook-app.png" />
+
+- **What is the name of the hook?** A valid file name or a camel-case name.
+- **The hook will be used with**: Choose **Multiple services**.
+- **Which services will this hook be used with?**
+    - **I will add the hook where it is needed**: The hook module is created
+    but you are expected to import it where its needed.
+    - **Use with all services as an app hook**: The hook module is imported
+    into **src/app.hooks.?s** which contains hooks run for all services.
+    - **service names**: Select one or more services which will use the hook.
+    The hook will be imported into their **src/services/serviceName/serviceName.hook.?s** modules.
 
 #### Folders
 
@@ -2768,20 +2795,140 @@ The generator adds some modules to the
 [JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/10-hook/feathers-app/)
 or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/10-hook/feathers-app/).
 
-<collapse-image hidden title="Folders After 'generate hook' for app, with JavaScript" url="/assets/get-started/generate-hook-app-dir-compare.png" />
-<collapse-image hidden title="Folders After 'generate hook' for app, with TypeScript" url="/assets/get-started/ts-generate-hook-app-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate hook' for app, with JavaScript" url="/assets/get-started/generate-hook-app-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate hook' for app, with TypeScript" url="/assets/get-started/ts-generate-hook-app-dir-compare.png" />
 
-- **?????** ?????
+- **src/hooks/normalize-query.?s** All hooks used by multiple services are located in this folder.
+- **test/hooks/normalize-query.unit.test.?s** A unit test is automatically created for the hook.
+The tests for hooks used by multiple services are all located in this folder.
 
-- **?????** ?????
-
-```js{5}
+Since we created a **Use with all services as an app hook** hook,
+its automatically imported into the **src/app.hooks.?s** module.
+```js{6}
 // src/app.hooks.js
 // Application hooks that run for every service. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 // eslint-disable-next-line no-unused-vars
 const normalizeQuery = require('./hooks/normalize-query');
 ```
+
+## generate test
+
+Test can be generated for
+- **Hooks.** Both unit tests and integration ones.
+- **Services.** Both tests running on the server (light integration),
+and ones running client/server (end-to-end integration).
+- **Authentication.** Two tests can be generated.
+One tests that basic authentication works using the user-entity.
+The other tests that every method on every service uses the authentication you expect.
+
+All these test are generated using
+
+```
+feathers-plus generate test
+```
+
+<collapse-image title="Initial prompts 'generate test'" url="/assets/get-started/generate-test-start.png" />
+
+- **hook - unit** Generate a unit test for a hook.
+- **hook - integration** Generate an integration test for a hook
+- **service - server** Generate a test running solely on the server.
+- **service - client** Generate a test where requests are started on  a client,
+and fullfilled on the server.
+- **authentication - base** Generate a test that checks authentication exists.
+- **authentication - services** Generate a test which checks authentication
+for every method on every service is what you expect.
+
+
+### Unit test for a hook
+
+<collapse-image title="Prompts 'generate test' for a hook unit test" url="/assets/get-started/generate-test-hook-unit.png" />
+
+- **Which hook is being tested?** Select the hook you want tested.
+
+:::warn Restriction
+Presently test can be generated only for generated hooks.
+
+If you want to generate tests for manually created hooks,
+generate a test for a generated hook and then rename the generated test module.
+:::
+
+### Integration test for a hook
+
+<collapse-image title="Prompts 'generate test' for a hook integration test" url="/assets/get-started/generate-test-hook-integ.png" />
+
+### Test a service using the server
+
+<collapse-image title="Prompts 'generate test' for a service server test" url="/assets/get-started/generate-test-service-server.png" />
+
+- **What is the name of the service being tested?** Choose the service to be tested.
+
+### Test a service using client/server
+
+<collapse-image title="Prompts 'generate test' for a service client/server test" url="/assets/get-started/generate-test-service-client.png" />
+
+All client/server tests are configurable to your environment.
+**config/default.json** contains the options.
+
+<collapse hidden title="Configuration options for client/server tests">
+
+```js
+  "tests": {
+    "environmentsAllowingSeedData": [
+      "test"
+    ],
+    "client": {
+      "port": 3030,
+      "ioOptions": {
+        "transports": [
+          "websocket"
+        ],
+        "forceNew": true,
+        "reconnection": false,
+        "extraHeaders": {}
+      },
+      "primusOptions": {
+        "transformer": "ws"
+      },
+      "restOptions": {
+        "url": "http://localhost:3030"
+      },
+      "overriddenAuth": {}
+    }
+  },
+```
+
+- **ioOptions, primusOptions, restOptions** The options used for **@feathersjs/socket.io-client**,
+**/primus** and **/rest-client** respectively.
+- **overriddenAuth** Used by the authentication for every service test. 
+
+</collapse>
+
+:::tip Client/server
+All generated client/server tests use these options. Fell free to use them yourself.
+:::
+
+### Test that checks authentication exists.
+
+<collapse-image title="More prompts 'generate test' for base authentication" url="/assets/get-started/generate-test-auth-base.png" />
+
+### Test which check authentication for every service
+
+<collapse-image title="More prompts 'generate test' for authentication for services'" url="/assets/get-started/generate-test-auth-services.png" />
+
+#### Folders
+
+The generator adds some modules to the
+[JS folder](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/js/11-test/feathers-app/)
+or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master/examples/ts/11-test/feathers-app/).
+
+<collapse-image hidden title="Folders after 'generate hook' for users service, with JavaScript" url="/assets/get-started/generate-test-dir-compare.png" />
+<collapse-image hidden title="Folders after 'generate hook' for users service, with TypeScript" url="/assets/get-started/ts-generate-test-dir-compare.png" />
+
+- **test/hooks** The tests for all/multiple hooks are located in this folder.
+- **test/services/serviceName/hooks** The tests for individual hooks are located in this folder.
+- **test/services/serviceName** The tests for services are located in this folder.
+- **test** The authentication tests are located in this folder.
 
 ## What We Have Accomplished
 

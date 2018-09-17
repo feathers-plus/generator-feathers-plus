@@ -1,0 +1,148 @@
+{
+  "users": [
+    {
+      "email": "Lolita55@gmail.com",
+      "firstName": "Emilie",
+      "lastName": "Schuppe",
+      "roleId": "5b992656c552bd135eea5094",
+      "password": "9bd9d8d69a674e0f467cc8796ed151a05dfc2ddf7cc78ca1ba928fc81674",
+      "_id": "5b992656c552bd135eea508d"
+    },
+    {
+      "email": "Timmothy_Krajcik40@yahoo.com",
+      "firstName": "Maxie",
+      "lastName": "Rowe",
+      "roleId": "5b992656c552bd135eea5092",
+      "password": "cb739205929396fea7596eb10faaa2352c5955907aff1a3a2fa946773925",
+      "_id": "5b992656c552bd135eea508e"
+    },
+    {
+      "email": "Rudolph72@yahoo.com",
+      "firstName": "Jayme",
+      "lastName": "Okuneva",
+      "roleId": "5b992656c552bd135eea5096",
+      "password": "aa52c3f5ad019da1ffe78f097b0074f15471b5e6e13b99d488e1e91e450a",
+      "_id": "5b992656c552bd135eea508f"
+    },
+    {
+      "email": "Florencio_Ebert@hotmail.com",
+      "firstName": "Elyse",
+      "lastName": "Kihn",
+      "roleId": "5b992656c552bd135eea5093",
+      "password": "2abd44269802d502a94bb4f63c969e9a3efa77dfb14cd66ae395efb9ba88",
+      "_id": "5b992656c552bd135eea5090"
+    },
+    {
+      "email": "Soledad96@yahoo.com",
+      "firstName": "Reyna",
+      "lastName": "Johns",
+      "roleId": "5b992656c552bd135eea5094",
+      "password": "3a66997074ba4469b6e2141959890afa563e2516fe4c8b711e5b7fd2ed02",
+      "_id": "5b992656c552bd135eea5091"
+    }
+  ],
+  "roles": [
+    {
+      "name": "National Group Liaison",
+      "_id": "5b992656c552bd135eea5092"
+    },
+    {
+      "name": "Investor Metrics Executive",
+      "_id": "5b992656c552bd135eea5093"
+    },
+    {
+      "name": "Legacy Accounts Executive",
+      "_id": "5b992656c552bd135eea5094"
+    },
+    {
+      "name": "Global Research Liaison",
+      "_id": "5b992656c552bd135eea5095"
+    },
+    {
+      "name": "Principal Accountability Consultant",
+      "_id": "5b992656c552bd135eea5096"
+    }
+  ],
+  "teams": [
+    {
+      "name": "dolores magni facere",
+      "memberIds": [
+        "5b992656c552bd135eea5090",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5091",
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea508f",
+        "5b992656c552bd135eea5090",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5091",
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea508f"
+      ],
+      "_id": "5b992656c552bd135eea5097"
+    },
+    {
+      "name": "nisi sunt esse",
+      "memberIds": [
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5091",
+        "5b992656c552bd135eea5090",
+        "5b992656c552bd135eea508f",
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5091",
+        "5b992656c552bd135eea5090",
+        "5b992656c552bd135eea508f"
+      ],
+      "_id": "5b992656c552bd135eea5098"
+    },
+    {
+      "name": "libero aperiam doloremque",
+      "memberIds": [
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea5091",
+        "5b992656c552bd135eea508f",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5090",
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea5091",
+        "5b992656c552bd135eea508f",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5090"
+      ],
+      "_id": "5b992656c552bd135eea5099"
+    },
+    {
+      "name": "accusamus exercitationem itaqu",
+      "memberIds": [
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5090",
+        "5b992656c552bd135eea508f",
+        "5b992656c552bd135eea5091",
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5090",
+        "5b992656c552bd135eea508f",
+        "5b992656c552bd135eea5091"
+      ],
+      "_id": "5b992656c552bd135eea509a"
+    },
+    {
+      "name": "eos libero sint",
+      "memberIds": [
+        "5b992656c552bd135eea5091",
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea508f",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5090",
+        "5b992656c552bd135eea5091",
+        "5b992656c552bd135eea508e",
+        "5b992656c552bd135eea508f",
+        "5b992656c552bd135eea508d",
+        "5b992656c552bd135eea5090"
+      ],
+      "_id": "5b992656c552bd135eea509b"
+    }
+  ]
+}

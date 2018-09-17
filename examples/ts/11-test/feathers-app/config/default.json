@@ -1,0 +1,106 @@
+{
+  "host": "localhost",
+  "port": 3030,
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "tests": {
+    "environmentsAllowingSeedData": [
+      "test"
+    ],
+    "client": {
+      "port": 3030,
+      "ioOptions": {
+        "transports": [
+          "websocket"
+        ],
+        "forceNew": true,
+        "reconnection": false,
+        "extraHeaders": {}
+      },
+      "primusOptions": {
+        "transformer": "ws"
+      },
+      "restOptions": {
+        "url": "http://localhost:3030"
+      },
+      "overriddenAuth": {}
+    }
+  },
+  "authentication": {
+    "secret": "3bfc003a65d268d507be06d980ba79ae50de4aa80cf17f738b5a67793127e7550bdb1b2c585b932b0a376adb422867337cec4285062a9d0a988d92c71d3f544dd39296f73c8bcc78ca8307d656424dfab760a0059dfbac71aa29e765b07db30ab6b4d1230fb701dc3fad92b1f36e3f0cb218e73a2d8f0f23b3caaf88c471c6fefb0eed5d9730d070f00d5f140bd3d0ab269113e1a7fc5e89759703f4d49aaa2f17c8373b2fc6ad8636b636a75cd8685744bb3866db6ebe493a89a33d335bc69ac92c802fc8a1b6757bf923b8d449e867bf717dc8ff2809f81519138867e56dfaa8f0bcda31cbe633a15119be2fa86c74ec9b9eb84ec76100d17e0d804fc0c115",
+    "strategies": [
+      "jwt",
+      "local"
+    ],
+    "path": "/authentication",
+    "service": "users",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "usernameField": "email",
+      "passwordField": "password"
+    },
+    "auth0": {
+      "clientID": "your auth0 client id",
+      "clientSecret": "your auth0 client secret",
+      "successRedirect": "/",
+      "domain": "mydomain.auth0.com",
+      "scopes": [
+        "profile"
+      ]
+    },
+    "google": {
+      "clientID": "your google client id",
+      "clientSecret": "your google client secret",
+      "successRedirect": "/",
+      "scope": [
+        "profile openid email"
+      ]
+    },
+    "facebook": {
+      "clientID": "your facebook client id",
+      "clientSecret": "your facebook client secret",
+      "successRedirect": "/",
+      "scope": [
+        "public_profile",
+        "email"
+      ],
+      "profileFields": [
+        "id",
+        "displayName",
+        "first_name",
+        "last_name",
+        "email",
+        "gender",
+        "profileUrl",
+        "birthday",
+        "picture",
+        "permissions"
+      ]
+    },
+    "github": {
+      "clientID": "your github client id",
+      "clientSecret": "your github client secret",
+      "successRedirect": "/"
+    },
+    "cookie": {
+      "enabled": true,
+      "name": "feathers-jwt",
+      "httpOnly": false,
+      "secure": false
+    }
+  },
+  "mongodb": "mongodb://localhost:27017/feathers_app"
+}
