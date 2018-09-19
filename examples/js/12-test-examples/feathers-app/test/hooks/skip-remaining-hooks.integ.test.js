@@ -1,5 +1,4 @@
 
-// Integration test
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
 const skipRemainingHooks = require('../../src/hooks/skip-remaining-hooks');
