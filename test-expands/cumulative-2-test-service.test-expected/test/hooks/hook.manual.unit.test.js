@@ -6,6 +6,7 @@ const assert = require('assert');
 const hookManual = require('../../src1/hooks/hook.manual');
 
 describe('Test /hooks/hook.manual.unit.test.js', () => {
+  // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars
     contextAfter, contextAfterMultiple;

@@ -6,6 +6,7 @@ import assert from 'assert';
 import hookNedb1 from '../../../../src1/services/nedb-1/hooks/hook.nedb1';
 
 describe('Test nedb-1/hooks/hook.nedb1.unit.test.ts', () => {
+  // tslint:disable-next-line:no-unused-variable
   let contextBefore: HookContext, contextAfterPaginated: HookContext,
     // tslint:disable-next-line:no-unused-variable
     contextAfter: HookContext, contextAfterMultiple: HookContext;

@@ -6,6 +6,7 @@
 <%- tplImports(hookName, pathTestToHook) %>
 
 describe('Test <%- serviceFileName -%><%- hookFileName -%><%- htt%>.test.<%- js -%>', () => {
+  // <%- lintDisableNextLineUnused %>
   let contextBefore<%- tplTsOnly(': HookContext') -%>, contextAfterPaginated<%- tplTsOnly(': HookContext') -%>,
     // <%- lintDisableNextLineUnused %>
     contextAfter<%- tplTsOnly(': HookContext') -%>, contextAfterMultiple<%- tplTsOnly(': HookContext') -%><%- sc %>
@@ -47,7 +48,8 @@ describe('Test <%- serviceFileName -%><%- hookFileName -%><%- htt%>.test.<%- js 
         data: [
 
         ]
-      } }<%- sc %>
+      }
+    }<%- sc %>
     contextAfterPaginated.result.total = contextAfterPaginated.result.data.length<%- sc %>
   })<%- sc %>
 

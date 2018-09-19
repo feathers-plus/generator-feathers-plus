@@ -1,0 +1,9 @@
+{
+  "mongodb": " ",
+  "mysql": " ",
+  "nedb": "../data-test",
+  "postgres": " ",
+  "rethinkdb": " ",
+  "sqlite": " ",
+  "mssql": " "
+}

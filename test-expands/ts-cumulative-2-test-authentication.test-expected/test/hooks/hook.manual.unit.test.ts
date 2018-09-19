@@ -6,6 +6,7 @@ import assert from 'assert';
 import hookManual from '../../src1/hooks/hook.manual';
 
 describe('Test /hooks/hook.manual.unit.test.ts', () => {
+  // tslint:disable-next-line:no-unused-variable
   let contextBefore: HookContext, contextAfterPaginated: HookContext,
     // tslint:disable-next-line:no-unused-variable
     contextAfter: HookContext, contextAfterMultiple: HookContext;

@@ -291,6 +291,26 @@ OK FINAL CHECKS
        OK - mongodb.*s
        OK - mongoose.*s
        OK - sequelize.*s for other DBs use a common template
+OK FINAL CHECKS
+OK - Consistency, e.g. name.sequelize.js lists needed fields for user-entity while others don't.       
+OK - tests
+OK  - config
+OK     - For security: const nonTestingNodeEnv = ['production', 'staging', 'uat']
+OK     - Check *.json exists and has the same connection property names as does default.json.
+OK - unit tests
+OK     - before hook for each prompt-selected method
+OK     - after hook for each prompt-selected method, paginated and not
+OK     - error hook ???
+OK - integration tests
+OK     - test each prompt-selected method returns expected data.
+OK     Developer seeds data (maybe with faked data) and provides expected result.
+OK - client-server integration tests
+OK    - test local-auth and jwt works on user-entity. Check feathers-gen-specs.json.
+OK      Optionally use one faked data record.
+OK    - test local-auth and jwt works for each prompt-selected method on service generated with auth.
+OK      Check feathers-gen-specs.json. Optionally use faked data records.
+OK    - test no auth works for each prompt-selected method on service generated without auth.
+OK      Optionally use faked data records.       
 
 
 NO - hooks modules should be ifNew: true
@@ -414,9 +434,6 @@ describe('Feathers application tests', () => {
   });
 
 FINAL CHECKS
-OK - Consistency, e.g. name.sequelize.js lists needed fields for user-entity while others don't.
-
-
 - Several templates may have the same app module as their destination. Each of these
   templates needs to be tested for .ts .
   - src/models/name.model.*s
@@ -430,27 +447,10 @@ OK - Consistency, e.g. name.sequelize.js lists needed fields for user-entity whi
     - sequelize.*s for MS SQL Server
         
 
-- tests
- - config
-    - For security: const nonTestingNodeEnv = ['production', 'staging', 'uat']
-    - Check *.json exists and has the same connection property names as does default.json.
- - unit tests
-    - before hook for each prompt-selected method
-    - after hook for each prompt-selected method, paginated and not
-    - error hook ???
-    
- - integration tests
-    - test each prompt-selected method returns expected data.
-    Developer seeds data (maybe with faked data) and provides expected result.
-     
- - client-server integration tests
-   - test local-auth and jwt works on user-entity. Check feathers-gen-specs.json.
-     Optionally use one faked data record.
-   - test local-auth and jwt works for each prompt-selected method on service generated with auth.
-     Check feathers-gen-specs.json. Optionally use faked data records.
-   - test no auth works for each prompt-selected method on service generated without auth.
-     Optionally use faked data records.
      
 - https://blog.feathersjs.com/stress-testing-your-feathersjs-application-like-in-production-4b8611ee8d9e
   Stress testing your FeathersJS application like in production
-       
+
+Patches to track
+https://github.com/feathersjs/feathers/pull/1008     
+https://mail.google.com/mail/u/0/#inbox/FMfcgxvzKbPwqJQgBFpCGpPfrhtdjxfk

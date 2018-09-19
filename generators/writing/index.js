@@ -1371,6 +1371,9 @@ function writeDefaultJsonClient (generator) {
     tests: {
       environmentsAllowingSeedData: [
       ],
+      local: {
+        password: 'password'
+      },
       client: {
         port: 3030,
         ioOptions: {

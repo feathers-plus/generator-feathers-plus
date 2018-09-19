@@ -16,6 +16,10 @@ if (!dbChangesAllowed) {
 }
 
 describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>', () => {
+  beforeEach(async () => {
+    await app.service('<%- servicePath -%>').remove(null)<%- sc %>
+  })<%- sc %>
+
   it('registered the service', () => {
     const service = app.service('<%- servicePath -%>')<%- sc %>
 

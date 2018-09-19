@@ -4,7 +4,7 @@
 <%- tplImports('assert', null) %>
 <%- tplImports('feathersClient', '@feathersjs/client') %>
 <%- tplImports('io', 'socket.io-client') %>
-<%- tplTsOnly('import { Server } from \'http\'') %><%- sc %>
+<%- tplTsOnly(`import { Server } from 'http'${sc}`) %>
 <%- tplImports('{ join }', 'path') %>
 <%- tplImports('{ localStorage, readJsonFileSync }', '@feathers-plus/test-utils') %>
 
@@ -62,6 +62,10 @@ describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt %>
         }, delayAfterServerOnce)<%- sc %>
       })<%- sc %>
     })<%- sc %>
+  })<%- sc %>
+
+  beforeEach(async () => {
+    await app.service('<%- servicePath -%>').remove(null)<%- sc %>
   })<%- sc %>
 
   after(function (done) {

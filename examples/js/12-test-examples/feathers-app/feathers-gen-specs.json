@@ -1,0 +1,132 @@
+{
+  "options": {
+    "ver": "1.0.0",
+    "inspectConflicts": false,
+    "semicolons": true,
+    "freeze": [],
+    "ts": false
+  },
+  "app": {
+    "environmentsAllowingSeedData": "test",
+    "seedData": true,
+    "name": "feathers-app",
+    "description": "Quick start example app.",
+    "src": "src",
+    "packager": "npm@>= 3.0.0",
+    "providers": [
+      "rest",
+      "socketio"
+    ]
+  },
+  "services": {
+    "users": {
+      "name": "users",
+      "nameSingular": "user",
+      "subFolder": "",
+      "fileName": "users",
+      "adapter": "nedb",
+      "path": "/users",
+      "isAuthEntity": true,
+      "requiresAuth": true,
+      "graphql": true
+    },
+    "roles": {
+      "name": "roles",
+      "nameSingular": "role",
+      "subFolder": "",
+      "fileName": "roles",
+      "adapter": "nedb",
+      "path": "/roles",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "graphql": true
+    },
+    "teams": {
+      "name": "teams",
+      "nameSingular": "team",
+      "subFolder": "",
+      "fileName": "teams",
+      "adapter": "nedb",
+      "path": "/teams",
+      "isAuthEntity": false,
+      "requiresAuth": true,
+      "graphql": true
+    }
+  },
+  "hooks": {
+    "verify-email": {
+      "fileName": "verify-email",
+      "camelName": "verifyEmail",
+      "ifMulti": "n",
+      "multiServices": [],
+      "singleService": "users"
+    },
+    "normalize-query": {
+      "fileName": "normalize-query",
+      "camelName": "normalizeQuery",
+      "ifMulti": "y",
+      "multiServices": [
+        "*app"
+      ],
+      "singleService": ""
+    },
+    "discard": {
+      "fileName": "discard",
+      "camelName": "discard",
+      "ifMulti": "y",
+      "multiServices": [
+        "*none"
+      ],
+      "singleService": ""
+    },
+    "skip-remaining-hooks": {
+      "fileName": "skip-remaining-hooks",
+      "camelName": "skipRemainingHooks",
+      "ifMulti": "y",
+      "multiServices": [
+        "*none"
+      ],
+      "singleService": ""
+    }
+  },
+  "authentication": {
+    "strategies": [
+      "local",
+      "auth0",
+      "google",
+      "facebook",
+      "github"
+    ],
+    "entity": "users"
+  },
+  "_hooks": {
+    "*app": [
+      {
+        "filePath": "./hooks/",
+        "fileName": "normalize-query",
+        "camelName": "normalizeQuery"
+      }
+    ],
+    "users": [
+      {
+        "filePath": "./hooks/",
+        "fileName": "verify-email",
+        "camelName": "verifyEmail"
+      }
+    ]
+  },
+  "connections": {
+    "nedb": {
+      "database": "nedb",
+      "adapter": "nedb",
+      "connectionString": "nedb://../data"
+    }
+  },
+  "graphql": {
+    "path": "/graphql",
+    "strategy": "services",
+    "sqlInterface": null,
+    "requiresAuth": false,
+    "name": "graphql"
+  }
+}

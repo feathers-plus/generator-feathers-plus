@@ -2877,6 +2877,9 @@ All client/server tests are configurable to your environment.
     "environmentsAllowingSeedData": [
       "test"
     ],
+    "local": {
+      "password": "password"
+    },
     "client": {
       "port": 3030,
       "ioOptions": {
@@ -2898,6 +2901,7 @@ All client/server tests are configurable to your environment.
   },
 ```
 
+- **local.password** The name of the password field in the user-entity service.
 - **ioOptions, primusOptions, restOptions** The options used for **@feathersjs/socket.io-client**,
 **/primus** and **/rest-client** respectively.
 - **overriddenAuth** Used by the authentication for every service test. 

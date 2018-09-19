@@ -6,6 +6,7 @@ const assert = require('assert');
 const normalizeQuery = require('../../src/hooks/normalize-query');
 
 describe('Test /hooks/normalize-query.unit.test.js', () => {
+  // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars
     contextAfter, contextAfterMultiple;

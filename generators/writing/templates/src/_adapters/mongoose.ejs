@@ -9,10 +9,12 @@
   mongoose.Promise = global.Promise<%- sc %>
   mongoose.connect(app.get('mongodb'), { useNewUrlParser: true })
     .then(({ connection }<%- tplTsOnly([': any']) -%>) => {
+      // <%- lintDisableNextLineNoConsole %>
       console.log(`connected to "${connection.name}" database at ${connection.host}:${connection.port}`)<%- sc %>
       return connection<%- sc %>
     })
     .catch(error => {
+      // <%- lintDisableNextLineNoConsole %>
       console.log(error)<%- sc %>
       process.exit(1)<%- sc %>
     })<%- sc %>

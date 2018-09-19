@@ -16,6 +16,10 @@ if (!dbChangesAllowed) {
 }
 
 describe('Test nedb-1/nedb-1.service.server.test.ts', () => {
+  beforeEach(async () => {
+    await app.service('/nedb-1').remove(null);
+  });
+
   it('registered the service', () => {
     const service = app.service('/nedb-1');
 

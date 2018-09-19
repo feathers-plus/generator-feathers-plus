@@ -348,7 +348,7 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = 'name-space.test' //null; //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
 const executeAll = false;
 
 describe('generators-writing.test.js', function () {

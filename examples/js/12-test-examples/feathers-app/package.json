@@ -1,0 +1,71 @@
+{
+  "name": "feathers-app",
+  "description": "Quick start example app.",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "John Szwaronek",
+    "email": "johnsz9999@gmail.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/"
+  },
+  "engines": {
+    "node": "^8.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run eslint && npm run mocha",
+    "test:all": "npm run eslint && NODE_ENV=test npm run mocha",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "dev": "nodemon src/",
+    "start": "node src/",
+    "start:seed": "NODE_ENV=test node src/ --seed",
+    "mocha": "mocha test/ --recursive --exit --timeout 30000"
+  },
+  "dependencies": {
+    "@feathers-plus/graphql": "^1.9.0",
+    "@feathersjs/authentication": "^2.1.7",
+    "@feathersjs/authentication-jwt": "^2.0.1",
+    "@feathersjs/authentication-local": "^1.2.1",
+    "@feathersjs/authentication-oauth2": "^1.1.0",
+    "@feathersjs/configuration": "^2.0.0",
+    "@feathersjs/errors": "^3.3.1",
+    "@feathersjs/express": "^1.2.3",
+    "@feathersjs/feathers": "^3.2.0",
+    "@feathersjs/socketio": "^3.2.2",
+    "ajv": "^5.5.2",
+    "compression": "^1.7.3",
+    "cors": "^2.8.4",
+    "feathers-hooks-common": "^4.16.3",
+    "feathers-mongoose": "^6.1.4",
+    "feathers-nedb": "^3.1.0",
+    "graphql-resolvers-ast": "^1.4.0",
+    "helmet": "^3.13.0",
+    "lodash.merge": "^4.6.1",
+    "merge-graphql-schemas": "^1.5.3",
+    "mongoose": "^5.2.8",
+    "nedb": "^1.8.0",
+    "passport-auth0": "^1.0.0",
+    "passport-facebook": "^2.1.1",
+    "passport-github": "^1.1.0",
+    "passport-google-oauth20": "^1.0.0",
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.0.0"
+  },
+  "devDependencies": {
+    "@feathers-plus/test-utils": "^0.3.1",
+    "eslint": "^5.3.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.3",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  }
+}

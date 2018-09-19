@@ -4,7 +4,7 @@
 const assert = require('assert');
 const feathersClient = require('@feathersjs/client');
 const io = require('socket.io-client');
-;
+
 const { join } = require('path');
 const { localStorage, readJsonFileSync } = require('@feathers-plus/test-utils');
 
@@ -62,6 +62,10 @@ describe('Test users-1/users-1.service.client.test.js', () => {
         }, delayAfterServerOnce);
       });
     });
+  });
+
+  beforeEach(async () => {
+    await app.service('/users-1').remove(null);
   });
 
   after(function (done) {

@@ -64,6 +64,10 @@ describe('Test nedb-1/nedb-1.service.client.test.ts', () => {
     });
   });
 
+  beforeEach(async () => {
+    await app.service('/nedb-1').remove(null);
+  });
+
   after(function (done) {
     this.timeout(timeoutForClosingingServerAndClient);
     client.logout();

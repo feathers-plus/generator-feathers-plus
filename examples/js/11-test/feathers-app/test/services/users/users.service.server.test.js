@@ -16,6 +16,10 @@ if (!dbChangesAllowed) {
 }
 
 describe('Test users/users.service.server.test.js', () => {
+  beforeEach(async () => {
+    await await app.service('/users').remove(null);
+  });
+
   it('registered the service', () => {
     const service = app.service('/users');
 

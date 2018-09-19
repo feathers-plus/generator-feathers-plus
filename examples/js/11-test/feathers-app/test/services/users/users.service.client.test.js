@@ -64,6 +64,10 @@ describe('Test users/users.service.client.test.js', () => {
     });
   });
 
+  beforeEach(async () => {
+    await await app.service('/users').remove(null);
+  });
+
   after(function (done) {
     this.timeout(timeoutForClosingingServerAndClient);
     client.logout();

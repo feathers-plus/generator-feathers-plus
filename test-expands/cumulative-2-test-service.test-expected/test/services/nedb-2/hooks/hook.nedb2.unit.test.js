@@ -6,6 +6,7 @@ const assert = require('assert');
 const hookNedb2 = require('../../../../src1/services/nedb-2/hooks/hook.nedb2');
 
 describe('Test nedb-2/hooks/hook.nedb2.unit.test.js', () => {
+  // eslint-disable-next-line no-unused-vars
   let contextBefore, contextAfterPaginated,
     // eslint-disable-next-line no-unused-vars
     contextAfter, contextAfterMultiple;
