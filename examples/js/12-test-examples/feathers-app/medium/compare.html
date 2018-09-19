@@ -37,13 +37,13 @@
 
 <div id="diff">
   <div class="d2h-wrapper">
-    <div id="d2h-839000" class="d2h-file-wrapper" data-lang="656161151 -0500">
+    <div id="d2h-879756" class="d2h-file-wrapper" data-lang="022092504 -0500">
       <div class="d2h-file-header">
       <span class="d2h-file-name-wrapper">
     <span class="d2h-icon-wrapper"><svg aria-hidden="true" class="d2h-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12">
     <path d="M6 5H2v-1h4v1zM2 8h7v-1H2v1z m0 2h7v-1H2v1z m0 2h7v-1H2v1z m10-7.5v9.5c0 0.55-0.45 1-1 1H1c-0.55 0-1-0.45-1-1V2c0-0.55 0.45-1 1-1h7.5l3.5 3.5z m-1 0.5L8 2H1v12h10V5z"></path>
 </svg></span>
-    <span class="d2h-file-name">02/{app/src/app.js	2016-12-23 17:38:02.788000000 -0500 → service/src/app.js	2016-12-25 10:41:50.656161151 -0500}</span>
+    <span class="d2h-file-name">02/{app1/src/services/teams/hooks/index.js	2017-01-10 15:55:18.871469000 -0500 → service/src/services/teams/hooks/index.js	2016-12-25 10:38:49.022092504 -0500}</span>
     <span class="d2h-tag d2h-moved d2h-moved-tag">RENAMED</span></span>
       </div>
       <div class="d2h-files-diff">
@@ -54,31 +54,177 @@
               <tr>
                 <td class="d2h-code-side-linenumber d2h-info"></td>
                 <td class="d2h-info">
-                  <div class="d2h-code-side-line d2h-info">@@ -28,4 +28,47 @@</div>
+                  <div class="d2h-code-side-line d2h-info">@@ -3,6 +3,23 @@</div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-                  28
+                  3
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
                     <span class="d2h-code-line-prefix"> </span>
-                    <span class="d2h-code-line-ctn">  .configure(services)</span>
+                    <span class="d2h-code-line-ctn">const globalHooks = require('../../../hooks');</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-                  29
+                  4
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
                     <span class="d2h-code-line-prefix"> </span>
-                    <span class="d2h-code-line-ctn">  .configure(middleware);</span>
+                    <span class="d2h-code-line-ctn">const hooks = require('feathers-hooks');</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-                  30
+                  5
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">const auth = require('feathers-authentication').hooks;</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+                  6
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
@@ -87,356 +233,106 @@
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-                  31
+                  7
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
                     <span class="d2h-code-line-prefix"> </span>
-                    <span class="d2h-code-line-ctn">module.exports = app;</span>
+                    <span class="d2h-code-line-ctn">exports.before = {</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-
+                  8
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  all: [</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-info"></td>
+                <td class="d2h-info">
+                  <div class="d2h-code-side-line d2h-info">@@ -20,8 +37,8 @@</div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-cntx">
+                  20
+                </td>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-
+                  21
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">exports.after = {</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-
+                  22
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  all: [],</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-del">
+                  23
+                </td>
+                <td class="d2h-del">
+                  <div class="d2h-code-side-line d2h-del">
+                    <span class="d2h-code-line-prefix">-</span>
+                    <span class="d2h-code-line-ctn">  find: <del>[],</del></span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-del">
+                  24
+                </td>
+                <td class="d2h-del">
+                  <div class="d2h-code-side-line d2h-del">
+                    <span class="d2h-code-line-prefix">-</span>
+                    <span class="d2h-code-line-ctn">  get: <del>[],</del></span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-
+                  25
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  create: [],</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-
+                  26
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  update: [],</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-
+                  27
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-cntx">
-
-                </td>
-                <td class="d2h-cntx">
-                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  patch: [],</span>
                   </div>
                 </td>
               </tr>
@@ -455,119 +351,263 @@
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-                  28
+                  3
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
                     <span class="d2h-code-line-prefix"> </span>
-                    <span class="d2h-code-line-ctn">  .configure(services)</span>
+                    <span class="d2h-code-line-ctn">const globalHooks = require('../../../hooks');</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-                  29
+                  4
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
                     <span class="d2h-code-line-prefix"> </span>
-                    <span class="d2h-code-line-ctn">  .configure(middleware);</span>
+                    <span class="d2h-code-line-ctn">const hooks = require('feathers-hooks');</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-                  30
+                  5
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
                     <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">const auth = require('feathers-authentication').hooks;</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-ins">
-                  31
+                  6
                 </td>
                 <td class="d2h-ins">
                   <div class="d2h-code-side-line d2h-ins">
                     <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">loadDatabases(app);</span>
+                    <span class="d2h-code-line-ctn">const { populate, serialize } = require('feathers-hooks-common'); // added</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-ins">
-                  32
+                  7
                 </td>
                 <td class="d2h-ins">
                   <div class="d2h-code-side-line d2h-ins">
                     <span class="d2h-code-line-prefix">+</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  8
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">const populateSchema = { // added</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  9
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">  include: [{</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  10
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">    service: 'users',</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  11
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">    nameAs: 'members',</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  12
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">    parentField: 'memberIds',</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  13
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">    childField: '_id'</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  14
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">  }]</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  15
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">};</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  16
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  17
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">const serializeSchema = { // added</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  18
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">  exclude: ['_id', '_include'],</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  19
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">  members: {</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  20
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">    only: ['email', 'role']</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  21
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">  }</span>
+                  </div>
+                </td>
+              </tr><tr>
+                <td class="d2h-code-side-linenumber d2h-ins">
+                  22
+                </td>
+                <td class="d2h-ins">
+                  <div class="d2h-code-side-line d2h-ins">
+                    <span class="d2h-code-line-prefix">+</span>
+                    <span class="d2h-code-line-ctn">};</span>
                   </div>
                 </td>
               </tr><tr>
                 <td class="d2h-code-side-linenumber d2h-cntx">
-                  33
+                  23
                 </td>
                 <td class="d2h-cntx">
                   <div class="d2h-code-side-line d2h-cntx">
                     <span class="d2h-code-line-prefix"> </span>
-                    <span class="d2h-code-line-ctn">module.exports = app;</span>
                   </div>
                 </td>
               </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  34
+                <td class="d2h-code-side-linenumber d2h-cntx">
+                  24
                 </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">exports.before = {</span>
                   </div>
                 </td>
               </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  35
+                <td class="d2h-code-side-linenumber d2h-cntx">
+                  25
                 </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">function loadDatabases(app) {</span>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  all: [</span>
                   </div>
                 </td>
               </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  36
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">  let userIds = [];</span>
-                  </div>
+                <td class="d2h-code-side-linenumber d2h-info"></td>
+                <td class="d2h-info">
+                  <div class="d2h-code-side-line d2h-info"></div>
                 </td>
               </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
+                <td class="d2h-code-side-linenumber d2h-cntx">
                   37
                 </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">  const teams = app.service('/teams');</span>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
                   </div>
                 </td>
               </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
+                <td class="d2h-code-side-linenumber d2h-cntx">
                   38
                 </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">  const users = app.service('/users');</span>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">exports.after = {</span>
                   </div>
                 </td>
               </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
+                <td class="d2h-code-side-linenumber d2h-cntx">
                   39
                 </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">  </span>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  all: [],</span>
                   </div>
                 </td>
               </tr><tr>
@@ -577,7 +617,7 @@
                 <td class="d2h-ins">
                   <div class="d2h-code-side-line d2h-ins">
                     <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">  console.log('\nClear databases.');</span>
+                    <span class="d2h-code-line-ctn">  find: <ins>[ populate({ schema: populateSchema }), serialize(serializeSchema) ], // changed</ins></span>
                   </div>
                 </td>
               </tr><tr>
@@ -587,337 +627,37 @@
                 <td class="d2h-ins">
                   <div class="d2h-code-side-line d2h-ins">
                     <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">  Promise.all([</span>
+                    <span class="d2h-code-line-ctn">  get: <ins>[ populate({ schema: populateSchema }), serialize(serializeSchema) ], // changed</ins></span>
                   </div>
                 </td>
               </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
+                <td class="d2h-code-side-linenumber d2h-cntx">
                   42
                 </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">    teams.remove(null),</span>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  create: [],</span>
                   </div>
                 </td>
               </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
+                <td class="d2h-code-side-linenumber d2h-cntx">
                   43
                 </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">    users.remove(null)</span>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  update: [],</span>
                   </div>
                 </td>
               </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
+                <td class="d2h-code-side-linenumber d2h-cntx">
                   44
                 </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">  ])</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  45
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">    .then (() =&gt; {</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  46
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">      console.log('\nLoad users.');</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  47
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">      return  Promise.all([</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  48
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'jane.doe@gmail.com', password: '11111', role: 'admin, tank' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  49
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'john.doe@gmail.com', password: '22222', role: 'user, heals' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  50
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'judy.doe@gmail.com', password: '33333', role: 'user' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  51
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'jack.doe@gmail.com', password: '44444', role: 'user' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  52
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'tom.smith@gmail.com', password: '55555', role: 'user' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  53
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'bob.smith@gmail.com', password: '66666', role: 'user' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  54
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'joe.smith@gmail.com', password: '77777', role: 'user' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  55
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'tim.lee@gmail.com', password: '88888', role: 'user, damage' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  56
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'tod.lee@gmail.com', password: '99999', role: 'user' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  57
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        users.create({ email: 'sam.lee@gmail.com', password: '00000', role: 'user' }),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  58
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">      ])</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  59
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">    })</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  60
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">    .then(results =&gt; {</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  61
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">      userIds = results.map(user =&gt; user._id); // This way is not elegant but easy to understand.</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  62
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">  </span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  63
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">      console.log('\nLoad teams.');</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  64
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">      return Promise.all([</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  65
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        teams.create({ name: 'Doe family', type: 'family', memberIds: [userIds[0], userIds[1], userIds[2], userIds[3]]}),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  66
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        teams.create({ name: 'Smith family', type: 'family', memberIds: [userIds[4], userIds[5], userIds[6]]}),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  67
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        teams.create({ name: 'Lee family', type: 'family', memberIds: [userIds[7], userIds[8], userIds[9]]}),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  68
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">        teams.create({ name: 'Fires of Heaven', type: 'dungeon', memberIds: [userIds[0], userIds[1], userIds[7]]}),</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  69
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">      ]);</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  70
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">    })</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  71
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">    .then(() =&gt; {</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  72
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">      console.log('\nDatabases loaded.');</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  73
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">    })</span>
-                  </div>
-                </td>
-              </tr><tr>
-                <td class="d2h-code-side-linenumber d2h-ins">
-                  74
-                </td>
-                <td class="d2h-ins">
-                  <div class="d2h-code-side-line d2h-ins">
-                    <span class="d2h-code-line-prefix">+</span>
-                    <span class="d2h-code-line-ctn">}</span>
+                <td class="d2h-cntx">
+                  <div class="d2h-code-side-line d2h-cntx">
+                    <span class="d2h-code-line-prefix"> </span>
+                    <span class="d2h-code-line-ctn">  patch: [],</span>
                   </div>
                 </td>
               </tr>
@@ -931,4 +671,5 @@
 </div>
 </body>
 </html>
+
 
