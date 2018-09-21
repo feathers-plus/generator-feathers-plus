@@ -35,7 +35,7 @@ module.exports = class GraphqlGenerator extends Generator {
     this.log();
 
     const graphqlSpecs = specs.graphql;
-    const { mapping } = serviceSpecsExpand(specs);
+    const { mapping } = serviceSpecsExpand(specs, this);
 
     if (!Object.keys(mapping.feathers).length) {
       this.log('No services are configured as being served by GraphQL. ');
