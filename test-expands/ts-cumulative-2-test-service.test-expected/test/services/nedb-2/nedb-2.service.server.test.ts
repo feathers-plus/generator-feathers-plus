@@ -1,6 +1,5 @@
 
 /// <reference types="mocha"/>
-
 import assert from 'assert';
 import app from '../../../src1/app';
 import config from '../../../config/default.json';

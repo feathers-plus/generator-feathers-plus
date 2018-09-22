@@ -1,6 +1,5 @@
 
-<%- tplTsOnly('/// <reference types="mocha"/>') %>
-<%- tplTsOnly('') %>
+<%- tplTsOnly(`/// <reference types="mocha"/>${EOL}`) -%>
 <%- tplImports('assert', null) %>
 <%- tplImports('app', `${pathTestToApp}${specs.app.src}/app`) %>
 <%- tplImports('config', `${pathTestToApp}config/default.json`) %>

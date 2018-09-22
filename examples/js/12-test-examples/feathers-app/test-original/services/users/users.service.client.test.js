@@ -1,6 +1,4 @@
 
-
-
 const assert = require('assert');
 const feathersClient = require('@feathersjs/client');
 const io = require('socket.io-client');

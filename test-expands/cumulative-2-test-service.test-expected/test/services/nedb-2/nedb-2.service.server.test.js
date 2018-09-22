@@ -1,6 +1,4 @@
 
-
-
 const assert = require('assert');
 const app = require('../../../src1/app');
 const config = require('../../../config/default.json');

@@ -1,6 +1,5 @@
 
 /// <reference types="mocha"/>
-
 import assert from 'assert';
 import feathersClient from '@feathersjs/client';
 import io from 'socket.io-client';

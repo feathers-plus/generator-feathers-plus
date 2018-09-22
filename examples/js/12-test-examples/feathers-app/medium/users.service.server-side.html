@@ -55,44 +55,7 @@
                     <tr>
     <td class="d2h-code-side-linenumber d2h-info"></td>
     <td class="d2h-info">
-        <div class="d2h-code-side-line d2h-info">@@ -1,6 +1,4 @@</div>
-    </td>
-</tr><tr>
-    <td class="d2h-code-side-linenumber d2h-cntx">
-      1
-    </td>
-    <td class="d2h-cntx">
-        <div class="d2h-code-side-line d2h-cntx">
-            <span class="d2h-code-line-prefix"> </span>
-        </div>
-    </td>
-</tr><tr>
-    <td class="d2h-code-side-linenumber d2h-del">
-      2
-    </td>
-    <td class="d2h-del">
-        <div class="d2h-code-side-line d2h-del">
-            <span class="d2h-code-line-prefix">-</span>
-        </div>
-    </td>
-</tr><tr>
-    <td class="d2h-code-side-linenumber d2h-del">
-      3
-    </td>
-    <td class="d2h-del">
-        <div class="d2h-code-side-line d2h-del">
-            <span class="d2h-code-line-prefix">-</span>
-        </div>
-    </td>
-</tr><tr>
-    <td class="d2h-code-side-linenumber d2h-cntx">
-      4
-    </td>
-    <td class="d2h-cntx">
-        <div class="d2h-code-side-line d2h-cntx">
-            <span class="d2h-code-line-prefix"> </span>
-            <span class="d2h-code-line-ctn">const assert = require(&#x27;assert&#x27;);</span>
-        </div>
+        <div class="d2h-code-side-line d2h-info">@@ -5,7 +5,7 @@</div>
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
@@ -101,7 +64,6 @@
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
             <span class="d2h-code-line-prefix"> </span>
-            <span class="d2h-code-line-ctn">const app = require(&#x27;..&#x2F;..&#x2F;..&#x2F;src&#x2F;app&#x27;);</span>
         </div>
     </td>
 </tr><tr>
@@ -111,17 +73,66 @@
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
             <span class="d2h-code-line-prefix"> </span>
-            <span class="d2h-code-line-ctn">const config = require(&#x27;..&#x2F;..&#x2F;..&#x2F;config&#x2F;default.json&#x27;);</span>
+            <span class="d2h-code-line-ctn">&#x2F;&#x2F; Determine if environment allows test to mutate existing DB data.</span>
+        </div>
+    </td>
+</tr><tr>
+    <td class="d2h-code-side-linenumber d2h-cntx">
+      7
+    </td>
+    <td class="d2h-cntx">
+        <div class="d2h-code-side-line d2h-cntx">
+            <span class="d2h-code-line-prefix"> </span>
+            <span class="d2h-code-line-ctn">const env = (config.tests || {}).environmentsAllowingSeedData || [];</span>
+        </div>
+    </td>
+</tr><tr>
+    <td class="d2h-code-side-linenumber d2h-del">
+      8
+    </td>
+    <td class="d2h-del">
+        <div class="d2h-code-side-line d2h-del">
+            <span class="d2h-code-line-prefix">-</span>
+            <span class="d2h-code-line-ctn">if (!env.includes(process.env.NODE_ENV<del>))</del> {</span>
+        </div>
+    </td>
+</tr><tr>
+    <td class="d2h-code-side-linenumber d2h-cntx">
+      9
+    </td>
+    <td class="d2h-cntx">
+        <div class="d2h-code-side-line d2h-cntx">
+            <span class="d2h-code-line-prefix"> </span>
+            <span class="d2h-code-line-ctn">  &#x2F;&#x2F; eslint-disable-next-line no-console</span>
+        </div>
+    </td>
+</tr><tr>
+    <td class="d2h-code-side-linenumber d2h-cntx">
+      10
+    </td>
+    <td class="d2h-cntx">
+        <div class="d2h-code-side-line d2h-cntx">
+            <span class="d2h-code-line-prefix"> </span>
+            <span class="d2h-code-line-ctn">  console.log(&#x27;SKIPPED - Test users&#x2F;users.service.server.test.js&#x27;);</span>
+        </div>
+    </td>
+</tr><tr>
+    <td class="d2h-code-side-linenumber d2h-cntx">
+      11
+    </td>
+    <td class="d2h-cntx">
+        <div class="d2h-code-side-line d2h-cntx">
+            <span class="d2h-code-line-prefix"> </span>
         </div>
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-info"></td>
     <td class="d2h-info">
-        <div class="d2h-code-side-line d2h-info">@@ -26,20 +24,26 @@</div>
+        <div class="d2h-code-side-line d2h-info">@@ -23,20 +23,26 @@</div>
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      26
+      23
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -131,7 +142,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      27
+      24
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -141,7 +152,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      28
+      25
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -150,7 +161,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      29
+      26
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -160,7 +171,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      30
+      27
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -170,7 +181,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      31
+      28
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -180,7 +191,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      32
+      29
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -190,7 +201,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      33
+      30
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -200,7 +211,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      34
+      31
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -209,7 +220,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      35
+      32
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -219,7 +230,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      36
+      33
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -237,7 +248,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      37
+      34
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -246,7 +257,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      38
+      35
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -272,7 +283,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      39
+      36
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -281,7 +292,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      40
+      37
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -315,7 +326,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      41
+      38
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -324,7 +335,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      42
+      39
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -334,7 +345,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-del">
-      43
+      40
     </td>
     <td class="d2h-del">
         <div class="d2h-code-side-line d2h-del">
@@ -344,7 +355,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      44
+      41
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -354,7 +365,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      45
+      42
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -378,7 +389,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      1
+      5
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -387,48 +398,61 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      
-    </td>
-    <td class="d2h-cntx">
-        <div class="d2h-code-side-line d2h-cntx">
-        </div>
-    </td>
-</tr><tr>
-    <td class="d2h-code-side-linenumber d2h-cntx">
-      
-    </td>
-    <td class="d2h-cntx">
-        <div class="d2h-code-side-line d2h-cntx">
-        </div>
-    </td>
-</tr><tr>
-    <td class="d2h-code-side-linenumber d2h-cntx">
-      2
+      6
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
             <span class="d2h-code-line-prefix"> </span>
-            <span class="d2h-code-line-ctn">const assert = require(&#x27;assert&#x27;);</span>
+            <span class="d2h-code-line-ctn">&#x2F;&#x2F; Determine if environment allows test to mutate existing DB data.</span>
         </div>
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      3
+      7
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
             <span class="d2h-code-line-prefix"> </span>
-            <span class="d2h-code-line-ctn">const app = require(&#x27;..&#x2F;..&#x2F;..&#x2F;src&#x2F;app&#x27;);</span>
+            <span class="d2h-code-line-ctn">const env = (config.tests || {}).environmentsAllowingSeedData || [];</span>
+        </div>
+    </td>
+</tr><tr>
+    <td class="d2h-code-side-linenumber d2h-ins">
+      8
+    </td>
+    <td class="d2h-ins">
+        <div class="d2h-code-side-line d2h-ins">
+            <span class="d2h-code-line-prefix">+</span>
+            <span class="d2h-code-line-ctn">if (!env.includes(process.env.NODE_ENV<ins>)</ins> <ins>|| process.argv.includes(&#x27;--noclient&#x27;)) </ins>{</span>
         </div>
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      4
+      9
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
             <span class="d2h-code-line-prefix"> </span>
-            <span class="d2h-code-line-ctn">const config = require(&#x27;..&#x2F;..&#x2F;..&#x2F;config&#x2F;default.json&#x27;);</span>
+            <span class="d2h-code-line-ctn">  &#x2F;&#x2F; eslint-disable-next-line no-console</span>
+        </div>
+    </td>
+</tr><tr>
+    <td class="d2h-code-side-linenumber d2h-cntx">
+      10
+    </td>
+    <td class="d2h-cntx">
+        <div class="d2h-code-side-line d2h-cntx">
+            <span class="d2h-code-line-prefix"> </span>
+            <span class="d2h-code-line-ctn">  console.log(&#x27;SKIPPED - Test users&#x2F;users.service.server.test.js&#x27;);</span>
+        </div>
+    </td>
+</tr><tr>
+    <td class="d2h-code-side-linenumber d2h-cntx">
+      11
+    </td>
+    <td class="d2h-cntx">
+        <div class="d2h-code-side-line d2h-cntx">
+            <span class="d2h-code-line-prefix"> </span>
         </div>
     </td>
 </tr><tr>
@@ -438,7 +462,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      24
+      23
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -448,7 +472,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      25
+      24
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -458,7 +482,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      26
+      25
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -467,7 +491,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      27
+      26
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -477,7 +501,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      28
+      27
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -487,7 +511,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      29
+      28
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -497,7 +521,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      30
+      29
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -507,7 +531,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      31
+      30
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -517,7 +541,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      32
+      31
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -526,7 +550,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      33
+      32
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -536,7 +560,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      34
+      33
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -546,7 +570,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      35
+      34
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -556,7 +580,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      36
+      35
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -565,7 +589,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      37
+      36
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -575,7 +599,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      38
+      37
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -585,7 +609,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      39
+      38
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -595,7 +619,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      40
+      39
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -604,7 +628,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      41
+      40
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -614,7 +638,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      42
+      41
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -624,7 +648,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      43
+      42
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -634,7 +658,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      44
+      43
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -644,7 +668,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      45
+      44
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -653,7 +677,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      46
+      45
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -663,7 +687,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-ins">
-      47
+      46
     </td>
     <td class="d2h-ins">
         <div class="d2h-code-side-line d2h-ins">
@@ -673,7 +697,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      48
+      47
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">
@@ -683,7 +707,7 @@
     </td>
 </tr><tr>
     <td class="d2h-code-side-linenumber d2h-cntx">
-      49
+      48
     </td>
     <td class="d2h-cntx">
         <div class="d2h-code-side-line d2h-cntx">

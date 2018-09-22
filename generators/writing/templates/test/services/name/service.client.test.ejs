@@ -1,6 +1,5 @@
 
-<%- tplTsOnly('/// <reference types="mocha"/>') %>
-<%- tplTsOnly('') %>
+<%- tplTsOnly(`/// <reference types="mocha"/>${EOL}`) -%>
 <%- tplImports('assert', null) %>
 <%- tplImports('feathersClient', '@feathersjs/client') %>
 <%- tplImports('io', 'socket.io-client') %>
