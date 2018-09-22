@@ -1,7 +1,4 @@
 
-
-
-
 const assert = require('assert');
 const normalizeQuery = require('../../src/hooks/normalize-query');
 

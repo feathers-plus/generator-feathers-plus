@@ -1,7 +1,6 @@
 
-<%- tplTsOnly('/// <reference types="mocha"/>') %>
-<%- tplTsOnly(`import { HookContext } from '@feathersjs/feathers'${sc}`) %>
-<%- tplTsOnly('') %>
+<%- tplTsOnly(`/// <reference types="mocha"/>${EOL}`) -%>
+<%- tplTsOnly(`import { HookContext } from '@feathersjs/feathers'${sc}${EOL}${EOL}`) -%>
 <%- tplImports('assert', null) %>
 <%- tplImports(hookName, pathTestToHook) %>
 
@@ -13,7 +12,7 @@ describe('Test <%- serviceFileName -%><%- hookFileName -%><%- htt%>.test.<%- js 
 
   beforeEach(() => {
     contextBefore = {
-<%- tplTsOnly('      service: null!,') %>
+<%- tplTsOnly(`      service: null!,${EOL}`) -%>
       type: 'before',
       params: { provider: 'socketio' },
       data: {
@@ -22,7 +21,7 @@ describe('Test <%- serviceFileName -%><%- hookFileName -%><%- htt%>.test.<%- js 
     }<%- sc %>
 
     contextAfter = {
-<%- tplTsOnly('      service: null!,') %>
+<%- tplTsOnly(`      service: null!,${EOL}`) -%>
       type: 'after',
       params: { provider: 'socketio' },
       result: {
@@ -31,7 +30,7 @@ describe('Test <%- serviceFileName -%><%- hookFileName -%><%- htt%>.test.<%- js 
     }<%- sc %>
 
     contextAfterMultiple = {
-<%- tplTsOnly('      service: null!,') %>
+<%- tplTsOnly(`      service: null!,${EOL}`) -%>
       type: 'after',
       params: { provider: 'socketio' },
       result: [
@@ -40,7 +39,7 @@ describe('Test <%- serviceFileName -%><%- hookFileName -%><%- htt%>.test.<%- js 
     }<%- sc %>
 
     contextAfterPaginated = {
-<%- tplTsOnly('      service: null!,') %>
+<%- tplTsOnly(`      service: null!,${EOL}`) -%>
       type: 'after',
       method: 'find',
       params: { provider: 'socketio' },

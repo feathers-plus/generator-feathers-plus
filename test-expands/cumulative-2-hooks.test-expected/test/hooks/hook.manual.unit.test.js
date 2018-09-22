@@ -1,7 +1,4 @@
 
-
-
-
 const assert = require('assert');
 const hookManual = require('../../src1/hooks/hook.manual');
 
@@ -13,7 +10,6 @@ describe('Test /hooks/hook.manual.unit.test.js', () => {
 
   beforeEach(() => {
     contextBefore = {
-
       type: 'before',
       params: { provider: 'socketio' },
       data: {
@@ -22,7 +18,6 @@ describe('Test /hooks/hook.manual.unit.test.js', () => {
     };
 
     contextAfter = {
-
       type: 'after',
       params: { provider: 'socketio' },
       result: {
@@ -31,7 +26,6 @@ describe('Test /hooks/hook.manual.unit.test.js', () => {
     };
 
     contextAfterMultiple = {
-
       type: 'after',
       params: { provider: 'socketio' },
       result: [
@@ -40,7 +34,6 @@ describe('Test /hooks/hook.manual.unit.test.js', () => {
     };
 
     contextAfterPaginated = {
-
       type: 'after',
       method: 'find',
       params: { provider: 'socketio' },

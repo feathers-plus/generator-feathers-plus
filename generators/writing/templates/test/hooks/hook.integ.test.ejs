@@ -1,7 +1,6 @@
 
-<%- tplTsOnly('/// <reference types="mocha"/>') %>
-<%- tplTsOnly(`import feathers, { Params, Service, Application } from '@feathersjs/feathers'${sc}`) %>
-<%- tplTsOnly('')-%>
+<%- tplTsOnly(`/// <reference types="mocha"/>${EOL}`) -%>
+<%- tplTsOnly(`import feathers, { Params, Service, Application } from '@feathersjs/feathers'${sc}${EOL}`) -%>
 <%- tplImports('assert', null) %>
 <%- tplImports('feathers', '@feathersjs/feathers') %>
 <%- tplImports('{ join }', 'path') %>

@@ -1,6 +1,4 @@
 
-
-
 const assert = require('assert');
 const feathers = require('@feathersjs/feathers');
 const { join } = require('path');

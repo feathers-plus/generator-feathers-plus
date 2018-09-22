@@ -10,7 +10,6 @@ describe('Test /hooks/discard.unit.test.js', () => {
 
   beforeEach(() => {
     contextBefore = {
-
       type: 'before',
       params: { provider: 'socketio' },
       data: {
@@ -19,7 +18,6 @@ describe('Test /hooks/discard.unit.test.js', () => {
     };
 
     contextAfter = {
-
       type: 'after',
       params: { provider: 'socketio' },
       result: {
@@ -28,7 +26,6 @@ describe('Test /hooks/discard.unit.test.js', () => {
     };
 
     contextAfterMultiple = {
-
       type: 'after',
       params: { provider: 'socketio' },
       result: [
@@ -38,7 +35,6 @@ describe('Test /hooks/discard.unit.test.js', () => {
     };
 
     contextAfterPaginated = {
-
       type: 'after',
       method: 'find',
       params: { provider: 'socketio' },

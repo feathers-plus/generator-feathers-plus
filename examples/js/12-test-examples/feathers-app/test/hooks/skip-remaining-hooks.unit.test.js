@@ -8,7 +8,6 @@ describe('Test /hooks/skip-remaining-hooks.unit.test.js', () => {
 
   beforeEach(() => {
     contextBefore = {
-      
       type: 'before',
       params: { provider: 'socketio' },
       data: {
@@ -17,7 +16,6 @@ describe('Test /hooks/skip-remaining-hooks.unit.test.js', () => {
     };
 
     contextAfter = {
-      
       type: 'after',
       params: { provider: 'socketio' },
       result: {
