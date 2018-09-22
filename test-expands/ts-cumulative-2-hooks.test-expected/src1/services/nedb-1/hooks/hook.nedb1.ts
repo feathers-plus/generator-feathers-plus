@@ -11,7 +11,7 @@ export default function (options: any = {}): Hook {
   // Return the actual hook.
   return async (context) => {
     // Throw if the hook is being called from an unexpected location.
-    checkContext(context, 'after', ['find', 'get', 'create', 'update', 'patch', 'remove']);
+    checkContext(context, null, ['find', 'get', 'create', 'update', 'patch', 'remove']);
 
     // Get the authenticated user.
     // tslint:disable-next-line:no-unused-variable
