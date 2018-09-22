@@ -28,7 +28,7 @@
     "dev": "nodemon src/",
     "start": "node src/",
     "start:seed": "NODE_ENV=test node src/ --seed",
-    "mocha": "mocha test/ --recursive --exit --timeout 30000"
+    "mocha": "mocha test/ --recursive --exit --timeout 90000"
   },
   "dependencies": {
     "@feathers-plus/graphql": "^1.9.0",
