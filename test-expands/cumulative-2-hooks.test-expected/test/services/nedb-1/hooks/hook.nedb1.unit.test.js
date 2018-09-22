@@ -48,7 +48,8 @@ describe('Test nedb-1/hooks/hook.nedb1.unit.test.js', () => {
         data: [
 
         ]
-      } };
+      }
+    };
     contextAfterPaginated.result.total = contextAfterPaginated.result.data.length;
   });
 

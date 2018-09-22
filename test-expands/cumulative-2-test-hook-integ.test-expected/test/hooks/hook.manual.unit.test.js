@@ -48,7 +48,8 @@ describe('Test /hooks/hook.manual.unit.test.js', () => {
         data: [
 
         ]
-      } };
+      }
+    };
     contextAfterPaginated.result.total = contextAfterPaginated.result.data.length;
   });
 
