@@ -7,7 +7,7 @@ import config from '../../../config/default.json';
 
 // Determine if environment allows test to mutate existing DB data.
 const env = (config.tests || {}).environmentsAllowingSeedData || [];
-if (!env.includes(process.env.NODE_ENV)) {
+if (!env.includes(process.env.NODE_ENV) || process.argv.includes('--noclient')) {
   // tslint:disable-next-line:no-console
   console.log('SKIPPED - Test nedb-2/nedb-2.service.server.test.ts');
   // @ts-ignore

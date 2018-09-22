@@ -7,7 +7,7 @@ const config = require('../../../config/default.json');
 
 // Determine if environment allows test to mutate existing DB data.
 const env = (config.tests || {}).environmentsAllowingSeedData || [];
-if (!env.includes(process.env.NODE_ENV)) {
+if (!env.includes(process.env.NODE_ENV) || process.argv.includes('--noclient')) {
   // eslint-disable-next-line no-console
   console.log('SKIPPED - Test nedb-1/nedb-1.service.server.test.js');
 

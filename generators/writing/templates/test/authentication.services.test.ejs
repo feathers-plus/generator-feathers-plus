@@ -5,8 +5,7 @@
 
 // Determine if environment allows test to mutate existing DB data.
 const env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
-const dbChangesAllowed = env.indexOf(process.env.NODE_ENV) !== -1<%- sc %>
-if (!dbChangesAllowed) {
+if (!env.includes(process.env.NODE_ENV) || process.argv.includes('--noclient')) {
   // <%- lintDisableNextLineNoConsole %>
   console.log('SKIPPED - Test authentication.services.<%- js -%>')<%- sc %>
 <%- tplTsOnly('  // @ts-ignore') %>
