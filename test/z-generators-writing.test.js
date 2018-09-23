@@ -157,10 +157,6 @@ const tests = [
   // Service names remain nedb1 & nedb2; use default connection string.
     { testName: 'cumulative-2-nedb-batchloaders.test' },
 
-  // Test switch from kebabCase naming of folders and files
-  // Its tests TEST AUTHENTICATION and should be periodically run with dependency loading
-    { testName: 'cumulative-2-test-auth.test' },
-
   // Test hook generation with associated tests
     { testName: 'cumulative-2-hooks.test' },
 
@@ -203,6 +199,7 @@ const tests = [
     },
 
   // Test generating authentication tests
+  // Its tests TEST AUTHENTICATION and should be periodically run with dependency loading
     { testName: 'cumulative-2-test-authentication.test',
       specsChanges: [
         { generate: 'test', prompts: { testType: 'authBase' } },
