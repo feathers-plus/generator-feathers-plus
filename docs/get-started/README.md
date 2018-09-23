@@ -2934,6 +2934,11 @@ or [TS one](https://github.com/feathers-plus/generator-feathers-plus/tree/master
 - **test/services/serviceName** The tests for services are located in this folder.
 - **test** The authentication tests are located in this folder.
 
+#### More information
+
+More information regarding `generate test` is available in the article
+[Automatic tests with feathers-plus/cli](https://medium.com/feathers-plus/automatic-tests-with-feathers-plus-cli-4844721a29cf).
+
 ## What We Have Accomplished
 
 REST and GraphQL are totally different. Each is dope *if used for the right thing.*
