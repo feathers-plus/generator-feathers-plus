@@ -60,9 +60,9 @@ let validatePatch = <%- tplJsOrTs('options', '(options?: any)') %> => {
 
 let quickValidate = <%- tplJsOrTs('(method, data, options)', '(method: string, data: any, options?: any)') %> => {
   try {
-    if (method === 'create') { validateCreate(options)({ type: 'before', method: 'create', data })<%- sc %> }
-    if (method === 'update') { validateCreate(options)({ type: 'before', method: 'update', data })<%- sc %> }
-    if (method === 'patch') { validateCreate(options)({ type: 'before', method: 'patch', data })<%- sc %> }
+    if (method === 'create') { validateCreate(options)({ type: 'before', method: 'create', data }<%- tplTsOnly(' as any') -%>)<%- sc %> }
+    if (method === 'update') { validateCreate(options)({ type: 'before', method: 'update', data }<%- tplTsOnly(' as any') -%>)<%- sc %> }
+    if (method === 'patch') { validateCreate(options)({ type: 'before', method: 'patch', data }<%- tplTsOnly(' as any') -%>)<%- sc %> }
   } catch (err) {
     return err<%- sc %>
   }
