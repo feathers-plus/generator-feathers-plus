@@ -576,6 +576,8 @@ module.exports = function generatorWriting (generator, what) {
     // inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
 
     // Custom template context.
+    const { typescriptTypes, typescriptExtends } =
+      serviceSpecsToTypescript(specsService, feathersSpecs[name], feathersSpecs[name]._extensions);
     context = Object.assign({}, context, {
       serviceName: name,
       serviceNameSingular: specsService.nameSingular,
@@ -600,12 +602,11 @@ module.exports = function generatorWriting (generator, what) {
       serviceModule,
       mongoJsonSchema: serviceSpecsToMongoJsonSchema(feathersSpecs[name], feathersSpecs[name]._extensions),
       mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
-      typescriptTypes: serviceSpecsToTypescript(specsService, feathersSpecs[name], feathersSpecs[name]._extensions),
     });
     context.mongoJsonSchemaStr = stringifyPlus(context.mongoJsonSchema);
     context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs: mongooseNativeFuncs });
-    context.typescriptTypesStr = context.typescriptTypes.map(str => `  ${str}`).join(`${context.sc}${EOL}`) +
-      (context.typescriptTypes.length ? `${context.sc}` : '');
+    context.typescriptTypesStr = typescriptTypes.map(str => `  ${str}${context.sc}`).join(`${EOL}`);
+    context.typescriptExtendsStr = typescriptExtends.map(str => `  ${str}${context.sc} // change if needed`).join(`${EOL}`);
 
     const { seqModel, seqFks } = serviceSpecsToSequelize(feathersSpecs[name], feathersSpecs[name]._extensions);
     context.sequelizeSchema = seqModel;
@@ -621,6 +622,8 @@ module.exports = function generatorWriting (generator, what) {
     // inspector(`\n... sequelizeFks ${name} (generator ${what})`, context.sequelizeFks);
     // inspector(`\n... typescriptTypes ${name} (generator ${what})`, context.typescriptTypes);
     // inspector(`\n... typescriptTypesStr ${name} (generator ${what})`, context.typescriptTypesStr.split('\n'));
+    // inspector(`\n... typescriptExtends${name} (generator ${what})`, context.typescriptExtends);
+    // inspector(`\n... typescriptExtendsStr ${name} (generator ${what})`, context.typescriptExtendsStr.split('\n'));
     // inspector(`\n... context (generator ${what})`, context);
 
     const dependencies = ['ajv'];

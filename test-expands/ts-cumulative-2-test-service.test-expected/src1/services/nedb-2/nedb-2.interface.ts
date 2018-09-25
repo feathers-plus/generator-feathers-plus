@@ -6,13 +6,17 @@
 // tslint:disable-next-line:no-empty-interface
 export interface Nedb2Base {
   // !<DEFAULT> code: interface
-  _id: string;
+  _id: unknown;
+  nedb1Id: unknown;
   // !end
 }
 
 // tslint:disable-next-line:no-empty-interface
 export interface Nedb2 extends Nedb2Base {
-  // !code: more // !end
+  // !<DEFAULT> code: more
+  _id: any; // change if needed
+  nedb1Id: any; // change if needed
+  // !end
 }
 
 // !code: funcs // !end

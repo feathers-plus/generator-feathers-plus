@@ -6,14 +6,16 @@
 // tslint:disable-next-line:no-empty-interface
 export interface Users1Base {
   // !<DEFAULT> code: interface
-  _id: string;
+  _id: unknown;
   name: string;
   // !end
 }
 
 // tslint:disable-next-line:no-empty-interface
 export interface Users1 extends Users1Base {
-  // !code: more // !end
+  // !<DEFAULT> code: more
+  _id: any; // change if needed
+  // !end
 }
 
 // !code: funcs // !end

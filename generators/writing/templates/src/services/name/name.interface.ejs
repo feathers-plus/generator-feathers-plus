@@ -11,7 +11,7 @@ export interface <%- __name %>Base {
 
 // tslint:disable-next-line:no-empty-interface
 export interface <%- __name %> extends <%- __name %>Base {
-  <%- insertFragment('more') %>
+  <%- insertFragment('more', typescriptExtendsStr) %>
 }
 
 <%- insertFragment('funcs') %>
