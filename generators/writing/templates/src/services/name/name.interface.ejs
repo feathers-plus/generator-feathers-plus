@@ -3,12 +3,16 @@
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-<%- insertFragment('nedb_interface', [
-  '// tslint:disable-next-line:no-empty-interface',
-  `export interface ${upperFirst(specs.services[camelName].nameSingular)} {`,
-  typescriptTypesStr,
-  '}',
-]) %>
+<% __name = upperFirst(specs.services[camelName].nameSingular) -%>
+// tslint:disable-next-line:no-empty-interface
+export interface <%- __name %>Base {
+  <%- insertFragment('interface', typescriptTypesStr) %>
+}
+
+// tslint:disable-next-line:no-empty-interface
+export interface <%- __name %> extends <%- __name %>Base {
+  <%- insertFragment('more') %>
+}
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>

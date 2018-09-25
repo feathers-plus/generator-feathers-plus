@@ -30,7 +30,7 @@ const tests = [
    `npm test` runs both of the above.
    The tests stop running on the first assertion failure.
    */
-
+/*
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -268,8 +268,8 @@ const tests = [
     { testName: 'name-space.test' },
 
   // test old and new service folder/file naming
-    { testName: 'service-naming.test', /* execute: true */ },
-
+    { testName: 'service-naming.test' }, // execute: true
+*/
   // .ts version of cconst logger = require('./logger')umulative-1-nedb.test
     { testName: 'ts-cumulative-1-nedb.test' },
 

@@ -3,12 +3,15 @@
 // !code: imports // !end
 // !code: init // !end
 
-// !<DEFAULT> code: nedb_interface
 // tslint:disable-next-line:no-empty-interface
-export interface Nedb6 {
-
+export interface Nedb6Base {
+  // !code: interface // !end
 }
-// !end
+
+// tslint:disable-next-line:no-empty-interface
+export interface Nedb6 extends Nedb6Base {
+  // !code: more // !end
+}
 
 // !code: funcs // !end
 // !code: end // !end
