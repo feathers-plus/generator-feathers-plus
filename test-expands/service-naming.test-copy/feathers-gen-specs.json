@@ -1,7 +1,8 @@
 {
   "overrides": {
     "authorName": "John Szwaronek",
-    "authorEmail": "johnsz9999@gmail.com"
+    "authorEmail": "johnsz9999@gmail.com",
+    "engineNodeMajor": 8
   },
   "options": {
     "ver": "1.0.0",
