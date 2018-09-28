@@ -2,9 +2,9 @@ const semver = require('semver');
 
 module.exports = function(generator) {
 
-  const { props, _specs: specs } = generator;
+  const { _specs: specs } = generator;
   const [ packager, version ] = specs.app.packager.split('@');
-  const major = specs.overrides.engineNodeMajor || semver.major(process.version);
+  const major = (specs.overrides || {}).engineNodeMajor || semver.major(process.version);
 
   const pkg = {
     name: specs.app.name,
