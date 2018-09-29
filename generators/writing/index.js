@@ -56,6 +56,8 @@ const sequelizeNativeFuncs = {
   [Sequelize.REAL]: 'DataTypes.REAL',
   [Sequelize.STRING]: 'DataTypes.STRING',
   [Sequelize.TEXT]: 'DataTypes.TEXT',
+  [Sequelize.DATE]: 'DataTypes.DATE',
+  [Sequelize.DATEONLY]: 'DataTypes.DATEONLY',
 };
 
 // type:   'tpl' - expand template, 'copy' - copy file, 'json' - write JSON as file.
