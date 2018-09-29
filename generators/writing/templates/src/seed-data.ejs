@@ -38,7 +38,7 @@ module.exports = async function (app<%- tplTsOnly(': App') %>) {
     if (services.hasOwnProperty(serviceName)) {
       const { name, adapter, path } = services[serviceName]<%- sc %>
       <%- insertFragment('seed_select', [
-        `const doSeed = adapter !== 'generic'${sc}`
+        `      const doSeed = adapter !== 'generic'${sc}`
       ]) %>
 
       if (doSeed) {
@@ -47,9 +47,9 @@ module.exports = async function (app<%- tplTsOnly(': App') %>) {
             const service = app.service(path)<%- sc %>
 
             <%- insertFragment('seed_try', [
-              `const deleted = await service.remove(null)${sc}`,
-              `const result = await service.create(fakeData[name])${sc}`,
-              'console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`)' + sc,
+              `            const deleted = await service.remove(null)${sc}`,
+              `            const result = await service.create(fakeData[name])${sc}`,
+              '            console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`)' + sc,
             ]) %>
           } catch (err) {
             console.log(`Error on seeding service ${name} on path ${path}`, err.message)<%- sc %>
