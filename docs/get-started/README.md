@@ -780,6 +780,12 @@ that is, the field contains the key to another record.
 
 - **type: {}** The default is 'string'.
 
+:::tip Sequelize
+Sequelize by default adds the fields createdAt and updatedAt to records.
+You need to define these 2 fields in the JSON-schema model as that model is DB agnostic.
+Define them as `createdAt: { format: 'date-time' }`.
+:::
+
 :::tip Centralizing field definitions
 Rather than defining the properties of the same type of field, e.g. *description*, in every model its defined in,
 you can define the field type once and refer to it from models using the **$ref** property.

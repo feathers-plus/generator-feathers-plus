@@ -18,7 +18,7 @@ let fakeData = readJsonFileSync(join(__dirname, '../seeds/fake-data.json')) || {
 
 // Get generated services
 let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) || {}).services;
-// !code: init // !end>
+// !code: init // !end
 
 module.exports = async function (app: App) {
   // !code: func_init // !end
@@ -34,32 +34,34 @@ module.exports = async function (app: App) {
     return;
   }
 
-  Object.keys(services).forEach(async serviceName => {
-    const { name, adapter, path } = services[serviceName];
-    // !<DEFAULT> code: seed_select
-    const doSeed = adapter !== 'generic';
-    // !end
+  for (const serviceName in services) {
+    if (services.hasOwnProperty(serviceName)) {
+      const { name, adapter, path } = services[serviceName];
+      // !<DEFAULT> code: seed_select
+      const doSeed = adapter !== 'generic';
+      // !end
 
-    if (doSeed) {
-      if (fakeData[name] && fakeData[name].length) {
-        try {
-          const service = app.service(path);
+      if (doSeed) {
+        if (fakeData[name] && fakeData[name].length) {
+          try {
+            const service = app.service(path);
 
-          // !<DEFAULT> code: seed_try
-          const deleted = await service.remove(null);
-          const result = await service.create(fakeData[name]);
-          console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`);
-          // !end
-        } catch (err) {
-          console.log(`Error on seeding service ${name} on path ${path}`, err.message);
+            // !<DEFAULT> code: seed_try
+            const deleted = await service.remove(null);
+            const result = await service.create(fakeData[name]);
+            console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`);
+            // !end
+          } catch (err) {
+            console.log(`Error on seeding service ${name} on path ${path}`, err.message);
+          }
+        } else {
+          console.log(`Not seeding service ${name} on path ${path}. No seed data.`);
         }
       } else {
-        console.log(`Not seeding service ${name} on path ${path}. No seed data.`);
+        console.log(`Not seeding generic service ${name} on path ${path}.`);
       }
-    } else {
-      console.log(`Not seeding generic service ${name} on path ${path}.`);
     }
-  });
+  }
   // !code: func_return // !end
 };
 

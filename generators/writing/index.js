@@ -419,13 +419,14 @@ module.exports = function generatorWriting (generator, what) {
 
     // generate name.json files for test environments
     configDefault.tests.environmentsAllowingSeedData.forEach(envName => {
+      const defaultConfigTest = makeConfig.configTest(generator, envName);
       const configTest = specs._testJson = generator.fs.readJSON(
-        generator.destinationPath(`${appConfigPath}/${envName}.json`), makeConfig.configTest(generator)
+        generator.destinationPath(`${appConfigPath}/${envName}.json`), defaultConfigTest
       );
 
       const connectionStrings = ['mongodb', 'mysql', 'nedb', 'postgres', 'rethinkdb', 'sqlite', 'mssql'];
       connectionStrings.forEach(name => {
-        configTest[name] = configTest[name] || ' ';
+        configTest[name] = configTest[name] || defaultConfigTest[name];
       });
 
       todos.push(
