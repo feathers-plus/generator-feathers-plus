@@ -1,8 +1,8 @@
 
 // Configure the Feathers services. (Can be re-generated.)
-let nedb1 = require('./nedb-1/nedb-1.service');
-let nedb2 = require('./nedb-2/nedb-2.service');
-let users1 = require('./users-1/users-1.service');
+let nedb1 = require('./nedb1/nedb1.service');
+let nedb2 = require('./nedb2/nedb2.service');
+let users1 = require('./users1/users1.service');
 
 let graphql = require('./graphql/graphql.service');
 // !code: imports // !end

@@ -30,100 +30,6 @@ const tests = [
    `npm test` runs both of the above.
    The tests stop running on the first assertion failure.
    */
-  /*
-  { testName: 'cumulative-0-generators.test',
-    specsChanges: [
-      { generate: 'app',
-        prompts: {
-          name: 'z-1',
-          src: 'src1',
-          description: 'Project z-1',
-          packager: 'npm@>= 3.0.0',
-          providers: [ 'rest', 'socketio' ],
-          environmentsAllowingSeedData: 'test',
-          seedData: false
-        }
-      },
-      { generate: 'authentication',
-        prompts: {
-          strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
-          entity: 'users1'
-        }
-      },
-      { generate: 'service',
-        prompts: {
-          name: 'users1',
-          isAuthEntity: true,
-          nameSingular: 'users1',
-          adapter: 'nedb',
-          subFolder: '',
-          path: '/users-1',
-          graphql: false
-        }
-      },
-      { generate: 'connection',
-        prompts: {
-          adapter: 'nedb',
-          service: 'users1',
-          database: 'nedb',
-          connectionString: 'nedb://../data'
-        }
-      },
-      { generate: 'service',
-        prompts: {
-          isAuthEntity: false,
-          requiresAuth: true,
-          name: 'nedb1',
-          nameSingular: 'nedb1',
-          adapter: 'nedb',
-          subFolder: '',
-          path: '/nedb-1',
-          graphql: true
-        }
-      },
-      { generate: 'service',
-        prompts: {
-          isAuthEntity: false,
-          requiresAuth: false,
-          name: 'nedb2',
-          nameSingular: 'nedb2',
-          adapter: 'nedb',
-          subFolder: '',
-          path: '/nedb-2',
-          graphql: true
-        }
-      },
-      { generate: 'middleware',
-        prompts: {
-          name: 'mw1',
-          path: '*',
-          kebabName: 'mw-1',
-          camelName: 'mw1'
-        }
-      },
-      { generate: 'middleware',
-        prompts: {
-          name: 'mw2',
-          path: 'mw2',
-          kebabName: 'mw-2',
-          camelName: 'mw2'
-        }
-      },
-      { generate: 'graphql',
-        prompts: {
-          strategy: 'services',
-          path: '/graphql',
-          requiresAuth: false,
-          snakeName: 'graphql',
-          kebabName: 'graphql',
-          camelName: 'graphql'
-        }
-      },
-    ],
-    compareDirs: true,
-    execute: false,
-  },
-  */
 
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
@@ -298,6 +204,100 @@ const tests = [
       specsChanges: [
         { generate: 'test', prompts: { testType: 'authBase' } },
         { generate: 'test', prompts: { testType: 'authServices' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
+
+  // Test generating app using only generate commands (except for an initialization step)
+    { testName: 'cumulative-6-generators.test',
+      specsChanges: [
+        { generate: 'app',
+          prompts: {
+            name: 'z-1',
+            src: 'src1',
+            description: 'Project z-1',
+            packager: 'npm@>= 3.0.0',
+            providers: [ 'rest', 'socketio' ],
+            environmentsAllowingSeedData: 'test',
+            seedData: false
+          }
+        },
+        { generate: 'connection',
+          prompts: {
+            database: 'nedb',
+            connectionString: '../data'
+          }
+        },
+        { generate: 'service',
+          prompts: {
+            name: 'users1',
+            nameSingular: 'users1',
+            subFolder: '',
+            adapter: 'nedb',
+            path: '/users-1',
+            graphql: false
+          },
+          calledByTest: { name: 'users1' }
+        },
+        { generate: 'authentication',
+          prompts: {
+            strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
+            entity: 'users1'
+          }
+        },
+        { generate: 'service',
+          prompts: {
+            isAuthEntity: false,
+            requiresAuth: true,
+            name: 'nedb1',
+            nameSingular: 'nedb1',
+            adapter: 'nedb',
+            subFolder: '',
+            path: '/nedb-1',
+            graphql: true
+          },
+          calledByTest: { name: 'nedb1' }
+        },
+        { generate: 'service',
+          prompts: {
+            isAuthEntity: false,
+            requiresAuth: false,
+            name: 'nedb2',
+            nameSingular: 'nedb2',
+            adapter: 'nedb',
+            subFolder: '',
+            path: '/nedb-2',
+            graphql: true
+          },
+          calledByTest: { name: 'nedb2' }
+        },
+        { generate: 'middleware',
+          prompts: {
+            name: 'mw1',
+            path: '*',
+            kebabName: 'mw-1',
+            camelName: 'mw1'
+          }
+        },
+        { generate: 'middleware',
+          prompts: {
+            name: 'mw2',
+            path: 'mw2',
+            kebabName: 'mw-2',
+            camelName: 'mw2'
+          }
+        },
+        { generate: 'graphql',
+          prompts: {
+            strategy: 'services',
+            path: '/graphql',
+            requiresAuth: false,
+            snakeName: 'graphql',
+            kebabName: 'graphql',
+            camelName: 'graphql'
+          }
+        },
       ],
       compareDirs: true,
       execute: false,
@@ -511,7 +511,7 @@ function runFirstGeneration (testName, withOptions) {
       confirmation: true,
       action: 'force' // force file overwrites
     })
-    .withOptions(withOptions);
+    .withOptions(Object.assign({}, { calledByTest: true }, withOptions));
 }
 
 // Run subsequent generators
@@ -542,7 +542,7 @@ function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
         specsChg.prompts,
         { action: 'force' }, // force file overwrites
       ))
-      .withOptions(withOptions)
+      .withOptions(Object.assign({}, { calledByTest: specsChg.calledByTest || true }, withOptions))
       .then(dir => {
         // There are no more generation steps
         if (!specsChanges.length) {

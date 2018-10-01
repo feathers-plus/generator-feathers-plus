@@ -11,6 +11,7 @@
       "test"
     ]
   },
+  "nedb": "../data",
   "authentication": {
     "secret": "***** secret generated for tests *****",
     "strategies": [
@@ -83,6 +84,5 @@
       "httpOnly": false,
       "secure": false
     }
-  },
-  "nedb": "../data"
+  }
 }

@@ -20,5 +20,5 @@
       "socketio"
     ],
     "environmentsAllowingSeedData": "test"
-  },
+  }
 }

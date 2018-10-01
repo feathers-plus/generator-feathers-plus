@@ -28,17 +28,18 @@
       "name": "users1",
       "nameSingular": "users1",
       "subFolder": "",
-      "fileName": "users-1",
+      "fileName": "users1",
       "adapter": "nedb",
       "path": "/users-1",
       "isAuthEntity": true,
-      "graphql": false
+      "graphql": false,
+      "requiresAuth": true
     },
     "nedb1": {
       "name": "nedb1",
       "nameSingular": "nedb1",
       "subFolder": "",
-      "fileName": "nedb-1",
+      "fileName": "nedb1",
       "adapter": "nedb",
       "path": "/nedb-1",
       "isAuthEntity": false,
@@ -49,12 +50,20 @@
       "name": "nedb2",
       "nameSingular": "nedb2",
       "subFolder": "",
-      "fileName": "nedb-2",
+      "fileName": "nedb2",
       "adapter": "nedb",
       "path": "/nedb-2",
       "isAuthEntity": false,
       "requiresAuth": false,
       "graphql": true
+    }
+  },
+  "hooks": {},
+  "connections": {
+    "nedb": {
+      "database": "nedb",
+      "adapter": "nedb",
+      "connectionString": "../data"
     }
   },
   "authentication": {
@@ -66,13 +75,6 @@
       "github"
     ],
     "entity": "users1"
-  },
-  "connections": {
-    "nedb": {
-      "database": "nedb",
-      "adapter": "nedb",
-      "connectionString": "../data"
-    }
   },
   "middlewares": {
     "mw1": {
@@ -87,10 +89,10 @@
     }
   },
   "graphql": {
-    "name": "graphql",
     "path": "/graphql",
     "strategy": "services",
     "sqlInterface": null,
-    "requiresAuth": false
+    "requiresAuth": false,
+    "name": "graphql"
   }
 }

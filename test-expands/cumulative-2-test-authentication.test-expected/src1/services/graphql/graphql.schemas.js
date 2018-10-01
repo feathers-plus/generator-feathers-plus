@@ -18,20 +18,12 @@ type Nedb2 {
   nedb1: Nedb1!
 }
  
-type Users1 {
-  id: ID
-  _id: ID
-  name: String
-}
- 
 
 type Query {
   getNedb1(key: JSON, query: JSON, params: JSON): Nedb1
   findNedb1(query: JSON, params: JSON): [Nedb1]!
   getNedb2(key: JSON, query: JSON, params: JSON): Nedb2
   findNedb2(query: JSON, params: JSON): [Nedb2]!
-  getUsers1(key: JSON, query: JSON, params: JSON): Users1
-  findUsers1(query: JSON, params: JSON): [Users1]!
 }
 `;
 

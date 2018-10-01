@@ -7,7 +7,7 @@ const commonHooks = require('feathers-hooks-common');
 // eslint-disable-next-line no-unused-vars
 const { iff } = commonHooks;
 // eslint-disable-next-line no-unused-vars
-const { create, update, patch, validateCreate, validateUpdate, validatePatch } = require('./nedb-2.validate');
+const { create, update, patch, validateCreate, validateUpdate, validatePatch } = require('./nedb2.validate');
 // !end
 
 // !code: init // !end

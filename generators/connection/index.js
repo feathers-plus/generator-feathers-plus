@@ -165,8 +165,10 @@ module.exports = class ConnectionGenerator extends Generator {
       }
     }];
 
-    return this.prompt(prompts).then(props => {
-      this.props = Object.assign(this.props, props);
+    return this.prompt(prompts).then(answers => {
+      answers.adapter = answers.adapter || answers.database;
+
+      Object.assign(this.props, answers);
     });
   }
 

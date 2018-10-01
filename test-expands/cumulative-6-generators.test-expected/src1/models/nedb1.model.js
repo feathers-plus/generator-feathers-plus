@@ -9,7 +9,7 @@ let moduleExports = function (app) {
   const dbPath = app.get('nedb');
   // !<DEFAULT> code: nedb_client
   let Model = new NeDB({
-    filename: path.join(dbPath, 'nedb-1.db'),
+    filename: path.join(dbPath, 'nedb1.db'),
     autoload: true
   });
   // !end

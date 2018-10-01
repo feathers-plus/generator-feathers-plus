@@ -35,6 +35,13 @@ module.exports = class ServiceGenerator extends Generator {
       serviceSpecs = specs.services[props.name];
     }
 
+    // z-generator-writing.test.js calls us with _opts: { calledByTest: { name: serviceName } }
+    if (this._opts.calledByTest && this._opts.calledByTest.name) {
+      props.name = this._opts.calledByTest.name;
+      initSpecs('service', { name: props.name });
+      serviceSpecs = specs.services[props.name];
+    }
+
     if (specs.authentication && !ifCalledByAuthentication) {
       props.requiresAuth = false;
     }
@@ -68,10 +75,11 @@ module.exports = class ServiceGenerator extends Generator {
       message: 'What is the name of the service?',
       /*
       filter (input) {
-        return generator.makeFileName(input);
+        return generator.makeFileName(input); // used for allowing dot notation. see issue #59.
       },
       */
       validate (input) {
+        console.log('...gen service name validate. input=', input);
         if (input.trim() === '') {
           return 'Service name cannot be empty';
         }
@@ -86,6 +94,7 @@ module.exports = class ServiceGenerator extends Generator {
 
         try {
           if (specs.services && specs.services[input]) {
+            console.log('...updating service');
             updatingService();
             generator.log(chalk.green([
               '',
@@ -94,6 +103,7 @@ module.exports = class ServiceGenerator extends Generator {
               ''
             ].join('\n')));
           } else {
+            console.log('...adding service');
             addingService(input);
             generator.log(chalk.green([
               '',

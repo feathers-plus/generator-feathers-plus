@@ -1,8 +1,8 @@
 
-// Initializes the `nedb1` service on path `/nedb-1`. (Can be re-generated.)
+// Initializes the `users1` service on path `/users-1`. (Can be re-generated.)
 const createService = require('feathers-nedb');
-const createModel = require('../../models/nedb-1.model');
-const hooks = require('./nedb-1.hooks');
+const createModel = require('../../models/users1.model');
+const hooks = require('./users1.hooks');
 // !code: imports // !end
 // !code: init // !end
 
@@ -19,10 +19,10 @@ let moduleExports = function (app) {
   // !code: options_change // !end
 
   // Initialize our service with any options it requires
-  app.use('/nedb-1', createService(options));
+  app.use('/users-1', createService(options));
 
   // Get our initialized service so that we can register hooks
-  const service = app.service('nedb-1');
+  const service = app.service('users-1');
 
   service.hooks(hooks);
   // !code: func_return // !end

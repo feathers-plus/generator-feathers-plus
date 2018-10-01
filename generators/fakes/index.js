@@ -36,7 +36,7 @@ module.exports = class FakesGenerator extends Generator {
       ].join(''));
       this.log(
         chalk.green.bold('You can change this configuration and rerun "feathers-plus generate fakes".')
-      )
+      );
       this.log();
     } else {
       this.log();
