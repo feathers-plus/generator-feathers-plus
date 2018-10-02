@@ -79,7 +79,6 @@ module.exports = class ServiceGenerator extends Generator {
       },
       */
       validate (input) {
-        console.log('...gen service name validate. input=', input);
         if (input.trim() === '') {
           return 'Service name cannot be empty';
         }
@@ -94,7 +93,6 @@ module.exports = class ServiceGenerator extends Generator {
 
         try {
           if (specs.services && specs.services[input]) {
-            console.log('...updating service');
             updatingService();
             generator.log(chalk.green([
               '',
@@ -103,7 +101,6 @@ module.exports = class ServiceGenerator extends Generator {
               ''
             ].join('\n')));
           } else {
-            console.log('...adding service');
             addingService(input);
             generator.log(chalk.green([
               '',

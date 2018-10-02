@@ -225,6 +225,7 @@ const tests = [
         },
         { generate: 'connection',
           prompts: {
+            adapter: 'nedb',
             database: 'nedb',
             connectionString: '../data'
           }

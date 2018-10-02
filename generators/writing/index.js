@@ -431,7 +431,7 @@ module.exports = function generatorWriting (generator, what) {
 
       todos.push(
         json(configTest,    [appConfigPath, `${envName}.json`], false, !envName),
-      )
+      );
     });
 
     if (isJs) {
