@@ -55,6 +55,11 @@ module.exports = class MiddlewareGenerator extends Generator {
           camelName: camelCase(answers.name)
         });
 
+        // Set missing defaults when call during test
+        if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
+          this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
+        }
+
         initSpecs('middleware', this.props);
       });
   }

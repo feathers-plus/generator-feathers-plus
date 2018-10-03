@@ -60,10 +60,6 @@
   },
   "hooks": {},
   "connections": {
-    "undefined": {
-      "database": "nedb",
-      "connectionString": "../data"
-    },
     "nedb": {
       "database": "nedb",
       "adapter": "nedb",

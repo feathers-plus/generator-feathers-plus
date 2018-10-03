@@ -72,7 +72,7 @@ module.exports = class CodelistGenerator extends Generator {
             name: ` One service (${srcFolder}/services/*/hooks/)`,
             value: 'n'
           }
-        ]
+        ];
       },
       default() {
         return hookSpecs.ifMulti || 'n';
@@ -118,6 +118,11 @@ module.exports = class CodelistGenerator extends Generator {
 
     return this.prompt(prompts).then(answers => {
       Object.assign(this.props, answers);
+
+      // Set missing defaults when call during test
+      if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
+        this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
+      }
     });
   }
 

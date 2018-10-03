@@ -24,7 +24,7 @@ cassandra |            |              | n/a          | limited
 
 ## generate connection
 
-adapter    |            | Feathersjs   | Feathers+    | diff? 
+database   | adapter    | Feathersjs   | Feathers+    | diff? 
 ===========|============|==============|==============|=======
 memory     |            | *none        | *none        |
 mongodb    | mongodb    | mongodb.js   | mongodb.js   |
@@ -44,3 +44,27 @@ sql server | sequelize  | sequelize.js | *none        | ERROR
 sql server | knexjs     | knex.js      | knex.js      |
 sql server | objection  | objection.js |              | limited 
 cassandra  |            | *none        |              | limited 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -110,6 +110,11 @@ module.exports = class GraphqlGenerator extends Generator {
           kebabName: 'graphql',
           camelName: 'graphql'
         });
+
+        // Set missing defaults when call during test
+        if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
+          this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
+        }
       });
   }
 

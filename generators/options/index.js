@@ -66,6 +66,11 @@ module.exports = class OptionsGenerator extends Generator {
 
     return this.prompt(prompts).then(answers => {
       Object.assign(this.props, answers);
+
+      // Set missing defaults when call during test
+      if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
+        this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
+      }
     });
   }
 

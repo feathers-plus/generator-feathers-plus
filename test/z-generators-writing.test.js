@@ -30,6 +30,231 @@ const tests = [
    `npm test` runs both of the above.
    The tests stop running on the first assertion failure.
    */
+  {
+    testName: 'adapter-2-generic.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'generic',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'generic',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+          }
+        }
+      }
+    ],
+    compareOnlySpecs: true
+  },
+
+  {
+    testName: 'adapter-2-memory.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'memory',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'memory',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+          }
+        }
+      }
+    ],
+    compareOnlySpecs: true
+  },
+
+  {
+    testName: 'adapter-2-nedb.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'nedb',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+
+          database: 'nedb', connectionString: '../data'
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'nedb',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'nedb', connectionString: '../data'
+          }
+        }
+      }
+    ],
+    compareOnlySpecs: true
+  },
+
+  {
+    testName: 'adapter-2-mongodb.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'mongodb',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+
+          database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'mongodb',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+          }
+        }
+      }
+    ],
+    compareOnlySpecs: true
+  },
+
+  {
+    testName: 'adapter-2-mongoose.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'mongoose',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+
+          database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'mongoose',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+          }
+        }
+      }
+    ],
+    compareOnlySpecs: true
+  },
+
+  {
+    testName: 'adapter-2-sequelize-mysql.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'sequelize',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+
+          database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'sequelize',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+          }
+        }
+      }
+    ],
+    compareOnlySpecs: true
+  },
+
+  {
+    testName: 'adapter-2-sequelize-postgres.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'sequelize',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+
+          database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'sequelize',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+          }
+        }
+      }
+    ],
+    compareOnlySpecs: true
+  },
+
+  {
+    testName: 'adapter-2-sequelize-sqlite.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'sequelize',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+
+          database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'sequelize',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+          }
+        }
+      }
+    ],
+    compareOnlySpecs: true
+  },
+
+  // ===== test generation of apps from feathers-gen-specs.json ====================================
 
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
@@ -210,9 +435,33 @@ const tests = [
     },
 
   // Test generating app using only generate commands (except for an initialization step)
-    { testName: 'cumulative-6-generators.test',
-      specsChanges: [
-        { generate: 'app',
+  //
+  // The this._opts.calledByTest in a generator will contain the specsChanges.calledByTest value.
+  //
+  // The generator's answer.name in prompting() is set to the specsChanges.prompts.name value
+  // only when the prompt would have been displayed. So prompts whose when() returns false will
+  // not have their answers.name set to specsChanges.prompts.name.
+  //
+  // These functions in prompting() are called but no console.log are displayed: name, message.
+  // These are called and console.log are displayed: when.
+  // These are not called: default, filter, validate. This makes it awkward to pass default
+  // values to prompts which use these function to obtain default values.
+  //
+  // We therefore standardized on passing the prompts in specsChanges.calledByTest.prompts as well.
+  // "Missing" prompt values can be set by the generator at the end of prompting().
+  { testName: 'cumulative-6-generators.test',
+    specsChanges: [
+      { generate: 'app',
+        prompts: {
+          name: 'z-1',
+          src: 'src1',
+          description: 'Project z-1',
+          packager: 'npm@>= 3.0.0',
+          providers: [ 'rest', 'socketio' ],
+          environmentsAllowingSeedData: 'test',
+          seedData: false,
+        },
+        calledByTest: {
           prompts: {
             name: 'z-1',
             src: 'src1',
@@ -220,17 +469,35 @@ const tests = [
             packager: 'npm@>= 3.0.0',
             providers: [ 'rest', 'socketio' ],
             environmentsAllowingSeedData: 'test',
-            seedData: false
+            seedData: false,
           }
+        }
+      },
+      { generate: 'connection',
+        prompts: {
+          adapter: 'nedb',
+          database: 'nedb',
+          connectionString: '../data'
         },
-        { generate: 'connection',
+        calledByTest: {
           prompts: {
             adapter: 'nedb',
             database: 'nedb',
             connectionString: '../data'
-          }
+          },
+        }
+      },
+      { generate: 'service',
+        prompts: {
+          name: 'users1',
+          nameSingular: 'users1',
+          subFolder: '',
+          adapter: 'nedb',
+          path: '/users-1',
+          graphql: false
         },
-        { generate: 'service',
+        calledByTest: {
+          name: 'users1',
           prompts: {
             name: 'users1',
             nameSingular: 'users1',
@@ -238,16 +505,34 @@ const tests = [
             adapter: 'nedb',
             path: '/users-1',
             graphql: false
-          },
-          calledByTest: { name: 'users1' }
+          }
+        }
+      },
+      { generate: 'authentication',
+        prompts: {
+          strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
+          entity: 'users1'
         },
-        { generate: 'authentication',
+        calledByTest: {
           prompts: {
             strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
             entity: 'users1'
-          }
+          },
+        }
+      },
+      { generate: 'service',
+        prompts: {
+          isAuthEntity: false,
+          requiresAuth: true,
+          name: 'nedb1',
+          nameSingular: 'nedb1',
+          adapter: 'nedb',
+          subFolder: '',
+          path: '/nedb-1',
+          graphql: true
         },
-        { generate: 'service',
+        calledByTest: {
+          name: 'nedb1',
           prompts: {
             isAuthEntity: false,
             requiresAuth: true,
@@ -258,38 +543,75 @@ const tests = [
             path: '/nedb-1',
             graphql: true
           },
-          calledByTest: { name: 'nedb1' }
+        }
+      },
+      { generate: 'service',
+        prompts: {
+          isAuthEntity: false,
+          requiresAuth: false,
+          name: 'nedb2',
+          nameSingular: 'nedb2',
+          adapter: 'nedb',
+          subFolder: '',
+          path: '/nedb-2',
+          graphql: true
         },
-        { generate: 'service',
+        calledByTest: {
+          name: 'nedb2',
           prompts: {
             isAuthEntity: false,
-            requiresAuth: false,
-            name: 'nedb2',
-            nameSingular: 'nedb2',
+            requiresAuth: true,
+            name: 'nedb1',
+            nameSingular: 'nedb1',
             adapter: 'nedb',
             subFolder: '',
-            path: '/nedb-2',
+            path: '/nedb-1',
             graphql: true
           },
-          calledByTest: { name: 'nedb2' }
+        }
+      },
+      { generate: 'middleware',
+        prompts: {
+          name: 'mw1',
+          path: '*',
+          kebabName: 'mw-1',
+          camelName: 'mw1'
         },
-        { generate: 'middleware',
+        calledByTest: {
           prompts: {
             name: 'mw1',
             path: '*',
             kebabName: 'mw-1',
             camelName: 'mw1'
-          }
+          },
+        }
+      },
+      { generate: 'middleware',
+        prompts: {
+          name: 'mw2',
+          path: 'mw2',
+          kebabName: 'mw-2',
+          camelName: 'mw2'
         },
-        { generate: 'middleware',
+        calledByTest: {
           prompts: {
             name: 'mw2',
             path: 'mw2',
             kebabName: 'mw-2',
             camelName: 'mw2'
-          }
+          },
+        }
+      },
+      { generate: 'graphql',
+        prompts: {
+          strategy: 'services',
+          path: '/graphql',
+          requiresAuth: false,
+          snakeName: 'graphql',
+          kebabName: 'graphql',
+          camelName: 'graphql'
         },
-        { generate: 'graphql',
+        calledByTest: {
           prompts: {
             strategy: 'services',
             path: '/graphql',
@@ -297,12 +619,13 @@ const tests = [
             snakeName: 'graphql',
             kebabName: 'graphql',
             camelName: 'graphql'
-          }
-        },
-      ],
-      compareDirs: true,
-      execute: false,
-    },
+          },
+        }
+      },
+    ],
+    compareDirs: true,
+    execute: false,
+  },
 
   // t21, z21 Test switching the user-entity
   // t21
@@ -434,9 +757,187 @@ const tests = [
       execute: false,
     },
 
-
   // test service in sub-folders
     { testName: 'ts-name-space.test' },
+
+  // ===== test generator prompting ================================================================
+
+  // Test "generate connection"
+    { testName: 'adapter-1-memory.test',
+      specsChanges: [
+        { generate: 'connection',
+          prompts: { database: 'memory' },
+          calledByTest: { prompts: { database: 'memory' } }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-mongodb-mongodb.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mongodb', adapter: 'mongodb', connectionString: 'mongodb://localhost:27017/zz' },
+          calledByTest: {
+            prompts: { database: 'mongodb', adapter: 'mongodb', connectionString: 'mongodb://localhost:27017/zz' },
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-mongodb-mongoose.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mongodb', adapter: 'mongoose', connectionString: 'mongodb://localhost:27017/zz' },
+          calledByTest: {
+            prompts: { database: 'mongodb', adapter: 'mongoose', connectionString: 'mongodb://localhost:27017/zz' },
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-mysql-sequelize.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mysql', adapter: 'sequelize', connectionString: 'mysql://root:@localhost:3306/zz' },
+          calledByTest: {
+            prompts: { database: 'mysql', adapter: 'sequelize', connectionString: 'mysql://root:@localhost:3306/zz' },
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-mysql-knex.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mysql', adapter: 'knex', connectionString: 'mysql://root:@localhost:3306/zz' },
+          calledByTest: {
+            prompts: { database: 'mysql', adapter: 'knex', connectionString: 'mysql://root:@localhost:3306/zz' },
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-nedb.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'nedb', connectionString: '../data' },
+          calledByTest: { prompts: {database: 'nedb', connectionString: '../data'} }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-postgres-sequelize.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'postgres', adapter: 'sequelize', connectionString: 'postgres://postgres:@localhost:5432/zz' },
+          calledByTest: {
+            prompts: { database: 'postgres', adapter: 'sequelize', connectionString: 'postgres://postgres:@localhost:5432/zz' }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-postgres-knex.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'postgres', adapter: 'knex', connectionString: 'postgres://postgres:@localhost:5432/zz' },
+          calledByTest: {
+            prompts: { database: 'postgres', adapter: 'knex', connectionString: 'postgres://postgres:@localhost:5432/zz' }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-rethinkdb.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'rethinkdb', connectionString: 'rethinkdb://localhost:28015/zz' },
+          calledByTest: {
+            prompts: { database: 'rethinkdb', connectionString: 'rethinkdb://localhost:28015/zz' }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-sqlite-sequelize.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'sqlite', adapter: 'sequelize', connectionString: 'sqlite://zz.sqlite' },
+          calledByTest: {
+            prompts: { database: 'sqlite', adapter: 'sequelize', connectionString: 'sqlite://zz.sqlite' }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-sqlite-knex.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'sqlite', adapter: 'knex', connectionString: 'sqlite://zz.sqlite' },
+          calledByTest: {
+            prompts: { database: 'sqlite', adapter: 'knex', connectionString: 'sqlite://zz.sqlite' }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-mssql-sequelize.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mssql', adapter: 'sequelize', connectionString: 'mssql://root:password@localhost:1433/zz' },
+          calledByTest: {
+            prompts: { database: 'mssql', adapter: 'sequelize', connectionString: 'mssql://root:password@localhost:1433/zz' }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'adapter-1-mssql-knex.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mssql', adapter: 'knex', connectionString: 'mssql://root:password@localhost:1433/zz' },
+          calledByTest: {
+            prompts: { database: 'mssql', adapter: 'knex', connectionString: 'mssql://root:password@localhost:1433/zz' }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
 ];
 
 let appDir;
@@ -444,7 +945,7 @@ const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
 const executeAll = false;
 
 describe('generators-writing.test.js', function () {
-  tests.forEach(({ testName, execute = false, specsChanges = [], compareDirs = true }) => {
+  tests.forEach(({ testName, specsChanges = [], compareDirs = true, compareOnlySpecs = false, execute = false }) => {
     if (runJustThisTest && runJustThisTest !== testName) return;
 
     describe(testName, function () {
@@ -454,13 +955,17 @@ describe('generators-writing.test.js', function () {
 
             // There is no second generation step
             if (!specsChanges.length) {
-              return compareCode(dir, `${testName}-expected`, compareDirs);
+              return compareOnlySpecs ?
+                compareSpecs(appDir, `${testName}-expected`) :
+                compareCode(dir, `${testName}-expected`, compareDirs);
             }
 
             // Generate on top of contents of working directory
             return runNextGenerator(dir, specsChanges, { skipInstall: true })
               .then(dir => {
-                return compareCode(dir, `${testName}-expected`, compareDirs);
+                return compareOnlySpecs ?
+                  compareSpecs(appDir, `${testName}-expected`) :
+                  compareCode(dir, `${testName}-expected`, compareDirs);
               });
           });
       });
@@ -532,7 +1037,7 @@ function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
     return helpers.run(path.join(__dirname, '..', 'generators', specsChg.generate))
       .inTmpDir(dirNext => {
         appDir = dirNext;
-        console.log(`      ${index + 1} "generate ${specsChg.generate}" with ${JSON.stringify(specsChg.prompts).substr(0, 65)}`);
+        console.log(`      ${index + 1} "generate ${specsChg.generate}" with ${JSON.stringify(specsChg.prompts).substr(0, 60)}`);
 
         //console.log('314', dir, dirNext);
         fs.copySync(dir, dirNext);
@@ -651,37 +1156,44 @@ function compareCode (appDir, testDir, compareDirs) {
     assert.deepEqual(actualPaths.relativePaths, expectedPaths.relativePaths, 'Unexpected files in generated dir');
   }
 
-  actualPaths.paths.forEach((actualPath, i) => {
-    compare(i, actualPath.path.substr(appDirLen));
+  actualPaths.paths.forEach(actualPath => {
+    compare(actualPath.path.substr(appDirLen), appDir, expectedDir);
   });
 
   /*
   const expectedDirLen = expectedDir.length;
-  expectedPaths.paths.forEach((expectedPath, i) => {
-    compare(i, expectedPath.path.substr(expectedDirLen));
+  expectedPaths.paths.forEach(expectedPath => {
+    compare(expectedPath.path.substr(expectedDirLen), appDir, expectedDir);
   });
   */
+}
 
-  function compare(i, fileName) {
-    // console.log('compare files', fileName);
-    let expected;
+function compareSpecs (appDir, testDir) {
+  console.log('... comparing feathers-gen-specs.json');
+  const expectedDir = path.join(__dirname, '..', 'test-expands', testDir);
 
-    //console.log('410', `${appDir}${fileName}`);
-    const actual = fs.readFileSync(`${appDir}${fileName}`, 'utf8');
+  compare('/feathers-gen-specs.json', appDir, expectedDir);
+}
 
-    try {
-      //console.log('414', `${expectedDir}${fileName}`);
-      expected = fs.readFileSync(`${expectedDir}${fileName}`, 'utf8');
-    } catch (err) {
-      console.log(actual);
-      throw err;
-    }
+function compare(fileName, appDir, expectedDir) {
+  // console.log('compare files', fileName);
+  let expected;
 
-    if (actual !== expected) console.log(actual);
-    // if (actual !== expected) console.log(expected);
+  // console.log('410', `${appDir}${fileName}`);
+  const actual = fs.readFileSync(`${appDir}${fileName}`, 'utf8');
 
-    assert.equal(actual, expected, `Unexpected contents for file ${appDir}${fileName}`);
+  try {
+    // console.log('414', `${expectedDir}${fileName}`);
+    expected = fs.readFileSync(`${expectedDir}${fileName}`, 'utf8');
+  } catch (err) {
+    console.log(actual);
+    throw err;
   }
+
+  if (actual !== expected) console.log(actual);
+  // if (actual !== expected) console.log(expected);
+
+  assert.equal(actual, expected, `Unexpected contents for file ${appDir}${fileName}`);
 }
 
 function getFileNames (dir) {

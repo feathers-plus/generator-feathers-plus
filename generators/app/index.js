@@ -156,6 +156,11 @@ module.exports = class AppGenerator extends Generator {
       .then(answers => {
         answers.seedData = answers.environmentsAllowingSeedData ? answers.seedData : false;
         Object.assign(this.props, answers);
+
+        // Set missing defaults when call during test
+        if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
+          this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
+        }
       });
   }
 
