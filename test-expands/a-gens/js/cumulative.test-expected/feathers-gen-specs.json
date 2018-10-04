@@ -12,6 +12,8 @@
     "ts": false
   },
   "app": {
+    "environmentsAllowingSeedData": "test",
+    "seedData": false,
     "name": "z-1",
     "description": "Project z-1",
     "src": "src1",
@@ -19,9 +21,7 @@
     "providers": [
       "rest",
       "socketio"
-    ],
-    "environmentsAllowingSeedData": "test",
-    "seedData": false
+    ]
   },
   "services": {
     "users1": {

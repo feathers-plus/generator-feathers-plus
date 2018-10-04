@@ -31,7 +31,7 @@ const tests = [
    The tests stop running on the first assertion failure.
    */
   {
-    testName: 'adapter-2-generic.test',
+    testName: 'a-specs/service-generic.test',
     specsChanges: [
       {
         generate: 'service',
@@ -56,7 +56,7 @@ const tests = [
   },
 
   {
-    testName: 'adapter-2-memory.test',
+    testName: 'a-specs/service-memory.test',
     specsChanges: [
       {
         generate: 'service',
@@ -81,7 +81,7 @@ const tests = [
   },
 
   {
-    testName: 'adapter-2-nedb.test',
+    testName: 'a-specs/service-nedb.test',
     specsChanges: [
       {
         generate: 'service',
@@ -110,7 +110,7 @@ const tests = [
   },
 
   {
-    testName: 'adapter-2-mongodb.test',
+    testName: 'a-specs/service-mongodb.test',
     specsChanges: [
       {
         generate: 'service',
@@ -139,7 +139,7 @@ const tests = [
   },
 
   {
-    testName: 'adapter-2-mongoose.test',
+    testName: 'a-specs/service-mongoose.test',
     specsChanges: [
       {
         generate: 'service',
@@ -168,7 +168,7 @@ const tests = [
   },
 
   {
-    testName: 'adapter-2-sequelize-mysql.test',
+    testName: 'a-specs/service-sequelize-mysql.test',
     specsChanges: [
       {
         generate: 'service',
@@ -197,7 +197,7 @@ const tests = [
   },
 
   {
-    testName: 'adapter-2-sequelize-postgres.test',
+    testName: 'a-specs/service-sequelize-postgres.test',
     specsChanges: [
       {
         generate: 'service',
@@ -226,7 +226,7 @@ const tests = [
   },
 
   {
-    testName: 'adapter-2-sequelize-sqlite.test',
+    testName: 'a-specs/service-sequelize-sqlite.test',
     specsChanges: [
       {
         generate: 'service',
@@ -253,8 +253,6 @@ const tests = [
     ],
     compareOnlySpecs: true
   },
-
-  // ===== test generation of apps from feathers-gen-specs.json ====================================
 
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
@@ -386,7 +384,7 @@ const tests = [
     { testName: 'cumulative-2-hooks.test' },
 
   // Test generating unit hook tests
-    { testName: 'cumulative-2-test-hook-unit.test',
+    { testName: 'a-gens/js/test-hook-unit.test',
       specsChanges: [
         { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.app1' } },
         { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb12' } },
@@ -399,7 +397,7 @@ const tests = [
     },
 
   // Test generating integration hook tests
-    { testName: 'cumulative-2-test-hook-integ.test',
+    { testName: 'a-gens/js/test-hook-integ.test',
       specsChanges: [
         { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.app1' } },
         { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb12' } },
@@ -412,7 +410,7 @@ const tests = [
     },
 
   // Test generating service tests
-    { testName: 'cumulative-2-test-service.test',
+    { testName: 'a-gens/js/test-service.test',
       specsChanges: [
         { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb1' } },
         { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb2' } },
@@ -425,7 +423,7 @@ const tests = [
 
   // Test generating authentication tests
   // Its tests TEST AUTHENTICATION and should be periodically run with dependency loading
-    { testName: 'cumulative-2-test-authentication.test',
+    { testName: 'a-gens/js/test-authentication.test',
       specsChanges: [
         { generate: 'test', prompts: { testType: 'authBase' } },
         { generate: 'test', prompts: { testType: 'authServices' } },
@@ -433,199 +431,6 @@ const tests = [
       compareDirs: true,
       execute: false,
     },
-
-  // Test generating app using only generate commands (except for an initialization step)
-  //
-  // The this._opts.calledByTest in a generator will contain the specsChanges.calledByTest value.
-  //
-  // The generator's answer.name in prompting() is set to the specsChanges.prompts.name value
-  // only when the prompt would have been displayed. So prompts whose when() returns false will
-  // not have their answers.name set to specsChanges.prompts.name.
-  //
-  // These functions in prompting() are called but no console.log are displayed: name, message.
-  // These are called and console.log are displayed: when.
-  // These are not called: default, filter, validate. This makes it awkward to pass default
-  // values to prompts which use these function to obtain default values.
-  //
-  // We therefore standardized on passing the prompts in specsChanges.calledByTest.prompts as well.
-  // "Missing" prompt values can be set by the generator at the end of prompting().
-  { testName: 'cumulative-6-generators.test',
-    specsChanges: [
-      { generate: 'app',
-        prompts: {
-          name: 'z-1',
-          src: 'src1',
-          description: 'Project z-1',
-          packager: 'npm@>= 3.0.0',
-          providers: [ 'rest', 'socketio' ],
-          environmentsAllowingSeedData: 'test',
-          seedData: false,
-        },
-        calledByTest: {
-          prompts: {
-            name: 'z-1',
-            src: 'src1',
-            description: 'Project z-1',
-            packager: 'npm@>= 3.0.0',
-            providers: [ 'rest', 'socketio' ],
-            environmentsAllowingSeedData: 'test',
-            seedData: false,
-          }
-        }
-      },
-      { generate: 'connection',
-        prompts: {
-          adapter: 'nedb',
-          database: 'nedb',
-          connectionString: '../data'
-        },
-        calledByTest: {
-          prompts: {
-            adapter: 'nedb',
-            database: 'nedb',
-            connectionString: '../data'
-          },
-        }
-      },
-      { generate: 'service',
-        prompts: {
-          name: 'users1',
-          nameSingular: 'users1',
-          subFolder: '',
-          adapter: 'nedb',
-          path: '/users-1',
-          graphql: false
-        },
-        calledByTest: {
-          name: 'users1',
-          prompts: {
-            name: 'users1',
-            nameSingular: 'users1',
-            subFolder: '',
-            adapter: 'nedb',
-            path: '/users-1',
-            graphql: false
-          }
-        }
-      },
-      { generate: 'authentication',
-        prompts: {
-          strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
-          entity: 'users1'
-        },
-        calledByTest: {
-          prompts: {
-            strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
-            entity: 'users1'
-          },
-        }
-      },
-      { generate: 'service',
-        prompts: {
-          isAuthEntity: false,
-          requiresAuth: true,
-          name: 'nedb1',
-          nameSingular: 'nedb1',
-          adapter: 'nedb',
-          subFolder: '',
-          path: '/nedb-1',
-          graphql: true
-        },
-        calledByTest: {
-          name: 'nedb1',
-          prompts: {
-            isAuthEntity: false,
-            requiresAuth: true,
-            name: 'nedb1',
-            nameSingular: 'nedb1',
-            adapter: 'nedb',
-            subFolder: '',
-            path: '/nedb-1',
-            graphql: true
-          },
-        }
-      },
-      { generate: 'service',
-        prompts: {
-          isAuthEntity: false,
-          requiresAuth: false,
-          name: 'nedb2',
-          nameSingular: 'nedb2',
-          adapter: 'nedb',
-          subFolder: '',
-          path: '/nedb-2',
-          graphql: true
-        },
-        calledByTest: {
-          name: 'nedb2',
-          prompts: {
-            isAuthEntity: false,
-            requiresAuth: true,
-            name: 'nedb1',
-            nameSingular: 'nedb1',
-            adapter: 'nedb',
-            subFolder: '',
-            path: '/nedb-1',
-            graphql: true
-          },
-        }
-      },
-      { generate: 'middleware',
-        prompts: {
-          name: 'mw1',
-          path: '*',
-          kebabName: 'mw-1',
-          camelName: 'mw1'
-        },
-        calledByTest: {
-          prompts: {
-            name: 'mw1',
-            path: '*',
-            kebabName: 'mw-1',
-            camelName: 'mw1'
-          },
-        }
-      },
-      { generate: 'middleware',
-        prompts: {
-          name: 'mw2',
-          path: 'mw2',
-          kebabName: 'mw-2',
-          camelName: 'mw2'
-        },
-        calledByTest: {
-          prompts: {
-            name: 'mw2',
-            path: 'mw2',
-            kebabName: 'mw-2',
-            camelName: 'mw2'
-          },
-        }
-      },
-      { generate: 'graphql',
-        prompts: {
-          strategy: 'services',
-          path: '/graphql',
-          requiresAuth: false,
-          snakeName: 'graphql',
-          kebabName: 'graphql',
-          camelName: 'graphql'
-        },
-        calledByTest: {
-          prompts: {
-            strategy: 'services',
-            path: '/graphql',
-            requiresAuth: false,
-            snakeName: 'graphql',
-            kebabName: 'graphql',
-            camelName: 'graphql'
-          },
-        }
-      },
-    ],
-    compareDirs: true,
-    execute: false,
-  },
 
   // t21, z21 Test switching the user-entity
   // t21
@@ -640,27 +445,27 @@ const tests = [
   //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
   //                            users1, Nedb, /users-1, nedb://../data, auth Y, graphql N
   //  generate service        # NeDB, nedb1, /nedb-1, auth Y (line not needed in test as test regens whole app)
-  { testName: 'regen-user-entity.test',
-    specsChanges: [
-      { generate: 'all', merge: {
-          authentication: { entity: 'users1' },
-          services: {
-            nedb1: { isAuthEntity: false },
-            users1: {
-              name: 'users1',
-              nameSingular: 'users1',
-              subFolder: '',
-              fileName: 'users-1',
-              adapter: 'nedb',
-              path: '/users-1',
-              isAuthEntity: true,
-              requiresAuth: true,
-              graphql: false
-            },
-          }
-        } },
-    ]
-  },
+    { testName: 'regen-user-entity.test',
+      specsChanges: [
+        { generate: 'all', merge: {
+            authentication: { entity: 'users1' },
+            services: {
+              nedb1: { isAuthEntity: false },
+              users1: {
+                name: 'users1',
+                nameSingular: 'users1',
+                subFolder: '',
+                fileName: 'users-1',
+                adapter: 'nedb',
+                path: '/users-1',
+                isAuthEntity: true,
+                requiresAuth: true,
+                graphql: false
+              },
+            }
+          } },
+      ]
+    },
 
   // z22 Test that app.js does not require templates/src/_adapters/* unless they are currently being used.
   // Also tests that existing package.json, config/default.json & config/production.json contents are retained.
@@ -710,7 +515,7 @@ const tests = [
     { testName: 'ts-cumulative-2-hooks.test' },
 
   // Test generating unit hook tests
-    { testName: 'ts-cumulative-2-test-hook-unit.test',
+    { testName: 'a-gens/ts/test-hook-unit.test',
       specsChanges: [
         { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.app1' } },
         { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb12' } },
@@ -723,7 +528,7 @@ const tests = [
     },
 
   // Test generating integration hook tests
-    { testName: 'ts-cumulative-2-test-hook-integ.test',
+    { testName: 'a-gens/ts/test-hook-integ.test',
       specsChanges: [
         { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.app1' } },
         { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb12' } },
@@ -736,7 +541,7 @@ const tests = [
     },
 
   // Test generating service tests
-    { testName: 'ts-cumulative-2-test-service.test',
+    { testName: 'a-gens/ts/test-service.test',
       specsChanges: [
         { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb1' } },
         { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb2' } },
@@ -748,7 +553,7 @@ const tests = [
     },
 
   // Test generating authentication tests
-    { testName: 'ts-cumulative-2-test-authentication.test',
+    { testName: 'a-gens/ts/test-authentication.test',
       specsChanges: [
         { generate: 'test', prompts: { testType: 'authBase' } },
         { generate: 'test', prompts: { testType: 'authServices' } },
@@ -760,10 +565,8 @@ const tests = [
   // test service in sub-folders
     { testName: 'ts-name-space.test' },
 
-  // ===== test generator prompting ================================================================
-
   // Test "generate connection"
-    { testName: 'adapter-1-memory.test',
+    { testName: 'a-specs/connection-memory.test',
       specsChanges: [
         { generate: 'connection',
           prompts: { database: 'memory' },
@@ -774,7 +577,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-mongodb-mongodb.test',
+      testName: 'a-specs/connection-mongodb-mongodb.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -788,7 +591,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-mongodb-mongoose.test',
+      testName: 'a-specs/connection-mongodb-mongoose.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -802,7 +605,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-mysql-sequelize.test',
+      testName: 'a-specs/connection-mysql-sequelize.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -816,7 +619,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-mysql-knex.test',
+      testName: 'a-specs/connection-mysql-knex.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -830,7 +633,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-nedb.test',
+      testName: 'a-specs/connection-nedb.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -842,7 +645,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-postgres-sequelize.test',
+      testName: 'a-specs/connection-postgres-sequelize.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -856,7 +659,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-postgres-knex.test',
+      testName: 'a-specs/connection-postgres-knex.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -870,7 +673,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-rethinkdb.test',
+      testName: 'a-specs/connection-rethinkdb.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -884,7 +687,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-sqlite-sequelize.test',
+      testName: 'a-specs/connection-sqlite-sequelize.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -898,7 +701,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-sqlite-knex.test',
+      testName: 'a-specs/connection-sqlite-knex.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -912,7 +715,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-mssql-sequelize.test',
+      testName: 'a-specs/connection-mssql-sequelize.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -926,7 +729,7 @@ const tests = [
     },
 
     {
-      testName: 'adapter-1-mssql-knex.test',
+      testName: 'a-specs/connection-mssql-knex.test',
       specsChanges: [
         {
           generate: 'connection',
@@ -936,12 +739,206 @@ const tests = [
           }
         }
       ],
+      compareDirs: false,
       compareOnlySpecs: true
+    },
+
+  // Test generating app using only generate commands (except for an initialization step)
+  //
+  // The this._opts.calledByTest in a generator will contain the specsChanges.calledByTest value.
+  //
+  // The generator's answer.name in prompting() is set to the specsChanges.prompts.name value
+  // only when the prompt would have been displayed. So prompts whose when() returns false will
+  // not have their answers.name set to specsChanges.prompts.name.
+  //
+  // These functions in prompting() are called but no console.log are displayed: name, message.
+  // These are called and console.log are displayed: when.
+  // These are not called: default, filter, validate. This makes it awkward to pass default
+  // values to prompts which use these function to obtain default values.
+  //
+  // We therefore standardized on passing the prompts in specsChanges.calledByTest.prompts as well.
+  // "Missing" prompt values can be set by the generator at the end of prompting().
+    { testName: 'a-gens/js/cumulative.test',
+      specsChanges: [
+        { generate: 'app',
+          prompts: {
+            name: 'z-1',
+            src: 'src1',
+            description: 'Project z-1',
+            packager: 'npm@>= 3.0.0',
+            providers: [ 'rest', 'socketio' ],
+            environmentsAllowingSeedData: 'test',
+            seedData: false,
+          },
+          calledByTest: {
+            prompts: {
+              name: 'z-1',
+              src: 'src1',
+              description: 'Project z-1',
+              packager: 'npm@>= 3.0.0',
+              providers: [ 'rest', 'socketio' ],
+              environmentsAllowingSeedData: 'test',
+              seedData: false,
+            }
+          }
+        },
+        { generate: 'connection',
+          prompts: {
+            adapter: 'nedb',
+            database: 'nedb',
+            connectionString: '../data'
+          },
+          calledByTest: {
+            prompts: {
+              adapter: 'nedb',
+              database: 'nedb',
+              connectionString: '../data'
+            },
+          }
+        },
+        { generate: 'service',
+          prompts: {
+            name: 'users1',
+            nameSingular: 'users1',
+            subFolder: '',
+            adapter: 'nedb',
+            path: '/users-1',
+            graphql: false
+          },
+          calledByTest: {
+            name: 'users1',
+            prompts: {
+              name: 'users1',
+              nameSingular: 'users1',
+              subFolder: '',
+              adapter: 'nedb',
+              path: '/users-1',
+              graphql: false
+            }
+          }
+        },
+        { generate: 'authentication',
+          prompts: {
+            strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
+            entity: 'users1'
+          },
+          calledByTest: {
+            prompts: {
+              strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
+              entity: 'users1'
+            },
+          }
+        },
+        { generate: 'service',
+          prompts: {
+            isAuthEntity: false,
+            requiresAuth: true,
+            name: 'nedb1',
+            nameSingular: 'nedb1',
+            adapter: 'nedb',
+            subFolder: '',
+            path: '/nedb-1',
+            graphql: true
+          },
+          calledByTest: {
+            name: 'nedb1',
+            prompts: {
+              isAuthEntity: false,
+              requiresAuth: true,
+              name: 'nedb1',
+              nameSingular: 'nedb1',
+              adapter: 'nedb',
+              subFolder: '',
+              path: '/nedb-1',
+              graphql: true
+            },
+          }
+        },
+        { generate: 'service',
+          prompts: {
+            isAuthEntity: false,
+            requiresAuth: false,
+            name: 'nedb2',
+            nameSingular: 'nedb2',
+            adapter: 'nedb',
+            subFolder: '',
+            path: '/nedb-2',
+            graphql: true
+          },
+          calledByTest: {
+            name: 'nedb2',
+            prompts: {
+              isAuthEntity: false,
+              requiresAuth: true,
+              name: 'nedb1',
+              nameSingular: 'nedb1',
+              adapter: 'nedb',
+              subFolder: '',
+              path: '/nedb-1',
+              graphql: true
+            },
+          }
+        },
+        { generate: 'middleware',
+          prompts: {
+            name: 'mw1',
+            path: '*',
+            kebabName: 'mw-1',
+            camelName: 'mw1'
+          },
+          calledByTest: {
+            prompts: {
+              name: 'mw1',
+              path: '*',
+              kebabName: 'mw-1',
+              camelName: 'mw1'
+            },
+          }
+        },
+        { generate: 'middleware',
+          prompts: {
+            name: 'mw2',
+            path: 'mw2',
+            kebabName: 'mw-2',
+            camelName: 'mw2'
+          },
+          calledByTest: {
+            prompts: {
+              name: 'mw2',
+              path: 'mw2',
+              kebabName: 'mw-2',
+              camelName: 'mw2'
+            },
+          }
+        },
+        { generate: 'graphql',
+          prompts: {
+            strategy: 'services',
+            path: '/graphql',
+            requiresAuth: false,
+            snakeName: 'graphql',
+            kebabName: 'graphql',
+            camelName: 'graphql'
+          },
+          calledByTest: {
+            prompts: {
+              strategy: 'services',
+              path: '/graphql',
+              requiresAuth: false,
+              snakeName: 'graphql',
+              kebabName: 'graphql',
+              camelName: 'graphql'
+            },
+          }
+        },
+      ],
+      compareDirs: true,
+      execute: false,
     },
 ];
 
 let appDir;
-const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = 'a-gens/js/cumulative.test'; //null; //'cumulative-1-sequelize.test' //null;
 const executeAll = false;
 
 describe('generators-writing.test.js', function () {

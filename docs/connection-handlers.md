@@ -36,7 +36,7 @@ nedb       |            | *none        | *none        |
 postgresql | sequelize  | sequelize.js | sequelize.js |
 postgresql | knexjs     | knex.js      | knex.js      |
 postgresql | objection  | objection.js |              | limited
-rethinkdb  |            | UNDEFINED.js | rethinkdb.js | better
+rethinkdb  |            | UNDEFINED.js | rethinkdb.js | BETTER
 sqlite     | sequelize  | sequelize.js | sequelize.js |
 sqlite     | knexjs     | knex.js      | knex.js      |
 sqlite     | objection  | objection.js |              | limited 

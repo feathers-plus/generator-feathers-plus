@@ -216,6 +216,11 @@ module.exports = function generatorWriting (generator, what) {
   // Generate what is needed.
   switch (what) {
     case 'all':
+      if (!specs.app.name) { // specs.js adds default props to specs.app
+        generator.log('\nfeathers-gen-specs.json does not contain an \'app\' property. Terminating.');
+        break;
+      }
+
       app(generator);
 
       Object.keys(specs.services || {}).forEach(name => {
