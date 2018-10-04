@@ -236,7 +236,6 @@ module.exports = class ServiceGenerator extends Generator {
       Object.assign(this.props, answers, {
         isAuthEntity: specs._generators.indexOf('authentication') !== -1
       });
-      console.log('...this.props=', this.props);
 
       // Set missing defaults when call during test
       if (this._opts.calledByTest && this._opts.calledByTest.prompts) {

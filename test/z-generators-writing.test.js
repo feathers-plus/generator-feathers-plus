@@ -30,290 +30,6 @@ const tests = [
    `npm test` runs both of the above.
    The tests stop running on the first assertion failure.
    */
-  {
-    testName: 'a-specs/service-generic.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'generic',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'generic',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-          }
-        }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/service-memory.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'memory',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'memory',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-          }
-        }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/service-nedb.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'nedb',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-
-          database: 'nedb', connectionString: '../data'
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'nedb',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-
-            database: 'nedb', connectionString: '../data'
-          }
-        }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/service-mongodb.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'mongodb',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-
-          database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'mongodb',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-
-            database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
-          }
-        }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/service-mongoose.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'mongoose',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-
-          database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'mongoose',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-
-            database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
-          }
-        }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/service-sequelize-mysql.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'sequelize',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-
-          database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'sequelize',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-
-            database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
-          }
-        }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/service-sequelize-postgres.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'sequelize',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-
-          database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'sequelize',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-
-            database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
-          }
-        }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/service-sequelize-sqlite.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'sequelize',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-
-          database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'sequelize',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-
-            database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
-          }
-        }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/service-sequelize-mysql.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'sequelize',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-
-          database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'sequelize',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-
-            database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
-          }
-        }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  // ============
-
-  {
-    testName: 'a-specs/service-sequelize-mssql.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'sequelize',
-
-          isAuthEntity: false, name: 'users', nameSingular: 'user',
-          subFolder: '', path: '/users', graphql: false,
-
-          database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
-        },
-        calledByTest: {
-          name: 'users',
-          prompts: {
-            adapter: 'sequelize',
-
-            isAuthEntity: false, name: 'users', nameSingular: 'user',
-            subFolder: '', path: '/users', graphql: false,
-
-            database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
-          }
-        }
-      }
-    ],
-    compareDirs: true, // make sure src/sequelize-mssql.js is generated
-    execute: false,
-  },
 
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
@@ -626,7 +342,7 @@ const tests = [
   // test service in sub-folders
     { testName: 'ts-name-space.test' },
 
-  // Test "generate connection"
+  // Test specs created by generator prompts
     { testName: 'a-specs/connection-memory.test',
       specsChanges: [
         { generate: 'connection',
@@ -802,6 +518,376 @@ const tests = [
       ],
       compareDirs: false,
       compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-generic.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'generic',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'generic',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-memory.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'memory',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'memory',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-nedb.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'nedb',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'nedb', connectionString: '../data'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'nedb',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'nedb', connectionString: '../data'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-mongodb.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'mongodb',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'mongodb',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-mongoose.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'mongoose',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'mongoose',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-sequelize-mysql.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'sequelize',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'sequelize',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-sequelize-postgres.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'sequelize',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'sequelize',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-sequelize-sqlite.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'sequelize',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'sequelize',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-knex-mysql.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'knex',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'knex',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-knex-postgres.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'knex',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'knex',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-knex-sqlite.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'knex',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'knex',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-knex-mssql.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'knex',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'knex',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+            }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-sequelize-mssql.test',
+      specsChanges: [
+        {
+          generate: 'service',
+          prompts: {
+            adapter: 'sequelize',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'sequelize',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+            }
+          }
+        }
+      ],
+      compareDirs: true, // make sure src/sequelize-mssql.js is generated
+      execute: false,
     },
 
   // Test generating app using only generate commands (except for an initialization step)

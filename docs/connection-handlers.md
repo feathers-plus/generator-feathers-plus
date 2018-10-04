@@ -20,7 +20,7 @@ rethinkdb |            |              | rethinkdb.js |
 objection |            |              | n/a          | limited
 cassandra |            |              | n/a          | limited
 
-(*) Produced by sequelize-mssql.ejs
+(*) feathers/cli produces this by sequelize-mssql.ejs
 
 
 ## generate connection

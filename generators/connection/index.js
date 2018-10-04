@@ -167,7 +167,6 @@ module.exports = class ConnectionGenerator extends Generator {
 
     return this.prompt(prompts).then(answers => {
       Object.assign(this.props, answers);
-      console.log('...this.props=', this.props);
 
       // Set missing defaults when call during test
       if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
