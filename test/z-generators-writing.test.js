@@ -254,6 +254,67 @@ const tests = [
     compareOnlySpecs: true
   },
 
+  {
+    testName: 'a-specs/service-sequelize-mysql.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'sequelize',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+
+          database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'sequelize',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+          }
+        }
+      }
+    ],
+    compareOnlySpecs: true
+  },
+
+  // ============
+
+  {
+    testName: 'a-specs/service-sequelize-mssql.test',
+    specsChanges: [
+      {
+        generate: 'service',
+        prompts: {
+          adapter: 'sequelize',
+
+          isAuthEntity: false, name: 'users', nameSingular: 'user',
+          subFolder: '', path: '/users', graphql: false,
+
+          database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+        },
+        calledByTest: {
+          name: 'users',
+          prompts: {
+            adapter: 'sequelize',
+
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+
+            database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+          }
+        }
+      }
+    ],
+    compareDirs: true, // make sure src/sequelize-mssql.js is generated
+    execute: false,
+  },
+
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -938,7 +999,7 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = 'a-gens/js/cumulative.test'; //null; //'cumulative-1-sequelize.test' //null;
+const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
 const executeAll = false;
 
 describe('generators-writing.test.js', function () {

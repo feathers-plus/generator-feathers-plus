@@ -11,7 +11,7 @@ mongoose  |            | mongoose.js  | mongodb.js   |
 sequelize | mysql      |              | sequelize.js |
 sequelize | postgresql |              | sequelize.js |
 sequelize | sqlite     |              | sequelize.js |
-sequelize | sql server |              | *none        | s/b sequelize-mssql.js
+sequelize | sql server | sequelize(*) | sequelize-mssql.js |
 knexjs    | mysql      |              | knex.js      |
 knexjs    | postgresql |              | knex.js      |
 knexjs    | sqlite     |              | knex.js      |
@@ -20,6 +20,7 @@ rethinkdb |            |              | rethinkdb.js |
 objection |            |              | n/a          | limited
 cassandra |            |              | n/a          | limited
 
+(*) Produced by sequelize-mssql.ejs
 
 
 ## generate connection
@@ -44,27 +45,3 @@ sql server | sequelize  | sequelize.js | *none        | ERROR
 sql server | knexjs     | knex.js      | knex.js      |
 sql server | objection  | objection.js |              | limited 
 cassandra  |            | *none        |              | limited 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

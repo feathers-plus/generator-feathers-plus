@@ -836,7 +836,9 @@ module.exports = function generatorWriting (generator, what) {
     ];
 
     Object.keys(_adapters).sort().forEach(adapter => {
-      if (connections[adapter]) {
+      const connectionsAdapter = adapter === 'sequelize-mssql' ? 'sequelize' : adapter;
+
+      if (connections[connectionsAdapter]) {
         // Force a regen for the adapter selected using `generate connection`.
         const forceWrite = isGenerateConnection && props.adapter === adapter;
 
@@ -844,7 +846,7 @@ module.exports = function generatorWriting (generator, what) {
           tmpl(
             [srcPath, '_adapters', _adapters[adapter]],
             [libDir, `${adapter}.${js}`],
-            !forceWrite, false, { database: connections[adapter].database } )
+            !forceWrite, false, { database: connections[connectionsAdapter].database } )
         );
       }
     });
