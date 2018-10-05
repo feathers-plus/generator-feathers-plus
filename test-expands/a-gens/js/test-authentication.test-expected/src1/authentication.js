@@ -49,12 +49,18 @@ let moduleExports = function (app) {
   app.service('authentication').hooks({
     before: {
       create: [
+        // !<DEFAULT> code: before_create
         authentication.hooks.authenticate(config.strategies),
+        // !end
       ],
       remove: [
+        // !<DEFAULT> code: before_remove
         authentication.hooks.authenticate('jwt'),
+        // !end
       ],
+      // !code: before // !end
     },
+    // !code: after // !end
   });
   // !code: func_return // !end
 };

@@ -1085,12 +1085,17 @@ const tests = [
 ];
 
 let appDir;
-const runJustThisTest = null; //'cumulative-1-sequelize.test' //null;
+const runFromTest = null; //'cumulative-1-sequelize.test' //null;
+const runToTest = null; //'cumulative-1-sequelize.test' //null;
 const executeAll = false;
+
+let runTests = !runFromTest;
 
 describe('generators-writing.test.js', function () {
   tests.forEach(({ testName, specsChanges = [], compareDirs = true, compareOnlySpecs = false, execute = false }) => {
-    if (runJustThisTest && runJustThisTest !== testName) return;
+    if (runFromTest && runFromTest === testName) runTests = true;
+    if (runToTest && runToTest === testName) runTests = false;
+    if (!runTests) return;
 
     describe(testName, function () {
       it('writes code expected', () => {

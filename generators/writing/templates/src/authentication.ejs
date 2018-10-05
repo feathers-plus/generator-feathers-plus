@@ -50,12 +50,18 @@
   app.service('authentication').hooks({
     before: {
       create: [
-        authentication.hooks.authenticate(config.strategies),
+        <%- insertFragment('before_create', [
+          '        authentication.hooks.authenticate(config.strategies),'
+        ]) %>
       ],
       remove: [
-        authentication.hooks.authenticate('jwt'),
+        <%- insertFragment('before_remove', [
+          '        authentication.hooks.authenticate(\'jwt\'),'
+        ]) %>
       ],
+      <%- insertFragment('before') %>
     },
+    <%- insertFragment('after') %>
   })<%- sc %>
   <%- insertFragment('func_return') %>
 }<%- sc %>
