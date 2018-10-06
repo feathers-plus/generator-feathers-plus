@@ -18,7 +18,8 @@
     `  const ${camelName} = new mongooseClient.Schema(mongooseSchema, { timestamps: true })${sc}`,
   ]) %>
 
-  let returns = mongooseClient.model('<%= camelName %>', <%= camelName %>)<%- sc %>
+  let existingModel = mongooseClient.models['<%= camelName %>']<%- sc %> // needed for client/server tests
+  let returns = existingModel || mongooseClient.model('<%= camelName %>', <%= camelName %>)<%- sc %>
 
   <%- insertFragment('mongoose_func_return') %>
   return returns<%- sc %>

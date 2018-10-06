@@ -18,7 +18,8 @@ let moduleExports = function (app: App) {
   const users1 = new mongooseClient.Schema(mongooseSchema, { timestamps: true });
   // !end
 
-  let returns = mongooseClient.model('users1', users1);
+  let existingModel = mongooseClient.models['users1']; // needed for client/server tests
+  let returns = existingModel || mongooseClient.model('users1', users1);
 
   // !code: mongoose_func_return // !end
   return returns;

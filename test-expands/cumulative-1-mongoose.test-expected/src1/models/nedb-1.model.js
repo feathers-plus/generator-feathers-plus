@@ -17,7 +17,8 @@ let moduleExports = function (app) {
   const nedb1 = new mongooseClient.Schema(mongooseSchema, { timestamps: true });
   // !end
 
-  let returns = mongooseClient.model('nedb1', nedb1);
+  let existingModel = mongooseClient.models['nedb1']; // needed for client/server tests
+  let returns = existingModel || mongooseClient.model('nedb1', nedb1);
 
   // !code: mongoose_func_return // !end
   return returns;

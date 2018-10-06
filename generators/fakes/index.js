@@ -49,7 +49,7 @@ module.exports = class FakesGenerator extends Generator {
 
     const prompts = [{
       name: 'confirmation',
-      message: 'Regenerate the service data?',
+      message: 'Regenerate the fakes service data?',
       type: 'confirm'
     }];
 
