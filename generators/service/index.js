@@ -73,11 +73,10 @@ module.exports = class ServiceGenerator extends Generator {
     const prompts = [{
       name: 'name',
       message: 'What is the name of the service?',
-      /*
       filter (input) {
-        return generator.makeFileName(input); // used for allowing dot notation. see issue #59.
+        // return generator.makeFileName(input); // used for allowing dot notation. see issue #59.
+        return camelCase(input); // prevent bad names will above resolved.
       },
-      */
       validate (input) {
         if (input.trim() === '') {
           return 'Service name cannot be empty';
