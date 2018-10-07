@@ -1,22 +1,22 @@
 
 // mongodb.<%- js %> - MongoDB adapter
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
-<%- tplImports('url', null, 'req') %>
+<%- tplImports('{ parseConnectionString }', 'mongodb-core', 'req') %>
 <%- tplImports('{ MongoClient }', 'mongodb', 'req') %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
   let config = app.get('mongodb')<%- sc %>
-  let dbName = url.parse(config).path<%- tplTsOnly(['!']) %>.substring(1)<%- sc %>
   <%- insertFragment('func_init') %>
 
-  const promise = MongoClient.connect(config).then(client => {
+  const promise = MongoClient.connect(config, { useNewUrlParser: true }).then(client => {
     // For mongodb <= 2.2
     if (client.collection) {
       return client<%- sc %>
     }
 
+    const dbName = parseConnectionString(config, () => {});
     return client.db(dbName)<%- sc %>
   })<%- sc %>
 
