@@ -1,23 +1,28 @@
 
 // mongodb.js - MongoDB adapter
-const url = require('url');
+const { parseConnectionString } = require('mongodb-core');
 const { MongoClient } = require('mongodb');
+const logger = require('./logger');
 // !code: imports // !end
 // !code: init // !end
 
 module.exports = function (app) {
   let config = app.get('mongodb');
-  let dbName = url.parse(config).path.substring(1);
   // !code: func_init // !end
 
-  const promise = MongoClient.connect(config).then(client => {
+  const promise = MongoClient.connect(config, { useNewUrlParser: true }).then(client => {
     // For mongodb <= 2.2
     if (client.collection) {
       return client;
     }
 
+    const dbName = parseConnectionString(config, () => {});
     return client.db(dbName);
-  });
+  })
+    .catch(error => {
+      console.log(error);
+      logger.error(error);
+    });
 
   app.set('mongoClient', promise);
   // !code: more // !end

@@ -1,6 +1,7 @@
 
 // mongoose.js - Mongoose adapter
 const mongoose = require('mongoose');
+const logger = require('./logger');
 // !code: imports // !end
 // !code: init // !end
 
@@ -15,6 +16,7 @@ module.exports = function (app) {
     .catch(error => {
       // eslint-disable-next-line no-console
       console.log(error);
+      logger.error(error);
       process.exit(1);
     });
   // !code: func_init // !end

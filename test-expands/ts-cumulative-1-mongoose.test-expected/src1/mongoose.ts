@@ -2,6 +2,7 @@
 // mongoose.ts - Mongoose adapter
 import { App } from './app.interface';
 import mongoose from 'mongoose';
+import logger from './logger';
 // !code: imports // !end
 // !code: init // !end
 
@@ -16,6 +17,7 @@ export default function (app: App) {
     .catch(error => {
       // tslint:disable-next-line:no-console
       console.log(error);
+      logger.error(error);
       process.exit(1);
     });
   // !code: func_init // !end
