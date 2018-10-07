@@ -2,6 +2,7 @@
 // rethink.<%- js %> - RethinkDB adapter
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- tplImports('rethinkdbdash', 'rethinkdbdash', 'req') %>
+<%- tplImports('logger', './logger') %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
@@ -24,7 +25,11 @@
       let service = app.service(path)<%- sc %>
 
       if (typeof service.init === 'function') {
-        promise = promise.then(() => service.init())<%- sc %>
+        promise = promise.then(() => { service.init()<%- sc %> }
+          .catch(error => {
+            console.log(error)<%- sc %>
+            logger.error(error)<%- sc %>
+          })
       }
     })<%- sc %>
 

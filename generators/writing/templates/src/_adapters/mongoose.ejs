@@ -2,6 +2,7 @@
 // mongoose.<%- js %> - Mongoose adapter
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- tplImports('mongoose', null, 'req') %>
+<%- tplImports('logger', './logger') %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
@@ -16,6 +17,7 @@
     .catch(error => {
       // <%- lintDisableNextLineNoConsole %>
       console.log(error)<%- sc %>
+      logger.error(error)<%- sc %>
       process.exit(1)<%- sc %>
     })<%- sc %>
   <%- insertFragment('func_init') %>

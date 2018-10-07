@@ -3,6 +3,7 @@
 <%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) -%>
 <%- tplImports('{ parseConnectionString }', 'mongodb-core', 'req') %>
 <%- tplImports('{ MongoClient }', 'mongodb', 'req') %>
+<%- tplImports('logger', './logger') %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
@@ -18,7 +19,11 @@
 
     const dbName = parseConnectionString(config, () => {});
     return client.db(dbName)<%- sc %>
-  })<%- sc %>
+  })
+    .catch(error => {
+      console.log(error)<%- sc %>
+      logger.error(error)<%- sc %>
+    })<%- sc %>
 
   app.set('mongoClient', promise)<%- sc %>
   <%- insertFragment('more') %>
