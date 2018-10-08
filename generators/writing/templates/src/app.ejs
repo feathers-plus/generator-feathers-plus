@@ -65,9 +65,30 @@ app.use('/', express.static(app.get('public')))<%- sc %>
 
 // Set up Plugins and providers
 <%- insertFragment('config_start') %>
-<%- hasProvider('rest') ? `app.configure(express.rest())${sc}` : '' %>
-<%- hasProvider('socketio') ? `app.configure(socketio())${sc}` : '' %>
-<%- hasProvider('primus') ? `app.configure(primus({ transformer: 'websockets' }))${sc}` : '' %>
+<%# -%>
+<%# --- if-90a starts below. -%>
+<% if (hasProvider('rest')) { -%>
+app.configure(express.rest(
+  <%- insertFragment('express_rest') %>
+))<%- sc %>
+<% } -%>
+<%# --- if-90a ends above. -%>
+<%# -%>
+<%# --- if-90b starts below. -%>
+<% if (hasProvider('socketio')) { -%>
+app.configure(socketio(
+  <%- insertFragment('express_socketio') %>
+))<%- sc %>
+<% } -%>
+<%# --- if-90b ends above. -%>
+<%# -%>
+<%# --- if-90c starts below. -%>
+<% if (hasProvider('primus')) { -%>
+app.configure(primus(
+  <%- insertFragment('express_socketio', '  { transformer: \'websockets\' }') %>
+))<%- sc %>
+<% } -%>
+<%# --- if-90c ends above. -%>
 <%# --- forEach-3 starts below. -%>
 <% Object.keys(specs._adapters || []).sort().forEach((__adapter, __i) => { -%>
 <%- __i === 0 ? '// Configure database adapters\n' : '' -%>

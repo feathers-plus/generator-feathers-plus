@@ -44,9 +44,9 @@ app.use('/', express.static(app.get('public')));
 
 // Set up Plugins and providers
 // !code: config_start // !end
-
-app.configure(socketio());
-
+app.configure(socketio(
+  // !code: express_socketio // !end
+));
 // Configure database adapters
 app.configure(sequelize-mssql);
 
