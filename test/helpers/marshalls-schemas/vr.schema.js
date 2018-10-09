@@ -1,12 +1,13 @@
-// Define the Feathers schema for service `Movies`. (Can be re-generated.)
+
+// Define the Feathers schema for service `vr`. (Can be re-generated.)
 // !code: imports // !end
 // !code: init // !end
 
 // Define the model using JSON-schema
 let schema = {
   // !<DEFAULT> code: schema_header
-  title: 'Movies',
-  description: 'Movies database.',
+  title: 'Vr',
+  description: 'Vr database.',
   // !end
   // !code: schema_definitions // !end
 
@@ -16,57 +17,27 @@ let schema = {
   ],
   // Fields with unique values.
   uniqueItemProperties: [
-    // !code: schema_unique
-    'email'
-    // !end
+    // !code: schema_unique // !end
   ],
 
   // Fields in the model.
   properties: {
-    // !code: schema_properties
-    title: {},
-    releases: {
-      type: 'boolean'
-    },
-    releaseDate: {
-      type: 'date',
-      default: function () {
-        if (this.released) {
-          return Date.now();
-        }
-        return null;
-      }
-    },
-    registerdDate: {
-      type: 'date',
-      default: Date.now
-    },
-    genre: {
-      type: 'string',
-      default: 'action'
-    },
-    status: {
-      type: 'string',
-      default: 'active'
-    }
-    // !end
+    // !code: schema_properties // !end
   },
   // !code: schema_more // !end
-};
+}
 
 // Define optional, non-JSON-schema extensions.
 let extensions = {
   // GraphQL generation.
   graphql: {
-    // !<DEFAULT> code: graphql_header
-    name: 'Movie',
+    // !code: graphql_header
+    name: 'Vr',
     service: {
-      sort: {
-        _id: 1
-      },
+      sort: { _id: 1 },
     },
     // sql: {
-    //   sqlTable: 'Movies',
+    //   sqlTable: 'Vr',
     //   uniqueKey: '_id',
     //   sqlColumn: {
     //     __authorId__: '__author_id__',
@@ -78,12 +49,12 @@ let extensions = {
     ],
     add: {
       // !<DEFAULT> code: graphql_add
-      // __author__: { type: '__Movie__!', args: false, relation: { ourTable: '__authorId__', otherTable: '_id' } },
+      // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: '_id' } },
       // !end
     },
     // !code: graphql_more // !end
   },
-};
+}
 
 // !code: more // !end
 
@@ -91,10 +62,10 @@ let moduleExports = {
   schema,
   extensions,
   // !code: moduleExports // !end
-};
+}
 
 // !code: exports // !end
-module.exports = moduleExports;
+module.exports = moduleExports
 
 // !code: funcs // !end
 // !code: end // !end

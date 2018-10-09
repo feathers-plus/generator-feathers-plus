@@ -1,72 +1,66 @@
-// Define the Feathers schema for service `Movies`. (Can be re-generated.)
+
+// Define the Feathers schema for service `tourMenuItems`. (Can be re-generated.)
 // !code: imports // !end
 // !code: init // !end
 
 // Define the model using JSON-schema
 let schema = {
   // !<DEFAULT> code: schema_header
-  title: 'Movies',
-  description: 'Movies database.',
+  title: 'TourMenuItems',
+  description: 'TourMenuItems database.',
   // !end
   // !code: schema_definitions // !end
 
   // Required fields.
   required: [
-    // !code: schema_required // !end
+    // !code: schema_required
+    'text'
+    // !end
   ],
   // Fields with unique values.
   uniqueItemProperties: [
-    // !code: schema_unique
-    'email'
-    // !end
+    // !code: schema_unique // !end
   ],
 
   // Fields in the model.
   properties: {
     // !code: schema_properties
-    title: {},
-    releases: {
-      type: 'boolean'
-    },
-    releaseDate: {
-      type: 'date',
-      default: function () {
-        if (this.released) {
-          return Date.now();
-        }
-        return null;
-      }
-    },
-    registerdDate: {
-      type: 'date',
-      default: Date.now
-    },
-    genre: {
+    text: {
       type: 'string',
-      default: 'action'
+      faker: 'lorem.'
     },
-    status: {
+    envId: {
+      type: 'ID'
+    },
+    type: {
       type: 'string',
-      default: 'active'
+      enum: [ 'Infobox', 'Pano']
+    },
+    panoId: {
+      type: 'ID'
+    },
+    infoboxId: {
+      type: 'ID'
+    },
+    sortOrder: {
+      type: 'number'
     }
     // !end
   },
   // !code: schema_more // !end
-};
+}
 
 // Define optional, non-JSON-schema extensions.
 let extensions = {
   // GraphQL generation.
   graphql: {
-    // !<DEFAULT> code: graphql_header
-    name: 'Movie',
+    // !code: graphql_header
+    name: 'TourMenuItem',
     service: {
-      sort: {
-        _id: 1
-      },
+      sort: { _id: 1 },
     },
     // sql: {
-    //   sqlTable: 'Movies',
+    //   sqlTable: 'TourMenuItems',
     //   uniqueKey: '_id',
     //   sqlColumn: {
     //     __authorId__: '__author_id__',
@@ -78,12 +72,12 @@ let extensions = {
     ],
     add: {
       // !<DEFAULT> code: graphql_add
-      // __author__: { type: '__Movie__!', args: false, relation: { ourTable: '__authorId__', otherTable: '_id' } },
+      // __author__: { type: '__User__!', args: false, relation: { ourTable: '__authorId__', otherTable: '_id' } },
       // !end
     },
     // !code: graphql_more // !end
   },
-};
+}
 
 // !code: more // !end
 
@@ -91,10 +85,10 @@ let moduleExports = {
   schema,
   extensions,
   // !code: moduleExports // !end
-};
+}
 
 // !code: exports // !end
-module.exports = moduleExports;
+module.exports = moduleExports
 
 // !code: funcs // !end
 // !code: end // !end

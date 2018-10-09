@@ -5,6 +5,7 @@ const merge = require('lodash.merge');
 const mongoose = require('mongoose');
 const jsonSchemaSeeder = require('json-schema-seeder');
 const Sequelize = require('sequelize');
+const traverse = require('traverse');
 
 const { camelCase, kebabCase: kebabCase1, snakeCase, upperFirst } = require('lodash');
 const { existsSync } = require('fs');
@@ -48,7 +49,7 @@ const mongooseNativeFuncs = {
   [mongoose.Schema.Types.ObjectId]: 'mongoose.Schema.Types.ObjectId'
 };
 
-const sequelizeNativeFuncs = {
+let sequelizeNativeFuncs = {
   [Sequelize.BOOLEAN]: 'DataTypes.BOOLEAN',
   [Sequelize.ENUM]: 'DataTypes.ENUM',
   [Sequelize.INTEGER]: 'DataTypes.INTEGER',
@@ -617,6 +618,20 @@ module.exports = function generatorWriting (generator, what) {
     context.typescriptExtendsStr = typescriptExtends.map(str => `  ${str}${context.sc} // change if needed`).join(`${EOL}`);
 
     const { seqModel, seqFks } = serviceSpecsToSequelize(feathersSpecs[name], feathersSpecs[name]._extensions);
+
+    // Process objects created by Sequelize.ENUM([option1, option2, ...])
+    traverse(seqModel).forEach(function (value) {
+      if (typeof value === 'object' && value instanceof Sequelize.ENUM) {
+        // Replace Sequelize.ENUM object with a placeholder func that stringify-plus will replace
+        const uniqueFunc = new Function(`return ${Math.random()};`);
+        this.update(uniqueFunc);
+
+        // Identify what stringify-plus should replace that unique function by
+        const str = `Sequelize.ENUM(${JSON.stringify(value.values)})`;
+        Object.assign(sequelizeNativeFuncs, { [uniqueFunc]: str });
+      }
+    });
+
     context.sequelizeSchema = seqModel;
     context.sequelizeFks = seqFks;
     context.sequelizeSchemaStr = stringifyPlus(context.sequelizeSchema, { nativeFuncs: sequelizeNativeFuncs });
