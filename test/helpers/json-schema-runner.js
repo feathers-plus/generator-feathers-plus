@@ -24,8 +24,7 @@ module.exports = function jsonSchemaRunner(options) {
   // inspector('...feathersSpecs', feathersSpecs);
 
   Object.keys(specs.services).forEach(name => {
-    console.log(`        compare service ${name}`);
-    const specsService = specs.services[name];
+    console.log(`        parse ${name}`);
 
     const isValid = validate(feathersSpecs[name]);
     if (!isValid) {
@@ -34,9 +33,14 @@ module.exports = function jsonSchemaRunner(options) {
     }
     if (!isValid) inspector('JSON-schema validation errors:', validate.errors);
     assert(isValid, 'invalid JSON-schema');
+  });
+
+  console.log('');
+  Object.keys(specs.services).forEach(name => {
+    console.log(`        compare ${name}`);
 
     const { typescriptTypes, typescriptExtends } =
-      serviceSpecsToTypescript(specsService, feathersSpecs[name], feathersSpecs[name]._extensions);
+      serviceSpecsToTypescript(specs.services[name], feathersSpecs[name], feathersSpecs[name]._extensions);
     // inspector(`\n\n.....${name} typescriptTypes`, typescriptTypes);
     // inspector(`.....${name} typescriptExtends`, typescriptExtends);
 
