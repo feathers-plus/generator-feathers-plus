@@ -1,4 +1,5 @@
 
+// Given specs and JSON-schema from services, log the models generated for each service.
 const { assert }= require('chai');
 const mongoose = require('mongoose');
 const Sequelize = require('sequelize');

@@ -63,6 +63,7 @@
   "dependencies": {
     "@feathers-plus/common": "0.1.0",
     "@feathersjs/tools": "0.1.7",
+    "ajv": "^6.5.4",
     "faker": "^4.1.0",
     "json-schema-deref-sync": "0.5.0",
     "json-schema-seeder": "^0.1.7",
@@ -79,7 +80,6 @@
   },
   "devDependencies": {
     "@feathersjs/feathers": "^3.1.7",
-    "ajv": "^6.5.4",
     "chai": "4.1.2",
     "fs-extra": "7.0.0",
     "istanbul": "1.1.0-alpha.1",

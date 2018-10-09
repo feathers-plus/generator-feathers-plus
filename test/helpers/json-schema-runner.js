@@ -29,7 +29,7 @@ module.exports = function jsonSchemaRunner(options) {
     const isValid = validate(feathersSpecs[name]);
     if (!isValid) {
       addErrors(validate.errors);
-      console.log(errorMessages);
+      console.log('\nJSON-schema validation errors:\n', errorMessages, '\n');
     }
     if (!isValid) inspector('JSON-schema validation errors:', validate.errors);
     assert(isValid, 'invalid JSON-schema');
