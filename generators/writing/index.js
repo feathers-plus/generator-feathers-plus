@@ -530,6 +530,9 @@ module.exports = function generatorWriting (generator, what) {
 
     if (specs.app.seedData) {
       generator.dependencies.push('@feathers-plus/test-utils');
+      if (!isJs) {
+        //generator.dependencies.push('@types/???');
+      }
     }
 
     const extraDeps = specs['additional-dependencies'];
@@ -1291,7 +1294,7 @@ module.exports = function generatorWriting (generator, what) {
         ] : [
           //'@types/???',
           '@feathers-plus/test-utils'
-        ], { saveDev: true });
+        ], { save: true }); // because seeding DBs also uses it
       }
     }
 
@@ -1328,7 +1331,7 @@ module.exports = function generatorWriting (generator, what) {
         ] : [
           //'@types/???',
           '@feathers-plus/test-utils'
-        ], { saveDev: true });
+        ], { save: true }); // because seeding DBs also uses it
       }
     }
 
