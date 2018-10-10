@@ -66,7 +66,7 @@
     "ajv": "^6.5.4",
     "faker": "^4.1.0",
     "json-schema-deref-sync": "0.5.0",
-    "json-schema-seeder": "^0.1.7",
+    "json-schema-seeder": "0.1.8",
     "lodash": "4.17.10",
     "lodash.merge": "4.6.1",
     "mongoose": "5.2.8",
