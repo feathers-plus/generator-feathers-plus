@@ -1344,26 +1344,26 @@ function writeAuthenticationConfiguration (generator, context) {
   const config = Object.assign({}, generator._specs._defaultJson);
   const path = context.servicePath;
 
-  config.authentication = {
-    secret: generator._specs._isRunningTests
-      ? '***** secret generated for tests *****'
-      : (config.authentication || {}).secret || crypto.randomBytes(256).toString('hex'),
-    strategies: [ 'jwt' ],
-    path: '/authentication',
-    service: path.substring(0,1) !== '/' ? path : context.servicePath.substring(1),
-    jwt: {
-      header: { typ: 'access' },
-      audience: 'https://yourdomain.com',
-      subject: 'anonymous',
-      issuer: 'feathers',
-      algorithm: 'HS256',
-      expiresIn: '1d'
-    }
+  const configAuth = config.authentication = config.authentication || {};
+  configAuth.secret = generator._specs._isRunningTests
+    ? '***** secret generated for tests *****'
+    : (configAuth.secret || crypto.randomBytes(256).toString('hex'));
+  configAuth.strategies = [ 'jwt' ];
+  configAuth.path = '/authentication';
+  configAuth.service = path.substring(0,1) !== '/' ? path : context.servicePath.substring(1);
+
+  configAuth.jwt = configAuth.jwt || {
+    header: { typ: 'access' },
+    audience: 'https://yourdomain.com',
+    subject: 'anonymous',
+    issuer: 'feathers',
+    algorithm: 'HS256',
+    expiresIn: '1d'
   };
 
   if (context.strategies.indexOf('local') !== -1) {
-    config.authentication.strategies.push('local');
-    config.authentication.local = {
+    configAuth.strategies.push('local');
+    configAuth.local = configAuth.local || {
       entity: 'user',
       usernameField: 'email',
       passwordField: 'password'
@@ -1395,12 +1395,12 @@ function writeAuthenticationConfiguration (generator, context) {
         strategyConfig.scope = ['profile openid email'];
       }
 
-      config.authentication[strategy] = strategyConfig;
+      configAuth[strategy] = configAuth[strategy] || strategyConfig;
     }
   });
 
   if (includesOAuth) {
-    config.authentication.cookie = {
+    configAuth.cookie = configAuth.cookie || {
       enabled: true,
       name: 'feathers-jwt',
       httpOnly: false,
