@@ -199,13 +199,13 @@ describe('Test posts/posts.service.permissions.test.js', () => {
         try {
           switch (method) {
           case 'find':
-            await app.service(SERVICE_NAME).find(ids[id], params);
+            await app.service(SERVICE_NAME).find(params);
             break;
           case 'get':
             await app.service(SERVICE_NAME).get(ids[id], params);
             break;
           case 'create':
-            await app.service(SERVICE_NAME).create({ body: 'foo' }, params);
+            await app.service(SERVICE_NAME).create({ body: 'bar' }, params);
             break;
           case 'update':
             await app.service(SERVICE_NAME).update(ids[id], { body: 'bar' }, params);
@@ -219,13 +219,13 @@ describe('Test posts/posts.service.permissions.test.js', () => {
           }
 
           if (errCode) {
-            assert(false, 'unexpected succeeded');
+            assert(false, 'unexpected success');
           }
         } catch(err) {
-          if (err.message === 'unexpected succeeded') return err;
+          if (err.message === 'unexpected success') return err;
 
           if (!errCode) {
-            assert(false, `unexpected failed: ${err.message}`);
+            assert(false, `unexpected fail: ${err.message}`);
             return;
           }
 
