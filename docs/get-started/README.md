@@ -2372,7 +2372,7 @@ GraphQL comes with a set of default scalar types out of the box:
 - **String!** Its a String. null is not allowed.
 - **[String]** Its an array of Strings. An element may be null and, instead of an array, the field itself may be null.
 - **[String!]** Like [String] but the elements may not be null. null is still allowed instead of an array.
-- **{String]!** Like [String] but an array must exist.
+- **[String]!** Like [String] but an array must exist.
 - **[String!]!** Like [String] but an array must exist and no element may be null.
 :::
     

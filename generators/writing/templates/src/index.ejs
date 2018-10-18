@@ -23,7 +23,7 @@ process.on('unhandledRejection', (reason, p) => {
   <%- insertFragment('unhandled_rejection') %>
 })<%- sc %>
 
-server.on('listening', () => {
+server.on('listening', async () => {
   <%- insertFragment('listening_log', [
     `  logger.info(\'Feathers application started on http://%s:%d\', app.get(\'host\'), port)${sc}`,
   ]) %>
@@ -31,9 +31,10 @@ server.on('listening', () => {
 <%# -%>
 <%# --- if-2 starts below. -%>
 <% if (specs.app.seedData) { -%>
-  seedData(app);
+  await seedData(app);
 <% } -%>
 <%# --- if-2 ends above. -%>
+  <%- insertFragment('listening1') %>
 })<%- sc %>
 
 <%- insertFragment('funcs') %>

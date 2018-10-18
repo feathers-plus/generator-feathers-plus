@@ -17,11 +17,12 @@ process.on('unhandledRejection', (reason, p) => {
   // !code: unhandled_rejection // !end
 });
 
-server.on('listening', () => {
+server.on('listening', async () => {
   // !<DEFAULT> code: listening_log
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   // !end
   // !code: listening // !end
+  // !code: listening1 // !end
 });
 
 // !code: funcs // !end

@@ -1017,7 +1017,7 @@ module.exports = function generatorWriting (generator, what) {
       libDirectory: generator.libDirectory
     });
 
-    // inspector('\n... graphqlSchemas\n', context.graphqlSchemas.split('\n'));
+     inspector('\n... graphqlSchemas\n', context.graphqlSchemas.split('\n'));
     // inspector('\n... mapping.graphqlService', context.mapping.graphqlService);
     // inspector('\n... feathersSpecs', context.feathersSpecs);
 
