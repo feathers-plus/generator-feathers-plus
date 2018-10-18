@@ -2619,12 +2619,8 @@ const expectedMongooseSchema = {
       type: String,
       required: true
     },
-    phones: [
-      Object
-    ],
-    emails: [
-      Object
-    ],
+    phones: [],
+    emails: [],
     primaryContact: String,
     notes: String
   },
@@ -2790,9 +2786,7 @@ const expectedMongooseSchema = {
     primaryPhotoUrl: String,
     primaryPhotoCoordinates: String,
     primaryPhotoUploadInfo: String,
-    categories: [
-      Object
-    ],
+    categories: [],
     location: {
       type: {
         type: String,
