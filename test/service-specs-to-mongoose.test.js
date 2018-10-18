@@ -25,4 +25,8 @@ describe('Creates Mongoose Schemas', function () {
     assert.deepEqual(mongooseSchema.registerdDate.default, Date.now, 'registerdDate default value was correctly applied');
    
   });
+  it('properly generates model for array of objects', function () {
+    const mongooseSchema = serviceSpecsToMongoose(usersSchema.schema);
+    assert.deepEqual(mongooseSchema.categories, [], 'categories ')
+  });
 });

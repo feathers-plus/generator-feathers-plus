@@ -44,6 +44,14 @@ let schema = {
       }
     },
 
+    categories: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {}
+      }
+    },
+
     dept: { enum: [ 'acct' ] }
     // !end
   },
