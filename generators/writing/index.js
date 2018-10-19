@@ -136,6 +136,9 @@ function generatorsInclude (name) {
   return generators.indexOf(name) !== -1;
 }
 
+// Options
+const ifFgraphql = (process.env.FLAGS || '').includes('f');
+
 let appConfigPath;
 
 module.exports = function generatorWriting (generator, what) {
@@ -186,6 +189,9 @@ module.exports = function generatorWriting (generator, what) {
     hasProvider (name) { return specs.app.providers.indexOf(name) !== -1; },
     getNameSpace(str) { return generator.getNameSpace(str); },
     appConfigPath,
+
+    // Options
+    ifFgraphql,
 
     // TypeScript & semicolon helpers.
     js,
@@ -729,6 +735,7 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([namePath, 'name.sequelize.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.sequelize.${js}`]   ),
       tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.validate.${js}`]    ),
       tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.hooks.${js}`]       ),
+      tmpl([namePath, 'name.populate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.populate.${js}`],   false, !ifFgraphql           ),
       tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                         ),
 
       tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
@@ -1016,10 +1023,6 @@ module.exports = function generatorWriting (generator, what) {
       graphqlSchemas: serviceSpecsToGraphql(feathersSpecs),
       libDirectory: generator.libDirectory
     });
-
-    // inspector('\n... graphqlSchemas\n', context.graphqlSchemas.split('\n'));
-    // inspector('\n... mapping.graphqlService', context.mapping.graphqlService);
-    // inspector('\n... feathersSpecs', context.feathersSpecs);
 
     todos = [
       tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `graphql.test.${js}`], true),
