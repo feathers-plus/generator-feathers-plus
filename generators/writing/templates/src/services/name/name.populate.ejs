@@ -3,8 +3,8 @@
 <%- tplImports('{ fgraphql }', 'feathers-hooks-common') %>
 <%- tplImports('{ parse }', 'graphql') %>
 <%- insertFragment('graphql', specs.graphql ? [
-      tplImports('schemaDefinitionLanguage', '../../services/graphql/graphql.schemas'),
-      tplImports('serviceResolvers', '../../services/graphql/service.resolvers'),
+      tplImports('schemaDefinitionLanguage', `../../${subFolderReverse}services/graphql/graphql.schemas`),
+      tplImports('serviceResolvers', `../../${subFolderReverse}services/graphql/service.resolvers`),
     ] : [
       `const schemaDefinitionLanguage = ''${sc}`,
       `const serviceResolvers = {}${sc}`,
@@ -103,7 +103,7 @@ Object.keys(__add1).forEach(__join1 => {
   '    parse,',
   '    schema: schemaDefinitionLanguage,',
   '    resolvers: serviceResolvers,',
-  `    recordType: '${serviceName}',`,
+  `    recordType: '${serviceNameSingular.charAt(0).toUpperCase() + serviceNameSingular.slice(1)}',`,
   '    query,',
   '    options: {},',
   '    resolverContent: {}',
