@@ -13,7 +13,7 @@
 
 <%# -%>
 <%# --- if-1 starts below. -%>
-<% if (specs.graphql && specs.graphql.path) { -%>
+<% if (specs.graphql && specs.graphql.path && !specs.graphql.doNotConfigure) { -%>
 <%- tplImports('graphql', './graphql/graphql.service', null, 'let') %>
 <% } -%>
 <%# --- if-1 ends above. -%>
@@ -30,7 +30,7 @@
 <%# --- forEach-2 ends above. -%>
 <%# -%>
 <%# --- if-2 starts below. -%>
-<% if (specs.graphql && specs.graphql.name) { %>
+<% if (specs.graphql && specs.graphql.name && !specs.graphql.doNotConfigure) { %>
   app.configure(<%- specs.graphql.name %>)<%- sc %>
 <% } -%>
 <%# --- if-2 ends above. -%>

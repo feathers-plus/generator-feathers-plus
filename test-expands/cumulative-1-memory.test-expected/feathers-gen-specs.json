@@ -85,6 +85,7 @@
     "path": "/graphql",
     "strategy": "services",
     "sqlInterface": null,
-    "requiresAuth": false
+    "requiresAuth": false,
+    "doNotConfigure": false
   }
 }

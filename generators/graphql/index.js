@@ -100,6 +100,11 @@ module.exports = class GraphqlGenerator extends Generator {
       type: 'confirm',
       default: graphqlSpecs.requiresAuth,
       when: !!specs.authentication
+    }, {
+      name: 'doNotConfigure',
+      message: 'Will you be using only the fgraphql hook, not the service?',
+      type: 'confirm',
+      default: graphqlSpecs.doNotConfigure,
     }];
 
     return this.prompt(prompts)

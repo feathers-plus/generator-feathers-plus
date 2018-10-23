@@ -93,6 +93,7 @@
     "strategy": "services",
     "sqlInterface": null,
     "requiresAuth": false,
+    "doNotConfigure": false,
     "name": "graphql"
   }
 }
