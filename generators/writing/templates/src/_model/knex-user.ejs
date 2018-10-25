@@ -21,9 +21,9 @@
         table.string('email').unique()<%- sc %>
         table.string('password')<%- sc %>
       <% } %>
-      <% authentication.oauthProviders.forEach(provider => { %>
+      <% oauthProviders.forEach(provider => { %>
         table.string('<%= provider.name %>Id')<%- sc %>
-      <% })<%- sc %> %>
+      <% }) %>
       })
         .then(() => console.log(`Created ${tableName} table`))
         .catch(e => console.error(`Error creating ${tableName} table`, e))<%- sc %>
