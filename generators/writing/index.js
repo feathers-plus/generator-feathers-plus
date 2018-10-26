@@ -180,6 +180,10 @@ module.exports = function generatorWriting (generator, what) {
   // Get expanded Feathers service specs
   const { mapping, feathersSpecs } = serviceSpecsExpand(specs, generator);
 
+  //inspector('\n...specs', specs);
+  //inspector('\n...mapping', mapping);
+  //inspector('\n...feathersSpecs', feathersSpecs);
+
   // Basic context used with templates.
   let context = Object.assign({}, {
     // Expanded definitions.
@@ -615,6 +619,7 @@ module.exports = function generatorWriting (generator, what) {
     // Custom template context.
     const { typescriptTypes, typescriptExtends } =
       serviceSpecsToTypescript(specsService, feathersSpecs[name], feathersSpecs[name]._extensions);
+
     context = Object.assign({}, context, {
       serviceName: name,
       serviceNameSingular: specsService.nameSingular,
@@ -622,6 +627,8 @@ module.exports = function generatorWriting (generator, what) {
       subFolderArray: generator.getNameSpace(specsService.subFolder)[1],
       subFolderReverse: generator.getNameSpace(specsService.subFolder)[2],
       primaryKey: feathersSpecs[name]._extensions.primaryKey,
+      graphqlTypeName: ((feathersSpecs[name]._extensions.graphql || {}).name)
+      || (specsService.nameSingular.charAt(0).toUpperCase() + specsService.nameSingular.slice(1)),
       camelName,
       kebabName: fileName,
       snakeName,
