@@ -39,7 +39,7 @@ $ feathers-plus generate app                 # Generate scaffolding for app
 $ feathers generate authentication           # Generate authentication and user-entity service
 $ feathers-plus generate secret              # Generate a new secret for authentication
 $ feathers-plus generate service             # Generate a new service with its model
-$ feathers-plus generate graphql             # Generate a GraphQL endp;oint for services
+$ feathers-plus generate graphql             # Generate a GraphQL endpoint for services
 $ feathers-plus generate all                 # Regenerate the entire app
 $ feathers-plus help                         # Show all commands
 ```
