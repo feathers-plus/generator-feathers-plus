@@ -166,12 +166,14 @@ module.exports = class ServiceGenerator extends Generator {
         }, {
           name: 'Sequelize',
           value: 'sequelize'
+          /*
         }, {
           name: 'KnexJS',
           value: 'knex'
         }, {
           name: 'RethinkDB',
           value: 'rethinkdb'
+          */
         }
       ]
     }, {
