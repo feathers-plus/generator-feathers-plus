@@ -628,7 +628,7 @@ module.exports = function generatorWriting (generator, what) {
       subFolderReverse: generator.getNameSpace(specsService.subFolder)[2],
       primaryKey: feathersSpecs[name]._extensions.primaryKey,
       graphqlTypeName: ((feathersSpecs[name]._extensions.graphql || {}).name)
-      || (specsService.nameSingular.charAt(0).toUpperCase() + specsService.nameSingular.slice(1)),
+        || (specsService.nameSingular.charAt(0).toUpperCase() + specsService.nameSingular.slice(1)),
       camelName,
       kebabName: fileName,
       snakeName,
@@ -1335,14 +1335,12 @@ module.exports = function generatorWriting (generator, what) {
         tmpl([testPath, 'services', 'name', 'service.client.test.ejs'], ['test', pathToTest], true, testType === 'serviceUnit'),
       ];
 
-      if (testType === 'serviceInteg') {
-        generator._packagerInstall(isJs ? [
-          '@feathers-plus/test-utils'
-        ] : [
-          //'@types/???',
-          '@feathers-plus/test-utils'
-        ], { save: true }); // because seeding DBs also uses it
-      }
+      generator._packagerInstall(isJs ? [
+        '@feathers-plus/test-utils'
+      ] : [
+        //'@types/???',
+        '@feathers-plus/test-utils'
+      ], { save: true }); // because seeding DBs also uses it
     }
 
     // Generate modules

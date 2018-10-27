@@ -1,17 +1,21 @@
 
 <%- tplTsOnly(`/// <reference types="mocha"/>${EOL}`) -%>
 <%- tplImports('assert', null) %>
+<%- tplImports('{ readJsonFileSync }', '@feathers-plus/test-utils') %>
 <%- tplImports('app', `${pathTestToApp}${specs.app.src}/app`) %>
 <%- tplImports('config', `${pathTestToApp}config/default.json`) %>
 
 // Determine if environment allows test to mutate existing DB data.
 const env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
-if (!env.includes(process.env.NODE_ENV) || process.argv.includes('--noclient')) {
+if (!env.includes(process.env.NODE_ENV)) {
   // <%- lintDisableNextLineNoConsole %>
   console.log('SKIPPED - Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>')<%- sc %>
 <%- tplTsOnly('  // @ts-ignore') %>
   return<%- sc %>
 }
+
+// <%- lintDisableNextLineUnused %>
+const fakeData = readJsonFileSync([__dirname, '../../../../seeds/fake-data.json']) || {}<%- sc %>
 
 describe('Test <%- serviceFileName -%>/<%- serviceFileName -%>.service<%- stt%>.test.<%- js -%>', () => {
   beforeEach(async () => {
