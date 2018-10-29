@@ -8,6 +8,13 @@
 <%- tplImports(__hook.camelName, `${__hook.filePath}${__hook.fileName}`) %>
 <% }) -%>
 <%# --- forEach-1 ends above. -%>
+<%# -%>
+<%# --- if-2 starts below. -%>
+<% if (specs.graphql && serviceName !== 'graphql') { -%>
+// <%- lintDisableNextLineUnused %>
+<%- tplImports(`${serviceName}Populate`, `./${kebabName}.populate`) %>
+<% } -%>
+<%# --- if-2 ends above. -%>
 <%- insertFragment('imports') %>
 
 <% __validate = isJs ? [

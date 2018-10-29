@@ -1,6 +1,8 @@
 
 // Hooks for service `nedb1`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
+// eslint-disable-next-line no-unused-vars
+const nedb1Populate = require('./nedb-1.populate');
 // !code: imports // !end
 
 // !<DEFAULT> code: used

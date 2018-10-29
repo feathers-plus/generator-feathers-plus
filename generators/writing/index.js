@@ -194,9 +194,6 @@ module.exports = function generatorWriting (generator, what) {
     getNameSpace(str) { return generator.getNameSpace(str); },
     appConfigPath,
 
-    // Options
-    ifFgraphql,
-
     // TypeScript & semicolon helpers.
     js,
     isJs,
@@ -742,7 +739,7 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([namePath, 'name.sequelize.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.sequelize.${js}`]   ),
       tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.validate.${js}`]    ),
       tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.hooks.${js}`]       ),
-      tmpl([namePath, 'name.populate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.populate.${js}`],   false, !ifFgraphql           ),
+      tmpl([namePath, 'name.populate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.populate.${js}`],   false, !specs.graphql        ),
       tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                         ),
 
       tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
