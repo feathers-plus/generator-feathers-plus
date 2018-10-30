@@ -7,11 +7,12 @@ const { authenticate } = authHooks;
 // tslint:disable-next-line:no-unused-variable
 import { hooks as localAuthHooks } from '@feathersjs/authentication-local';
 const { hashPassword, protect } = localAuthHooks;
+import { ObjectID } from 'mongodb';
 // !code: imports // !end
 
 // !<DEFAULT> code: used
 // tslint:disable-next-line:no-unused-variable
-const { iff } = commonHooks;
+const { iff, mongoKeys } = commonHooks;
 import validate from './users-1.validate';
 // tslint:disable-next-line:no-unused-variable
 const { create, update, patch, validateCreate, validateUpdate, validatePatch } = validate;
@@ -22,7 +23,7 @@ const { create, update, patch, validateCreate, validateUpdate, validatePatch } =
 let moduleExports: HooksObject = {
   before: {
     // Your hooks should include:
-    //   find  : authenticate('jwt')
+    //   find  : authenticate('jwt'), mongoKeys(ObjectID, foreignKeys)
     //   get   : authenticate('jwt')
     //   create: hashPassword()
     //   update: hashPassword(), authenticate('jwt')
@@ -30,7 +31,7 @@ let moduleExports: HooksObject = {
     //   remove: authenticate('jwt')
     // !<DEFAULT> code: before
     all: [],
-    find: [ authenticate('jwt') ],
+    find: [ authenticate('jwt'), mongoKeys(ObjectID, foreignKeys) ],
     get: [ authenticate('jwt') ],
     create: [ hashPassword() ],
     update: [ hashPassword(), authenticate('jwt') ],

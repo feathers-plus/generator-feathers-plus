@@ -618,12 +618,10 @@ module.exports = function generatorWriting (generator, what) {
       serviceSpecsToTypescript(specsService, feathersSpecs[name], feathersSpecs[name]._extensions);
 
     let graphqlTypeName;
-    generator.log(specsService.graphql, name !== 'graphql')
     if (specs.graphql && specsService.graphql && name !== 'graphql') {
       graphqlTypeName = ((feathersSpecs[name]._extensions.graphql || {}).name)
         || (specsService.nameSingular.charAt(0).toUpperCase() + specsService.nameSingular.slice(1));
     }
-    generator.log('graphqlTypeName', graphqlTypeName)
 
     context = Object.assign({}, context, {
       serviceName: name,
@@ -767,7 +765,8 @@ module.exports = function generatorWriting (generator, what) {
     // Determine which hooks are needed
     function getHookInfo(name) {
       const sc = context.sc;
-      const isMongo = (mapping.feathers[name] || {}).adapter === 'mongodb';
+      //const isMongo = (mapping.feathers[name] || {}).adapter === 'mongodb';
+      const isMongo = specs.services[name].adapter === 'mongodb';
       const requiresAuth = specsService.requiresAuth;
 
       const hooks = [ 'iff' ];

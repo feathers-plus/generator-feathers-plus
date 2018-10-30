@@ -4,11 +4,12 @@ const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
 // eslint-disable-next-line no-unused-vars
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
+const { ObjectID } = require('mongodb');
 // !code: imports // !end
 
 // !<DEFAULT> code: used
 // eslint-disable-next-line no-unused-vars
-const { iff } = commonHooks;
+const { iff, mongoKeys } = commonHooks;
 // eslint-disable-next-line no-unused-vars
 const { create, update, patch, validateCreate, validateUpdate, validatePatch } = require('./users-1.validate');
 // !end
@@ -18,7 +19,7 @@ const { create, update, patch, validateCreate, validateUpdate, validatePatch } =
 let moduleExports = {
   before: {
     // Your hooks should include:
-    //   find  : authenticate('jwt')
+    //   find  : authenticate('jwt'), mongoKeys(ObjectID, foreignKeys)
     //   get   : authenticate('jwt')
     //   create: hashPassword()
     //   update: hashPassword(), authenticate('jwt')
@@ -26,7 +27,7 @@ let moduleExports = {
     //   remove: authenticate('jwt')
     // !<DEFAULT> code: before
     all: [],
-    find: [ authenticate('jwt') ],
+    find: [ authenticate('jwt'), mongoKeys(ObjectID, foreignKeys) ],
     get: [ authenticate('jwt') ],
     create: [ hashPassword() ],
     update: [ hashPassword(), authenticate('jwt') ],
