@@ -92,7 +92,7 @@ async function <%= serviceName %>Populate (context) {
   '    runTime,',
   '    schema,',
   '    resolvers,',
-  `    recordType: '${feathersSpecs[serviceName]._extensions.graphql.name || (serviceNameSingular.charAt(0).toUpperCase() + serviceNameSingular.substr(1))}',`,
+  `    recordType: '${graphqlTypeName}',`,
   '    query,',
   '    options,',
   `  })(context)${sc}`,

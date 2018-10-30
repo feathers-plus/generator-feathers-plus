@@ -617,6 +617,14 @@ module.exports = function generatorWriting (generator, what) {
     const { typescriptTypes, typescriptExtends } =
       serviceSpecsToTypescript(specsService, feathersSpecs[name], feathersSpecs[name]._extensions);
 
+    let graphqlTypeName;
+    generator.log(specsService.graphql, name !== 'graphql')
+    if (specs.graphql && specsService.graphql && name !== 'graphql') {
+      graphqlTypeName = ((feathersSpecs[name]._extensions.graphql || {}).name)
+        || (specsService.nameSingular.charAt(0).toUpperCase() + specsService.nameSingular.slice(1));
+    }
+    generator.log('graphqlTypeName', graphqlTypeName)
+
     context = Object.assign({}, context, {
       serviceName: name,
       serviceNameSingular: specsService.nameSingular,
@@ -624,8 +632,7 @@ module.exports = function generatorWriting (generator, what) {
       subFolderArray: generator.getNameSpace(specsService.subFolder)[1],
       subFolderReverse: generator.getNameSpace(specsService.subFolder)[2],
       primaryKey: feathersSpecs[name]._extensions.primaryKey,
-      graphqlTypeName: ((feathersSpecs[name]._extensions.graphql || {}).name)
-        || (specsService.nameSingular.charAt(0).toUpperCase() + specsService.nameSingular.slice(1)),
+      graphqlTypeName,
       camelName,
       kebabName: fileName,
       snakeName,
@@ -739,7 +746,7 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([namePath, 'name.sequelize.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.sequelize.${js}`]   ),
       tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.validate.${js}`]    ),
       tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.hooks.${js}`]       ),
-      tmpl([namePath, 'name.populate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.populate.${js}`],   false, !specs.graphql        ),
+      tmpl([namePath, 'name.populate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.populate.${js}`],   false, !graphqlTypeName        ),
       tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                         ),
 
       tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
@@ -1015,6 +1022,8 @@ module.exports = function generatorWriting (generator, what) {
       subFolder: '',
       subFolderArray: [],
       subFolderReverse: '',
+
+      graphqlTypeName: undefined,
 
       path: stripSlashes(specs.graphql.path),
       authentication: false,

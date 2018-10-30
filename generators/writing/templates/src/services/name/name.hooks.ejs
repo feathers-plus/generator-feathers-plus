@@ -10,7 +10,7 @@
 <%# --- forEach-1 ends above. -%>
 <%# -%>
 <%# --- if-2 starts below. -%>
-<% if (specs.graphql && serviceName !== 'graphql') { -%>
+<% if (graphqlTypeName) { -%>
 // <%- lintDisableNextLineUnused %>
 <%- tplImports(`${serviceName}Populate`, `./${kebabName}.populate`) %>
 <% } -%>

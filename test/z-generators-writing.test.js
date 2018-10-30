@@ -1078,6 +1078,7 @@ const tests = [
             },
           }
         },
+        // since the services are not regenerated, no name.populate.js files are generated
       ],
       compareDirs: true,
       execute: false,
