@@ -5,6 +5,8 @@ const commonHooks = require('feathers-hooks-common');
 const hookNedb12 = require('../../hooks/hook.nedb12');
 // eslint-disable-next-line no-unused-vars
 const hookNedb2 = require('./hooks/hook.nedb2');
+// eslint-disable-next-line no-unused-vars
+const nedb2Populate = require('./nedb-2.populate');
 // !code: imports // !end
 
 // !<DEFAULT> code: used

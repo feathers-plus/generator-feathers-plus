@@ -5,6 +5,8 @@ import { HooksObject } from '@feathersjs/feathers';
 import { hooks as authHooks } from '@feathersjs/authentication';
 const { authenticate } = authHooks;
 import { ObjectID } from 'mongodb';
+// tslint:disable-next-line:no-unused-variable
+import nedb1Populate from './nedb-1.populate';
 // !code: imports // !end
 
 // !<DEFAULT> code: used

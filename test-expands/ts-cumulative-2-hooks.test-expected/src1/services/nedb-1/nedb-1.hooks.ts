@@ -8,6 +8,8 @@ const { authenticate } = authHooks;
 import hookNedb1 from './hooks/hook.nedb1';
 // tslint:disable-next-line:no-unused-variable
 import hookNedb12 from '../../hooks/hook.nedb12';
+// tslint:disable-next-line:no-unused-variable
+import nedb1Populate from './nedb-1.populate';
 // !code: imports // !end
 
 // !<DEFAULT> code: used

@@ -3,6 +3,8 @@
 const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
 const { ObjectID } = require('mongodb');
+// eslint-disable-next-line no-unused-vars
+const nedb1Populate = require('./nedb-1.populate');
 // !code: imports // !end
 
 // !<DEFAULT> code: used

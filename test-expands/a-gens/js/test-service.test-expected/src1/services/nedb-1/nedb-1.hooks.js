@@ -6,6 +6,8 @@ const { authenticate } = require('@feathersjs/authentication').hooks;
 const hookNedb1 = require('./hooks/hook.nedb1');
 // eslint-disable-next-line no-unused-vars
 const hookNedb12 = require('../../hooks/hook.nedb12');
+// eslint-disable-next-line no-unused-vars
+const nedb1Populate = require('./nedb-1.populate');
 // !code: imports // !end
 
 // !<DEFAULT> code: used

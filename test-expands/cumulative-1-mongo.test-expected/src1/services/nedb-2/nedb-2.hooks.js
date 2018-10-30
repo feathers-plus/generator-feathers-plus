@@ -2,6 +2,8 @@
 // Hooks for service `nedb2`. (Can be re-generated.)
 const commonHooks = require('feathers-hooks-common');
 const { ObjectID } = require('mongodb');
+// eslint-disable-next-line no-unused-vars
+const nedb2Populate = require('./nedb-2.populate');
 // !code: imports // !end
 
 // !<DEFAULT> code: used

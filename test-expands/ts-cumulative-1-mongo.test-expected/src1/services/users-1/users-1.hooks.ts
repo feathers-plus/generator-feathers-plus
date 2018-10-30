@@ -7,6 +7,8 @@ const { authenticate } = authHooks;
 // tslint:disable-next-line:no-unused-variable
 import { hooks as localAuthHooks } from '@feathersjs/authentication-local';
 const { hashPassword, protect } = localAuthHooks;
+// tslint:disable-next-line:no-unused-variable
+import users1Populate from './users-1.populate';
 // !code: imports // !end
 
 // !<DEFAULT> code: used

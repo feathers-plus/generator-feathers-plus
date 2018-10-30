@@ -6,6 +6,8 @@ import { HooksObject } from '@feathersjs/feathers';
 import hookNedb12 from '../../hooks/hook.nedb12';
 // tslint:disable-next-line:no-unused-variable
 import hookNedb2 from './hooks/hook.nedb2';
+// tslint:disable-next-line:no-unused-variable
+import nedb2Populate from './nedb-2.populate';
 // !code: imports // !end
 
 // !<DEFAULT> code: used

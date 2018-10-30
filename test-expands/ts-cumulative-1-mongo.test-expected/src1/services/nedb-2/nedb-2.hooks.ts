@@ -3,6 +3,8 @@
 import * as commonHooks from 'feathers-hooks-common';
 import { HooksObject } from '@feathersjs/feathers';
 import { ObjectID } from 'mongodb';
+// tslint:disable-next-line:no-unused-variable
+import nedb2Populate from './nedb-2.populate';
 // !code: imports // !end
 
 // !<DEFAULT> code: used

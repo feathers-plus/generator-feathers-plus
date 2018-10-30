@@ -2,6 +2,8 @@
 // Hooks for service `nedb2`. (Can be re-generated.)
 import * as commonHooks from 'feathers-hooks-common';
 import { HooksObject } from '@feathersjs/feathers';
+// tslint:disable-next-line:no-unused-variable
+import nedb2Populate from './nedb-2.populate';
 // !code: imports // !end
 
 // !<DEFAULT> code: used

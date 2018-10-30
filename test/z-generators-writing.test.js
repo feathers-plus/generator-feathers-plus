@@ -1085,7 +1085,7 @@ const tests = [
 ];
 
 let appDir;
-const runFromTest = 'graphql.test'; //null; //'cumulative-1-sequelize.test' //null;
+const runFromTest = null; //'cumulative-1-sequelize.test' //null;
 const runToTest = null; //'cumulative-1-sequelize.test' //null;
 const executeAll = false;
 

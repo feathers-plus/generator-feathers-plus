@@ -4,6 +4,8 @@ const commonHooks = require('feathers-hooks-common');
 const { authenticate } = require('@feathersjs/authentication').hooks;
 // eslint-disable-next-line no-unused-vars
 const { hashPassword, protect } = require('@feathersjs/authentication-local').hooks;
+// eslint-disable-next-line no-unused-vars
+const users1Populate = require('./users-1.populate');
 // !code: imports // !end
 
 // !<DEFAULT> code: used
