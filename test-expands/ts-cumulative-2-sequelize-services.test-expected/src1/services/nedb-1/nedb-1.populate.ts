@@ -1,7 +1,7 @@
 
 // fgraphql populate hook for service `nedb1`. (Can be re-generated.)
 import runTime from '@feathers-plus/graphql/lib/run-time';
-import { fgraphql } from 'feathers-hooks-common';
+import { fgraphql, serialize } from 'feathers-hooks-common';
 import { parse } from 'graphql';
 // !<DEFAULT> code: graphql
 import schema from '../../services/graphql/graphql.schemas';
@@ -33,29 +33,29 @@ const queries = {
 async function nedb1Populate (context) {
   // tslint:disable-next-line:no-unused-variable
   const params = context.params;
-  let query, options;
+  let query, options, serializer;
 
   if (params.$populate) { return context; } // another populate is calling this service
 
   // !<DEFAULT> code: populate
   // Example: always the same query
-  ({ query, options } = queries.foo);
+  ({ query, options, serializer } = queries.foo);
 
   // Example: select query based on user being authenticated or not
-  ({ query, options } = queries[params.user ? queries.foo : queries.bar]);
+  ({ query, options, serializer } = queries[params.user ? queries.foo : queries.bar]);
 
   // Example: select query based on the user role
   if (params.user && params.user.roles.includes('foo')) {
-    ({ query, options } = queries.foo);
+    ({ query, options, serializer } = queries.foo);
   }
 
   // Example: allow client to provide the query
   if (params.$populateQuery) {
-    ({ query, options } = params.$populateQuery);
+    ({ query, options, serializer } = params.$populateQuery);
   }
 
   // Populate the data.
-  const newContext = await fgraphql({
+  let newContext = await fgraphql({
     parse,
     runTime,
     schema,
@@ -66,7 +66,9 @@ async function nedb1Populate (context) {
   })(context);
 
   // Prune and sanitize the data.
-  // ...
+  if (serializer) {
+    newContext = serialize(serializer)(newContext);
+  }
 
   // End the hook.
   return newContext;

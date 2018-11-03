@@ -1,7 +1,7 @@
 
 // fgraphql populate hook for service `<%= serviceName %>`. (Can be re-generated.)
 <%- tplImports('runTime', '@feathers-plus/graphql/lib/run-time') %>
-<%- tplImports('{ fgraphql }', 'feathers-hooks-common') %>
+<%- tplImports('{ fgraphql, serialize }', 'feathers-hooks-common') %>
 <%- tplImports('{ parse }', 'graphql') %>
 <%- insertFragment('graphql', specs.graphql ? [
       tplImports('schema', `../../${subFolderReverse}services/graphql/graphql.schemas`),
@@ -65,29 +65,29 @@ Object.keys(__add1).forEach(__join1 => {
 async function <%= serviceName %>Populate (context) {
   // <%- lintDisableNextLineUnused %>
   const params = context.params<%- sc %>
-  let query, options<%- sc %>
+  let query, options, serializer<%- sc %>
 
   if (params.$populate) { return context<%- sc %> } // another populate is calling this service
 
   <%- insertFragment('populate', [
   '  // Example: always the same query',
-  `  ({ query, options } = queries.foo)${sc}`,
+  `  ({ query, options, serializer } = queries.foo)${sc}`,
   '',
   '  // Example: select query based on user being authenticated or not',
-  `  ${sc ? '' : ';'}({ query, options } = queries[params.user ? queries.foo : queries.bar])${sc}`,
+  `  ${sc ? '' : ';'}({ query, options, serializer } = queries[params.user ? queries.foo : queries.bar])${sc}`,
   '',
   '  // Example: select query based on the user role',
   '  if (params.user && params.user.roles.includes(\'foo\')) {',
-  `    ({ query, options } = queries.foo)${sc}`,
+  `    ({ query, options, serializer } = queries.foo)${sc}`,
   '  }',
   '',
   '  // Example: allow client to provide the query',
   '  if (params.$populateQuery) {',
-  `    ({ query, options } = params.$populateQuery)${sc}`,
+  `    ({ query, options, serializer } = params.$populateQuery)${sc}`,
   '  }',
   '',
   '  // Populate the data.',
-  '  const newContext = await fgraphql({',
+  '  let newContext = await fgraphql({',
   '    parse,',
   '    runTime,',
   '    schema,',
@@ -98,7 +98,9 @@ async function <%= serviceName %>Populate (context) {
   `  })(context)${sc}`,
   '',
   '  // Prune and sanitize the data.',
-  '  // ...',
+  '  if (serializer) {',
+  `    newContext = serialize(serializer)(newContext)${sc}`,
+  '  }',
   '',
   '  // End the hook.',
   `  return newContext${sc}`,
