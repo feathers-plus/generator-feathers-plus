@@ -1,6 +1,5 @@
 
 /* eslint-disable no-console */
-const Ajv = require('ajv');
 const crypto = require('crypto');
 const merge = require('lodash.merge');
 const mongoose = require('mongoose');
@@ -16,7 +15,6 @@ const { join } = require('path');
 const kebabCase = kebabCase1; //name => name === 'users1' ? name : kebabCase1(name);
 
 const doesFileExist = require('../../lib/does-file-exist');
-const jsonSchemaDraft07Schema = require('../../lib/json-schema-draft-07-schema');
 const makeConfig = require('./templates/_configs');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
@@ -26,6 +24,7 @@ const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
 const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript');
 const stringifyPlus = require('../../lib/stringify-plus');
 const validationErrorsLog = require('../../lib/validation-errors-log');
+const validateJsonSchema = require('../../lib/validate-json-schema');
 
 const { generatorFs } = require('../../lib/generator-fs');
 const { updateSpecs } = require('../../lib/specs');
@@ -125,11 +124,6 @@ function abstractTs(specs) {
     },
   };
 }
-
-// JSON-schema validation
-const ajv = new Ajv();
-const validate = ajv.compile(jsonSchemaDraft07Schema);
-let errorMessages = null;
 
 // Utilities
 let generators;
@@ -600,11 +594,7 @@ module.exports = function generatorWriting (generator, what) {
     // inspector(`\n... feathersSpecs ${name} (generator ${what})`, feathersSpecs[name]);
 
     // Validate JSON-schema (not non-JSON-schema props like .extensions)
-    const isValid = validate(feathersSpecs[name]);
-    if (!isValid) {
-      addErrors(validate.errors);
-      validationErrorsLog(`JSON-schema validation errors in JSON-schema for service ${name}`, errorMessages);
-    }
+    validateJsonSchema(name, feathersSpecs[name]);
 
     // Custom template context.
     const { typescriptTypes, typescriptExtends } =
@@ -1451,27 +1441,6 @@ function writeDefaultJsonClient (generator) {
     generator.destinationPath(appConfigPath, 'default.json'),
     config
   );
-}
-
-function addErrors (errors) {
-  errors.forEach(ajvError => {
-    errorMessages = addNewError(errorMessages, ajvError);
-  });
-}
-
-function addNewError (errorMessages, ajvError) {
-  let message = `${ajvError.dataPath || ''} ${ajvError.message}`;
-
-  if (ajvError.params) {
-    if (ajvError.params.additionalProperty) {
-      message += `: ${ajvError.params.additionalProperty}`;
-    }
-    if (ajvError.params.allowedValues) {
-      message += `: ${ajvError.params.allowedValues}`;
-    }
-  }
-
-  return (errorMessages || []).concat(message);
 }
 
 // eslint-disable-next-line no-unused-vars
