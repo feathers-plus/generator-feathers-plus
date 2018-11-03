@@ -25,6 +25,7 @@ const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
 const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript');
 const stringifyPlus = require('../../lib/stringify-plus');
+const validationErrorsLog = require('../../lib/validation-errors-log');
 
 const { generatorFs } = require('../../lib/generator-fs');
 const { updateSpecs } = require('../../lib/specs');
@@ -135,9 +136,6 @@ let generators;
 function generatorsInclude (name) {
   return generators.indexOf(name) !== -1;
 }
-
-// Options
-const ifFgraphql = (process.env.FLAGS || '').includes('f');
 
 let appConfigPath;
 
@@ -605,12 +603,7 @@ module.exports = function generatorWriting (generator, what) {
     const isValid = validate(feathersSpecs[name]);
     if (!isValid) {
       addErrors(validate.errors);
-      console.log(`\n\nJSON-schema validation errors in JSON-schema for service ${name}`);
-      console.log('==================================================================');
-      errorMessages.forEach((msg, i) => {
-        console.log(i, msg);
-      });
-      console.log('\n\n');
+      validationErrorsLog(`JSON-schema validation errors in JSON-schema for service ${name}`, errorMessages);
     }
 
     // Custom template context.

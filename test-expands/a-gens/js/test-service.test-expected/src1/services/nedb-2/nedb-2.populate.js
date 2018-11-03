@@ -35,7 +35,7 @@ async function nedb2Populate (context) {
   const params = context.params;
   let query, options;
 
-  if (params.$populate) return context; // another populate is calling this service
+  if (params.$populate) { return context; } // another populate is calling this service
 
   // !<DEFAULT> code: populate
   // Example: always the same query

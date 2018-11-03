@@ -35,14 +35,14 @@ async function nedb1Populate (context) {
   const params = context.params
   let query, options
 
-  if (params.$populate) return context // another populate is calling this service
+  if (params.$populate) { return context } // another populate is calling this service
 
   // !<DEFAULT> code: populate
   // Example: always the same query
   ({ query, options } = queries.foo)
 
   // Example: select query based on user being authenticated or not
-  ({ query, options } = queries[params.user ? queries.foo : queries.bar])
+  ;({ query, options } = queries[params.user ? queries.foo : queries.bar])
 
   // Example: select query based on the user role
   if (params.user && params.user.roles.includes('foo')) {
