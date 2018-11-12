@@ -1,5 +1,6 @@
 
 const chalk = require('chalk');
+const makeDebug = require('debug');
 const { parse, sep } = require('path');
 const { cwd } = require('process');
 const { kebabCase } = require('lodash');
@@ -8,8 +9,12 @@ const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
 
+const debug = makeDebug('generator-feathers-plus:prompts:app');
+
 module.exports = class AppGenerator extends Generator {
   async prompting () {
+    debug('app prompting() start');
+
     await Generator.asyncInit(this);
     const { props, _specs: specs } = this;
     const generator = this;
@@ -152,8 +157,11 @@ module.exports = class AppGenerator extends Generator {
       },
     }];
 
+    debug('start prompts');
     return this.prompt(prompts)
       .then(answers => {
+        debug('end prompts');
+
         answers.seedData = answers.environmentsAllowingSeedData ? answers.seedData : false;
         Object.assign(this.props, answers);
 
@@ -161,10 +169,14 @@ module.exports = class AppGenerator extends Generator {
         if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
           this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
         }
+
+        debug('app prompting() ends', this.props);
       });
   }
 
   writing () {
+    debug('app writing starts. call generatorWriting');
     generatorWriting(this, 'app');
+    debug('app writing ends');
   }
 };

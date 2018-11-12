@@ -136,7 +136,7 @@ function generatorsInclude (name) {
 let appConfigPath;
 
 module.exports = function generatorWriting (generator, what) {
-  debug('generatorWriting()', what);
+  debug('generatorWriting() starts', what);
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator;
   updateSpecs(what, props, `${what} generator`);
