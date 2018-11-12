@@ -38,8 +38,10 @@ app.use(compress())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')))
+// !<DEFAULT> code: use_static
 // Host the public folder
 app.use('/', express.static(app.get('public')))
+// !end
 // !code: use_end // !end
 
 // Set up Plugins and providers

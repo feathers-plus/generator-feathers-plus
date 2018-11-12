@@ -1,6 +1,7 @@
 
 /* eslint-disable no-console */
 const crypto = require('crypto');
+const makeDebug = require('debug');
 const merge = require('lodash.merge');
 const mongoose = require('mongoose');
 const jsonSchemaSeeder = require('json-schema-seeder');
@@ -29,6 +30,7 @@ const validateJsonSchema = require('../../lib/validate-json-schema');
 const { generatorFs } = require('../../lib/generator-fs');
 const { updateSpecs } = require('../../lib/specs');
 
+const debug = makeDebug('generator-feathers-plus:main');
 const EOL = '\n';
 
 const OAUTH2_STRATEGY_MAPPINGS = {
@@ -134,6 +136,7 @@ function generatorsInclude (name) {
 let appConfigPath;
 
 module.exports = function generatorWriting (generator, what) {
+  debug('generatorWriting()', what);
   // Update specs with answers to prompts
   let { props, _specs: specs } = generator;
   updateSpecs(what, props, `${what} generator`);
@@ -142,6 +145,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // Get unique generators which have been run
   generators = [...new Set(specs._generators)].sort();
+  debug('generators run=', generators);
 
   // Abbreviations for paths to templates used in building 'todos'.
   const tpl = join(__dirname, 'templates');
@@ -304,8 +308,11 @@ module.exports = function generatorWriting (generator, what) {
       throw new Error(`Unexpected generate ${what}. (writing`);
   }
 
+  debug('generatorWriting() ended');
+
   // ===== app =====================================================================================
   function app (generator) {
+    debug('app()');
     const [ packager ] = specs.app.packager.split('@');
     const testAllJsFront = `${packager} run eslint && NODE_ENV=`;
     const testAllJsBack = ' npm run mocha';
@@ -544,12 +551,18 @@ module.exports = function generatorWriting (generator, what) {
       generator.devDependencies = generator.devDependencies.concat(extraDevDeps);
     }
 
+    debug('dependencies', generator.dependencies);
+    debug('dev-dependencies', generator.devDependencies);
+
     generator._packagerInstall(generator.dependencies, { save: true });
     generator._packagerInstall(generator.devDependencies, { saveDev: true });
+
+    debug('app() ended');
   }
 
   // ===== service =================================================================================
   function service (generator, name) {
+    debug('service()');
     const specsService = specs.services[name];
     const fileName = specsService.fileName;
     const camelName = camelCase(name);
@@ -859,6 +872,7 @@ module.exports = function generatorWriting (generator, what) {
   // ===== connection ==============================================================================
   function connection (generator) {
     if (!specs.connections) return;
+    debug('connection()');
 
     // Common abbreviations for building 'todos'.
     const newConfig = specs._defaultJson = Object.assign({}, specs._defaultJson, specs._dbConfigs);
@@ -902,6 +916,7 @@ module.exports = function generatorWriting (generator, what) {
   // ===== authentication ==========================================================================
   function authentication (generator, justRegen) {
     if (!specs.authentication) return;
+    debug('authentication()');
 
     const entity = specs.authentication.entity;
     const strategies = specs.authentication.strategies;
@@ -975,6 +990,7 @@ module.exports = function generatorWriting (generator, what) {
   // ===== middleware ==============================================================================
   function middleware (generator) {
     if (!specs.middlewares) return;
+    debug('middleware()');
 
     todos = [
       tmpl([mwPath, 'index.ejs'], [src, 'middleware', `index.${js}`])
@@ -994,6 +1010,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== graphql =================================================================================
   function graphql (generator) {
+    debug('graphql()');
     // Custom template context
     context = Object.assign({}, context, {
       name: 'graphql',
@@ -1129,6 +1146,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== hook ====================================================================================
   function hook(generator, name) {
+    debug('hook()');
     const hookSpec = specs.hooks[name];
     const hookFile = hookSpec.fileName;
     let todos;
@@ -1153,6 +1171,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== fakes ===================================================================================
   function fakes (generator) {
+    debug('fakes()');
     const schemas = {};
     const adapters = {};
 
@@ -1196,6 +1215,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // ===== test ====================================================================================
   function test (generator) {
+    debug('test()');
     // props = {
     //   testType = ['hookUnit', 'hookInteg', 'serviceUnit', 'serviceInteg', 'authBase', 'authServices'],
     //   hookName!, serviceName!
