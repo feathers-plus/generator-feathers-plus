@@ -52,6 +52,9 @@ const tests = [
   // Test when .eslintrc.json file already exists
     { testName: 'app-eslintrc.test' },
 
+  // Test using feathers-gen-code.js for code
+    { testName: 'app-code-blocks.test' },
+
   // t02, z02 (z01 ->) Test service creation without authentication scaffolding.
   // Also test any missing specs.options props are created.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)

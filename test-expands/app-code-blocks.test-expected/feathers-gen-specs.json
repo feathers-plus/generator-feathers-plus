@@ -1,0 +1,26 @@
+{
+  "overrides": {
+    "authorName": "John Szwaronek",
+    "authorEmail": "johnsz9999@gmail.com",
+    "engineNodeMajor": 8
+  },
+  "options": {
+    "ver": "1.0.0",
+    "inspectConflicts": false,
+    "semicolons": true,
+    "freeze": [],
+    "ts": false
+  },
+  "app": {
+    "name": "z-1",
+    "description": "Project z-1",
+    "src": "src1",
+    "packager": "npm@>= 3.0.0",
+    "providers": [
+      "socketio"
+    ],
+    "environmentsAllowingSeedData": "testa",
+    "seedData": false
+  },
+  "services": {}
+}

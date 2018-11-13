@@ -1,0 +1,9 @@
+{
+  "mongodb": "mongodb://no-connection-string-config-testa",
+  "mysql": "mysql://root:@no-connection-string-config-testa",
+  "nedb": "nedb://no-connection-string-config-testa",
+  "postgres": "postgres://postgres:@no-connection-string-config-testa",
+  "rethinkdb": "rethinkdb://no-connection-string-config-testa",
+  "sqlite": "sqlite://no-connection-string-config-testa",
+  "mssql": "mssql://root:password@no-connection-string-config-testa"
+}
