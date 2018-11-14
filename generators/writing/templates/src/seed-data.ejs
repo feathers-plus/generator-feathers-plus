@@ -3,15 +3,15 @@
 <%- tplImports('{ join }', 'path') %>
 <%- tplImports('{ readJsonFileSync }', '@feathers-plus/test-utils') %>
 <%- tplImports('config', '../config/default.json') %>
-<%- tplTsOnly('import { App } from \'../src/app.interface\'') %>
+<%- tplTsOnly([`import { App } from './app.interface'${sc}`, '']) %>
 <%- insertFragment('imports') %>
 
 // Determine if command line argument exists for seeding data
 let ifSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str))<%- sc %>
 
 // Determine if environment allows test to mutate existing DB data.
-let env = (config.tests || {}).environmentsAllowingSeedData || []<%- sc %>
-let ifDbChangesAllowed = env.includes(process.env.NODE_ENV)<%- sc %>
+let { tests: { environmentsAllowingSeedData = [] } = {}} = config<%- sc %>
+let ifDbChangesAllowed = environmentsAllowingSeedData.includes(process.env.NODE_ENV)<%- sc %>
 
 // Get generated fake data
 let fakeData = readJsonFileSync(join(__dirname, '../seeds/fake-data.json')) || {}<%- sc %>
