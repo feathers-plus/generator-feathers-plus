@@ -26,11 +26,13 @@ module.exports = class CodelistGenerator extends Generator {
       const codeFilePath = code[filePath];
 
       this.log();
-      this.log(chalk.yellow.bold(`> Module ${filePath.substr(dirLen)}`));
+      this.log(chalk.yellow.bold(`// !module ${filePath.substr(dirLen)}`));
+      this.log();
 
       Object.keys(codeFilePath).forEach(codeLocation => {
-        this.log(chalk.green.bold(`> Location ${codeLocation}`));
+        this.log(chalk.green.bold(`// !code: ${codeLocation}`));
         this.log(codeFilePath[codeLocation].join('\n'));
+        this.log(chalk.green.bold('// !end'));
       });
     });
   }
