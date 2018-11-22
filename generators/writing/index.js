@@ -1,10 +1,10 @@
 
 /* eslint-disable no-console */
 const crypto = require('crypto');
+const jsonSchemaSeeder = require('json-schema-seeder');
 const makeDebug = require('debug');
 const merge = require('lodash.merge');
 const mongoose = require('mongoose');
-const jsonSchemaSeeder = require('json-schema-seeder');
 const Sequelize = require('sequelize');
 const traverse = require('traverse');
 
