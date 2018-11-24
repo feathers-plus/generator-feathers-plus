@@ -22,7 +22,7 @@ process.env['NODE_CONFIG_DIR'] = './<%- appConfigPath %>'<%- sc %>
 <%- tplImports('middleware', './middleware') %>
 <%- tplImports('services', './services') %>
 <%- tplImports('appHooks', './app.hooks') %>
-<%- tplImports('channels', './channels') %>
+<%- (hasProvider('socketio') || hasProvider('primus')) ? tplImports('channels', './channels') : '' %>
 <%- tplTsOnly([`// ${lintDisableNextLine}`, '']) -%>
 const generatorSpecs = require('../feathers-gen-specs.json')<%- sc %>
 <%# -%>
@@ -110,8 +110,12 @@ app.configure(authentication)<%- sc %>
 <%# --- if-2 ends above. -%>
 // Set up our services (see `services/index.<%- js %>`)
 app.configure(services)<%- sc %>
+<%# --- if-4 starts below. -%>
+<% if (hasProvider('primus') || hasProvider('socketio')) { -%>
 // Set up event channels (see channels.<%- js %>)
 app.configure(channels)<%- sc %>
+<% } -%>
+<%# --- if-4 ends above. -%>
 <%- insertFragment('config_middle') %>
 
 // Configure a middleware for 404s and the error handler
