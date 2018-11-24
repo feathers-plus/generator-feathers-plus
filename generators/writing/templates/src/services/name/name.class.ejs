@@ -71,7 +71,7 @@ module.exports = moduleExports;
 <%# -%>
 <%# --- if-2 starts below. TYPESCRIPT ---------------------------------------------------------- -%>
 <% if (!isJs) { %>
-import { App } from '../../app.interface'<%- sc %>
+import { App } from '../../<%- subFolderReverse %>app.interface'<%- sc %>
 import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '@feathersjs/feathers'<%- sc %>
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
