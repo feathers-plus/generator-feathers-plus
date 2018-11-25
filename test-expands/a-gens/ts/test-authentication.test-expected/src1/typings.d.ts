@@ -3,6 +3,8 @@
 // !code: imports // !end
 // !code: init // !end
 
+declare module '*.json';
+
 // Application.
 
 // Authentication.
@@ -15,6 +17,9 @@ declare module 'feathers-nedb';
 // GraphQL.
 declare module '@feathers-plus/graphql';
 declare module 'merge-graphql-schemas';
+
+// Seed.
+declare module '@feathers-plus/test-utils';
 
 // !code: more // !end
 
