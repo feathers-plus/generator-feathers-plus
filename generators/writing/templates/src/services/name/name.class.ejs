@@ -82,26 +82,26 @@ import { Id, NullableId, Paginated, Params, ServiceMethods, SetupMethod } from '
 ]) %>
 
 export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
-  <%- insertFragment('properties', '  app!: App;') %>
+  <%- insertFragment('properties', '  public app!: App;') %>
 
   constructor (private options: ServiceOptions = {}) {
     <%- insertFragment('constructor1') %>
   }
 
   <%- insertFragment('setup', [
-    '  setup (app: App, path: string): void {',
+    '  public setup (app: App, path: string): void {',
     `    this.app = app${sc}`,
     '  }'
   ]) %>
 
   <%- insertFragment('find', [
-    '  async find(params?: Params): Promise<any[] | Paginated<any>> {',
+    '  public async find(params?: Params): Promise<any[] | Paginated<any>> {',
     `    return []${sc}`,
     '  }',
   ]) %>
 
   <%- insertFragment('get', [
-    '  async get (id: Id, params?: Params): Promise<any> {',
+    '  public async get (id: Id, params?: Params): Promise<any> {',
     '    return {',
     '      id, text: `A new message with ID: ${id}!`',
     `    }${sc}`,
@@ -109,7 +109,7 @@ export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   ]) %>
 
   <%- insertFragment('create', [
-    '  async create (data: Partial<any> | Array<Partial<any>>, params?: Params): Promise<any> {',
+    '  public async create (data: Partial<any> | Array<Partial<any>>, params?: Params): Promise<any> {',
     '    if (Array.isArray(data)) {',
     `      return Promise.all(data.map(current => this.create(current, params)))${sc}`,
     '    }',
@@ -119,19 +119,19 @@ export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   ]) %>
 
   <%- insertFragment('update', [
-    '  async update (id: NullableId, data: any, params?: Params): Promise<any> {',
+    '  public async update (id: NullableId, data: any, params?: Params): Promise<any> {',
     `    return data${sc}`,
     '  }',
   ]) %>
 
   <%- insertFragment('patch', [
-    '  async patch (id: NullableId, data: Partial<any>, params?: Params): Promise<any> {',
+    '  public async patch (id: NullableId, data: Partial<any>, params?: Params): Promise<any> {',
     `    return data${sc}`,
     '  }',
   ]) %>
 
   <%- insertFragment('remove', [
-    '  async remove (id: NullableId, params?: Params): Promise<any> {',
+    '  public async remove (id: NullableId, params?: Params): Promise<any> {',
     `    return { id }${sc}`,
     '  }',
   ]) %>
@@ -140,7 +140,7 @@ export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
 
 export default function (options: ServiceOptions) {
   return new Service(options)<%- sc %>
-}<%- sc %>
+}
 
 <% } -%>
 <%# --- if-2 ends above. -%>
