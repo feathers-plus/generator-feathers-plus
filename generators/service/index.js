@@ -1,5 +1,6 @@
 
 const chalk = require('chalk');
+const makeDebug = require('debug');
 const { camelCase, kebabCase } = require('lodash');
 const { cwd } = require('process');
 const { parse } = require('path');
@@ -7,8 +8,9 @@ const { singular } = require('pluralize');
 
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
-
 const { initSpecs } = require('../../lib/specs');
+
+const debug = makeDebug('generator-feathers-plus:prompts:service');
 
 module.exports = class ServiceGenerator extends Generator {
   async prompting () {
@@ -242,10 +244,20 @@ module.exports = class ServiceGenerator extends Generator {
       if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
         this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
       }
+
+      debug('service prompting() ends', this.props);
+
+      if (!generator.callWritingFromPrompting()) return;
+
+      debug('service writing patch starts. call generatorWriting');
+      generatorWriting(generator, 'service');
+      debug('service writing patch ends');
     });
   }
 
   writing () {
+    if (this.callWritingFromPrompting()) return;
+
     generatorWriting(this, 'service');
   }
 };

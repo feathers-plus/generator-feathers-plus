@@ -1,5 +1,6 @@
 
 const chalk = require('chalk');
+const makeDebug = require('debug');
 const { cwd } = require('process');
 const { parse } = require('path');
 
@@ -7,10 +8,13 @@ const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
 
+const debug = makeDebug('generator-feathers-plus:prompts:options');
+
 module.exports = class OptionsGenerator extends Generator {
   async prompting () {
     await Generator.asyncInit(this);
     const { _specs: specs } = this;
+    const generator = this;
     initSpecs('options');
     const js = specs.options.ts ? 'ts' : 'js';
 
@@ -71,10 +75,20 @@ module.exports = class OptionsGenerator extends Generator {
       if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
         this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
       }
+
+      debug('options prompting() ends', this.props);
+
+      if (!generator.callWritingFromPrompting()) return;
+
+      debug('options writing patch starts. call generatorWriting');
+      generatorWriting(generator, 'options');
+      debug('options writing patch ends');
     });
   }
 
   writing () {
+    if (this.callWritingFromPrompting()) return;
+
     generatorWriting(this, 'options');
   }
 };

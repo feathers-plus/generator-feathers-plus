@@ -1,5 +1,6 @@
 
 const chalk = require('chalk');
+const makeDebug = require('debug');
 const { parse } = require('path');
 const { cwd } = require('process');
 const Generator = require('../../lib/generator');

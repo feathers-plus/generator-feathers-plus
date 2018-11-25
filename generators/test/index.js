@@ -1,8 +1,11 @@
 
 const chalk = require('chalk');
+const makeDebug = require('debug');
 
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
+
+const debug = makeDebug('generator-feathers-plus:prompts:test');
 
 module.exports = class CodelistGenerator extends Generator {
   async prompting () {
@@ -146,10 +149,20 @@ module.exports = class CodelistGenerator extends Generator {
       if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
         this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
       }
+
+      debug('test prompting() ends', this.props);
+
+      if (!generator.callWritingFromPrompting()) return;
+
+      debug('test writing patch starts. call generatorWriting');
+      generatorWriting(generator, 'test');
+      debug('test writing patch ends');
     });
   }
 
   writing () {
+    if (this.callWritingFromPrompting()) return;
+
     generatorWriting(this, 'test');
   }
 };

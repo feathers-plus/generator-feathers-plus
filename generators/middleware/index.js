@@ -1,5 +1,6 @@
 
 const chalk = require('chalk');
+const makeDebug = require('debug');
 const { cwd } = require('process');
 const { kebabCase, camelCase } = require('lodash');
 const { parse } = require('path');
@@ -7,6 +8,8 @@ const { parse } = require('path');
 const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
+
+const debug = makeDebug('generator-feathers-plus:prompts:middleware');
 
 module.exports = class MiddlewareGenerator extends Generator {
   async prompting () {
@@ -61,10 +64,20 @@ module.exports = class MiddlewareGenerator extends Generator {
         }
 
         initSpecs('middleware', this.props);
+
+        debug('middleware prompting() ends', this.props);
+
+        if (!generator.callWritingFromPrompting()) return;
+
+        debug('middleware writing patch starts. call generatorWriting');
+        generatorWriting(generator, 'middleware');
+        debug('middleware writing patch ends');
       });
   }
 
   writing () {
+    if (this.callWritingFromPrompting()) return;
+
     generatorWriting(this, 'middleware');
   }
 };
