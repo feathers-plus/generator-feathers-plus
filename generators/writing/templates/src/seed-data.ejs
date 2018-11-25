@@ -20,7 +20,7 @@ let fakeData = readJsonFileSync(join(__dirname, '../seeds/fake-data.json')) || {
 let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) || {}).services<%- sc %>
 <%- insertFragment('init') %>
 
-module.exports = async function (app<%- tplTsOnly(': App') %>) {
+<%- tplExport('async function (app) {', 'async function (app: App) {') %>
   <%- insertFragment('func_init') %>
   if (!ifSeedServices) return<%- sc %>
   if (!ifDbChangesAllowed) return<%- sc %>
@@ -63,7 +63,7 @@ module.exports = async function (app<%- tplTsOnly(': App') %>) {
     }
   }
   <%- insertFragment('func_return') %>
-}<%- sc %>
+}<%- tplJsOnly(sc) %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
