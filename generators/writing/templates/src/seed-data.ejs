@@ -22,8 +22,8 @@ let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) 
 
 module.exports = async function (app<%- tplTsOnly(': App') %>) {
   <%- insertFragment('func_init') %>
-  if (!ifSeedServices) return<%- sc %><%- tplTsOnly(' // tslint:disable-line') %>
-  if (!ifDbChangesAllowed) return<%- sc %><%- tplTsOnly(' // tslint:disable-line') %>
+  if (!ifSeedServices) return<%- sc %>
+  if (!ifDbChangesAllowed) return<%- sc %>
 
   if (!Object.keys(fakeData).length) {
     console.log('Cannot seed services as seed/fake-data.json doesn\'t have seed data.')<%- sc %>
@@ -49,7 +49,7 @@ module.exports = async function (app<%- tplTsOnly(': App') %>) {
             <%- insertFragment('seed_try', [
               `            const deleted = await service.remove(null)${sc}`,
               `            const result = await service.create(fakeData[name])${sc}`,
-              '            console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`)' + sc + tplTsOnly(' // tslint:disable-line'),
+              '            console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`)' + sc,
             ]) %>
           } catch (err) {
             console.log(`Error on seeding service ${name} on path ${path}`, err.message)<%- sc %>
