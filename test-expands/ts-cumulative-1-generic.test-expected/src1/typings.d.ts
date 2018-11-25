@@ -3,6 +3,8 @@
 // !code: imports // !end
 // !code: init // !end
 
+declare module '*.json';
+
 // Application.
 
 // Authentication.
