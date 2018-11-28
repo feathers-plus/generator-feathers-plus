@@ -345,6 +345,10 @@ module.exports = function generatorWriting (generator, what) {
         `${startSeedFront}${startSeedJsBack}` : `${startSeedFront}${startSeedTsBack}`
     );
 
+    const configNodemon = generator.fs.readJSON(
+      generator.destinationPath('nodemon.json'), makeConfig.nodemon(generator, 'development')
+    );
+
     const configProd = generator.fs.readJSON(
       generator.destinationPath(`${appConfigPath}/production.json`), makeConfig.configProduction(generator)
     );
@@ -422,6 +426,7 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([tpl, 'src', 'seed-data.ejs'],        [src, `seed-data.${js}`], false, !specs.app.seedData),
 
       json(pkg,           'package.json'),
+      json(configNodemon, 'nodemon.json'),
       json(configDefault, [appConfigPath, 'default.json']),
       json(configProd,    [appConfigPath, 'production.json']),
 
