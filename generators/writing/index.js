@@ -490,6 +490,7 @@ module.exports = function generatorWriting (generator, what) {
 
     generator.devDependencies = [
       'mocha',
+      'nodemon',
       'request',
       'request-promise'
     ];
@@ -497,7 +498,6 @@ module.exports = function generatorWriting (generator, what) {
     if (isJs) {
       generator.devDependencies = generator.devDependencies.concat([
         'eslint',
-        'nodemon',
       ]);
     } else {
       generator.devDependencies = generator.devDependencies.concat([
