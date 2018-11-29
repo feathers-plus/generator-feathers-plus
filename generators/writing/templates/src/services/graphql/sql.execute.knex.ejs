@@ -1,7 +1,7 @@
 
 // Execute raw SQL statement for GraphQL using Knex. (Can be re-generated.)
 <%- tplTsOnly([`import { App } from '../../app.interface'${sc}`, '']) -%>
-<%- tplTsOnly([`import { Knex } from 'knex'${sc}`, '']) -%>
+<%- tplTsOnly([`import Knex from 'knex'${sc}`, '']) -%>
 <%- insertFragment('imports') %>
 
 let dialects<%- tplTsOnly(': any') -%> = {
