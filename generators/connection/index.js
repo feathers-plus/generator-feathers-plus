@@ -1,5 +1,6 @@
 
 const chalk = require('chalk');
+const makeDebug = require('debug');
 const { snakeCase } = require('lodash');
 const { parse } = require('path');
 const { cwd } = require('process');
@@ -8,11 +9,14 @@ const Generator = require('../../lib/generator');
 const generatorWriting = require('../writing');
 const { initSpecs } = require('../../lib/specs');
 
+const debug = makeDebug('generator-feathers-plus:prompts:connection');
+
 module.exports = class ConnectionGenerator extends Generator {
   async prompting () {
     this.checkDirContainsApp();
     await Generator.asyncInit(this);
     const { props, _specs: specs } = this;
+    const generator = this;
     this._initialGeneration = !this._specs.connections;
     initSpecs('connection');
 
@@ -27,7 +31,6 @@ module.exports = class ConnectionGenerator extends Generator {
       this.log();
     }
 
-    const generator = this;
     this.dependencies = [];
 
     const databaseName = snakeCase(this.pkg.name);
@@ -172,10 +175,20 @@ module.exports = class ConnectionGenerator extends Generator {
       if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
         this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
       }
+
+      debug('connection prompting() ends', this.props);
+
+      if (!generator.callWritingFromPrompting()) return;
+
+      debug('connection writing patch starts. call generatorWriting');
+      generatorWriting(generator, 'connection');
+      debug('connection writing patch ends');
     });
   }
 
   writing () {
+    if (this.callWritingFromPrompting()) return;
+
     generatorWriting(this, 'connection');
   }
 };

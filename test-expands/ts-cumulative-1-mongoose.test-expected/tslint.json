@@ -6,9 +6,11 @@
   "jsRules": {},
   "rules": {
     "arrow-parens": false,
-    "no-consecutive-blank-lines": false,
+    "curly": [true, "ignore-same-line"],
     "interface-name": false,
     "linebreak-style": [true, "LF"],
+    "max-line-length": false,
+    "no-consecutive-blank-lines": false,
     "no-require-imports": false,
     "object-literal-sort-keys": false,
     "one-variable-per-declaration": false,

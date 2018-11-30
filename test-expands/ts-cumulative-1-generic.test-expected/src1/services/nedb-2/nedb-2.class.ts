@@ -14,7 +14,7 @@ interface ServiceOptions {}
 
 export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   // !<DEFAULT> code: properties
-  app!: App;
+  public app!: App;
   // !end
 
   constructor (private options: ServiceOptions = {}) {
@@ -22,19 +22,19 @@ export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   }
 
   // !<DEFAULT> code: setup
-  setup (app: App, path: string): void {
+  public setup (app: App, path: string): void {
     this.app = app;
   }
   // !end
 
   // !<DEFAULT> code: find
-  async find(params?: Params): Promise<any[] | Paginated<any>> {
+  public async find(params?: Params): Promise<any[] | Paginated<any>> {
     return [];
   }
   // !end
 
   // !<DEFAULT> code: get
-  async get (id: Id, params?: Params): Promise<any> {
+  public async get (id: Id, params?: Params): Promise<any> {
     return {
       id, text: `A new message with ID: ${id}!`
     };
@@ -42,7 +42,7 @@ export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   // !end
 
   // !<DEFAULT> code: create
-  async create (data: Partial<any> | Array<Partial<any>>, params?: Params): Promise<any> {
+  public async create (data: Partial<any> | Array<Partial<any>>, params?: Params): Promise<any> {
     if (Array.isArray(data)) {
       return Promise.all(data.map(current => this.create(current, params)));
     }
@@ -52,19 +52,19 @@ export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
   // !end
 
   // !<DEFAULT> code: update
-  async update (id: NullableId, data: any, params?: Params): Promise<any> {
+  public async update (id: NullableId, data: any, params?: Params): Promise<any> {
     return data;
   }
   // !end
 
   // !<DEFAULT> code: patch
-  async patch (id: NullableId, data: Partial<any>, params?: Params): Promise<any> {
+  public async patch (id: NullableId, data: Partial<any>, params?: Params): Promise<any> {
     return data;
   }
   // !end
 
   // !<DEFAULT> code: remove
-  async remove (id: NullableId, params?: Params): Promise<any> {
+  public async remove (id: NullableId, params?: Params): Promise<any> {
     return { id };
   }
   // !end
@@ -73,7 +73,7 @@ export class Service implements Partial<ServiceMethods<any>>, SetupMethod {
 
 export default function (options: ServiceOptions) {
   return new Service(options);
-};
+}
 
 // !code: funcs // !end
 // !code: end // !end

@@ -66,10 +66,12 @@ declare module 'merge-graphql-schemas'<%- sc %>
 <%# --- if-5 ends above. -%>
 <%# --- if-7 starts below. -%>
 <% if (specs.app.seedData) { -%>
+
 // Seed.
 declare module '@feathers-plus/test-utils'<%- sc %>
 <% } -%>
 <%# --- if-7 ends above. -%>
+
 <%- insertFragment('more') %>
 
 <%- insertFragment('funcs') %>

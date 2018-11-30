@@ -1,5 +1,6 @@
 
 const chalk = require('chalk');
+const makeDebug = require('debug');
 const { parse } = require('path');
 const { cwd } = require('process');
 
@@ -8,11 +9,14 @@ const generatorWriting = require('../writing');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const { initSpecs } = require('../../lib/specs');
 
+const debug = makeDebug('generator-feathers-plus:prompts:graphql');
+
 module.exports = class GraphqlGenerator extends Generator {
   async prompting () {
     this.checkDirContainsApp();
     await Generator.asyncInit(this);
     const { _specs: specs } = this;
+    const generator = this;
     this._initialGeneration = !specs.graphql;
     initSpecs('graphql');
 
@@ -120,10 +124,20 @@ module.exports = class GraphqlGenerator extends Generator {
         if (this._opts.calledByTest && this._opts.calledByTest.prompts) {
           this.props = Object.assign({}, this._opts.calledByTest.prompts, this. props);
         }
+
+        debug('graphql prompting() ends', this.props);
+
+        if (!generator.callWritingFromPrompting()) return;
+
+        debug('graphql writing patch starts. call generatorWriting');
+        generatorWriting(generator, 'graphql');
+        debug('graphql writing patch ends');
       });
   }
 
   writing () {
+    if (this.callWritingFromPrompting()) return;
+
     generatorWriting(this, 'graphql');
   }
 };

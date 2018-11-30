@@ -67,6 +67,13 @@ It then generates an additional GraphQL endpoint.
 FeathersJS, using cli-plus, now supports both REST and GraphQL architectural concepts and their query languages.
 :::
 
+:::warning Windows 10
+The Yeoman toolkit used by cli-plus has an outstanding issue when run on Windows 10 with Node 10.
+You either have to call cli-plus from Git Bash using either Node 8 or 10,
+or you have to use Node 8 when calling cli-plus from PowerShell or command.exe.
+The generated code will run on Node 10.
+:::
+
 
 ## generate options
 
