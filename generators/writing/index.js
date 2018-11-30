@@ -345,6 +345,10 @@ module.exports = function generatorWriting (generator, what) {
         `${startSeedFront}${startSeedJsBack}` : `${startSeedFront}${startSeedTsBack}`
     );
 
+    const configNodemon = generator.fs.readJSON(
+      generator.destinationPath('nodemon.json'), makeConfig.nodemon(generator, 'development')
+    );
+
     const configProd = generator.fs.readJSON(
       generator.destinationPath(`${appConfigPath}/production.json`), makeConfig.configProduction(generator)
     );
@@ -383,17 +387,39 @@ module.exports = function generatorWriting (generator, what) {
     const rules = eslintrc.rules = eslintrc.rules || {};
     const rulesSemi = rules.semi;
 
+    // Modify tslint.json for semicolon option
+    let tslintExists = true;
+    let tslintJsonChanged = false;
+    let tslintjson = generator.fs.readJSON(join(process.cwd(), 'tslint.json'), {});
+
+     if (!Object.keys(tslintjson).length) {
+      tslintExists = false;
+      tslintjson = generator.fs.readJSON(join(tpl, '_tslint.json'), {});
+    }
+
+    const tsRules = tslintjson.rules = tslintjson.rules || {};
+    const tsRulesSemi = tsRules.semicolon;
+
+
     if (context.sc) {
       // semicolons used
       if (!Array.isArray(rulesSemi) || rulesSemi[0] !== 'error') {
         eslintrc.rules.semi = ['error', 'always'];
         eslintrcChanged = true;
       }
+      if (!Array.isArray(tsRulesSemi) || tsRulesSemi[0] !== true) {
+        tslintjson.rules.semicolon = true;
+        tslintJsonChanged = true;
+      }
     } else {
       // semicolons not used
       if (rulesSemi) {
         delete rules.semi;
         eslintrcChanged = true;
+      }
+      if (tsRulesSemi) {
+        tslintjson.rules.semicolon = false;
+        tslintJsonChanged = true;
       }
     }
 
@@ -416,12 +442,13 @@ module.exports = function generatorWriting (generator, what) {
 
       tmpl([tpl, 'test', 'app.test.ejs'],  [testDir, `app.test.${js}`], true),
 
-      tmpl([tpl, 'src', 'hooks', 'log.ejs'],    [src, 'hooks', `log.${js}`], true),
+      tmpl([tpl, 'src', 'hooks', 'log.ejs'],    [src, 'hooks', `log.${js}`]),
       copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], true),
-      tmpl([tpl, 'src', 'channels.ejs'],        [src, `channels.${js}`], true),
+      tmpl([tpl, 'src', 'channels.ejs'],        [src, `channels.${js}`]),
       tmpl([tpl, 'src', 'seed-data.ejs'],        [src, `seed-data.${js}`], false, !specs.app.seedData),
 
       json(pkg,           'package.json'),
+      json(configNodemon, 'nodemon.json'),
       json(configDefault, [appConfigPath, 'default.json']),
       json(configProd,    [appConfigPath, 'production.json']),
 
@@ -459,7 +486,7 @@ module.exports = function generatorWriting (generator, what) {
       );
     } else {
       todos = todos.concat(
-        copy([tpl, 'tslint.json'], 'tslint.json', true),
+        json(tslintjson, 'tslint.json', null, tslintExists && !tslintJsonChanged),
         tmpl([tpl, 'tsconfig.json'], 'tsconfig.json', true),
         copy([tpl, 'tsconfig.test.json'], 'tsconfig.test.json', true),
       );
@@ -485,6 +512,7 @@ module.exports = function generatorWriting (generator, what) {
 
     generator.devDependencies = [
       'mocha',
+      'nodemon',
       'request',
       'request-promise'
     ];
@@ -492,7 +520,6 @@ module.exports = function generatorWriting (generator, what) {
     if (isJs) {
       generator.devDependencies = generator.devDependencies.concat([
         'eslint',
-        'nodemon',
       ]);
     } else {
       generator.devDependencies = generator.devDependencies.concat([

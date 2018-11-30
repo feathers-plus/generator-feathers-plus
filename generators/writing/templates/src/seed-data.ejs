@@ -3,7 +3,7 @@
 <%- tplImports('{ join }', 'path') %>
 <%- tplImports('{ readJsonFileSync }', '@feathers-plus/test-utils') %>
 <%- tplImports('config', '../config/default.json') %>
-<%- tplTsOnly(`import { App } from './app.interface'`) %><%- sc %>
+<%- tplTsOnly(`import { App } from './app.interface'${sc}`) %>
 <%- insertFragment('imports') %>
 
 // Determine if command line argument exists for seeding data
