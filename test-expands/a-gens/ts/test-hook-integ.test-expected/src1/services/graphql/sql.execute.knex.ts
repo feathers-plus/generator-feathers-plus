@@ -1,7 +1,7 @@
 
 // Execute raw SQL statement for GraphQL using Knex. (Can be re-generated.)
 import { App } from '../../app.interface';
-import { Knex } from 'knex';
+import Knex from 'knex';
 // !code: imports // !end
 
 let dialects: any = {

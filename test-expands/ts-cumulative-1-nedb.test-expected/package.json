@@ -25,6 +25,8 @@
     "test": "npm run tslint && npm run mocha",
     "test:all": "npm run tslint && NODE_ENV=test npm run mocha",
     "tslint": "tslint -p tsconfig.json -c tslint.json && tslint -p tsconfig.test.json -c tslint.json",
+    "dev": "nodemon src1/index.ts",
+    "dev:seed": "nodemon src1/index.ts --seed",
     "start": "ts-node --files src1/",
     "start:seed": "NODE_ENV=test ts-node --seed --files src/",
     "mocha": "ts-mocha -p tsconfig.test.json \"test/**/*.test.ts\" --timeout 10000 --exit",
