@@ -1,6 +1,7 @@
 
 /* tslint:disable no-console */
 // Start the server. (Can be re-generated.)
+// !code: preface // !end
 import logger from './logger';
 import app from './app';
 import seedData from './seed-data';

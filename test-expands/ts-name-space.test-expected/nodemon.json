@@ -1,0 +1,17 @@
+{
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "watch": [
+    "tsconfig.json",
+    "tslint.json",
+    "src1/**/*.ts"
+  ],
+  "execMap": {
+    "ts": "ts-node --files --typeCheck"
+  },
+  "events": {
+    "start": "tslint -p tsconfig.json -c tslint.json",
+    "restart": "tslint -p tsconfig.json -c tslint.json"
+  }
+}

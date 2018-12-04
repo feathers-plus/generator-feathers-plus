@@ -171,10 +171,18 @@ module.exports = class AppGenerator extends Generator {
         }
 
         debug('app prompting() ends', this.props);
+
+        if (!generator.callWritingFromPrompting()) return;
+
+        debug('app writing patch starts. call generatorWriting');
+        generatorWriting(generator, 'app');
+        debug('app writing patch ends');
       });
   }
 
   writing () {
+    if (this.callWritingFromPrompting()) return;
+
     debug('app writing starts. call generatorWriting');
     generatorWriting(this, 'app');
     debug('app writing ends');

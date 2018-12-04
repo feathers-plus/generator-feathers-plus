@@ -1,7 +1,7 @@
 {
   "name": "@feathers-plus/generator-feathers-plus",
   "description": "A Yeoman generator to (re)generate a FeathersJS application supporting both REST and GraphQL architectural concepts and their query languages.",
-  "version": "0.6.61",
+  "version": "0.6.67",
   "homepage": "https://github.com/feathers-plus/generator-feathers-plus",
   "main": "lib/",
   "keywords": [
@@ -67,7 +67,7 @@
     "debug": "^4.1.0",
     "faker": "^4.1.0",
     "json-schema-deref-sync": "0.5.0",
-    "json-schema-seeder": "0.1.9",
+    "json-schema-seeder": "0.1.10",
     "lodash": "4.17.10",
     "lodash.merge": "4.6.1",
     "mongoose": "5.2.8",
@@ -154,7 +154,7 @@
     "mongodb": "^3.1.1",
     "mongoose": "^5.2.7",
     "nedb": "^1.8.0",
-    "nodemon": "^1.18.3",
+    "nodemon": "^1.18.7",
     "passport-auth0": "^1.0.0",
     "passport-google-oauth20": "^1.0.0",
     "passport-facebook": "^2.1.1",
