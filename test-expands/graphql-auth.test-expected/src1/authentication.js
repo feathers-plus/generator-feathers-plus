@@ -18,9 +18,11 @@ let moduleExports = function (app) {
   app.configure(local());
   // !code: loc_1 // !end
 
+
   app.configure(oauth2(Object.assign({
     name: 'auth0',
     Strategy: Auth0Strategy
+    // !code: auth0_options // !end
   }, config.auth0)));
 
   // !code: loc_2 // !end
