@@ -39,6 +39,7 @@
   app.configure(oauth2(Object.assign({
     name: '<%= provider.name %>',
     Strategy: <%= provider.strategyName %>
+    <%- insertFragment(provider.name + '_options') %>
   }, config.<%= provider.name %>)))<%- sc %>
 <% }); %>
 <%# --- forEach-1 ends above. -%>
