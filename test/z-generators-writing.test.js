@@ -6,6 +6,8 @@ const helpers = require('yeoman-test');
 const klawSync = require('klaw-sync');
 const merge = require('lodash.merge');
 const path = require('path');
+require('colors');
+const jsDiff = require('diff');
 
 const { resetForTest: resetSpecs } = require('../lib/specs');
 
@@ -1325,7 +1327,7 @@ function compareSpecs (appDir, testDir) {
   console.log('... comparing feathers-gen-specs.json');
   const expectedDir = path.join(__dirname, '..', 'test-expands', testDir);
 
-  compare(`${path.delimiter}feathers-gen-specs.json`, appDir, expectedDir);
+  compare(`${path.sep}feathers-gen-specs.json`, appDir, expectedDir);
 }
 
 function compare (fileName, appDir, expectedDir) {
@@ -1343,29 +1345,29 @@ function compare (fileName, appDir, expectedDir) {
     throw err;
   }
   // Get rid of any line ending differences
-  actual = actual.replace(/\r?\n/g, "\n")
-  expected = expected.replace(/\r?\n/g, "\n");
+  actual = actual.replace(/\r?\n/g, '\n')
+  expected = expected.replace(/\r?\n/g, '\n');
 
   var diff = jsDiff.diffChars(actual, expected);
 
   if (diff.length > 1) {
-    let str = diff.reduce(function(accum, part){
+    let str = diff.reduce(function(accum, part) {
       // green for additions, red for deletions
       // grey for common parts
-      var color = part.added ? 'green' :
-        part.removed ? 'red' : 'grey';
-  
-      return accum + part.value[color]
-    }, "");
+      var color = part.added ? 'bgGreen' :
+        part.removed ? 'bgRed' : 'grey';
+      const value = /(\r\n)|(\r)|(\n)/.test(part.value) ? '<EOL DIFF>' : part.value;
+      return accum + value[color];
+    }, '');
     process.stderr.write(str);
   }
-  assert(diff.length === 1, `Unexpected contents for file ${appDir}${fileName}`)
+  assert(diff.length === 1, `Unexpected contents for file ${appDir}${fileName}`);
 }
 
 function getFileNames (dir) {
   console.log('>getFileNames', dir);
   const nodes = klawSync(dir, { nodir: true })
-    .filter(obj => obj.path.indexOf(`${path.delimiter}node_modules${path.delimiter}`) === -1 && obj.path.indexOf(`${path.delimiter}data${path.delimiter}`) === -1);
+    .filter(obj => obj.path.indexOf(`${path.sep}node_modules${path.sep}`) === -1 && obj.path.indexOf(`${path.sep}data${path.sep}`) === -1);
 
   return {
     paths: nodes,
