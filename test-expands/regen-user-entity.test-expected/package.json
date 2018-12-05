@@ -23,12 +23,12 @@
   },
   "scripts": {
     "test": "npm run eslint && npm run mocha",
-    "test:all": "npm run eslint && NODE_ENV=test npm run mocha",
+    "test:all": "npm run eslint && cross-env NODE_ENV=test npm run mocha",
     "eslint": "eslint src1/. test/. --config .eslintrc.json",
     "dev": "nodemon src1/",
     "dev:seed": "nodemon src1/ --seed",
     "start": "node src1/",
-    "start:seed": "NODE_ENV=test node src/ --seed",
+    "start:seed": "cross-env NODE_ENV=test node src/ --seed",
     "mocha": "mocha test/ --recursive --exit --timeout 10000"
   }
 }
