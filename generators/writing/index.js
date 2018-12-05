@@ -508,6 +508,7 @@ module.exports = function generatorWriting (generator, what) {
       'lodash.merge',
       'serve-favicon',
       'winston',
+      'cross-env',
     ];
 
     generator.devDependencies = [
