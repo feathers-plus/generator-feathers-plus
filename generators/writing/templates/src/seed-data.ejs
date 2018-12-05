@@ -22,9 +22,10 @@ let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) 
 <%- insertFragment('init') %>
 
 <%- tplExport('async function (app) {', 'async function (app: App) {') %>
+  const ifDbChangesAllowed = areDbChangesAllowed(app.get("tests"))<%- sc %>
   <%- insertFragment('func_init') %>
   if (!ifSeedServices) return<%- sc %>
-    if (!areDbChangesAllowed(app.get("tests"))) return<%- sc %>
+  if (!ifDbChangesAllowed) return<%- sc %>
 
   if (!Object.keys(fakeData).length) {
     console.log('Cannot seed services as seed/fake-data.json doesn\'t have seed data.')<%- sc %>
