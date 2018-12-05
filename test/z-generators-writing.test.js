@@ -1345,27 +1345,40 @@ function compare (fileName, appDir, expectedDir) {
     throw err;
   }
   // Get rid of any line ending differences
-  actual = actual.replace(/\r?\n/g, '\n')
+  actual = actual.replace(/\r?\n/g, '\n');
   expected = expected.replace(/\r?\n/g, '\n');
 
-  var diff = jsDiff.diffChars(actual, expected);
+  const diff = jsDiff.diffChars(actual, expected);
 
   if (diff.length > 1) {
+    // console.log('\nvvvvv actual module vvvvv');
+    // console.log(actual);
+    // console.log('^^^^^');
+    console.log('\nvvvvv expected module vvvvv');
+    console.log(expected);
+    console.log('^^^^^');
+
     let str = diff.reduce(function(accum, part) {
       // green for additions, red for deletions
       // grey for common parts
-      var color = part.added ? 'bgGreen' :
+      const color = part.added ? 'bgGreen' :
         part.removed ? 'bgRed' : 'grey';
       const value = /(\r\n)|(\r)|(\n)/.test(part.value) ? '<EOL DIFF>' : part.value;
+
       return accum + value[color];
     }, '');
+
+    console.log('\nvvvvv module diff vvvvv');
     process.stderr.write(str);
+    console.log('\n^^^^^');
+
+    assert.equal(actual, expected, `Unexpected contents for file ${appDir}${fileName}`);
+    // assert(diff.length === 1, `Unexpected contents for file ${appDir}${fileName}`);
   }
-  assert(diff.length === 1, `Unexpected contents for file ${appDir}${fileName}`);
 }
 
 function getFileNames (dir) {
-  console.log('>getFileNames', dir);
+  // console.log('>getFileNames', dir);
   const nodes = klawSync(dir, { nodir: true })
     .filter(obj => obj.path.indexOf(`${path.sep}node_modules${path.sep}`) === -1 && obj.path.indexOf(`${path.sep}data${path.sep}`) === -1);
 
