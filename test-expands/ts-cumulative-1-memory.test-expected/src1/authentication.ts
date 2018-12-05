@@ -46,7 +46,6 @@ let moduleExports = function (app: App) {
     // !code: github_options // !end
   }, config.github)));
 
-
   // !code: loc_2 // !end
 
   // The `authentication` service is used to create a JWT.
