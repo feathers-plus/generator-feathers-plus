@@ -6,6 +6,8 @@ const helpers = require('yeoman-test');
 const klawSync = require('klaw-sync');
 const merge = require('lodash.merge');
 const path = require('path');
+require('colors');
+const jsDiff = require('diff');
 
 const { resetForTest: resetSpecs } = require('../lib/specs');
 
@@ -1325,37 +1327,50 @@ function compareSpecs (appDir, testDir) {
   console.log('... comparing feathers-gen-specs.json');
   const expectedDir = path.join(__dirname, '..', 'test-expands', testDir);
 
-  compare('/feathers-gen-specs.json', appDir, expectedDir);
+  compare(`${path.sep}feathers-gen-specs.json`, appDir, expectedDir);
 }
 
-function compare(fileName, appDir, expectedDir) {
+function compare (fileName, appDir, expectedDir) {
   // console.log('compare files', fileName);
   let expected;
 
   // console.log('410', `${appDir}${fileName}`);
-  const actual = fs.readFileSync(`${appDir}${fileName}`, 'utf8');
+  let actual = fs.readFileSync(path.join(appDir, fileName), 'utf8');
 
   try {
     // console.log('414', `${expectedDir}${fileName}`);
-    expected = fs.readFileSync(`${expectedDir}${fileName}`, 'utf8');
+    expected = fs.readFileSync(path.join(expectedDir, fileName), 'utf8');
   } catch (err) {
     console.log(actual);
     throw err;
   }
+  // Get rid of any line ending differences
+  actual = actual.replace(/\r?\n/g, '\n')
+  expected = expected.replace(/\r?\n/g, '\n');
 
-  if (actual !== expected) console.log(actual);
-  // if (actual !== expected) console.log(expected);
+  var diff = jsDiff.diffChars(actual, expected);
 
-  assert.equal(actual, expected, `Unexpected contents for file ${appDir}${fileName}`);
+  if (diff.length > 1) {
+    let str = diff.reduce(function(accum, part) {
+      // green for additions, red for deletions
+      // grey for common parts
+      var color = part.added ? 'bgGreen' :
+        part.removed ? 'bgRed' : 'grey';
+      const value = /(\r\n)|(\r)|(\n)/.test(part.value) ? '<EOL DIFF>' : part.value;
+      return accum + value[color];
+    }, '');
+    process.stderr.write(str);
+  }
+  assert(diff.length === 1, `Unexpected contents for file ${appDir}${fileName}`);
 }
 
 function getFileNames (dir) {
-  //console.log('>getFileNames', dir);
+  console.log('>getFileNames', dir);
   const nodes = klawSync(dir, { nodir: true })
-    .filter(obj => obj.path.indexOf('/node_modules/') === -1 && obj.path.indexOf('/data/') === -1);
+    .filter(obj => obj.path.indexOf(`${path.sep}node_modules${path.sep}`) === -1 && obj.path.indexOf(`${path.sep}data${path.sep}`) === -1);
 
   return {
     paths: nodes,
-    relativePaths: nodes.map(path => path.path.replace(`${dir}/`, '')).sort()
+    relativePaths: nodes.map(node => path.relative(dir, node.path)).sort()
   };
 }
