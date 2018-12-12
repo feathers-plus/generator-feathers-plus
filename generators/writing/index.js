@@ -314,12 +314,12 @@ module.exports = function generatorWriting (generator, what) {
   function app (generator) {
     debug('app()');
     const [ packager ] = specs.app.packager.split('@');
-    const testAllJsFront = `${packager} run eslint && NODE_ENV=`;
+    const testAllJsFront = `${packager} run eslint && cross-env NODE_ENV=`;
     const testAllJsBack = ' npm run mocha';
-    const testAllTsFront = `${packager} run tslint && NODE_ENV=`;
+    const testAllTsFront = `${packager} run tslint && cross-env NODE_ENV=`;
     const testAllTsBack = ' npm run mocha';
 
-    const startSeedFront = 'NODE_ENV=';
+    const startSeedFront = 'cross-env NODE_ENV=';
     const startSeedJsBack = ' node src/ --seed';
     const startSeedTsBack = ' ts-node --seed --files src/';
 
@@ -508,6 +508,7 @@ module.exports = function generatorWriting (generator, what) {
       'lodash.merge',
       'serve-favicon',
       'winston',
+      'cross-env',
     ];
 
     generator.devDependencies = [
