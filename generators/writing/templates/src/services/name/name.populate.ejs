@@ -1,7 +1,11 @@
 
 // fgraphql populate hook for service `<%= serviceName %>`. (Can be re-generated.)
 <%- tplImports('runTime', '@feathers-plus/graphql/lib/run-time') %>
-<%- tplImports('{ fgraphql, serialize }', 'feathers-hooks-common') %>
+<%- tplJsOrTs(
+  `const { fgraphql, serialize } = require('feathers-hooks-common')`,
+  `import { fgraphql, serialize, FGraphQLHookOptions, SyncContextFunction, SerializeSchema } from 'feathers-hooks-common'`
+) -%><%- sc %>
+<%- tplTsOnly(`import { Query, HookContext } from '@feathersjs/feathers'${sc}${EOL}`) -%>
 <%- tplImports('{ parse }', 'graphql') %>
 <%- insertFragment('graphql', specs.graphql ? [
       tplImports('schema', `../../${subFolderReverse}services/graphql/graphql.schemas`),
@@ -14,7 +18,7 @@
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-const queries = {
+const queries<%- tplTsOnly(': {[s: string]: { query?: Query | SyncContextFunction<Query>, options?: FGraphQLHookOptions, serializer?: SerializeSchema | SyncContextFunction<SerializeSchema>}}') -%> = {
   // No populate
   none: {},
   // All resolver fields 1 level deep.
@@ -62,7 +66,7 @@ Object.keys(__add1).forEach(__join1 => {
   <%- insertFragment('queries') %>
 }<%- sc %>
 
-async function <%= serviceName %>Populate (context) {
+async function <%= serviceName %>Populate (context<%- tplTsOnly(': HookContext')-%>) {
   // <%- lintDisableNextLineUnused %>
   const params = context.params<%- sc %>
   let query, options, serializer<%- sc %>
@@ -87,7 +91,9 @@ async function <%= serviceName %>Populate (context) {
   '  }',
   '',
   '  // Populate the data.',
-  '  let newContext = await fgraphql({',
+
+    // todo (JL) find a better way than using 'any' to make `ReturnType<Hook>` assignable to `HookContext`
+  `  let newContext${tplTsOnly(': any')} = await fgraphql({`,
   '    parse,',
   '    runTime,',
   '    schema,',

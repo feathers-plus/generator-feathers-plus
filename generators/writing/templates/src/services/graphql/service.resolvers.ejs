@@ -4,7 +4,7 @@
 <%- tplTsOnly([
   `import { App } from '../../app.interface'${sc}`,
   `import { Paginated } from '@feathersjs/feathers'${sc}`,
-  `import { ResolverMap } from './graphql.interfaces'${sc}`,
+  `import { FGraphQLResolverMap } from 'feathers-hooks-common'${sc}`,
   '',
 ]) -%>
 <%- insertFragment('imports') %>
@@ -30,7 +30,7 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
 ); -%>
   <%- insertFragment('services', __temp) %>
 
-  let returns<%- tplTsOnly(': ResolverMap') -%> = {
+  let returns<%- tplTsOnly(': FGraphQLResolverMap') -%> = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(mapping.graphqlService).forEach(graphqlName => {
