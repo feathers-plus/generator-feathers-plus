@@ -8,10 +8,10 @@
 <%- tplTsOnly([
   `import { App } from '../../app.interface'${sc}`,
   `import { Paginated, Params } from '@feathersjs/feathers'${sc}`,
-  `import { getByDot, setByDot } from 'feathers-hooks-common'${sc}`,
+  `import { getByDot, setByDot, FGraphQLResolverMap } from 'feathers-hooks-common'${sc}`,
   `import { GraphQLFieldResolver } from 'graphql'${sc}`,
   `import { GraphQLResolveInfo } from 'graphql/type/definition'${sc}`,
-  `import { ArgMap, ResolverContext, ResolverMap } from './graphql.interfaces'${sc}`,
+  `import { ArgMap, ResolverContext } from './graphql.interfaces'${sc}`,
   '',
   `export interface BatchloaderResolverOptions {`,
   `  convertArgsToParams: any${sc}`,
@@ -87,7 +87,7 @@ let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)',
     `function getBatchLoader(dataLoaderName, parent, args, content, ast) {`, [
       'function getBatchLoader(',
       '    dataLoaderName: string, parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo',
-      '  ): ResolverMap {'
+      '  ): FGraphQLResolverMap {'
     ].join(EOL)
   ) %>
     let feathersParams<%- sc %>
@@ -159,7 +159,7 @@ let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)',
 <%# -%>
 <%# === resolvers ============================================================================== -%>
 
-  let returns<%- tplTsOnly(': ResolverMap') -%> = {
+  let returns<%- tplTsOnly(': FGraphQLResolverMap') -%> = {
 <%# -%>
 <%# --- forEach-1 starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(mapping.graphqlService).forEach(graphqlName => {

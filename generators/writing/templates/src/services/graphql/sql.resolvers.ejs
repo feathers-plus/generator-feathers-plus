@@ -3,7 +3,7 @@
 // Define GraphQL resolvers for forming raw SQL statements. (Can be re-generated.)
 <%- tplTsOnly([
   `import { App } from '../../app.interface'${sc}`,
-  `import { ResolverMap } from './graphql.interfaces'${sc}`,
+  `import { FGraphQLResolverMap } from 'feathers-hooks-common'${sc}`,
   ``,
   `export interface SqlResolverFactoryOptions {`,
   `  dialect: string${sc}`,
@@ -19,7 +19,7 @@ let moduleExports = function sqlResolvers<%- tplJsOrTs('(app, options)', '(app: 
   let { dialect, executeSql, genAndRunSql } = options<%- sc %>
   let genRunSql = genAndRunSql(executeSql, { dialect }, options)<%- sc %>
 
-  const returns<%- tplTsOnly(': ResolverMap') -%> = {
+  const returns<%- tplTsOnly(': FGraphQLResolverMap') -%> = {
     <%- insertFragment('resolver_field_more') %>
 
     Query: {
