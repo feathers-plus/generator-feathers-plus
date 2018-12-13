@@ -2,7 +2,7 @@
 /* tslint:disable no-unused-variable */
 // Define GraphQL resolvers for forming raw SQL statements. (Can be re-generated.)
 import { App } from '../../app.interface';
-import { ResolverMap } from './graphql.interfaces';
+import { FGraphQLResolverMap } from 'feathers-hooks-common';
 
 export interface SqlResolverFactoryOptions {
   dialect: string;
@@ -16,7 +16,7 @@ let moduleExports = function sqlResolvers(app: App, options: SqlResolverFactoryO
   let { dialect, executeSql, genAndRunSql } = options;
   let genRunSql = genAndRunSql(executeSql, { dialect }, options);
 
-  const returns: ResolverMap = {
+  const returns: FGraphQLResolverMap = {
     // !code: resolver_field_more // !end
 
     Query: {

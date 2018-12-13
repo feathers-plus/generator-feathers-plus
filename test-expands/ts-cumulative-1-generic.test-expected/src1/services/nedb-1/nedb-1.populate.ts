@@ -1,7 +1,8 @@
 
 // fgraphql populate hook for service `nedb1`. (Can be re-generated.)
 import runTime from '@feathers-plus/graphql/lib/run-time';
-import { fgraphql, serialize } from 'feathers-hooks-common';
+import { fgraphql, serialize, FGraphQLHookOptions, SyncContextFunction, SerializeSchema } from 'feathers-hooks-common';
+import { Query, HookContext } from '@feathersjs/feathers';
 import { parse } from 'graphql';
 // !<DEFAULT> code: graphql
 import schema from '../../services/graphql/graphql.schemas';
@@ -10,7 +11,7 @@ import resolvers from '../../services/graphql/service.resolvers';
 // !code: imports // !end
 // !code: init // !end
 
-const queries = {
+const queries: {[s: string]: { query?: Query | SyncContextFunction<Query>, options?: FGraphQLHookOptions, serializer?: SerializeSchema | SyncContextFunction<SerializeSchema>}} = {
   // No populate
   none: {},
   // All resolver fields 1 level deep.
@@ -30,7 +31,7 @@ const queries = {
   // !code: queries // !end
 };
 
-async function nedb1Populate (context) {
+async function nedb1Populate (context: HookContext) {
   // tslint:disable-next-line:no-unused-variable
   const params = context.params;
   let query, options, serializer;
@@ -55,7 +56,7 @@ async function nedb1Populate (context) {
   }
 
   // Populate the data.
-  let newContext = await fgraphql({
+  let newContext: any = await fgraphql({
     parse,
     runTime,
     schema,
