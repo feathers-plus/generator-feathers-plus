@@ -3,10 +3,10 @@
 // Define GraphQL resolvers using Feathers services and BatchLoaders. (Can be re-generated.)
 import { App } from '../../app.interface';
 import { Paginated, Params } from '@feathersjs/feathers';
-import { getByDot, setByDot } from 'feathers-hooks-common';
+import { getByDot, setByDot, FGraphQLResolverMap } from 'feathers-hooks-common';
 import { GraphQLFieldResolver } from 'graphql';
 import { GraphQLResolveInfo } from 'graphql/type/definition';
-import { ArgMap, ResolverContext, ResolverMap } from './graphql.interfaces';
+import { ArgMap, ResolverContext } from './graphql.interfaces';
 
 export interface BatchloaderResolverOptions {
   convertArgsToParams: any;
@@ -69,7 +69,7 @@ let moduleExports = function batchLoaderResolvers(app: App, options: Batchloader
   // Note that each resolver's 'args' are static throughout a GraphQL call.
   function getBatchLoader(
     dataLoaderName: string, parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo
-  ): ResolverMap {
+  ): FGraphQLResolverMap {
     let feathersParams;
 
     switch (dataLoaderName) {
@@ -124,7 +124,7 @@ let moduleExports = function batchLoaderResolvers(app: App, options: Batchloader
     }
   }
 
-  let returns: ResolverMap = {
+  let returns: FGraphQLResolverMap = {
 
     Nedb1: {
 

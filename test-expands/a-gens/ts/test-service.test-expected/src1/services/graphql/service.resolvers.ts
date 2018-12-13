@@ -3,7 +3,7 @@
 // Define GraphQL resolvers using only Feathers services. (Can be re-generated.)
 import { App } from '../../app.interface';
 import { Paginated } from '@feathersjs/feathers';
-import { ResolverMap } from './graphql.interfaces';
+import { FGraphQLResolverMap } from 'feathers-hooks-common';
 // !code: imports // !end
 // !code: init // !end
 
@@ -24,7 +24,7 @@ let moduleExports = function serviceResolvers(app: App, options: ServiceResolver
   let nedb2 = app.service('/nedb-2');
   // !end
 
-  let returns: ResolverMap = {
+  let returns: FGraphQLResolverMap = {
 
     Nedb1: {
 
