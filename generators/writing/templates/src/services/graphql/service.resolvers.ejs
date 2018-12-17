@@ -59,7 +59,8 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
   // Field in other table is not an array
   if (!__addField.relation.otherTableIsArray) {
     __temp = [
-      '        (parent, args, content, ast) => {',
+      ,
+      `        ${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} => {`,
       '          const feathersParams = convertArgs(args, content, ast, {',
       `            query: { ${__addField.relation.otherTable}: `
         + `${__addField.relation.ourTableIsArray ? '{ $in: ' : ''}parent.${__addField.relation.ourTable}${__addField.relation.ourTableIsArray ? ' }' : ''}`
@@ -73,7 +74,7 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
   } else {
   // Field in other table is an array
     __temp = [
-      '        (parent, args, content, ast) => {',
+      `        ${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} => {`,
       '          const feathersParams = convertArgs(args, content, ast, {',
       `            query: { ${__$sort} }, paginate: false`,
       `          })${sc}`
@@ -102,7 +103,9 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
         <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
 <% } else { -%>
         <%- insertFragment(`resolver-${graphqlName}-${fieldName}-non`,
-          `        (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.')${sc} },`
+          `        ${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} => {`,
+          `           throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.')${sc}`,
+          `        },`
         ) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>
@@ -122,13 +125,13 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
   __graphql = feathersSpecs[__serviceName]._extensions.graphql;
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
-    `      get${graphqlName}(parent, args, content, ast) {`,
+    `      get${graphqlName}${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} {`,
     `        const feathersParams = convertArgs(args, content, ast)${sc}`,
     `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem)${sc}`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
-    `      find${graphqlName}(parent, args, content, ast) {`,
+    `      find${graphqlName}${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} {`,
     `        const feathersParams = convertArgs(args, content, ast${__graphql.serviceSortParams})${sc}`,
     `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems)${sc}`,
     '      },',
