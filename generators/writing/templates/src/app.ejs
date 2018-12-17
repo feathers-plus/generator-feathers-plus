@@ -19,10 +19,10 @@ process.env['NODE_CONFIG_DIR'] = './<%- appConfigPath %>'<%- sc %>
 <%- tplJsOrTs(tplImports('express', '@feathersjs/express'), tplImports('express, { Application }', '@feathersjs/express')) %>
 <%- hasProvider('socketio') ? tplImports('socketio', '@feathersjs/socketio') : '' %>
 <%- hasProvider('primus') ? tplImports('primus', '@feathersjs/primus') : '' %>
+<%- tplTsOnly(`import { Services } from './app.interface'${sc}`) %>
 <%- tplImports('middleware', './middleware') %>
 <%- tplImports('services', './services') %>
 <%- tplImports('appHooks', './app.hooks') %>
-<%- tplTsOnly(`import { Services } from './app.interface'${sc}`) %>
 <%- (hasProvider('socketio') || hasProvider('primus')) ? tplImports('channels', './channels') : '' %>
 <%- tplTsOnly([`// ${lintDisableNextLine}`, '']) -%>
 const generatorSpecs = require('../feathers-gen-specs.json')<%- sc %>

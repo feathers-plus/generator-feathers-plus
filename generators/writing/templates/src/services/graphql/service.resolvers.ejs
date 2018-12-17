@@ -20,7 +20,7 @@
   '',
 ]) -%>
 let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(app: App, options: ServiceResolverOptions)') %> {
-  const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options<%- sc %>
+  const { convertArgsToFeathers, extractAllItems, extractFirstItem } = options<%- sc %>
   <%- insertFragment('extra_auth_props', [
     `  const convertArgs = convertArgsToFeathers([])${sc}`,
   ]) %>
@@ -56,11 +56,11 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
 <%# -%>
 <%# --- if/else-1 starts below. Whether field is a join or a calculated field. -%>
 <% if (__addField.serviceName) {
+  deIndent = true;
   // Field in other table is not an array
   if (!__addField.relation.otherTableIsArray) {
     __temp = [
-      ,
-      `        ${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} => {`,
+      `        ${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo)')} => {`,
       '          const feathersParams = convertArgs(args, content, ast, {',
       `            query: { ${__addField.relation.otherTable}: `
         + `${__addField.relation.ourTableIsArray ? '{ $in: ' : ''}parent.${__addField.relation.ourTable}${__addField.relation.ourTableIsArray ? ' }' : ''}`
@@ -74,7 +74,7 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
   } else {
   // Field in other table is an array
     __temp = [
-      `        ${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} => {`,
+      `        ${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo)')} => {`,
       '          const feathersParams = convertArgs(args, content, ast, {',
       `            query: { ${__$sort} }, paginate: false`,
       `          })${sc}`
@@ -100,12 +100,13 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
     }
   }
 -%>
-        <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
+        <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp, undefined, { indentEnd: -2 }) %>
 <% } else { -%>
-        <%- insertFragment(`resolver-${graphqlName}-${fieldName}-non`,
-          `        ${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} => {`,
+        <%- insertFragment(`resolver-${graphqlName}-${fieldName}-non`, [
+          `        ${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo)')} => {`,
           `           throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.')${sc}`,
           `        },`
+          ]
         ) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>
@@ -125,13 +126,13 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
   __graphql = feathersSpecs[__serviceName]._extensions.graphql;
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
-    `      get${graphqlName}${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} {`,
+    `      get${graphqlName}${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo)')} {`,
     `        const feathersParams = convertArgs(args, content, ast)${sc}`,
     `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem)${sc}`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
-    `      find${graphqlName}${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: any, content: any, ast: any)')} {`,
+    `      find${graphqlName}${tplJsOrTs('(parent, args, content, ast)', '(parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo)')} {`,
     `        const feathersParams = convertArgs(args, content, ast${__graphql.serviceSortParams})${sc}`,
     `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems)${sc}`,
     '      },',
