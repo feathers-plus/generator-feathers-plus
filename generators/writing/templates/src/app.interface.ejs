@@ -26,14 +26,16 @@ import { <%- __importName %> } from './services/<%- __subFolder %><%- __kName %>
     user = 5; // this won't compile, because user is known to be of type User
   });
  */
-export type App = Application<{
+
+export interface Services {
 <%# -%>
 <%# --- forEach-2 starts below. Loop thru the services. -%>
 <% Object.keys(specs.services || {}).sort().forEach(__name => { -%>
-  '<%- specs.services[__name].fileName %>': <%- upperFirst(specs.services[__name].nameSingular) %>,
+  '<%- specs.services[__name].fileName %>': <%- upperFirst(specs.services[__name].nameSingular) %>;
 <% }); -%>
 <%# --- forEach-2 ends above. -%>
   <%- insertFragment('moduleExports') %>
-}>;
+}
+export type App = Application<Services>;
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
