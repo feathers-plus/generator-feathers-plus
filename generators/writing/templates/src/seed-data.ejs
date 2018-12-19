@@ -5,13 +5,18 @@
 <%- tplTsOnly(`import { App } from './app.interface'${sc}`) %>
 <%- insertFragment('imports') %>
 
+
+<%- tplTsOnly(`interface TestConfig {
+  environmentsAllowingSeedData?: string[];
+}`) %>
+
 // Determine if command line argument exists for seeding data
 let ifSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str))<%- sc %>
 
 // Determine if environment allows test to mutate existing DB data.
-function areDbChangesAllowed(testConfig) {
-  let { environmentsAllowingSeedData = [] } = testConfig<%- sc %>
-  return environmentsAllowingSeedData.includes(process.env.NODE_ENV)<%- sc %>
+function areDbChangesAllowed(testConfig<%- tplTsOnly(`: TestConfig`) -%>) {
+  let { environmentsAllowingSeedData = [] } = testConfig || {}<%- sc %>
+  return environmentsAllowingSeedData.includes(process.env.NODE_ENV<%- tplTsOnly(` as string`) -%>)<%- sc %>
 }
 
 // Get generated fake data
@@ -22,7 +27,7 @@ let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) 
 <%- insertFragment('init') %>
 
 <%- tplExport('async function (app) {', 'async function (app: App) {') %>
-  const ifDbChangesAllowed = areDbChangesAllowed(app.get("tests"))<%- sc %>
+  const ifDbChangesAllowed = areDbChangesAllowed(app.get('tests'))<%- sc %>
   <%- insertFragment('func_init') %>
   if (!ifSeedServices) return<%- sc %>
   if (!ifDbChangesAllowed) return<%- sc %>

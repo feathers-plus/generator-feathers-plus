@@ -19,11 +19,14 @@ import { Users1 } from './services/users-1/users-1.interface';
     user = 5; // this won't compile, because user is known to be of type User
   });
  */
-export type App = Application<{
-  'nedb-1': Nedb1,
-  'nedb-2': Nedb2,
-  'users-1': Users1,
+
+export interface Services {
+  'nedb-1': Nedb1;
+  'nedb-2': Nedb2;
+  'users-1': Users1;
   // !code: moduleExports // !end
-}>;
+}
+
+export type App = Application<Services>;
 // !code: funcs // !end
 // !code: end // !end
