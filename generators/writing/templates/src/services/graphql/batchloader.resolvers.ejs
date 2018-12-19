@@ -27,7 +27,7 @@
 <%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
-let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)', '(app: App, options: BatchloaderResolverOptions )') %> {
+let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)', '(app: App, options: BatchloaderResolverOptions)') %> {
   // <%- lintDisableNextLine %>
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
     feathersBatchLoader: { feathersBatchLoader } } = options<%- sc %>
@@ -93,18 +93,18 @@ let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)',
     let feathersParams<%- sc %>
 
     switch (dataLoaderName) {
-    /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
-    <%- insertFragment('bl-persisted', [
-      '    // case \'_persisted.user.one.id\': // service user, returns one object, key is field id',
-    ]) %>
+      /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
+      <%- insertFragment('bl-persisted', [
+      '      // case \'_persisted.user.one.id\': // service user, returns one object, key is field id',
+      ]) %>
 
-    /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
-    <%- insertFragment('bl-shared', [
-        '    // *.*: User',
-        '    // case \'_shared.user.one.id\': // service user, returns one object, key is field id',
-    ]) %>
+      /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
+      <%- insertFragment('bl-shared', [
+      '      // *.*: User',
+      '      // case \'_shared.user.one.id\': // service user, returns one object, key is field id',
+      ]) %>
 
-    /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
+      /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
 <%# -%>
 <%# --- forEach-a starts below. Loop thru the schemas of GraphQL enabled services. -%>
 <% Object.keys(mapping.graphqlService).forEach(graphqlName => {
@@ -124,24 +124,24 @@ let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)',
     __code = __addField.isNullable ? '' : '!';
   }
   __temp = [
-    `    case '${graphqlName}.${fieldName}':`,
-    `      return feathersBatchLoader(dataLoaderName, '${__code}', '${__addField.relation.otherTable}',`,
+    `      case '${graphqlName}.${fieldName}':`,
+    `        return feathersBatchLoader(dataLoaderName, '${__code}', '${__addField.relation.otherTable}',`,
     isJs ?
-      '        keys => {' :
-      '        (keys: string[]) => {',
-    '          feathersParams = convertArgs(args, content, null, {',
-    `            query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined },`,
-    '            _populate: \'skip\', paginate: false',
-    `          })${sc}`,
-    `          return ${__addField.serviceName}.find(feathersParams)${sc}`,
-    '        },',
-    '        maxBatchSize // Max #keys in a BatchLoader func call.',
-    `      )${sc}`,
+    '          keys => {' :
+    '          (keys: string[]) => {',
+    '            feathersParams = convertArgs(args, content, null, {',
+    `              query: { ${__addField.relation.otherTable}: { $in: keys }, $sort: undefined },`,
+    '              _populate: \'skip\', paginate: false',
+    `            })${sc}`,
+    `            return ${__addField.serviceName}.find(feathersParams)${sc}`,
+    '          },',
+    '          maxBatchSize // Max #keys in a BatchLoader func call.',
+    `        )${sc}`,
   ];
 -%>
 
-    // <%- `${graphqlName}.${fieldName}${__addField.args}: ${__addField.type}` %>
-    <%- insertFragment(`bl-${graphqlName}-${fieldName}`, __temp, undefined, { indentEnd: 2 }) %>
+      // <%- `${graphqlName}.${fieldName}${__addField.args}: ${__addField.type}` %>
+      <%- insertFragment(`bl-${graphqlName}-${fieldName}`, __temp, undefined, { indentEnd: 0 }) %>
 <% } -%>
 <%# --- if-c ends above. -%>
 <% }); -%>
@@ -149,11 +149,11 @@ let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)',
 <% }); -%>
 <%# --- forEach-a ends above. -%>
 
-    /* Throw on unknown BatchLoader name. */
-    default:
-      <%- insertFragment('bl-default', [
-        '      throw new Error(`GraphQL query requires BatchLoader named \'${dataLoaderName}\' but no definition exists for it.`)' + `${sc}`,
-      ]) %>
+      /* Throw on unknown BatchLoader name. */
+      default:
+        <%- insertFragment('bl-default', [
+      '        throw new Error(`GraphQL query requires BatchLoader named \'${dataLoaderName}\' but no definition exists for it.`)' + `${sc}`,
+        ], undefined, { indentEnd: -2 }) %>
     }
   }
 <%# -%>
@@ -185,7 +185,9 @@ let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)',
       <%- insertFragment(`resolver-${graphqlName}-${fieldName}`, __temp) %>
 <% } else { -%>
       <%- insertFragment(`resolver-${graphqlName}-${fieldName}-non`, [
-        `      ${fieldName}: (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.')${sc} },`,
+        isJs ?
+          `      ${fieldName}: (parent, args, content, ast) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.')${sc} },`:
+          `      ${fieldName}: (parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo) => { throw Error('GraphQL fieldName ${graphqlName}.${fieldName} is not calculated.')${sc} },`
       ]) %>
 <% } -%>
 <%# --- if/else-1 ends above. -%>
@@ -206,13 +208,18 @@ let moduleExports = function batchLoaderResolvers<%- tplJsOrTs('(app, options)',
   __graphql = feathersSpecs[__serviceName]._extensions.graphql;
   __temp = [
     `      // get${graphqlName}(query: JSON, params: JSON, key: JSON): ${graphqlName}`,
-    `      get${graphqlName}(parent, args, content, ast) {`,
+    isJs ?
+    `      get${graphqlName}(parent, args, content, ast) {` :
+    `      get${graphqlName}(parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo) {`,
     `        const feathersParams = convertArgs(args, content, ast)${sc}`,
     `        return ${__serviceName}.get(args.key, feathersParams).then(extractFirstItem)${sc}`,
     '      },',
     '',
     `      // find${graphqlName}(query: JSON, params: JSON): [${graphqlName}!]`,
-    `      find${graphqlName}(parent, args, content, ast) {`,
+    
+    isJs ? 
+          `      find${graphqlName}(parent, args, content, ast) {` :
+          `      find${graphqlName}(parent: any, args: ArgMap, content: ResolverContext, ast: GraphQLResolveInfo) {`,
     `        const feathersParams = convertArgs(args, content, ast${__graphql.serviceSortParams})${sc}`,
     `        return ${__serviceName}.find(feathersParams).then(paginate(content)).then(extractAllItems)${sc}`,
     '      },',

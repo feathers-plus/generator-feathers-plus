@@ -20,7 +20,7 @@ export interface BatchloaderResolverOptions {
 // !code: imports // !end
 // !code: init // !end
 
-let moduleExports = function batchLoaderResolvers(app: App, options: BatchloaderResolverOptions ) {
+let moduleExports = function batchLoaderResolvers(app: App, options: BatchloaderResolverOptions) {
   // tslint:disable-next-line
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
     feathersBatchLoader: { feathersBatchLoader } } = options;
@@ -73,53 +73,53 @@ let moduleExports = function batchLoaderResolvers(app: App, options: Batchloader
     let feathersParams;
 
     switch (dataLoaderName) {
-    /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
-    // !<DEFAULT> code: bl-persisted
-    // case '_persisted.user.one.id': // service user, returns one object, key is field id
-    // !end
-
-    /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
-    // !<DEFAULT> code: bl-shared
-    // *.*: User
-    // case '_shared.user.one.id': // service user, returns one object, key is field id
-    // !end
-
-    /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
-
-    // Nedb1.nedb2: Nedb2!
-    // !<DEFAULT> code: bl-Nedb1-nedb2
-    case 'Nedb1.nedb2':
-      return feathersBatchLoader(dataLoaderName, '!', 'id',
-        (keys: string[]) => {
-          feathersParams = convertArgs(args, content, null, {
-            query: { id: { $in: keys }, $sort: undefined },
-            _populate: 'skip', paginate: false
-          });
-          return nedb2.find(feathersParams);
-        },
-        maxBatchSize // Max #keys in a BatchLoader func call.
-      );
+      /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
+      // !<DEFAULT> code: bl-persisted
+      // case '_persisted.user.one.id': // service user, returns one object, key is field id
       // !end
 
-    // Nedb2.nedb1: Nedb1!
-    // !<DEFAULT> code: bl-Nedb2-nedb1
-    case 'Nedb2.nedb1':
-      return feathersBatchLoader(dataLoaderName, '!', 'id',
-        (keys: string[]) => {
-          feathersParams = convertArgs(args, content, null, {
-            query: { id: { $in: keys }, $sort: undefined },
-            _populate: 'skip', paginate: false
-          });
-          return nedb1.find(feathersParams);
-        },
-        maxBatchSize // Max #keys in a BatchLoader func call.
-      );
+      /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
+      // !<DEFAULT> code: bl-shared
+      // *.*: User
+      // case '_shared.user.one.id': // service user, returns one object, key is field id
       // !end
 
-    /* Throw on unknown BatchLoader name. */
-    default:
-      // !<DEFAULT> code: bl-default
-      throw new Error(`GraphQL query requires BatchLoader named '${dataLoaderName}' but no definition exists for it.`);
+      /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
+
+      // Nedb1.nedb2: Nedb2!
+      // !<DEFAULT> code: bl-Nedb1-nedb2
+      case 'Nedb1.nedb2':
+        return feathersBatchLoader(dataLoaderName, '!', 'id',
+          (keys: string[]) => {
+            feathersParams = convertArgs(args, content, null, {
+              query: { id: { $in: keys }, $sort: undefined },
+              _populate: 'skip', paginate: false
+            });
+            return nedb2.find(feathersParams);
+          },
+          maxBatchSize // Max #keys in a BatchLoader func call.
+        );
+      // !end
+
+      // Nedb2.nedb1: Nedb1!
+      // !<DEFAULT> code: bl-Nedb2-nedb1
+      case 'Nedb2.nedb1':
+        return feathersBatchLoader(dataLoaderName, '!', 'id',
+          (keys: string[]) => {
+            feathersParams = convertArgs(args, content, null, {
+              query: { id: { $in: keys }, $sort: undefined },
+              _populate: 'skip', paginate: false
+            });
+            return nedb1.find(feathersParams);
+          },
+          maxBatchSize // Max #keys in a BatchLoader func call.
+        );
+      // !end
+
+      /* Throw on unknown BatchLoader name. */
+      default:
+        // !<DEFAULT> code: bl-default
+        throw new Error(`GraphQL query requires BatchLoader named '${dataLoaderName}' but no definition exists for it.`);
       // !end
     }
   }
@@ -147,28 +147,28 @@ let moduleExports = function batchLoaderResolvers(app: App, options: Batchloader
 
       // !<DEFAULT> code: query-Nedb1
       // getNedb1(query: JSON, params: JSON, key: JSON): Nedb1
-      getNedb1(parent, args, content, ast) {
+      getNedb1(parent: any, args: any, content: any, ast: any) {
         const feathersParams = convertArgs(args, content, ast);
         return nedb1.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findNedb1(query: JSON, params: JSON): [Nedb1!]
-      findNedb1(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   id: 1 } } });
+      findNedb1(parent: any, args: any, content: any, ast: any) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: { id: 1 } } });
         return nedb1.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
 
       // !<DEFAULT> code: query-Nedb2
       // getNedb2(query: JSON, params: JSON, key: JSON): Nedb2
-      getNedb2(parent, args, content, ast) {
+      getNedb2(parent: any, args: any, content: any, ast: any) {
         const feathersParams = convertArgs(args, content, ast);
         return nedb2.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findNedb2(query: JSON, params: JSON): [Nedb2!]
-      findNedb2(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   id: 1 } } });
+      findNedb2(parent: any, args: any, content: any, ast: any) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: { id: 1 } } });
         return nedb2.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
