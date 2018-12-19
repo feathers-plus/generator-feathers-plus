@@ -36,8 +36,7 @@ const tests = [
   // t0, z0 Test scaffolding to execute multiple generate calls and check the final result.
   // Also test a missing specs.options is created.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
-  {
-    testName: 'scaffolding.test',
+  { testName: 'scaffolding.test',
     specsChanges: [
       { generate: 'all', before: specs => delete specs.app.providers, merge: { app: { providers: ['primus'] } } },
       { generate: 'all', before: specs => delete specs.app.providers, merge: { app: { providers: ['rest'] } } },
@@ -45,25 +44,25 @@ const tests = [
       { generate: 'all', prompts: { confirmation: true } }
     ],
     compareDirs: true,
-    execute: false
+    execute: false,
   },
 
   // t01, z01 Test creation of app.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
-  { testName: 'app.test' },
+    { testName: 'app.test' },
 
   // Test when .eslintrc.json file already exists
-  { testName: 'app-eslintrc.test' },
+    { testName: 'app-eslintrc.test' },
 
   // Test using feathers-gen-code.js for code
-  { testName: 'app-code-blocks.test' },
+    { testName: 'app-code-blocks.test' },
 
   // t02, z02 (z01 ->) Test service creation without authentication scaffolding.
   // Also test any missing specs.options props are created.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth N, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
-  { testName: 'service.test' },
+    { testName: 'service.test' },
 
   // t03, z03 (z02 ->) Test middleware creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -71,7 +70,7 @@ const tests = [
   //* generate service        # NeDB, nedb2, /nedb-2,                 auth N, graphql Y
   //  generate middleware     # mw1, *
   //  generate middleware     # mw2, mw2
-  { testName: 'middleware.test' },
+    { testName: 'middleware.test' },
 
   // t04, z04 (z02 ->) Test graphql endpoint creation.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -81,7 +80,7 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-  { testName: 'graphql.test' },
+    { testName: 'graphql.test' },
 
   // (z04 ->) Test graphql endpoint creation with authentication.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)
@@ -92,25 +91,25 @@ const tests = [
   //  Add schemas for nedb1 and nedb2
   //  Regenerate nedb1 and nedb2
   //  generate graphql        # service calls, /graphql,
-  { testName: 'graphql-auth.test' },
+    { testName: 'graphql-auth.test' },
 
   // t05, z05 Test authentication scaffolding.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //  generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
-  { testName: 'authentication-1.test' },
+    { testName: 'authentication-1.test' },
 
   // t06, z06 (z05 ->) Test creation of authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //  generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
-  { testName: 'authentication-2.test' },
+    { testName: 'authentication-2.test' },
 
   // t07, z07 (z06 ->) Test creation of non-authenticated service with auth scaffolding.
   //* generate app            # z-1, Project z-1, npm, src1, REST and socketio
   //* generate authentication # Local and Auth0, users1, Nedb, nedb://../data, graphql Y
   //* generate service        # NeDB, nedb1, /nedb-1, nedb://../data, auth Y, graphql Y
   //  generate service        # NeDB, nedb2, /nedb-2, nedb://../data, auth N, graphql Y
-  { testName: 'authentication-3.test' },
+    { testName: 'authentication-3.test' },
 
   // t08, z08 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -124,7 +123,7 @@ const tests = [
   //  Add schemas for users1, nedb1 and nedb2 --> ADD BOTH schema.properties AND extensions <--
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
-  { testName: 'cumulative-1-nedb.test' },
+    { testName: 'cumulative-1-nedb.test' },
 
   // t08, z08 Test everything together. Mainly used to test different adapters.
   //  generate app            # z-1, Project z-1, npm, src1, REST and socketio
@@ -138,86 +137,82 @@ const tests = [
   //  Add schemas for users1, nedb1 and nedb2 --> ADD BOTH schema.properties AND extensions <--
   //  Regenerate users1, nedb1 and nedb2
   //  generate graphql        # service calls, /graphql, auth N
-  { testName: 'cumulative-1-generic.test' },
+    { testName: 'cumulative-1-generic.test' },
 
   // t08-memory, z08-memory The same as t08 & z08 but using @f/memory.
   // Service names remain nedb1 & nedb2.
-  { testName: 'cumulative-1-memory.test' },
+    { testName: 'cumulative-1-memory.test' },
 
   // t08-mongo, z08-mongo The same as t08 & z08 but using @f/mongodb.
   // Service names remain nedb1 & nedb2; use default connection string.
-  { testName: 'cumulative-1-mongo.test' },
+    { testName: 'cumulative-1-mongo.test' },
 
   // t08-mongoose, z08-mongoose The same as t08 & z08 but using @f/mongoosedb.
   // Service names remain nedb1 & nedb2; use default connection string.
-  { testName: 'cumulative-1-mongoose.test' },
+    { testName: 'cumulative-1-mongoose.test' },
 
   // The same as t08 & z08 but using options: { semicolons: false }
-  { testName: 'cumulative-1-no-semicolons.test' },
+    { testName: 'cumulative-1-no-semicolons.test' },
 
   // t08-sequelize, z08-sequelize The same as t08 & z08 but using @f/sequelize & PostgreSQL.
   // Service names remain nedb1 & nedb2; use default connection string.
-  { testName: 'cumulative-2-sequelize-services.test' },
+    { testName: 'cumulative-2-sequelize-services.test' },
 
   // The same as t08 & z08 but using options: { graphql: { strategy: 'batchloaders' } }
   // Service names remain nedb1 & nedb2; use default connection string.
-  { testName: 'cumulative-2-nedb-batchloaders.test' },
+    { testName: 'cumulative-2-nedb-batchloaders.test' },
 
   // Test hook generation with associated tests
-  { testName: 'cumulative-2-hooks.test' },
+    { testName: 'cumulative-2-hooks.test' },
 
   // Test generating unit hook tests
-  {
-    testName: 'a-gens/js/test-hook-unit.test',
-    specsChanges: [
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.app1' } },
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb12' } },
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.manual' } },
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb1' } },
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb2' } }
-    ],
-    compareDirs: true,
-    execute: false
-  },
+    { testName: 'a-gens/js/test-hook-unit.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.app1' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb12' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.manual' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb1' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb2' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
 
   // Test generating integration hook tests
-  {
-    testName: 'a-gens/js/test-hook-integ.test',
-    specsChanges: [
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.app1' } },
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb12' } },
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.manual' } },
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb1' } },
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb2' } }
-    ],
-    compareDirs: true,
-    execute: false
-  },
+    { testName: 'a-gens/js/test-hook-integ.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.app1' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb12' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.manual' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb1' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb2' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
 
   // Test generating service tests
-  {
-    testName: 'a-gens/js/test-service.test',
-    specsChanges: [
-      { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb1' } },
-      { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb2' } },
-      { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'nedb1' } },
-      { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'users1' } }
-    ],
-    compareDirs: true,
-    execute: false
-  },
+    { testName: 'a-gens/js/test-service.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb1' } },
+        { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb2' } },
+        { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'nedb1' } },
+        { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'users1' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
 
   // Test generating authentication tests
   // Its tests TEST AUTHENTICATION and should be periodically run with dependency loading
-  {
-    testName: 'a-gens/js/test-authentication.test',
-    specsChanges: [
-      { generate: 'test', prompts: { testType: 'authBase' } },
-      { generate: 'test', prompts: { testType: 'authServices' } }
-    ],
-    compareDirs: true,
-    execute: false
-  },
+    { testName: 'a-gens/js/test-authentication.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'authBase' } },
+        { generate: 'test', prompts: { testType: 'authServices' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
 
   // t21, z21 Test switching the user-entity
   // t21
@@ -232,813 +227,673 @@ const tests = [
   //  generate authentication # Local+Auth0+Google+Facebook+GitHub,
   //                            users1, Nedb, /users-1, nedb://../data, auth Y, graphql N
   //  generate service        # NeDB, nedb1, /nedb-1, auth Y (line not needed in test as test regens whole app)
-  {
-    testName: 'regen-user-entity.test',
-    specsChanges: [
-      {
-        generate: 'all',
-        merge: {
-          authentication: { entity: 'users1' },
-          services: {
-            nedb1: { isAuthEntity: false },
-            users1: {
-              name: 'users1',
-              nameSingular: 'users1',
-              subFolder: '',
-              fileName: 'users-1',
-              adapter: 'nedb',
-              path: '/users-1',
-              isAuthEntity: true,
-              requiresAuth: true,
-              graphql: false
+    { testName: 'regen-user-entity.test',
+      specsChanges: [
+        { generate: 'all', merge: {
+            authentication: { entity: 'users1' },
+            services: {
+              nedb1: { isAuthEntity: false },
+              users1: {
+                name: 'users1',
+                nameSingular: 'users1',
+                subFolder: '',
+                fileName: 'users-1',
+                adapter: 'nedb',
+                path: '/users-1',
+                isAuthEntity: true,
+                requiresAuth: true,
+                graphql: false
+              },
             }
-          }
-        }
-      }
-    ]
-  },
+          } },
+      ]
+    },
 
   // z22 Test that app.js does not require templates/src/_adapters/* unless they are currently being used.
   // Also tests that existing package.json, config/default.json & config/production.json contents are retained.
   //  generate app            # z-1, Project z-1, npm, src1, socketio (only)
   //  generate service        # MongoDB, nedb1, /nedb-1, mongodb://localhost:27017/z_1, auth N, graphql Y
   //  generate service        # NeDB,    nedb1, /nedb-1, nedb://../data,                auth N, graphql Y
-  {
-    testName: 'regen-adapters-1.test',
-    specsChanges: [
-      {
-        generate: 'all',
-        merge: {
-          services: { nedb1: { adapter: 'nedb' } },
-          connections: {
-            'nedb': {
-              database: 'nedb',
-              adapter: 'nedb',
-              connectionString: 'nedb://../data'
+    { testName: 'regen-adapters-1.test',
+      specsChanges: [
+        { generate: 'all', merge: {
+            services: { nedb1: { adapter: 'nedb' } },
+            connections: {
+              'nedb': {
+                database: 'nedb',
+                adapter: 'nedb',
+                connectionString: 'nedb://../data'
+              }
             }
-          }
-        }
-      }
-    ]
-  },
+          } },
+      ]
+    },
 
   // test service in sub-folders
-  { testName: 'name-space.test' },
+    { testName: 'name-space.test' },
 
   // test old and new service folder/file naming
-  { testName: 'service-naming.test' }, // execute: true
+    { testName: 'service-naming.test' }, // execute: true
 
   // .ts version of cconst logger = require('./logger')umulative-1-nedb.test
-  { testName: 'ts-cumulative-1-nedb.test' },
+    { testName: 'ts-cumulative-1-nedb.test' },
 
   // .ts version of cumulative-1-generic.test
-  { testName: 'ts-cumulative-1-generic.test' },
+    { testName: 'ts-cumulative-1-generic.test' },
 
   // .ts version of cumulative-1-memory.test
-  { testName: 'ts-cumulative-1-memory.test' },
+    { testName: 'ts-cumulative-1-memory.test' },
 
   // .ts version of cumulative-1-mongo.test
-  { testName: 'ts-cumulative-1-mongo.test' },
+    { testName: 'ts-cumulative-1-mongo.test' },
 
   // .ts version of cumulative-1-mongoose.test
-  { testName: 'ts-cumulative-1-mongoose.test' },
+    { testName: 'ts-cumulative-1-mongoose.test' },
 
   // .ts version of cumulative-2-sequelize-services.test
-  { testName: 'ts-cumulative-2-sequelize-services.test' },
+    { testName: 'ts-cumulative-2-sequelize-services.test' },
 
   // Test hook generation with associated tests
-  { testName: 'ts-cumulative-2-hooks.test' },
+    { testName: 'ts-cumulative-2-hooks.test' },
 
   // Test generating unit hook tests
-  {
-    testName: 'a-gens/ts/test-hook-unit.test',
-    specsChanges: [
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.app1' } },
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb12' } },
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.manual' } },
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb1' } },
-      { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb2' } }
-    ],
-    compareDirs: true,
-    execute: false
-  },
+    { testName: 'a-gens/ts/test-hook-unit.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.app1' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb12' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.manual' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb1' } },
+        { generate: 'test', prompts: { testType: 'hookUnit', hookName: 'hook.nedb2' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
 
   // Test generating integration hook tests
-  {
-    testName: 'a-gens/ts/test-hook-integ.test',
-    specsChanges: [
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.app1' } },
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb12' } },
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.manual' } },
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb1' } },
-      { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb2' } }
-    ],
-    compareDirs: true,
-    execute: false
-  },
+    { testName: 'a-gens/ts/test-hook-integ.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.app1' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb12' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.manual' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb1' } },
+        { generate: 'test', prompts: { testType: 'hookInteg', hookName: 'hook.nedb2' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
 
   // Test generating service tests
-  {
-    testName: 'a-gens/ts/test-service.test',
-    specsChanges: [
-      { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb1' } },
-      { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb2' } },
-      { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'nedb1' } },
-      { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'users1' } }
-    ],
-    compareDirs: true,
-    execute: false
-  },
+    { testName: 'a-gens/ts/test-service.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb1' } },
+        { generate: 'test', prompts: { testType: 'serviceUnit', serviceName: 'nedb2' } },
+        { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'nedb1' } },
+        { generate: 'test', prompts: { testType: 'serviceInteg', serviceName: 'users1' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
 
   // Test generating authentication tests
-  {
-    testName: 'a-gens/ts/test-authentication.test',
-    specsChanges: [
-      { generate: 'test', prompts: { testType: 'authBase' } },
-      { generate: 'test', prompts: { testType: 'authServices' } }
-    ],
-    compareDirs: true,
-    execute: false
-  },
+    { testName: 'a-gens/ts/test-authentication.test',
+      specsChanges: [
+        { generate: 'test', prompts: { testType: 'authBase' } },
+        { generate: 'test', prompts: { testType: 'authServices' } },
+      ],
+      compareDirs: true,
+      execute: false,
+    },
 
   // test service in sub-folders
-  { testName: 'ts-name-space.test' },
+    { testName: 'ts-name-space.test' },
 
   // Test specs created by generator prompts
-  {
-    testName: 'a-specs/connection-memory.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'memory' },
-        calledByTest: { prompts: { database: 'memory' } }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/connection-mongodb-mongodb.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'mongodb', adapter: 'mongodb', connectionString: 'mongodb://localhost:27017/zz' },
-        calledByTest: {
-          prompts: { database: 'mongodb', adapter: 'mongodb', connectionString: 'mongodb://localhost:27017/zz' }
+    { testName: 'a-specs/connection-memory.test',
+      specsChanges: [
+        { generate: 'connection',
+          prompts: { database: 'memory' },
+          calledByTest: { prompts: { database: 'memory' } }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-mongodb-mongoose.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'mongodb', adapter: 'mongoose', connectionString: 'mongodb://localhost:27017/zz' },
-        calledByTest: {
-          prompts: { database: 'mongodb', adapter: 'mongoose', connectionString: 'mongodb://localhost:27017/zz' }
+    {
+      testName: 'a-specs/connection-mongodb-mongodb.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mongodb', adapter: 'mongodb', connectionString: 'mongodb://localhost:27017/zz' },
+          calledByTest: {
+            prompts: { database: 'mongodb', adapter: 'mongodb', connectionString: 'mongodb://localhost:27017/zz' },
+          }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-mysql-sequelize.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'mysql', adapter: 'sequelize', connectionString: 'mysql://root:@localhost:3306/zz' },
-        calledByTest: {
-          prompts: { database: 'mysql', adapter: 'sequelize', connectionString: 'mysql://root:@localhost:3306/zz' }
+    {
+      testName: 'a-specs/connection-mongodb-mongoose.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mongodb', adapter: 'mongoose', connectionString: 'mongodb://localhost:27017/zz' },
+          calledByTest: {
+            prompts: { database: 'mongodb', adapter: 'mongoose', connectionString: 'mongodb://localhost:27017/zz' },
+          }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-mysql-knex.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'mysql', adapter: 'knex', connectionString: 'mysql://root:@localhost:3306/zz' },
-        calledByTest: {
-          prompts: { database: 'mysql', adapter: 'knex', connectionString: 'mysql://root:@localhost:3306/zz' }
+    {
+      testName: 'a-specs/connection-mysql-sequelize.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mysql', adapter: 'sequelize', connectionString: 'mysql://root:@localhost:3306/zz' },
+          calledByTest: {
+            prompts: { database: 'mysql', adapter: 'sequelize', connectionString: 'mysql://root:@localhost:3306/zz' },
+          }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-nedb.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'nedb', connectionString: '../data' },
-        calledByTest: { prompts: { database: 'nedb', connectionString: '../data' } }
-      }
-    ],
-    compareOnlySpecs: true
-  },
-
-  {
-    testName: 'a-specs/connection-postgres-sequelize.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'postgres', adapter: 'sequelize', connectionString: 'postgres://postgres:@localhost:5432/zz' },
-        calledByTest: {
-          prompts: { database: 'postgres', adapter: 'sequelize', connectionString: 'postgres://postgres:@localhost:5432/zz' }
+    {
+      testName: 'a-specs/connection-mysql-knex.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mysql', adapter: 'knex', connectionString: 'mysql://root:@localhost:3306/zz' },
+          calledByTest: {
+            prompts: { database: 'mysql', adapter: 'knex', connectionString: 'mysql://root:@localhost:3306/zz' },
+          }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-postgres-knex.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'postgres', adapter: 'knex', connectionString: 'postgres://postgres:@localhost:5432/zz' },
-        calledByTest: {
-          prompts: { database: 'postgres', adapter: 'knex', connectionString: 'postgres://postgres:@localhost:5432/zz' }
+    {
+      testName: 'a-specs/connection-nedb.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'nedb', connectionString: '../data' },
+          calledByTest: { prompts: {database: 'nedb', connectionString: '../data'} }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-rethinkdb.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'rethinkdb', connectionString: 'rethinkdb://localhost:28015/zz' },
-        calledByTest: {
-          prompts: { database: 'rethinkdb', connectionString: 'rethinkdb://localhost:28015/zz' }
+    {
+      testName: 'a-specs/connection-postgres-sequelize.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'postgres', adapter: 'sequelize', connectionString: 'postgres://postgres:@localhost:5432/zz' },
+          calledByTest: {
+            prompts: { database: 'postgres', adapter: 'sequelize', connectionString: 'postgres://postgres:@localhost:5432/zz' }
+          }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-sqlite-sequelize.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'sqlite', adapter: 'sequelize', connectionString: 'sqlite://zz.sqlite' },
-        calledByTest: {
-          prompts: { database: 'sqlite', adapter: 'sequelize', connectionString: 'sqlite://zz.sqlite' }
+    {
+      testName: 'a-specs/connection-postgres-knex.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'postgres', adapter: 'knex', connectionString: 'postgres://postgres:@localhost:5432/zz' },
+          calledByTest: {
+            prompts: { database: 'postgres', adapter: 'knex', connectionString: 'postgres://postgres:@localhost:5432/zz' }
+          }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-sqlite-knex.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'sqlite', adapter: 'knex', connectionString: 'sqlite://zz.sqlite' },
-        calledByTest: {
-          prompts: { database: 'sqlite', adapter: 'knex', connectionString: 'sqlite://zz.sqlite' }
+    {
+      testName: 'a-specs/connection-rethinkdb.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'rethinkdb', connectionString: 'rethinkdb://localhost:28015/zz' },
+          calledByTest: {
+            prompts: { database: 'rethinkdb', connectionString: 'rethinkdb://localhost:28015/zz' }
+          }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-mssql-sequelize.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'mssql', adapter: 'sequelize', connectionString: 'mssql://root:password@localhost:1433/zz' },
-        calledByTest: {
-          prompts: { database: 'mssql', adapter: 'sequelize', connectionString: 'mssql://root:password@localhost:1433/zz' }
+    {
+      testName: 'a-specs/connection-sqlite-sequelize.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'sqlite', adapter: 'sequelize', connectionString: 'sqlite://zz.sqlite' },
+          calledByTest: {
+            prompts: { database: 'sqlite', adapter: 'sequelize', connectionString: 'sqlite://zz.sqlite' }
+          }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/connection-mssql-knex.test',
-    specsChanges: [
-      {
-        generate: 'connection',
-        prompts: { database: 'mssql', adapter: 'knex', connectionString: 'mssql://root:password@localhost:1433/zz' },
-        calledByTest: {
-          prompts: { database: 'mssql', adapter: 'knex', connectionString: 'mssql://root:password@localhost:1433/zz' }
+    {
+      testName: 'a-specs/connection-sqlite-knex.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'sqlite', adapter: 'knex', connectionString: 'sqlite://zz.sqlite' },
+          calledByTest: {
+            prompts: { database: 'sqlite', adapter: 'knex', connectionString: 'sqlite://zz.sqlite' }
+          }
         }
-      }
-    ],
-    compareDirs: false,
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-generic.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'generic',
+    {
+      testName: 'a-specs/connection-mssql-sequelize.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mssql', adapter: 'sequelize', connectionString: 'mssql://root:password@localhost:1433/zz' },
+          calledByTest: {
+            prompts: { database: 'mssql', adapter: 'sequelize', connectionString: 'mssql://root:password@localhost:1433/zz' }
+          }
+        }
+      ],
+      compareOnlySpecs: true
+    },
 
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/connection-mssql-knex.test',
+      specsChanges: [
+        {
+          generate: 'connection',
+          prompts: { database: 'mssql', adapter: 'knex', connectionString: 'mssql://root:password@localhost:1433/zz' },
+          calledByTest: {
+            prompts: { database: 'mssql', adapter: 'knex', connectionString: 'mssql://root:password@localhost:1433/zz' }
+          }
+        }
+      ],
+      compareDirs: false,
+      compareOnlySpecs: true
+    },
+
+    {
+      testName: 'a-specs/service-generic.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'generic',
 
-            isAuthEntity: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+          },
+          calledByTest: {
             name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false
+            prompts: {
+              adapter: 'generic',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-memory.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'memory',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-memory.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'memory',
 
-            isAuthEntity: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
+          },
+          calledByTest: {
             name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false
+            prompts: {
+              adapter: 'memory',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-nedb.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'nedb',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'nedb',
-          connectionString: '../data'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-nedb.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'nedb',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'nedb',
-            connectionString: '../data'
+            database: 'nedb', connectionString: '../data'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'nedb',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'nedb', connectionString: '../data'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-mongodb.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'mongodb',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'mongodb',
-          connectionString: 'mongodb://localhost:27017/zz'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-mongodb.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'mongodb',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'mongodb',
-            connectionString: 'mongodb://localhost:27017/zz'
+            database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'mongodb',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-mongoose.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'mongoose',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'mongodb',
-          connectionString: 'mongodb://localhost:27017/zz'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-mongoose.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'mongoose',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'mongodb',
-            connectionString: 'mongodb://localhost:27017/zz'
+            database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'mongoose',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mongodb', connectionString: 'mongodb://localhost:27017/zz'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-sequelize-mysql.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'sequelize',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'mysql',
-          connectionString: 'mysql://root:@localhost:3306/zz'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-sequelize-mysql.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'sequelize',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'mysql',
-            connectionString: 'mysql://root:@localhost:3306/zz'
+            database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'sequelize',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-sequelize-postgres.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'sequelize',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'postgres',
-          connectionString: 'postgres://postgres:@localhost:5432/zz'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-sequelize-postgres.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'sequelize',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'postgres',
-            connectionString: 'postgres://postgres:@localhost:5432/zz'
+            database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'sequelize',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-sequelize-sqlite.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'sequelize',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'sqlite',
-          connectionString: 'sqlite://zz.sqlite'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-sequelize-sqlite.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'sequelize',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'sqlite',
-            connectionString: 'sqlite://zz.sqlite'
+            database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'sequelize',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-knex-mysql.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'knex',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'mysql',
-          connectionString: 'mysql://root:@localhost:3306/zz'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-knex-mysql.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'knex',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'mysql',
-            connectionString: 'mysql://root:@localhost:3306/zz'
+            database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'knex',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mysql', connectionString: 'mysql://root:@localhost:3306/zz'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-knex-postgres.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'knex',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'postgres',
-          connectionString: 'postgres://postgres:@localhost:5432/zz'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-knex-postgres.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'knex',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'postgres',
-            connectionString: 'postgres://postgres:@localhost:5432/zz'
+            database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'knex',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'postgres', connectionString: 'postgres://postgres:@localhost:5432/zz'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-knex-sqlite.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'knex',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'sqlite',
-          connectionString: 'sqlite://zz.sqlite'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-knex-sqlite.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'knex',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'sqlite',
-            connectionString: 'sqlite://zz.sqlite'
+            database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'knex',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'sqlite', connectionString: 'sqlite://zz.sqlite'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-knex-mssql.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'knex',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'mssql',
-          connectionString: 'mssql://root:password@localhost:1433/zz'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-knex-mssql.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'knex',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'mssql',
-            connectionString: 'mssql://root:password@localhost:1433/zz'
+            database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'knex',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+            }
           }
         }
-      }
-    ],
-    compareOnlySpecs: true
-  },
+      ],
+      compareOnlySpecs: true
+    },
 
-  {
-    testName: 'a-specs/service-sequelize-mssql.test',
-    specsChanges: [
-      {
-        generate: 'service',
-        prompts: {
-          adapter: 'sequelize',
-
-          isAuthEntity: false,
-          name: 'users',
-          nameSingular: 'user',
-          subFolder: '',
-          path: '/users',
-          graphql: false,
-
-          database: 'mssql',
-          connectionString: 'mssql://root:password@localhost:1433/zz'
-        },
-        calledByTest: {
-          name: 'users',
+    {
+      testName: 'a-specs/service-sequelize-mssql.test',
+      specsChanges: [
+        {
+          generate: 'service',
           prompts: {
             adapter: 'sequelize',
 
-            isAuthEntity: false,
-            name: 'users',
-            nameSingular: 'user',
-            subFolder: '',
-            path: '/users',
-            graphql: false,
+            isAuthEntity: false, name: 'users', nameSingular: 'user',
+            subFolder: '', path: '/users', graphql: false,
 
-            database: 'mssql',
-            connectionString: 'mssql://root:password@localhost:1433/zz'
+            database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+          },
+          calledByTest: {
+            name: 'users',
+            prompts: {
+              adapter: 'sequelize',
+
+              isAuthEntity: false, name: 'users', nameSingular: 'user',
+              subFolder: '', path: '/users', graphql: false,
+
+              database: 'mssql', connectionString: 'mssql://root:password@localhost:1433/zz'
+            }
           }
         }
-      }
-    ],
-    compareDirs: true, // make sure src/sequelize-mssql.js is generated
-    execute: false
-  },
+      ],
+      compareDirs: true, // make sure src/sequelize-mssql.js is generated
+      execute: false,
+    },
 
   // Test generating app using only generate commands (except for an initialization step)
   //
@@ -1055,59 +910,45 @@ const tests = [
   //
   // We therefore standardized on passing the prompts in specsChanges.calledByTest.prompts as well.
   // "Missing" prompt values can be set by the generator at the end of prompting().
-  {
-    testName: 'a-gens/js/cumulative.test',
-    specsChanges: [
-      {
-        generate: 'app',
-        prompts: {
-          name: 'z-1',
-          src: 'src1',
-          description: 'Project z-1',
-          packager: 'npm@>= 3.0.0',
-          providers: ['rest', 'socketio'],
-          environmentsAllowingSeedData: 'test',
-          seedData: false
-        },
-        calledByTest: {
+    { testName: 'a-gens/js/cumulative.test',
+      specsChanges: [
+        { generate: 'app',
           prompts: {
             name: 'z-1',
             src: 'src1',
             description: 'Project z-1',
             packager: 'npm@>= 3.0.0',
-            providers: ['rest', 'socketio'],
+            providers: [ 'rest', 'socketio' ],
             environmentsAllowingSeedData: 'test',
-            seedData: false
+            seedData: false,
+          },
+          calledByTest: {
+            prompts: {
+              name: 'z-1',
+              src: 'src1',
+              description: 'Project z-1',
+              packager: 'npm@>= 3.0.0',
+              providers: [ 'rest', 'socketio' ],
+              environmentsAllowingSeedData: 'test',
+              seedData: false,
+            }
           }
-        }
-      },
-      {
-        generate: 'connection',
-        prompts: {
-          adapter: 'nedb',
-          database: 'nedb',
-          connectionString: '../data'
         },
-        calledByTest: {
+        { generate: 'connection',
           prompts: {
             adapter: 'nedb',
             database: 'nedb',
             connectionString: '../data'
+          },
+          calledByTest: {
+            prompts: {
+              adapter: 'nedb',
+              database: 'nedb',
+              connectionString: '../data'
+            },
           }
-        }
-      },
-      {
-        generate: 'service',
-        prompts: {
-          name: 'users1',
-          nameSingular: 'users1',
-          subFolder: '',
-          adapter: 'nedb',
-          path: '/users-1',
-          graphql: false
         },
-        calledByTest: {
-          name: 'users1',
+        { generate: 'service',
           prompts: {
             name: 'users1',
             nameSingular: 'users1',
@@ -1115,36 +956,32 @@ const tests = [
             adapter: 'nedb',
             path: '/users-1',
             graphql: false
+          },
+          calledByTest: {
+            name: 'users1',
+            prompts: {
+              name: 'users1',
+              nameSingular: 'users1',
+              subFolder: '',
+              adapter: 'nedb',
+              path: '/users-1',
+              graphql: false
+            }
           }
-        }
-      },
-      {
-        generate: 'authentication',
-        prompts: {
-          strategies: ['local', 'auth0', 'google', 'facebook', 'github'],
-          entity: 'users1'
         },
-        calledByTest: {
+        { generate: 'authentication',
           prompts: {
-            strategies: ['local', 'auth0', 'google', 'facebook', 'github'],
+            strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
             entity: 'users1'
+          },
+          calledByTest: {
+            prompts: {
+              strategies: [ 'local', 'auth0', 'google', 'facebook', 'github' ],
+              entity: 'users1'
+            },
           }
-        }
-      },
-      {
-        generate: 'service',
-        prompts: {
-          isAuthEntity: false,
-          requiresAuth: true,
-          name: 'nedb1',
-          nameSingular: 'nedb1',
-          adapter: 'nedb',
-          subFolder: '',
-          path: '/nedb-1',
-          graphql: true
         },
-        calledByTest: {
-          name: 'nedb1',
+        { generate: 'service',
           prompts: {
             isAuthEntity: false,
             requiresAuth: true,
@@ -1154,80 +991,79 @@ const tests = [
             subFolder: '',
             path: '/nedb-1',
             graphql: true
+          },
+          calledByTest: {
+            name: 'nedb1',
+            prompts: {
+              isAuthEntity: false,
+              requiresAuth: true,
+              name: 'nedb1',
+              nameSingular: 'nedb1',
+              adapter: 'nedb',
+              subFolder: '',
+              path: '/nedb-1',
+              graphql: true
+            },
           }
-        }
-      },
-      {
-        generate: 'service',
-        prompts: {
-          isAuthEntity: false,
-          requiresAuth: false,
-          name: 'nedb2',
-          nameSingular: 'nedb2',
-          adapter: 'nedb',
-          subFolder: '',
-          path: '/nedb-2',
-          graphql: true
         },
-        calledByTest: {
-          name: 'nedb2',
+        { generate: 'service',
           prompts: {
             isAuthEntity: false,
-            requiresAuth: true,
-            name: 'nedb1',
-            nameSingular: 'nedb1',
+            requiresAuth: false,
+            name: 'nedb2',
+            nameSingular: 'nedb2',
             adapter: 'nedb',
             subFolder: '',
-            path: '/nedb-1',
+            path: '/nedb-2',
             graphql: true
+          },
+          calledByTest: {
+            name: 'nedb2',
+            prompts: {
+              isAuthEntity: false,
+              requiresAuth: true,
+              name: 'nedb1',
+              nameSingular: 'nedb1',
+              adapter: 'nedb',
+              subFolder: '',
+              path: '/nedb-1',
+              graphql: true
+            },
           }
-        }
-      },
-      {
-        generate: 'middleware',
-        prompts: {
-          name: 'mw1',
-          path: '*',
-          kebabName: 'mw-1',
-          camelName: 'mw1'
         },
-        calledByTest: {
+        { generate: 'middleware',
           prompts: {
             name: 'mw1',
             path: '*',
             kebabName: 'mw-1',
             camelName: 'mw1'
+          },
+          calledByTest: {
+            prompts: {
+              name: 'mw1',
+              path: '*',
+              kebabName: 'mw-1',
+              camelName: 'mw1'
+            },
           }
-        }
-      },
-      {
-        generate: 'middleware',
-        prompts: {
-          name: 'mw2',
-          path: 'mw2',
-          kebabName: 'mw-2',
-          camelName: 'mw2'
         },
-        calledByTest: {
+        { generate: 'middleware',
           prompts: {
             name: 'mw2',
             path: 'mw2',
             kebabName: 'mw-2',
             camelName: 'mw2'
+          },
+          calledByTest: {
+            prompts: {
+              name: 'mw2',
+              path: 'mw2',
+              kebabName: 'mw-2',
+              camelName: 'mw2'
+            },
           }
-        }
-      },
-      {
-        generate: 'graphql',
-        prompts: {
-          strategy: 'services',
-          path: '/graphql',
-          requiresAuth: false,
-          snakeName: 'graphql',
-          kebabName: 'graphql',
-          camelName: 'graphql'
         },
-        calledByTest: {
+        { generate: 'graphql',
           prompts: {
             strategy: 'services',
             path: '/graphql',
@@ -1235,19 +1071,28 @@ const tests = [
             snakeName: 'graphql',
             kebabName: 'graphql',
             camelName: 'graphql'
+          },
+          calledByTest: {
+            prompts: {
+              strategy: 'services',
+              path: '/graphql',
+              requiresAuth: false,
+              snakeName: 'graphql',
+              kebabName: 'graphql',
+              camelName: 'graphql'
+            },
           }
-        }
-      }
-      // since the services are not regenerated, no name.populate.js files are generated
-    ],
-    compareDirs: true,
-    execute: false
-  }
+        },
+        // since the services are not regenerated, no name.populate.js files are generated
+      ],
+      compareDirs: true,
+      execute: false,
+    },
 ];
 
 let appDir;
-const runFromTest = null; // 'cumulative-1-sequelize.test' //null;
-const runToTest = null; // 'cumulative-1-sequelize.test' //null;
+const runFromTest = null; //'cumulative-1-sequelize.test' //null;
+const runToTest = null; //'cumulative-1-sequelize.test' //null;
 const executeAll = false;
 
 let runTests = !runFromTest;
@@ -1259,32 +1104,32 @@ describe('generators-writing.test.js', function () {
     if (!runTests) return;
 
     describe(testName, function () {
-      it('writes code expected', async () => {
-        await Promise.resolve()
+      it('writes code expected', () => {
         return runFirstGeneration(testName, { skipInstall: true })
           .then(dir => {
+
             // There is no second generation step
             if (!specsChanges.length) {
-              return compareOnlySpecs
-                ? compareSpecs(appDir, `${testName}-expected`)
-                : compareCode(dir, `${testName}-expected`, compareDirs);
+              return compareOnlySpecs ?
+                compareSpecs(appDir, `${testName}-expected`) :
+                compareCode(dir, `${testName}-expected`, compareDirs);
             }
 
             // Generate on top of contents of working directory
             return runNextGenerator(dir, specsChanges, { skipInstall: true })
               .then(dir => {
-                return compareOnlySpecs
-                  ? compareSpecs(appDir, `${testName}-expected`)
-                  : compareCode(dir, `${testName}-expected`, compareDirs);
+                return compareOnlySpecs ?
+                  compareSpecs(appDir, `${testName}-expected`) :
+                  compareCode(dir, `${testName}-expected`, compareDirs);
               });
           });
       });
 
       if (executeAll || execute) {
-        it('runs test generated', async () => {
-          await Promise.resolve()
+        it('runs test generated', () => {
           return runFirstGeneration(testName, { skipInstall: false })
             .then(dir => {
+
               // There is no second generation step
               if (!specsChanges.length) {
                 return runExecute(dir);
@@ -1311,14 +1156,14 @@ describe('generators-writing.test.js', function () {
 });
 
 // Run the first generator
-function runFirstGeneration(testName, withOptions) {
-  // console.log('>runFirstGeneration', testName, withOptions);
+function runFirstGeneration (testName, withOptions) {
+  //console.log('>runFirstGeneration', testName, withOptions);
   return helpers.run(path.join(__dirname, '..', 'generators', 'all'))
     .inTmpDir(dir => {
       appDir = dir;
       // specs.app.name must be 'z-1' not 'z1' as Feathers-generate app converts the project name
       // to kebab-case during the prompt.
-      // console.log('288', path.join(__dirname, '..', 'test-expands', `${testName}-copy`), dir);
+      //console.log('288', path.join(__dirname, '..', 'test-expands', `${testName}-copy`), dir);
       fs.copySync(path.join(__dirname, '..', 'test-expands', `${testName}-copy`), dir);
 
       resetSpecs();
@@ -1333,7 +1178,7 @@ function runFirstGeneration(testName, withOptions) {
 // Run subsequent generators
 // Return working directory containing last generated app.
 function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
-  // console.log('>runNextGenerator', dir);
+  //console.log('>runNextGenerator', dir);
   if (!specsChanges.length) return;
   const specsChg = specsChanges.shift();
 
@@ -1349,14 +1194,14 @@ function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
         appDir = dirNext;
         console.log(`      ${index + 1} "generate ${specsChg.generate}" with ${JSON.stringify(specsChg.prompts).substr(0, 60)}`);
 
-        // console.log('314', dir, dirNext);
+        //console.log('314', dir, dirNext);
         fs.copySync(dir, dirNext);
 
         resetSpecs();
       })
       .withPrompts(Object.assign({},
         specsChg.prompts,
-        { action: 'force' } // force file overwrites
+        { action: 'force' }, // force file overwrites
       ))
       .withOptions(Object.assign({}, { calledByTest: specsChg.calledByTest || true }, withOptions))
       .then(dir => {
@@ -1377,17 +1222,17 @@ function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
         appDir = dirNext;
         console.log(`      ${index + 1} change specs ${JSON.stringify(specsChg.merge).substr(0, 65)}`);
 
-        // console.log('314', dir, dirNext);
+        //console.log('314', dir, dirNext);
         fs.copySync(dir, dirNext);
 
-        // console.log('317', path.join(dir, 'feathers-gen-specs.json'));
+        //console.log('317', path.join(dir, 'feathers-gen-specs.json'));
         const prevJson = fs.readJsonSync(path.join(dir, 'feathers-gen-specs.json'));
         if (specsChg.before) {
           specsChg.before(prevJson);
         }
         nextJson = specsChg.merge ? merge(prevJson, specsChg.merge) : prevJson;
 
-        // console.log('322', path.join(dirNext, 'feathers-gen-specs.json'));
+        //console.log('322', path.join(dirNext, 'feathers-gen-specs.json'));
         fs.writeFileSync(path.join(dirNext, 'feathers-gen-specs.json'), JSON.stringify(nextJson, null, 2));
 
         resetSpecs();
@@ -1409,7 +1254,7 @@ function runNextGenerator(dir, specsChanges, withOptions, index = 1) {
 }
 
 // Run the 'test' script in package.json
-function runGeneratedTests(expectedText) {
+function runGeneratedTests (expectedText) {
   // console.log('>runGeneratedTests');
   return runCommand(packageInstaller, ['test'], { cwd: appDir })
     .then(({ buffer }) => {
@@ -1425,12 +1270,12 @@ function runGeneratedTests(expectedText) {
 
 // Start a process and wait either for it to exit
 // or to display a certain text
-function runCommand(cmd, args, options, text) {
+function runCommand (cmd, args, options, text) {
   console.log('..run shell command', cmd, args);
   return new Promise((resolve, reject) => {
     let buffer = '';
 
-    function addToBuffer(data) {
+    function addToBuffer (data) {
       buffer += data;
 
       if (text && buffer.indexOf(text) !== -1) {
@@ -1453,7 +1298,7 @@ function runCommand(cmd, args, options, text) {
   });
 }
 
-async function compareCode(appDir, testDir, compareDirs) {
+function compareCode (appDir, testDir, compareDirs) {
   // console.log('>compareCode', appDir, testDir, compareDirs);
   console.log('... comparing code');
   const appDirLen = appDir.length;
@@ -1466,9 +1311,9 @@ async function compareCode(appDir, testDir, compareDirs) {
     assert.deepEqual(actualPaths.relativePaths, expectedPaths.relativePaths, 'Unexpected files in generated dir');
   }
 
-  return Promise.all(actualPaths.paths.map(async actualPath => {
-    await compare(actualPath.path.substr(appDirLen), appDir, expectedDir);
-  }))
+  actualPaths.paths.forEach(actualPath => {
+    compare(actualPath.path.substr(appDirLen), appDir, expectedDir);
+  });
 
   /*
   const expectedDirLen = expectedDir.length;
@@ -1478,14 +1323,14 @@ async function compareCode(appDir, testDir, compareDirs) {
   */
 }
 
-function compareSpecs(appDir, testDir) {
+function compareSpecs (appDir, testDir) {
   console.log('... comparing feathers-gen-specs.json');
   const expectedDir = path.join(__dirname, '..', 'test-expands', testDir);
 
   compare(`${path.sep}feathers-gen-specs.json`, appDir, expectedDir);
 }
 
-function compare(fileName, appDir, expectedDir) {
+function compare (fileName, appDir, expectedDir) {
   // console.log('compare files', fileName);
   let expected;
 
@@ -1513,11 +1358,11 @@ function compare(fileName, appDir, expectedDir) {
     console.log(expected);
     console.log('^^^^^');
 
-    let str = diff.reduce(function (accum, part) {
+    let str = diff.reduce(function(accum, part) {
       // green for additions, red for deletions
       // grey for common parts
-      const color = part.added ? 'bgGreen'
-        : part.removed ? 'bgRed' : 'grey';
+      const color = part.added ? 'bgGreen' :
+        part.removed ? 'bgRed' : 'grey';
       const value = /(\r\n)|(\r)|(\n)/.test(part.value) ? '<EOL DIFF>' : part.value;
 
       return accum + value[color];
@@ -1532,7 +1377,7 @@ function compare(fileName, appDir, expectedDir) {
   }
 }
 
-function getFileNames(dir) {
+function getFileNames (dir) {
   // console.log('>getFileNames', dir);
   const nodes = klawSync(dir, { nodir: true })
     .filter(obj => obj.path.indexOf(`${path.sep}node_modules${path.sep}`) === -1 && obj.path.indexOf(`${path.sep}data${path.sep}`) === -1);

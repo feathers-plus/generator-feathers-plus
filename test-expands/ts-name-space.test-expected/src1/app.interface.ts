@@ -22,17 +22,14 @@ import { Nedb6 } from './services/c-1/nedb-6/nedb-6.interface';
     user = 5; // this won't compile, because user is known to be of type User
   });
  */
-
-export interface Services {
-  'nedb-1': Nedb1;
-  'nedb-2': Nedb2;
-  'nedb-3': Nedb3;
-  'nedb-4': Nedb4;
-  'nedb-5': Nedb5;
-  'nedb-6': Nedb6;
+export type App = Application<{
+  'nedb-1': Nedb1,
+  'nedb-2': Nedb2,
+  'nedb-3': Nedb3,
+  'nedb-4': Nedb4,
+  'nedb-5': Nedb5,
+  'nedb-6': Nedb6,
   // !code: moduleExports // !end
-}
-
-export type App = Application<Services>;
+}>;
 // !code: funcs // !end
 // !code: end // !end

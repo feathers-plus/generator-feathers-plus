@@ -5,7 +5,7 @@
 // !code: init // !end
 
 let moduleExports = function serviceResolvers(app, options) {
-  const { convertArgsToFeathers, extractAllItems, extractFirstItem } = options;
+  const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options;
   // !<DEFAULT> code: extra_auth_props
   const convertArgs = convertArgsToFeathers([]);
   // !end

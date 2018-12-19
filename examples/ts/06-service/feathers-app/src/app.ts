@@ -9,7 +9,7 @@ import logger from './logger';
 
 import feathers from '@feathersjs/feathers';
 import configuration from '@feathersjs/configuration';
-import express, { Application } from '@feathersjs/express';
+import express from '@feathersjs/express';
 import socketio from '@feathersjs/socketio';
 
 import middleware from './middleware';
@@ -24,7 +24,7 @@ import mongoose from './mongoose';
 // !code: imports // !end
 // !code: init // !end
 
-const app = express<Services>(feathers() as Application<Services>);
+const app = express(feathers());
 // !code: use_start // !end
 
 // Load app configuration
