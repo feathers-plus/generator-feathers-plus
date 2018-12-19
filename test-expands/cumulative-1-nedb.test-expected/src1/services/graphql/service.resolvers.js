@@ -5,7 +5,7 @@
 // !code: init // !end
 
 let moduleExports = function serviceResolvers(app, options) {
-  const { convertArgsToFeathers, extractAllItems, extractFirstItem } = options;
+  const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options;
   // !<DEFAULT> code: extra_auth_props
   const convertArgs = convertArgsToFeathers([]);
   // !end
@@ -28,7 +28,7 @@ let moduleExports = function serviceResolvers(app, options) {
           });
           return nedb2.find(feathersParams).then(extractFirstItem);
         },
-      // !end
+        // !end
     },
 
     Nedb2: {
@@ -42,7 +42,7 @@ let moduleExports = function serviceResolvers(app, options) {
           });
           return nedb1.find(feathersParams).then(extractFirstItem);
         },
-      // !end
+        // !end
     },
 
     // !code: resolver_field_more // !end
@@ -58,7 +58,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findNedb1(query: JSON, params: JSON): [Nedb1!]
       findNedb1(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: { _id: 1 } } });
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
         return nedb1.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
@@ -72,7 +72,7 @@ let moduleExports = function serviceResolvers(app, options) {
 
       // findNedb2(query: JSON, params: JSON): [Nedb2!]
       findNedb2(parent, args, content, ast) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: { _id: 1 } } });
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   _id: 1 } } });
         return nedb2.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end

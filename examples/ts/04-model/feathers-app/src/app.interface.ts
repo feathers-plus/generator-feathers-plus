@@ -17,12 +17,9 @@ import { User } from './services/users/users.interface';
     user = 5; // this won't compile, because user is known to be of type User
   });
  */
-
-export interface Services {
-  'users': User;
+export type App = Application<{
+  'users': User,
   // !code: moduleExports // !end
-}
-
-export type App = Application<Services>;
+}>;
 // !code: funcs // !end
 // !code: end // !end
