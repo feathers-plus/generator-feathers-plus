@@ -14,7 +14,7 @@ export interface ServiceResolverOptions {
 }
 
 let moduleExports = function serviceResolvers(app: App, options: ServiceResolverOptions) {
-  const { convertArgsToFeathers, extractAllItems, extractFirstItem } = options;
+  const {convertArgsToFeathers, extractAllItems, extractFirstItem} = options;
   // !<DEFAULT> code: extra_auth_props
   const convertArgs = convertArgsToFeathers([]);
   // !end
@@ -32,7 +32,7 @@ let moduleExports = function serviceResolvers(app: App, options: ServiceResolver
       // users: [User!]
       users:
         // !<DEFAULT> code: resolver-Role-users
-        (parent: any, args: any, content: any, ast: any) => {
+        (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
             query: { roleId: parent._id, $sort: undefined }, paginate: false
           });
@@ -46,7 +46,7 @@ let moduleExports = function serviceResolvers(app: App, options: ServiceResolver
       // members: [User!]
       members:
         // !<DEFAULT> code: resolver-Team-members
-        (parent: any, args: any, content: any, ast: any) => {
+        (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
             query: { _id: { $in: parent.memberIds }, $sort: 
               {
@@ -64,13 +64,13 @@ let moduleExports = function serviceResolvers(app: App, options: ServiceResolver
       // fullName: String!
       fullName:
         // !<DEFAULT> code: resolver-User-fullName-non
-        (parent: any, args: any, content: any, ast: any) => { throw Error('GraphQL fieldName User.fullName is not calculated.'); },
+        (parent, args, content, ast) => { throw Error('GraphQL fieldName User.fullName is not calculated.'); },
         // !end
 
       // role(query: JSON, params: JSON, key: JSON): Role
       role:
         // !<DEFAULT> code: resolver-User-role
-        (parent: any, args: any, content: any, ast: any) => {
+        (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
             query: { _id: parent.roleId }, paginate: false
           });
@@ -81,7 +81,7 @@ let moduleExports = function serviceResolvers(app: App, options: ServiceResolver
       // teams(query: JSON, params: JSON, key: JSON): [Team!]
       teams:
         // !<DEFAULT> code: resolver-User-teams
-        (parent: any, args: any, content: any, ast: any) => {
+        (parent, args, content, ast) => {
           const feathersParams = convertArgs(args, content, ast, {
             query: { $sort: 
               {
@@ -106,13 +106,13 @@ let moduleExports = function serviceResolvers(app: App, options: ServiceResolver
 
       // !<DEFAULT> code: query-Role
       // getRole(query: JSON, params: JSON, key: JSON): Role
-      getRole(parent: any, args: any, content: any, ast: any) {
+      getRole(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast);
         return roles.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findRole(query: JSON, params: JSON): [Role!]
-      findRole(parent: any, args: any, content: any, ast: any) {
+      findRole(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return roles.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
@@ -120,13 +120,13 @@ let moduleExports = function serviceResolvers(app: App, options: ServiceResolver
 
       // !<DEFAULT> code: query-Team
       // getTeam(query: JSON, params: JSON, key: JSON): Team
-      getTeam(parent: any, args: any, content: any, ast: any) {
+      getTeam(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast);
         return teams.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findTeam(query: JSON, params: JSON): [Team!]
-      findTeam(parent: any, args: any, content: any, ast: any) {
+      findTeam(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return teams.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
@@ -134,13 +134,13 @@ let moduleExports = function serviceResolvers(app: App, options: ServiceResolver
 
       // !<DEFAULT> code: query-User
       // getUser(query: JSON, params: JSON, key: JSON): User
-      getUser(parent: any, args: any, content: any, ast: any) {
+      getUser(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast);
         return users.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findUser(query: JSON, params: JSON): [User!]
-      findUser(parent: any, args: any, content: any, ast: any) {
+      findUser(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   lastName: 1,   firstName: 1 } } });
         return users.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },

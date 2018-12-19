@@ -38,10 +38,10 @@ const feathersSpecs = {
           }
         },
         sql: { uniqueKey: 'id', sqlColumn: {} },
-        serviceSortParams: ', { query: { $sort: {  _id: 1 } } }'
+        serviceSortParams: ', { query: { $sort: {   _id: 1 } } }'
       },
       primaryKey: { idName: '_id', idType: 'string' },
-      foreignKeys: ['id', '_id', 'nedb2Id'],
+      foreignKeys: [ 'id', '_id', 'nedb2Id' ],
       _ifGraphql: true
     }
   },
@@ -83,10 +83,10 @@ const feathersSpecs = {
           }
         },
         sql: { uniqueKey: 'id', sqlColumn: {} },
-        serviceSortParams: ', { query: { $sort: {  _id: 1 } } }'
+        serviceSortParams: ', { query: { $sort: {   _id: 1 } } }'
       },
       primaryKey: { idName: '_id', idType: 'string' },
-      foreignKeys: ['id', '_id', 'nedb1Id'],
+      foreignKeys: [ 'id', '_id', 'nedb1Id' ],
       _ifGraphql: true
     }
   },

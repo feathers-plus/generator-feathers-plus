@@ -20,7 +20,7 @@ export interface BatchloaderResolverOptions {
 // !code: imports // !end
 // !code: init // !end
 
-let moduleExports = function batchLoaderResolvers(app: App, options: BatchloaderResolverOptions) {
+let moduleExports = function batchLoaderResolvers(app: App, options: BatchloaderResolverOptions ) {
   // tslint:disable-next-line
   let { convertArgsToParams, convertArgsToFeathers, extractAllItems, extractFirstItem,
     feathersBatchLoader: { feathersBatchLoader } } = options;
@@ -74,83 +74,83 @@ let moduleExports = function batchLoaderResolvers(app: App, options: Batchloader
     let feathersParams;
 
     switch (dataLoaderName) {
-      /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
-      // !<DEFAULT> code: bl-persisted
-      // case '_persisted.user.one.id': // service user, returns one object, key is field id
+    /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
+    // !<DEFAULT> code: bl-persisted
+    // case '_persisted.user.one.id': // service user, returns one object, key is field id
+    // !end
+
+    /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
+    // !<DEFAULT> code: bl-shared
+    // *.*: User
+    // case '_shared.user.one.id': // service user, returns one object, key is field id
+    // !end
+
+    /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
+
+    // Role.users: [User!]
+    // !<DEFAULT> code: bl-Role-users
+    case 'Role.users':
+      return feathersBatchLoader(dataLoaderName, '[!]', 'roleId',
+        (keys: string[]) => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { roleId: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return users.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
       // !end
 
-      /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
-      // !<DEFAULT> code: bl-shared
-      // *.*: User
-      // case '_shared.user.one.id': // service user, returns one object, key is field id
+    // Team.members: [User!]
+    // !<DEFAULT> code: bl-Team-members
+    case 'Team.members':
+      return feathersBatchLoader(dataLoaderName, '[!]', '_id',
+        (keys: string[]) => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return users.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
       // !end
 
-      /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
-
-      // Role.users: [User!]
-      // !<DEFAULT> code: bl-Role-users
-      case 'Role.users':
-        return feathersBatchLoader(dataLoaderName, '[!]', 'roleId',
-          (keys: string[]) => {
-            feathersParams = convertArgs(args, content, null, {
-              query: { roleId: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return users.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
+    // User.role(query: JSON, params: JSON, key: JSON): Role
+    // !<DEFAULT> code: bl-User-role
+    case 'User.role':
+      return feathersBatchLoader(dataLoaderName, '', '_id',
+        (keys: string[]) => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { _id: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return roles.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
       // !end
 
-      // Team.members: [User!]
-      // !<DEFAULT> code: bl-Team-members
-      case 'Team.members':
-        return feathersBatchLoader(dataLoaderName, '[!]', '_id',
-          (keys: string[]) => {
-            feathersParams = convertArgs(args, content, null, {
-              query: { _id: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return users.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
+    // User.teams(query: JSON, params: JSON, key: JSON): [Team!]
+    // !<DEFAULT> code: bl-User-teams
+    case 'User.teams':
+      return feathersBatchLoader(dataLoaderName, '[!]', 'memberIds',
+        (keys: string[]) => {
+          feathersParams = convertArgs(args, content, null, {
+            query: { memberIds: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return teams.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
       // !end
 
-      // User.role(query: JSON, params: JSON, key: JSON): Role
-      // !<DEFAULT> code: bl-User-role
-      case 'User.role':
-        return feathersBatchLoader(dataLoaderName, '', '_id',
-          (keys: string[]) => {
-            feathersParams = convertArgs(args, content, null, {
-              query: { _id: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return roles.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
-      // !end
-
-      // User.teams(query: JSON, params: JSON, key: JSON): [Team!]
-      // !<DEFAULT> code: bl-User-teams
-      case 'User.teams':
-        return feathersBatchLoader(dataLoaderName, '[!]', 'memberIds',
-          (keys: string[]) => {
-            feathersParams = convertArgs(args, content, null, {
-              query: { memberIds: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return teams.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
-      // !end
-
-      /* Throw on unknown BatchLoader name. */
-      default:
-        // !<DEFAULT> code: bl-default
-        throw new Error(`GraphQL query requires BatchLoader named '${dataLoaderName}' but no definition exists for it.`);
+    /* Throw on unknown BatchLoader name. */
+    default:
+      // !<DEFAULT> code: bl-default
+      throw new Error(`GraphQL query requires BatchLoader named '${dataLoaderName}' but no definition exists for it.`);
       // !end
     }
   }
@@ -177,7 +177,7 @@ let moduleExports = function batchLoaderResolvers(app: App, options: Batchloader
 
       // fullName: String!
       // !<DEFAULT> code: resolver-User-fullName-non
-      fullName: (parent: any, args: any, content: any, ast: any) => { throw Error('GraphQL fieldName User.fullName is not calculated.'); },
+      fullName: (parent, args, content, ast) => { throw Error('GraphQL fieldName User.fullName is not calculated.'); },
       // !end
 
       // role(query: JSON, params: JSON, key: JSON): Role
@@ -196,42 +196,42 @@ let moduleExports = function batchLoaderResolvers(app: App, options: Batchloader
 
       // !<DEFAULT> code: query-Role
       // getRole(query: JSON, params: JSON, key: JSON): Role
-      getRole(parent: any, args: any, content: any, ast: any) {
+      getRole(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast);
         return roles.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findRole(query: JSON, params: JSON): [Role!]
-      findRole(parent: any, args: any, content: any, ast: any) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: { name: 1 } } });
+      findRole(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return roles.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
 
       // !<DEFAULT> code: query-Team
       // getTeam(query: JSON, params: JSON, key: JSON): Team
-      getTeam(parent: any, args: any, content: any, ast: any) {
+      getTeam(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast);
         return teams.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findTeam(query: JSON, params: JSON): [Team!]
-      findTeam(parent: any, args: any, content: any, ast: any) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: { name: 1 } } });
+      findTeam(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   name: 1 } } });
         return teams.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end
 
       // !<DEFAULT> code: query-User
       // getUser(query: JSON, params: JSON, key: JSON): User
-      getUser(parent: any, args: any, content: any, ast: any) {
+      getUser(parent, args, content, ast) {
         const feathersParams = convertArgs(args, content, ast);
         return users.get(args.key, feathersParams).then(extractFirstItem);
       },
 
       // findUser(query: JSON, params: JSON): [User!]
-      findUser(parent: any, args: any, content: any, ast: any) {
-        const feathersParams = convertArgs(args, content, ast, { query: { $sort: { lastName: 1, firstName: 1 } } });
+      findUser(parent, args, content, ast) {
+        const feathersParams = convertArgs(args, content, ast, { query: { $sort: {   lastName: 1,   firstName: 1 } } });
         return users.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       // !end

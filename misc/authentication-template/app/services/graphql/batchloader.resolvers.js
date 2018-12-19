@@ -55,175 +55,175 @@ let moduleExports = function batchLoaderResolvers(app, options) {
     let feathersParams;
 
     switch (dataLoaderName) {
-      /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
-      //!<DEFAULT> code: bl-persisted
-      // case '_persisted.user.one.id': // service user, returns one object, key is field id
-      //!end
+    /* Persistent BatchLoaders. Stored in `content.batchLoaders._persisted`. */
+    //!<DEFAULT> code: bl-persisted
+    // case '_persisted.user.one.id': // service user, returns one object, key is field id
+    //!end
 
-      /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
-      //!code: bl-shared
-      // *.*: User
-      case '_shared.user.one.uuid': // service user, returns one object, key is field uuid
-        return feathersBatchLoader(dataLoaderName, '!', 'uuid',
-          keys => {
-            feathersParams = convertArgsToFeathers(args, graphqlContent, null,
-              { query: { uuid: { $in: keys } } }
-            );
-            return user.find(feathersParams);
-          },
-          50
-        );
-      //!end
+    /* Transient BatchLoaders shared among resolvers. Stored in `content.batchLoaders._shared`. */
+    //!code: bl-shared
+    // *.*: User
+    case '_shared.user.one.uuid': // service user, returns one object, key is field uuid
+      return feathersBatchLoader(dataLoaderName, '!', 'uuid',
+        keys => {
+          feathersParams = convertArgsToFeathers(args, graphqlContent, null,
+            { query : { uuid: { $in: keys } } }
+          );
+          return user.find(feathersParams);
+        },
+        50
+      );
+    //!end
 
-      /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
+    /* Transient BatchLoaders used by only one resolver. Stored in `content.batchLoaders`. */
 
-      // Comment.author: User!
-      //!code: bl-Comment-author
+    // Comment.author: User!
+    //!code: bl-Comment-author
       // ... Using instead _shared.user.one.id
       //!end
 
-      // Comment.likes: [Like!]
-      //!<DEFAULT> code: bl-Comment-likes
-      case 'Comment.likes':
-        return feathersBatchLoader(dataLoaderName, '[!]', 'commentUuid',
-          keys => {
-            feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
-              query: { commentUuid: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return like.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
-      //!end
+    // Comment.likes: [Like!]
+    //!<DEFAULT> code: bl-Comment-likes
+    case 'Comment.likes':
+      return feathersBatchLoader(dataLoaderName, '[!]', 'commentUuid',
+        keys => {
+          feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
+            query: { commentUuid: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return like.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+    //!end
 
-      // Like.author: User!
-      //!code: bl-Like-author
+    // Like.author: User!
+    //!code: bl-Like-author
       // ... Using instead _shared.user.one.id
       //!end
 
-      // Like.comment: Comment!
-      //!<DEFAULT> code: bl-Like-comment
-      case 'Like.comment':
-        return feathersBatchLoader(dataLoaderName, '!', 'uuid',
-          keys => {
-            feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
-              query: { uuid: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return comment.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
-      //!end
+    // Like.comment: Comment!
+    //!<DEFAULT> code: bl-Like-comment
+    case 'Like.comment':
+      return feathersBatchLoader(dataLoaderName, '!', 'uuid',
+        keys => {
+          feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
+            query: { uuid: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return comment.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+    //!end
 
-      // Post.author: User!
-      //!code: bl-Post-author
+    // Post.author: User!
+    //!code: bl-Post-author
       // ... Using instead _shared.user.one.id
       //!end
 
-      // Post.comments: [Comment!]
-      //!<DEFAULT> code: bl-Post-comments
-      case 'Post.comments':
-        return feathersBatchLoader(dataLoaderName, '[!]', 'postUuid',
-          keys => {
-            feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
-              query: { postUuid: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return comment.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
-      //!end
+    // Post.comments: [Comment!]
+    //!<DEFAULT> code: bl-Post-comments
+    case 'Post.comments':
+      return feathersBatchLoader(dataLoaderName, '[!]', 'postUuid',
+        keys => {
+          feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
+            query: { postUuid: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return comment.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+    //!end
 
-      // Relationship.follower: User!
-      //!code: bl-Relationship-follower
+    // Relationship.follower: User!
+    //!code: bl-Relationship-follower
       // ... Using instead _shared.user.one.id
       //!end
 
-      // Relationship.followee: User!
-      //!code: bl-Relationship-followee
+    // Relationship.followee: User!
+    //!code: bl-Relationship-followee
       // ... Using instead _shared.user.one.id
       //!end
 
-      // User.comments: [Comment!]
-      //!<DEFAULT> code: bl-User-comments
-      case 'User.comments':
-        return feathersBatchLoader(dataLoaderName, '[!]', 'authorUuid',
-          keys => {
-            feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
-              query: { authorUuid: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return comment.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
-      //!end
+    // User.comments: [Comment!]
+    //!<DEFAULT> code: bl-User-comments
+    case 'User.comments':
+      return feathersBatchLoader(dataLoaderName, '[!]', 'authorUuid',
+        keys => {
+          feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
+            query: { authorUuid: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return comment.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+    //!end
 
-      // User.followed_by: [Relationship!]
-      //!<DEFAULT> code: bl-User-followed_by
-      case 'User.followed_by':
-        return feathersBatchLoader(dataLoaderName, '[!]', 'followeeUuid',
-          keys => {
-            feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
-              query: { followeeUuid: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return relationship.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
-      //!end
+    // User.followed_by: [Relationship!]
+    //!<DEFAULT> code: bl-User-followed_by
+    case 'User.followed_by':
+      return feathersBatchLoader(dataLoaderName, '[!]', 'followeeUuid',
+        keys => {
+          feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
+            query: { followeeUuid: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return relationship.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+    //!end
 
-      // User.following: [Relationship!]
-      //!<DEFAULT> code: bl-User-following
-      case 'User.following':
-        return feathersBatchLoader(dataLoaderName, '[!]', 'followerUuid',
-          keys => {
-            feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
-              query: { followerUuid: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return relationship.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
-      //!end
+    // User.following: [Relationship!]
+    //!<DEFAULT> code: bl-User-following
+    case 'User.following':
+      return feathersBatchLoader(dataLoaderName, '[!]', 'followerUuid',
+        keys => {
+          feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
+            query: { followerUuid: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return relationship.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+    //!end
 
-      // User.likes: [Like!]
-      //!<DEFAULT> code: bl-User-likes
-      case 'User.likes':
-        return feathersBatchLoader(dataLoaderName, '[!]', 'authorUuid',
-          keys => {
-            feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
-              query: { authorUuid: { $in: keys }, $sort: undefined },
-              _populate: 'skip', paginate: false
-            });
-            return like.find(feathersParams);
-          },
-          maxBatchSize // Max #keys in a BatchLoader func call.
-        );
-      //!end
+    // User.likes: [Like!]
+    //!<DEFAULT> code: bl-User-likes
+    case 'User.likes':
+      return feathersBatchLoader(dataLoaderName, '[!]', 'authorUuid',
+        keys => {
+          feathersParams = convertArgsToFeathers(args, graphqlContent, null, {
+            query: { authorUuid: { $in: keys }, $sort: undefined },
+            _populate: 'skip', paginate: false
+          });
+          return like.find(feathersParams);
+        },
+        maxBatchSize // Max #keys in a BatchLoader func call.
+      );
+    //!end
 
-      // User.posts(query: JSON, params: JSON, key: JSON): [Post!]
-      //!code: bl-User-posts
-      case 'User.posts':
-        return feathersBatchLoader(dataLoaderName, '[!]', 'authorUuid',
-          keys => {
-            feathersParams = convertArgsToFeathers(args, graphqlContent, null,
-              { query: { authorUuid: { $in: keys }, $sort: { uuid: 1 } }, populate: false }
-            );
-            return post.find(feathersParams);
-          }
-        );
-      //!end
+    // User.posts(query: JSON, params: JSON, key: JSON): [Post!]
+    //!code: bl-User-posts
+    case 'User.posts':
+      return feathersBatchLoader(dataLoaderName, '[!]', 'authorUuid',
+        keys => {
+          feathersParams = convertArgsToFeathers(args, graphqlContent, null,
+            { query: { authorUuid: { $in: keys }, $sort: { uuid: 1 } }, populate: false }
+          );
+          return post.find(feathersParams);
+        }
+      );
+    //!end
 
-      /* Throw on unknown BatchLoader name. */
-      default:
-        //!<DEFAULT> code: bl-default
-        throw new Error(`GraphQL query requires BatchLoader named '${dataLoaderName}' but no definition exists for it.`);
+    /* Throw on unknown BatchLoader name. */
+    default:
+      //!<DEFAULT> code: bl-default
+      throw new Error(`GraphQL query requires BatchLoader named '${dataLoaderName}' but no definition exists for it.`);
       //!end
     }
   }
@@ -320,7 +320,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
       //!<DEFAULT> code: query-Comment
       // getComment(query: JSON, params: JSON, key: JSON): Comment
-      getComment(parent, args, content, ast) {
+      getComment (parent, args, content, ast) {
         graphqlContent = content;
         const feathersParams = convertArgsToFeathers(args, content, ast);
         return comment.get(args.key, feathersParams).then(extractFirstItem);
@@ -329,14 +329,14 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       // findComment(query: JSON, params: JSON): [Comment!]
       findComment(parent, args, content, ast) {
         graphqlContent = content;
-        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: { uuid: 1 } } });
+        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: {   uuid: 1 } } });
         return comment.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       //!end
 
       //!<DEFAULT> code: query-Like
       // getLike(query: JSON, params: JSON, key: JSON): Like
-      getLike(parent, args, content, ast) {
+      getLike (parent, args, content, ast) {
         graphqlContent = content;
         const feathersParams = convertArgsToFeathers(args, content, ast);
         return like.get(args.key, feathersParams).then(extractFirstItem);
@@ -345,14 +345,14 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       // findLike(query: JSON, params: JSON): [Like!]
       findLike(parent, args, content, ast) {
         graphqlContent = content;
-        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: { uuid: 1 } } });
+        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: {   uuid: 1 } } });
         return like.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       //!end
 
       //!<DEFAULT> code: query-Post
       // getPost(query: JSON, params: JSON, key: JSON): Post
-      getPost(parent, args, content, ast) {
+      getPost (parent, args, content, ast) {
         graphqlContent = content;
         const feathersParams = convertArgsToFeathers(args, content, ast);
         return post.get(args.key, feathersParams).then(extractFirstItem);
@@ -360,14 +360,14 @@ let moduleExports = function batchLoaderResolvers(app, options) {
 
       // findPost(query: JSON, params: JSON): [Post!]
       findPost(parent, args, content, ast) {
-        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: { uuid: 1 } } });
+        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: {   uuid: 1 } } });
         return post.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       //!end
 
       //!<DEFAULT> code: query-Relationship
       // getRelationship(query: JSON, params: JSON, key: JSON): Relationship
-      getRelationship(parent, args, content, ast) {
+      getRelationship (parent, args, content, ast) {
         graphqlContent = content;
         const feathersParams = convertArgsToFeathers(args, content, ast);
         return relationship.get(args.key, feathersParams).then(extractFirstItem);
@@ -376,14 +376,14 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       // findRelationship(query: JSON, params: JSON): [Relationship!]
       findRelationship(parent, args, content, ast) {
         graphqlContent = content;
-        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: { uuid: 1 } } });
+        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: {   uuid: 1 } } });
         return relationship.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       //!end
 
       //!<DEFAULT> code: query-User
       // getUser(query: JSON, params: JSON, key: JSON): User
-      getUser(parent, args, content, ast) {
+      getUser (parent, args, content, ast) {
         graphqlContent = content;
         const feathersParams = convertArgsToFeathers(args, content, ast);
         return user.get(args.key, feathersParams).then(extractFirstItem);
@@ -392,7 +392,7 @@ let moduleExports = function batchLoaderResolvers(app, options) {
       // findUser(query: JSON, params: JSON): [User!]
       findUser(parent, args, content, ast) {
         graphqlContent = content;
-        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: { uuid: 1 } } });
+        const feathersParams = convertArgsToFeathers(args, content, ast, { query: { $sort: {   uuid: 1 } } });
         return user.find(feathersParams).then(paginate(content)).then(extractAllItems);
       },
       //!end
