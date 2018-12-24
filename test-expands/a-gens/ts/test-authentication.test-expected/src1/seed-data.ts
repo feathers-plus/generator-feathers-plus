@@ -27,8 +27,8 @@ let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) 
 export default async function (app: App) {
   const ifDbChangesAllowed = areDbChangesAllowed(app.get('tests'));
   // !code: func_init // !end
-  if (!ifSeedServices) { return; }
-  if (!ifDbChangesAllowed) { return; }
+  if (!ifSeedServices) return;
+  if (!ifDbChangesAllowed) return;
 
   if (!Object.keys(fakeData).length) {
     console.log('Cannot seed services as seed/fake-data.json doesn\'t have seed data.');
@@ -54,9 +54,7 @@ export default async function (app: App) {
             // !<DEFAULT> code: seed_try
             const deleted = await service.remove(null);
             const result = await service.create(fakeData[name]);
-            console.log(
-              `Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`
-            );
+            console.log(`Seeded service ${name} on path ${path} deleting ${deleted.length} records, adding ${result.length}.`);
             // !end
           } catch (err) {
             console.log(`Error on seeding service ${name} on path ${path}`, err.message);
