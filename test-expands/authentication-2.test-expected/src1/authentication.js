@@ -11,6 +11,7 @@ const Auth0Strategy = require('passport-auth0');
 
 let moduleExports = function (app) {
   const config = app.get('authentication');
+  // !code: func_init // !end
 
   // Set up authentication with the secret
   app.configure(authentication(config));

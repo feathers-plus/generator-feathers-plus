@@ -27,6 +27,7 @@
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
   const config = app.get('authentication')<%- sc %>
+  <%- insertFragment('func_init') %>
 
   // Set up authentication with the secret
   app.configure(authentication(config))<%- sc %>
