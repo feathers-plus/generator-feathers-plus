@@ -9,9 +9,12 @@ import { App } from './app.interface';
 let ifSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str));
 
 // Determine if environment allows test to mutate existing DB data.
-function areDbChangesAllowed(testConfig) {
+function areDbChangesAllowed(testConfig: { environmentsAllowingSeedData: string[] }) {
   let { environmentsAllowingSeedData = [] } = testConfig;
-  return environmentsAllowingSeedData.includes(process.env.NODE_ENV);
+  if (process.env.NODE_ENV) {
+    return environmentsAllowingSeedData.includes(process.env.NODE_ENV);
+  }
+  return false;
 }
 
 // Get generated fake data
@@ -22,7 +25,7 @@ let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) 
 // !code: init // !end
 
 export default async function (app: App) {
-  const ifDbChangesAllowed = areDbChangesAllowed(app.get("tests"));
+  const ifDbChangesAllowed = areDbChangesAllowed(app.get('tests'));
   // !code: func_init // !end
   if (!ifSeedServices) return;
   if (!ifDbChangesAllowed) return;

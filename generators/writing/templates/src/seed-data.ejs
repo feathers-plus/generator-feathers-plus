@@ -9,9 +9,12 @@
 let ifSeedServices = ['--seed', '-s'].some(str => process.argv.slice(2).includes(str))<%- sc %>
 
 // Determine if environment allows test to mutate existing DB data.
-function areDbChangesAllowed(testConfig) {
+function areDbChangesAllowed(testConfig<%- tplTsOnly(': { environmentsAllowingSeedData: string[] }') -%>) {
   let { environmentsAllowingSeedData = [] } = testConfig<%- sc %>
-  return environmentsAllowingSeedData.includes(process.env.NODE_ENV)<%- sc %>
+  if (process.env.NODE_ENV) {
+    return environmentsAllowingSeedData.includes(process.env.NODE_ENV)<%- sc %>
+  }
+  return false<%- sc %>
 }
 
 // Get generated fake data
@@ -22,7 +25,7 @@ let services = (readJsonFileSync(join(__dirname, '../feathers-gen-specs.json')) 
 <%- insertFragment('init') %>
 
 <%- tplExport('async function (app) {', 'async function (app: App) {') %>
-  const ifDbChangesAllowed = areDbChangesAllowed(app.get("tests"))<%- sc %>
+  const ifDbChangesAllowed = areDbChangesAllowed(app.get('tests'))<%- sc %>
   <%- insertFragment('func_init') %>
   if (!ifSeedServices) return<%- sc %>
   if (!ifDbChangesAllowed) return<%- sc %>
