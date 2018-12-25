@@ -14,6 +14,7 @@ const GithubStrategy = require('passport-github')
 
 let moduleExports = function (app) {
   const config = app.get('authentication')
+  // !code: func_init // !end
 
   // Set up authentication with the secret
   app.configure(authentication(config))

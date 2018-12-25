@@ -15,6 +15,7 @@ import { App } from './app.interface';
 
 let moduleExports = function (app: App) {
   const config = app.get('authentication');
+  // !code: func_init // !end
 
   // Set up authentication with the secret
   app.configure(authentication(config));
