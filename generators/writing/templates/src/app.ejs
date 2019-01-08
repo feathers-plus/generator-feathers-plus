@@ -54,11 +54,23 @@ app.configure(configuration())<%- sc %>
 ]) %>
 
 // Enable security, CORS, compression, favicon and body parsing
-app.use(helmet())<%- sc %>
-app.use(cors())<%- sc %>
-app.use(compress())<%- sc %>
-app.use(express.json())<%- sc %>
-app.use(express.urlencoded({ extended: true }))<%- sc %>
+app.use(helmet(
+  <%- insertFragment('helmet_config') %>
+))<%- sc %>
+app.use(cors(
+  <%- insertFragment('cors_config') %>
+))<%- sc %>
+app.use(compress(
+  <%- insertFragment('compress_config') %>
+))<%- sc %>
+app.use(express.json(
+  <%- insertFragment('json_config') %>
+))<%- sc %>
+app.use(express.urlencoded(
+  <%- insertFragment('urlencoded_config', [
+    '  { extended: true }'
+  ]) %>
+))<%- sc %>
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')))<%- sc %>
 <%- insertFragment('use_static', [
   '// Host the public folder',

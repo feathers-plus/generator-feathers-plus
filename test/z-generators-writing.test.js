@@ -1091,7 +1091,7 @@ const tests = [
 ];
 
 let appDir;
-const runFromTest = null; //'cumulative-1-sequelize.test' //null;
+const runFromTest = null; //'cumulative-1-sequelize.test'
 const runToTest = null; //'cumulative-1-sequelize.test' //null;
 const executeAll = false;
 

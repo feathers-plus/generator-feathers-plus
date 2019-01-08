@@ -1,7 +1,7 @@
 {
   "name": "@feathers-plus/generator-feathers-plus",
   "description": "A Yeoman generator to (re)generate a FeathersJS application supporting both REST and GraphQL architectural concepts and their query languages.",
-  "version": "0.6.71",
+  "version": "0.6.72",
   "homepage": "https://github.com/feathers-plus/generator-feathers-plus",
   "main": "lib/",
   "keywords": [
@@ -95,7 +95,7 @@
     "yeoman-test": "1.9.1"
   },
   "generatedSemvers": {
-    "@feathers-plus/graphql": "^1.9.0",
+    "@feathers-plus/graphql": "^1.10.0",
     "@feathersjs/authentication": "^2.1.7",
     "@feathersjs/authentication-jwt": "^2.0.1",
     "@feathersjs/authentication-local": "^1.2.1",
