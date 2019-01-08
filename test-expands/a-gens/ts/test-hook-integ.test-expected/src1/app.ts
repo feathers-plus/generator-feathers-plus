@@ -34,11 +34,23 @@ app.set('generatorSpecs', generatorSpecs);
 // !end
 
 // Enable security, CORS, compression, favicon and body parsing
-app.use(helmet());
-app.use(cors());
-app.use(compress());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(helmet(
+  // !code: helmet_config // !end
+));
+app.use(cors(
+  // !code: cors_config // !end
+));
+app.use(compress(
+  // !code: compress_config // !end
+));
+app.use(express.json(
+  // !code: json_config // !end
+));
+app.use(express.urlencoded(
+  // !<DEFAULT> code: urlencoded_config
+  { extended: true }
+  // !end
+));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // !<DEFAULT> code: use_static
 // Host the public folder
