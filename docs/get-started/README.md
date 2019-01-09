@@ -989,7 +989,7 @@ module.exports = moduleExports;
 
 ## generate secret
 
-*generate authentication* added a secret to package.json:
+*generate authentication* added a secret to config/default.json:
 ```js
 {
   "host": "localhost",
