@@ -35,9 +35,9 @@ let update = merge({},
 
 let patch = merge({},
   base,
-  { required: undefined },
   <%- insertFragment('patch_more') %>
 )<%- sc %>
+delete patch.required<%- sc %>
 <%- insertFragment('all_change') %>
 
 let validateCreate = <%- tplJsOrTs('options', '(options?: any)') %> => {
