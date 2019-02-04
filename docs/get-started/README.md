@@ -787,6 +787,11 @@ that is, the field contains the key to another record.
 
 - **type: {}** The default is 'string'.
 
+:::tip id or _id
+The generator does not change the name of index fields based on the type of adapter the service uses.
+You have to define a property _id: { type: 'ID' } field in model if your database id field is named _id. 
+:::
+
 :::tip Sequelize
 Sequelize by default adds the fields createdAt and updatedAt to records.
 You need to define these 2 fields in the JSON-schema model as that model is DB agnostic.
