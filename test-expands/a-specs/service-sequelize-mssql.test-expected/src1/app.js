@@ -19,7 +19,7 @@ const appHooks = require('./app.hooks');
 const channels = require('./channels');
 const generatorSpecs = require('../feathers-gen-specs.json');
 
-const sequelize-mssql = require('./sequelize-mssql');
+const sequelizeMssql = require('./sequelize-mssql');
 // !code: imports // !end
 // !code: init // !end
 
@@ -63,7 +63,7 @@ app.configure(socketio(
   // !code: express_socketio // !end
 ));
 // Configure database adapters
-app.configure(sequelize-mssql);
+app.configure(sequelizeMssql);
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);

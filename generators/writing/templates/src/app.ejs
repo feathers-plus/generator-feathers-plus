@@ -37,8 +37,9 @@ const generatorSpecs = require('../feathers-gen-specs.json')<%- sc %>
 <% Object.keys(specs._adapters || []).sort().forEach(__adapter => {
   __temp = specs._adapters[__adapter];
   __module = __temp.substring(0, __temp.length - 4);
+  __safeAdapter = __adapter === 'sequelize-mssql' ? 'sequelizeMssql' : __adapter;
 -%>
-<%- tplImports(__adapter, `./${__module}`) %>
+<%- tplImports(__safeAdapter, `./${__module}`) %>
 <% }) -%>
 <%# --- forEach-1 ends above. -%>
 <%- insertFragment('imports') %>
@@ -105,9 +106,11 @@ app.configure(primus(
 <% } -%>
 <%# --- if-90c ends above. -%>
 <%# --- forEach-3 starts below. -%>
-<% Object.keys(specs._adapters || []).sort().forEach((__adapter, __i) => { -%>
+<% Object.keys(specs._adapters || []).sort().forEach((__adapter, __i) => {
+  __safeAdapter = __adapter === 'sequelize-mssql' ? 'sequelizeMssql' : __adapter;
+-%>
 <%- __i === 0 ? '// Configure database adapters\n' : '' -%>
-app.configure(<%- __adapter %>)<%- sc %>
+app.configure(<%- __safeAdapter %>)<%- sc %>
 <% }) -%>
 <%# --- forEach-3 ends above. -%>
 
