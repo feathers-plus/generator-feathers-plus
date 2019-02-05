@@ -28,6 +28,7 @@ const validationErrorsLog = require('../../lib/validation-errors-log');
 const validateJsonSchema = require('../../lib/validate-json-schema');
 
 const { generatorFs } = require('../../lib/generator-fs');
+const { getFragment } = require('../../lib/code-fragments');
 const { updateSpecs } = require('../../lib/specs');
 
 const debug = makeDebug('generator-feathers-plus:main');
@@ -83,6 +84,10 @@ function copy (src, dest, ifNew, ifSkip, ctx) {
 
 function json (obj, dest, ifNew, ifSkip, ctx) {
   return { type: 'json', obj, dest, ifNew, ifSkip, ctx };
+}
+
+function source (obj, dest, ifNew, ifSkip, ctx) {
+  return { type: 'write', obj, dest, ifNew, ifSkip, ctx };
 }
 
 function stripSlashes (name) {
@@ -261,6 +266,9 @@ module.exports = function generatorWriting (generator, what) {
       if (process.env.fakes) {
         fakes(generator);
       }
+
+      resources(generator);
+
       break;
     case 'app':
       app(generator);
@@ -1378,6 +1386,30 @@ module.exports = function generatorWriting (generator, what) {
         '@feathers-plus/test-utils'
       ], { save: true }); // because seeding DBs also uses it
     }
+
+    // Generate modules
+    generatorFs(generator, context, todos);
+  }
+
+  // ===== resources ===============================================================================
+  function resources (generator) {
+    debug('resources()');
+
+    if (!specs.requiredCustomResources || !specs.requiredCustomResources.files
+      || !specs.requiredCustomResources.files.text) { return; }
+
+    const getFragmenter = getFragment(process.cwd() + '/requiredCustomResources');
+    const text = specs.requiredCustomResources.files.text;
+    const textPaths = Array.isArray(text) ? text : [text];
+    let todos = [];
+
+    // Create new custom text files
+    textPaths.forEach(textPath => {
+      const code = getFragmenter(textPath) || '';
+      todos.push(
+        source(code, textPath, true),
+      );
+    });
 
     // Generate modules
     generatorFs(generator, context, todos);
