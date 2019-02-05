@@ -93,7 +93,7 @@ let moduleExports = function serviceResolvers<%- tplJsOrTs('(app, options)', '(a
         `          }`,
         '',
         `          return Promise.resolve(content.cache.${graphqlName}.${fieldName})`,
-        `            .then(res => res.filter(rec => rec.${__addField.relation.otherTable}.indexOf(parent._id) !== -1))${sc}`,
+        `            .then(res => res.filter(rec => rec.${__addField.relation.otherTable}.map(key => key.toString()).indexOf(parent._id.toString()) !== -1))${sc}`,
         '        },'
       ]);
     }
