@@ -42,9 +42,9 @@ let update = merge({},
 
 let patch = merge({},
   base,
-  { required: undefined },
   // !code: patch_more // !end
 );
+delete patch.required;
 // !code: all_change // !end
 
 let validateCreate = (options?: any) => {
