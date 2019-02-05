@@ -60,7 +60,7 @@ export default function (app: App) {
   app.set('sequelizeClient', sequelize);
 
   app.setup = function (...args: any[]) {
-    let result = oldSetup.apply(this, args);
+    let result = oldSetup.call(this, ...args);
     // !code: func_init // !end
 
     // Set up data relationships
