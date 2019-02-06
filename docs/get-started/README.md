@@ -265,7 +265,7 @@ This overrides the database connection strings in **default.json** and prevents 
 npm, or yarn if that's installed.
 The dependencies are enumerated in `package.json`.
 
-- **public/** nontains the resources to be served.
+- **public/** contains the resources to be served.
 A sample favicon and HTML file are included.
 
 - **src/** contains the Feathers server.
@@ -3019,7 +3019,7 @@ cli-plus will not overwrite any module names you add to *freeze*. For example
 You can list all the custom code in your app using
 
 ```
-feathers-plus codelist
+feathers-plus generate codelist
 ```
 
 <collapse-image hidden title="Prompts 'generate codelist'" url="/assets/get-started/generate-codelist.png" />
