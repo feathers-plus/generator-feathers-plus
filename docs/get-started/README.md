@@ -3019,7 +3019,7 @@ cli-plus will not overwrite any module names you add to *freeze*. For example
 You can list all the custom code in your app using
 
 ```
-feathers-plus codelist
+feathers-plus generate codelist
 ```
 
 <collapse-image hidden title="Prompts 'generate codelist'" url="/assets/get-started/generate-codelist.png" />
