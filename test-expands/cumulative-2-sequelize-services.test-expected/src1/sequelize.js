@@ -59,7 +59,7 @@ module.exports = function (app) {
   app.set('sequelizeClient', sequelize);
 
   app.setup = function (...args) {
-    let result = oldSetup.apply(this, args);
+    let result = oldSetup.call(this, ...args);
     // !code: func_init // !end
 
     // Set up data relationships

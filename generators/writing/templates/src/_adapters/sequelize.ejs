@@ -60,7 +60,7 @@ const operatorsAliases = {
   app.set('sequelizeClient', sequelize)<%- sc %>
 
   app.setup = function (...args<%- tplTsOnly(': any[]') -%>) {
-    let result = oldSetup.apply(this, args)<%- sc %>
+    let result = oldSetup.call(this, ...args)<%- sc %>
     <%- insertFragment('func_init') %>
 
     // Set up data relationships
