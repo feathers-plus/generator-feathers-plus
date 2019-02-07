@@ -1,19 +1,30 @@
 
 const chalk = require('chalk');
 const { cwd } = require('process');
-const { parse } = require('path');
+const { join, parse } = require('path');
 
 const Generator = require('../../lib/generator');
-const { getFragments } = require('../../lib/code-fragments');
+const { insertRequiredCustomResources, getFragments } = require('../../lib/code-fragments');
+
+const RESOURCE_HEADER = 'requiredCustomResources';
 
 module.exports = class CodelistGenerator extends Generator {
   async prompting () {
     await Generator.asyncInit(this);
   }
 
-  writing () {
-    const code = getFragments();
+  async writing () {
+    const { _specs: specs } = this;
+    const resourceHeader = join(process.cwd(), RESOURCE_HEADER);
+    const resources = (specs.requiredCustomResources || {}).files || {};
+    await insertRequiredCustomResources(resources);
+
+    let code = getFragments();
     const dirLen = process.cwd().length + 1;
+
+    const requiredResourceCode = code[resourceHeader] || {};
+
+    delete code[resourceHeader];
 
     this.log();
     this.log([
@@ -24,7 +35,6 @@ module.exports = class CodelistGenerator extends Generator {
 
     Object.keys(code).forEach(filePath => {
       const codeFilePath = code[filePath];
-
       this.log();
       this.log(chalk.yellow.bold(`// !module ${filePath.substr(dirLen)}`));
       this.log();
@@ -35,5 +45,16 @@ module.exports = class CodelistGenerator extends Generator {
         this.log(chalk.green.bold('// !end'));
       });
     });
+    if (Object.keys(requiredResourceCode).length > 0) {
+      this.log();
+      this.log(chalk.yellow.bold(`// !module ${RESOURCE_HEADER}`));
+      this.log();
+      Object.keys(requiredResourceCode).forEach(resourceLocation => {
+        const resourceCode = requiredResourceCode[resourceLocation];
+        this.log(chalk.green.bold(`// !code: ${resourceLocation}`));
+        this.log(resourceCode.join('\n'));
+        this.log(chalk.green.bold('// !end'));
+      });
+    }
   }
 };
