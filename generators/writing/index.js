@@ -28,7 +28,7 @@ const validationErrorsLog = require('../../lib/validation-errors-log');
 const validateJsonSchema = require('../../lib/validate-json-schema');
 
 const { generatorFs } = require('../../lib/generator-fs');
-const { getFragment, getFragments, formatCodelist, flattenCodelist } = require('../../lib/code-fragments');
+const { getFragment } = require('../../lib/code-fragments');
 const { updateSpecs } = require('../../lib/specs');
 
 const debug = makeDebug('generator-feathers-plus:main');
@@ -311,9 +311,6 @@ module.exports = function generatorWriting (generator, what) {
       break;
     case 'test':
       test(generator);
-      break;
-    case 'codelist':
-      codelist(generator);
       break;
     default:
       throw new Error(`Unexpected generate ${what}. (writing`);
@@ -1416,38 +1413,6 @@ module.exports = function generatorWriting (generator, what) {
 
     // Generate modules
     generatorFs(generator, context, todos);
-  }
-
-  // ===== codelist ===============================================================================
-  function codelist (generator) {
-    debug('codelist()');
-    const { format } = props;
-
-    const logCheck = format === 'console';
-
-    const code = getFragments();
-    const dirLen = process.cwd().length + 1;
-
-    const jcode = formatCodelist(code, dirLen);
-
-    let codelist;
-    let todos = [];
-
-    if (format !== 'json') {
-      codelist = flattenCodelist(jcode, logCheck ? generator.log : false);
-
-    } else {
-      codelist = jcode;
-      
-    }
-    if (format !== 'console') {
-      
-      todos = format === 'json' ? [json(codelist, 'feathers-gen-code.json')] : 
-      [source(codelist, `feathers-gen-code.${js}`)];
-
-      // Generate modules
-      generatorFs(generator, context, todos);
-    }
   }
 };
 
