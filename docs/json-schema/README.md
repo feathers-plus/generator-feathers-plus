@@ -125,7 +125,7 @@ You should read
 on JSON-schema written by the author of
 [`ajv`](https://github.com/epoberezkin/ajv).
 The Feathers common hook
-[`validateSchema`](../../api/hooks-common#validateSchema.md)
+[`validateSchema`](https://feathers-plus.github.io/v1/feathers-hooks-common/index.html#validateSchema)
 uses `ajv` to validate data.
 :::
 
