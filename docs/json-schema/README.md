@@ -125,7 +125,7 @@ You should read
 on JSON-schema written by the author of
 [`ajv`](https://github.com/epoberezkin/ajv).
 The Feathers common hook
-[`validateSchema`](../../api/hooks-common#validateSchema.md)
+[`validateSchema`](https://feathers-plus.github.io/v1/feathers-hooks-common/index.html#validateSchema)
 uses `ajv` to validate data.
 :::
 
@@ -286,7 +286,7 @@ You can verify the compatibility of your JSON-schema and your data collection
 by using the JSON-schema to verify your collection.
 
 You can use the Feathers common hook
-[`validateSchema`](../../api/hooks-common#validate-schema.md).
+[`validateSchema`](https://feathers-plus.github.io/v1/feathers-hooks-common/#validateschema).
 Or you may decide its more convenient to call
 [`ajv`](https://github.com/epoberezkin/ajv)
 directly.
