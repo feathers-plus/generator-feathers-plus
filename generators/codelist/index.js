@@ -1,18 +1,25 @@
 
 const chalk = require('chalk');
 const { cwd } = require('process');
-const { parse } = require('path');
+const { join, parse } = require('path');
 
 const Generator = require('../../lib/generator');
-const { getFragments } = require('../../lib/code-fragments');
+const { insertRequiredCustomResources, getFragments } = require('../../lib/code-fragments');
+
+const RESOURCE_HEADER = 'requiredCustomResources';
 
 module.exports = class CodelistGenerator extends Generator {
   async prompting () {
     await Generator.asyncInit(this);
   }
 
-  writing () {
-    const code = getFragments();
+  async writing () {
+    const { _specs: specs } = this;
+    const resourceHeader = join(process.cwd(), RESOURCE_HEADER);
+    const resources = (specs.requiredCustomResources || {}).files || {};
+    await insertRequiredCustomResources(resources);
+
+    let code = getFragments();
     const dirLen = process.cwd().length + 1;
 
     this.log();
@@ -21,10 +28,9 @@ module.exports = class CodelistGenerator extends Generator {
       chalk.yellow.bold(parse(cwd()).base),
       ':',
     ].join(''));
-
+    
     Object.keys(code).forEach(filePath => {
       const codeFilePath = code[filePath];
-
       this.log();
       this.log(chalk.yellow.bold(`// !module ${filePath.substr(dirLen)}`));
       this.log();
