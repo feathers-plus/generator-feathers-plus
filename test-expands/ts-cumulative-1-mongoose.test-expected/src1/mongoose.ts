@@ -8,7 +8,7 @@ import logger from './logger';
 
 export default function (app: App) {
   mongoose.Promise = global.Promise;
-  mongoose.connect(app.get('mongodb'), { useNewUrlParser: true })
+  mongoose.connect(app.get('mongodb'), { useNewUrlParser: true, useCreateIndex: true })
     .then(({ connection }: any) => {
       // tslint:disable-next-line:no-console
       console.log(`connected to "${connection.name}" database at ${connection.host}:${connection.port}`);

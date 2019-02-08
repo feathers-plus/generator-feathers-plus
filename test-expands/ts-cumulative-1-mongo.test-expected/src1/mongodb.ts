@@ -11,7 +11,7 @@ export default function (app: App) {
   let config = app.get('mongodb');
   // !code: func_init // !end
 
-  const promise = MongoClient.connect(config, { useNewUrlParser: true }).then(client => {
+  const promise = MongoClient.connect(config, { useNewUrlParser: true, useCreateIndex: true }).then(client => {
     // For mongodb <= 2.2
     if (client.collection) {
       return client;
