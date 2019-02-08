@@ -8,7 +8,7 @@
 
 <%- tplExport('function (app) {', 'function (app: App) {') %>
   mongoose.Promise = global.Promise<%- sc %>
-  mongoose.connect(app.get('mongodb'), { useNewUrlParser: true })
+  mongoose.connect(app.get('mongodb'), { useNewUrlParser: true, useCreateIndex: true })
     .then(({ connection }<%- tplTsOnly([': any']) -%>) => {
       // <%- lintDisableNextLineNoConsole %>
       console.log(`connected to "${connection.name}" database at ${connection.host}:${connection.port}`)<%- sc %>
