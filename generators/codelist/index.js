@@ -6,8 +6,6 @@ const { join, parse } = require('path');
 const Generator = require('../../lib/generator');
 const { insertRequiredCustomResources, getFragments } = require('../../lib/code-fragments');
 
-const RESOURCE_HEADER = 'requiredCustomResources';
-
 module.exports = class CodelistGenerator extends Generator {
   async prompting () {
     await Generator.asyncInit(this);
@@ -15,7 +13,6 @@ module.exports = class CodelistGenerator extends Generator {
 
   async writing () {
     const { _specs: specs } = this;
-    const resourceHeader = join(process.cwd(), RESOURCE_HEADER);
     const resources = (specs.requiredCustomResources || {}).files || {};
     await insertRequiredCustomResources(resources);
 
