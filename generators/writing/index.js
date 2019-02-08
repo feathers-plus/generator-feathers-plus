@@ -32,6 +32,8 @@ const { getFragment } = require('../../lib/code-fragments');
 const { updateSpecs } = require('../../lib/specs');
 
 const debug = makeDebug('generator-feathers-plus:main');
+const WRITE_IF_NEW = true;
+const WRITE_ALWAYS = false;
 const EOL = '\n';
 
 const OAUTH2_STRATEGY_MAPPINGS = {
@@ -439,21 +441,21 @@ module.exports = function generatorWriting (generator, what) {
 
     // Modules to generate
     todos = [
-      copy([tpl, '_editorconfig'], '.editorconfig', true),
+      copy([tpl, '_editorconfig'], '.editorconfig', WRITE_IF_NEW),
       // This name hack is necessary because NPM does not publish `.gitignore` files
-      copy([tpl, '_gitignore'],    '.gitignore', true),
-      copy([tpl, 'LICENSE'],       'LICENSE', true),
-      tmpl([tpl, 'README.md.ejs'], 'README.md', true),
+      copy([tpl, '_gitignore'],    '.gitignore', WRITE_IF_NEW),
+      copy([tpl, 'LICENSE'],       'LICENSE', WRITE_IF_NEW),
+      tmpl([tpl, 'README.md.ejs'], 'README.md', WRITE_IF_NEW),
 
-      copy([tpl, 'public', 'favicon.ico'], ['public', 'favicon.ico'], true),
-      copy([tpl, 'public', 'index.html'],  ['public', 'index.html'], true),
+      copy([tpl, 'public', 'favicon.ico'], ['public', 'favicon.ico'], WRITE_IF_NEW),
+      copy([tpl, 'public', 'index.html'],  ['public', 'index.html'], WRITE_IF_NEW),
 
-      tmpl([tpl, 'test', 'app.test.ejs'],  [testDir, `app.test.${js}`], true),
+      tmpl([tpl, 'test', 'app.test.ejs'],  [testDir, `app.test.${js}`], WRITE_IF_NEW),
 
       tmpl([tpl, 'src', 'hooks', 'log.ejs'],    [src, 'hooks', `log.${js}`]),
-      copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], true),
+      copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], WRITE_IF_NEW),
       tmpl([tpl, 'src', 'channels.ejs'],        [src, `channels.${js}`]),
-      tmpl([tpl, 'src', 'seed-data.ejs'],        [src, `seed-data.${js}`], false, !specs.app.seedData),
+      tmpl([tpl, 'src', 'seed-data.ejs'],        [src, `seed-data.${js}`], WRITE_ALWAYS, !specs.app.seedData),
 
       json(pkg,           'package.json'),
       json(configNodemon, 'nodemon.json'),
@@ -467,8 +469,8 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([mwPath, 'index.ejs'],             [src, 'middleware', `index.${js}`]            ),
       tmpl([srcPath, 'app.ejs'],              [src, `app.${js}`]                            ),
       tmpl([serPath, 'index.ejs'],            [src, 'services', `index.${js}`]              ),
-      tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
-      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
+      tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         WRITE_ALWAYS, isJs),
+      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             WRITE_ALWAYS, isJs),
     ];
 
     // generate name.json files for test environments
@@ -484,19 +486,19 @@ module.exports = function generatorWriting (generator, what) {
       });
 
       todos.push(
-        json(configTest,    [appConfigPath, `${envName}.json`], false, !envName),
+        json(configTest,    [appConfigPath, `${envName}.json`], WRITE_ALWAYS, !envName),
       );
     });
 
     if (isJs) {
       todos = todos.concat(
-        json(eslintrc, '.eslintrc.json', null, eslintrcExists && !eslintrcChanged),
+        json(eslintrc, '.eslintrc.json', WRITE_ALWAYS, eslintrcExists && !eslintrcChanged),
       );
     } else {
       todos = todos.concat(
-        json(tslintjson, 'tslint.json', null, tslintExists && !tslintJsonChanged),
-        tmpl([tpl, 'tsconfig.json'], 'tsconfig.json', true),
-        copy([tpl, 'tsconfig.test.json'], 'tsconfig.test.json', true),
+        json(tslintjson, 'tslint.json', WRITE_ALWAYS, tslintExists && !tslintJsonChanged),
+        tmpl([tpl, 'tsconfig.json'], 'tsconfig.json', WRITE_IF_NEW),
+        copy([tpl, 'tsconfig.test.json'], 'tsconfig.test.json', WRITE_IF_NEW),
       );
     }
 
@@ -764,11 +766,11 @@ module.exports = function generatorWriting (generator, what) {
     const sfa = context.subFolderArray;
 
     todos = [
-      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services',         `${fn}.test.${js}`],           true                         ),
-      tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`], false, !context.modelName    ),
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services',         `${fn}.test.${js}`],           WRITE_IF_NEW                         ),
+      tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`], WRITE_ALWAYS, !context.modelName    ),
       tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, fn, `${fn}.service.${js}`],    ),
-      tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.class.${js}`],      false, adapter !== 'generic' ),
-      tmpl([namePath, 'name.interface.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.interface.${js}`],  false, isJs ),
+      tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.class.${js}`],      WRITE_ALWAYS, adapter !== 'generic' ),
+      tmpl([namePath, 'name.interface.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.interface.${js}`],  WRITE_ALWAYS, isJs ),
 
       tmpl([namePath, 'name.schema.ejs'],           [libDir,  'services', ...sfa, fn, `${fn}.schema.${js}`]      ),
       tmpl([namePath, 'name.mongo.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.mongo.${js}`]       ),
@@ -776,11 +778,11 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([namePath, 'name.sequelize.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.sequelize.${js}`]   ),
       tmpl([namePath, 'name.validate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.validate.${js}`]    ),
       tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.hooks.${js}`]       ),
-      tmpl([namePath, 'name.populate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.populate.${js}`],   false, !graphqlTypeName        ),
+      tmpl([namePath, 'name.populate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.populate.${js}`],   WRITE_ALWAYS, !graphqlTypeName        ),
       tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                         ),
 
-      tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         false, isJs),
-      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
+      tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         WRITE_ALWAYS, isJs),
+      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             WRITE_ALWAYS, isJs),
     ];
 
     // Generate modules
@@ -917,9 +919,9 @@ module.exports = function generatorWriting (generator, what) {
     const isGenerateConnection = generatorsInclude('connection') && !generatorsInclude('service');
 
     const todos = !Object.keys(connections).length ? [] : [
-      json(newConfig, [appConfigPath, 'default.json']),
-      tmpl([srcPath, 'app.ejs'], [libDir, `app.${js}`]),
-      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
+      json(newConfig,                     [appConfigPath, 'default.json']                    ),
+      tmpl([srcPath, 'app.ejs'],          [libDir, `app.${js}`]                              ),
+      tmpl([tpl, 'src', 'typings.d.ejs'], [src, 'typings.d.ts'],           WRITE_ALWAYS, isJs),
     ];
 
     Object.keys(_adapters).sort().forEach(adapter => {
@@ -1035,8 +1037,8 @@ module.exports = function generatorWriting (generator, what) {
     Object.keys(specs.middlewares || {}).sort().forEach(mwName => {
       const fileName = specs.middlewares[mwName].kebab;
       todos.push(
-        tmpl([mwPath, 'middleware.ejs'], [libDir, 'middleware', `${fileName}.${js}`], true, null, { mwName }),
-        tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
+        tmpl([mwPath, 'middleware.ejs'], [libDir, 'middleware', `${fileName}.${js}`], WRITE_IF_NEW, null, { mwName }),
+        tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],                WRITE_ALWAYS, isJs),
       );
     });
 
@@ -1073,8 +1075,8 @@ module.exports = function generatorWriting (generator, what) {
     });
 
     todos = [
-      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `graphql.test.${js}`], true),
-      tmpl([qlPath, 'graphql.interfaces.ejs'], [libDir, 'services', 'graphql', 'graphql.interfaces.ts'], false, isJs),
+      tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `graphql.test.${js}`], WRITE_IF_NEW),
+      tmpl([qlPath, 'graphql.interfaces.ejs'], [libDir, 'services', 'graphql', 'graphql.interfaces.ts'], WRITE_ALWAYS, isJs),
 
       tmpl([namePath, 'name.hooks.ejs'], [libDir, 'services', 'graphql', `graphql.hooks.${js}`]),
       tmpl([qlPath, 'graphql.schemas.ejs'], [libDir, 'services', 'graphql', `graphql.schemas.${js}`]),
@@ -1088,7 +1090,7 @@ module.exports = function generatorWriting (generator, what) {
       tmpl([qlPath, 'sql.resolvers.ejs'], [libDir, 'services', 'graphql', `sql.resolvers.${js}`]),
       tmpl([serPath, 'index.ejs'], [libDir, 'services', `index.${js}`]),
 
-      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             false, isJs),
+      tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             WRITE_ALWAYS, isJs),
     ];
 
     // Generate modules
@@ -1193,11 +1195,11 @@ module.exports = function generatorWriting (generator, what) {
       const sfa = generator.getNameSpace(specsService.subFolder)[1];
 
       todos = [
-        tmpl([namePath, 'hooks', 'hook.ejs'], [libDir,  'services', ...sfa, sn, 'hooks', `${hookFile}.${js}`], true ),
+        tmpl([namePath, 'hooks', 'hook.ejs'], [libDir,  'services', ...sfa, sn, 'hooks', `${hookFile}.${js}`], WRITE_IF_NEW ),
       ];
     } else {
       todos = [
-        tmpl([srcPath,  'hooks', 'hook.ejs'], [libDir,  'hooks', `${hookFile}.${js}`],                     true ),
+        tmpl([srcPath,  'hooks', 'hook.ejs'], [libDir,  'hooks', `${hookFile}.${js}`],                     WRITE_IF_NEW ),
       ];
     }
 
@@ -1241,7 +1243,7 @@ module.exports = function generatorWriting (generator, what) {
       jssOptions.postGeneration(data) : data;
 
     todos = [
-      copy([tpl, '_configs', 'default.js'], [appConfigPath, 'default.js'], true),
+      copy([tpl, '_configs', 'default.js'], [appConfigPath, 'default.js'], WRITE_IF_NEW),
       json(fakeData, ['seeds', 'fake-data.json']),
     ];
 
@@ -1338,8 +1340,8 @@ module.exports = function generatorWriting (generator, what) {
       });
 
       todos = [
-        tmpl([testPath, 'hooks', 'hook.unit.test.ejs'],  ['test', `${pathToTest}.${js}`], true, testType !== 'hookUnit'),
-        tmpl([testPath, 'hooks', 'hook.integ.test.ejs'], ['test', `${pathToTest}.${js}`], true, testType === 'hookUnit'),
+        tmpl([testPath, 'hooks', 'hook.unit.test.ejs'],  ['test', `${pathToTest}.${js}`], WRITE_IF_NEW, testType !== 'hookUnit'),
+        tmpl([testPath, 'hooks', 'hook.integ.test.ejs'], ['test', `${pathToTest}.${js}`], WRITE_IF_NEW, testType === 'hookUnit'),
       ];
 
       if (testType === 'hookInteg') {
@@ -1375,8 +1377,8 @@ module.exports = function generatorWriting (generator, what) {
       });
 
       todos = [
-        tmpl([testPath, 'services', 'name', 'service.server.test.ejs'],  ['test', pathToTest], true, testType !== 'serviceUnit'),
-        tmpl([testPath, 'services', 'name', 'service.client.test.ejs'], ['test', pathToTest], true, testType === 'serviceUnit'),
+        tmpl([testPath, 'services', 'name', 'service.server.test.ejs'], ['test', pathToTest], WRITE_IF_NEW, testType !== 'serviceUnit'),
+        tmpl([testPath, 'services', 'name', 'service.client.test.ejs'], ['test', pathToTest], WRITE_IF_NEW, testType === 'serviceUnit'),
       ];
 
       generator._packagerInstall(isJs ? [
