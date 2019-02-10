@@ -1,11 +1,14 @@
 
 // Configure Feathers app. (Can be re-generated.)
 import * as path from 'path';
-import favicon from 'serve-favicon';
 import compress from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
 import logger from './logger';
+
+// !<DEFAULT> code: favicon_import
+import favicon from 'serve-favicon';
+// !end
 
 import feathers from '@feathersjs/feathers';
 import configuration from '@feathersjs/configuration';
@@ -39,7 +42,10 @@ app.use(cors());
 app.use(compress());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// !<DEFAULT> code: use_favicon
+// Use favicon
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
+// !end
 // Host the public folder
 app.use('/', express.static(app.get('public')));
 // !code: use_end // !end

@@ -2,11 +2,14 @@
 // Configure Feathers app. (Can be re-generated.)
 <%- insertFragment('preface') %>
 <%- tplImports('path', null, 'as') %>
-<%- tplImports('favicon', 'serve-favicon', 'req') %>
 <%- tplImports('compress', 'compression', 'req') %>
 <%- tplImports('cors', null, 'req') %>
 <%- tplImports('helmet', null, 'req') %>
 <%- tplImports('logger', './logger') %>
+
+<%- insertFragment('favicon_import', [
+  `${tplImports('favicon', 'serve-favicon', 'req')}`
+]) %>
 
 <%- tplImports('feathers', '@feathersjs/feathers') %>
 <%# -%>
@@ -72,7 +75,10 @@ app.use(express.urlencoded(
     '  { extended: true }'
   ]) %>
 ))<%- sc %>
-app.use(favicon(path.join(app.get('public'), 'favicon.ico')))<%- sc %>
+<%- insertFragment('use_favicon', [
+  '// Use favicon',
+  `app.use(favicon(path.join(app.get('public'), 'favicon.ico')))${sc}`
+]) %>
 <%- insertFragment('use_static', [
   '// Host the public folder',
   `app.use('/', express.static(app.get('public')))${sc}`
