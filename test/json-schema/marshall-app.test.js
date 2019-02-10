@@ -1514,8 +1514,8 @@ const expectedTypescriptTypes = {
   ],
   businesses: [
     "name: string",
-    "phones: array",
-    "emails: array",
+    "phones: any[]",
+    "emails: any[]",
     "primaryContact: string",
     "notes: string"
   ],
@@ -1524,7 +1524,7 @@ const expectedTypescriptTypes = {
     "path: string",
     "sortOrder: number",
     "clientId: unknown",
-    "environmentIds: array",
+    "environmentIds: string[]",
     "isGlobal: boolean"
   ],
   clients: [
@@ -1568,7 +1568,7 @@ const expectedTypescriptTypes = {
     "content: string",
     "mediaUrl: string",
     "uploadInfo: string",
-    "location: {\n  type: string;\n  coordinates: array\n}"
+    "location: {\n  type: string;\n  coordinates: string[]\n}"
   ],
   infoboxTypes: [
     "name: string",
@@ -1589,8 +1589,8 @@ const expectedTypescriptTypes = {
     "primaryPhotoUrl: string",
     "primaryPhotoCoordinates: string",
     "primaryPhotoUploadInfo: string",
-    "categories: array",
-    "location: {\n  type: string;\n  coordinates: array\n}",
+    "categories: any[]",
+    "location: {\n  type: string;\n  coordinates: string[]\n}",
     "phone: string",
     "tourLink: string",
     "learnMoreLink: string",
@@ -1607,16 +1607,16 @@ const expectedTypescriptTypes = {
     "linkMeta: {\n  url: string;\n  target: string\n}",
     "percentX: number",
     "percentY: number",
-    "coordinates: array"
+    "coordinates: number[]"
   ],
   panos: [
     "name: string",
     "slug: string",
     "imageUrl: string",
     "uploadInfo: {\n\n}",
-    "location: {\n  type: string;\n  coordinates: array\n}",
-    "tags: array",
-    "tagIds: array"
+    "location: {\n  type: string;\n  coordinates: any[]\n}",
+    "tags: string[]",
+    "tagIds: string[]"
   ],
   salesLeads: [
     "name: string",
