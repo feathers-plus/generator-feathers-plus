@@ -4,12 +4,12 @@ const crypto = require('crypto');
 const jsonSchemaSeeder = require('json-schema-seeder');
 const makeDebug = require('debug');
 const merge = require('lodash.merge');
-const mongoose = require('mongoose');
-const Sequelize = require('sequelize');
-const traverse = require('traverse');
+//const mongoose = require('mongoose');
+//const Sequelize = require('sequelize');
+//const traverse = require('traverse');
 
 const { camelCase, kebabCase: kebabCase1, snakeCase, upperFirst } = require('lodash');
-const { existsSync } = require('fs');
+//const { existsSync } = require('fs');
 const { inspect } = require('util');
 const { join } = require('path');
 
@@ -17,16 +17,17 @@ const kebabCase = kebabCase1; //name => name === 'users1' ? name : kebabCase1(na
 
 const { app } = require('./app');
 const { service } = require('./service');
+const { connection } = require('./connection');
 
-const doesFileExist = require('../../lib/does-file-exist');
+//const doesFileExist = require('../../lib/does-file-exist');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
-const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
-const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
-const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
-const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript');
+//const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
+//const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
+//const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
+//const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript');
 const stringifyPlus = require('../../lib/stringify-plus');
-const validateJsonSchema = require('../../lib/validate-json-schema');
+//const validateJsonSchema = require('../../lib/validate-json-schema');
 
 const { generatorFs } = require('../../lib/generator-fs');
 const { getFragment } = require('../../lib/code-fragments');
@@ -52,6 +53,7 @@ const AUTH_TYPES = {
   github: '@types/passport-github',
 };
 
+/*
 const mongooseNativeFuncs = {
   [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
   [mongoose.Schema.Types.ObjectId]: 'mongoose.Schema.Types.ObjectId'
@@ -68,6 +70,7 @@ let sequelizeNativeFuncs = {
   [Sequelize.DATE]: 'DataTypes.DATE',
   [Sequelize.DATEONLY]: 'DataTypes.DATEONLY',
 };
+*/
 
 // type:   'tpl' - expand template, 'copy' - copy file, 'json' - write JSON as file.
 // src:    path & file of template or source file. Array of folder names or str.
@@ -285,7 +288,7 @@ module.exports = function generatorWriting (generator, what) {
 
       authentication(generator, true);
 
-      connection(generator);
+      connection(generator, props, specs, context, state);
 
       middleware(generator);
 
@@ -327,7 +330,7 @@ module.exports = function generatorWriting (generator, what) {
       });
       break;
     case 'connection':
-      connection(generator);
+      connection(generator, props, specs, context, state);
       break;
     case 'authentication':
       authentication(generator);
@@ -815,7 +818,7 @@ module.exports = function generatorWriting (generator, what) {
               service: name
             } });
         } else {
-          connection(generator);
+          connection(generator, props, specs, context, state);
         }
       }
     }
@@ -1089,7 +1092,68 @@ module.exports = function generatorWriting (generator, what) {
   */
 
   // ===== connection ==============================================================================
-  function connection (generator) {
+  /*
+  function connection (generator, props, specs, context, state) {
+    const makeDebug = require('debug');
+    const { generatorFs } = require('../../lib/generator-fs');
+
+    const debug = makeDebug('generator-feathers-plus:writing:service');
+
+    /* eslint-disable no-unused-vars * /
+    const {
+      // File writing functions
+      tmpl,
+      copy,
+      json,
+      source,
+      stripSlashes,
+      // Paths to various folders
+      tpl,
+      configPath,
+      src,
+      srcPath,
+      mwPath,
+      serPath,
+      namePath,
+      qlPath,
+      testPath,
+      // Abbreviations using in building 'todos'.
+      libDir,
+      testDir,
+      // Utilities
+      generatorsInclude,
+      // Constants
+      WRITE_IF_NEW,
+      WRITE_ALWAYS,
+    } = state;
+
+    const {
+      // Paths to various folders
+      appConfigPath,
+      // If JS or TS
+      js,
+      isJs,
+      // Abstract .js and .ts statements.
+      tplJsOrTs,
+      tplJsOnly,
+      tplTsOnly,
+      tplImports,
+      tplModuleExports,
+      tplExport,
+      // Expanded Feathers service specs
+      mapping,
+      feathersSpecs,
+      // Utilities.
+      camelCase,
+      kebabCase,
+      snakeCase,
+      upperFirst,
+      merge,
+      EOL,
+      stringifyPlus
+    } = context;
+    /* eslint-enable no-unused-vars * /
+
     if (!specs.connections) return;
     debug('connection()');
 
@@ -1131,6 +1195,7 @@ module.exports = function generatorWriting (generator, what) {
 
     generatorFs(generator, context, todos);
   }
+  */
 
   // ===== authentication ==========================================================================
   function authentication (generator, justRegen) {

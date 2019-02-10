@@ -132,7 +132,7 @@ function service (generator, name, props, specs, context, state, inject) {
             service: name
           } });
       } else {
-        connection(generator);
+        connection(generator, props, specs, context, state);
       }
     }
   }
