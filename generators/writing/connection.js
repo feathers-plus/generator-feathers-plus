@@ -105,3 +105,9 @@ function connection (generator, props, specs, context, state) {
 
   generatorFs(generator, context, todos);
 }
+
+// eslint-disable-next-line no-unused-vars
+function inspector(desc, obj, depth = 6) {
+  console.log(desc);
+  console.log(inspect(obj, { colors: true, depth }));
+}

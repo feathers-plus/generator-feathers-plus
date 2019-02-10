@@ -1,6 +1,6 @@
 
 /* eslint-disable no-console */
-const crypto = require('crypto');
+//const crypto = require('crypto');
 const jsonSchemaSeeder = require('json-schema-seeder');
 const makeDebug = require('debug');
 const merge = require('lodash.merge');
@@ -18,6 +18,7 @@ const kebabCase = kebabCase1; //name => name === 'users1' ? name : kebabCase1(na
 const { app } = require('./app');
 const { service } = require('./service');
 const { connection } = require('./connection');
+const { authentication } = require('./authentication');
 
 //const doesFileExist = require('../../lib/does-file-exist');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
@@ -36,8 +37,11 @@ const { updateSpecs } = require('../../lib/specs');
 const debug = makeDebug('generator-feathers-plus:main');
 const WRITE_IF_NEW = true;
 const WRITE_ALWAYS = false;
+const DONT_SKIP_WRITE = false;
+const SKIP_WRITE = true;
 const EOL = '\n';
 
+/*
 const OAUTH2_STRATEGY_MAPPINGS = {
   auth0: 'passport-auth0',
   google: 'passport-google-oauth20',
@@ -52,6 +56,7 @@ const AUTH_TYPES = {
   facebook: ['@types/passport-facebook', '@types/feathersjs__authentication-oauth2'],
   github: '@types/passport-github',
 };
+*/
 
 /*
 const mongooseNativeFuncs = {
@@ -260,6 +265,8 @@ module.exports = function generatorWriting (generator, what) {
     // Constants
     WRITE_IF_NEW,
     WRITE_ALWAYS,
+    SKIP_WRITE,
+    DONT_SKIP_WRITE,
   };
 
   const inject = { connection };
@@ -286,11 +293,11 @@ module.exports = function generatorWriting (generator, what) {
         test(generator);
       });
 
-      authentication(generator, true);
+      authentication(generator, true, props, specs, context, state);
 
       connection(generator, props, specs, context, state);
 
-      middleware(generator);
+      middleware(generator, props, specs, context, state);
 
       if (specs.graphql &&
         (Object.keys(mapping.graphqlService).length || Object.keys(mapping.graphqlSql).length)
@@ -314,7 +321,7 @@ module.exports = function generatorWriting (generator, what) {
       // `generate authentication` from the prompt will generate the wrong path for
       // the user-entity because of a chicken-and-egg problem. This fixes it.
       if (specs.services[props.name].isAuthEntity) {
-        authentication(generator, true);
+        authentication(generator, true, props, specs, context, state);
       }
       break;
     case 'hook':
@@ -333,10 +340,10 @@ module.exports = function generatorWriting (generator, what) {
       connection(generator, props, specs, context, state);
       break;
     case 'authentication':
-      authentication(generator);
+      authentication(generator, false, props, specs, context, state);
       break;
     case 'middleware':
-      middleware(generator);
+      middleware(generator, props, specs, context, state);
       break;
     case 'graphql':
       graphql(generator);
@@ -1097,7 +1104,7 @@ module.exports = function generatorWriting (generator, what) {
     const makeDebug = require('debug');
     const { generatorFs } = require('../../lib/generator-fs');
 
-    const debug = makeDebug('generator-feathers-plus:writing:service');
+    const debug = makeDebug('generator-feathers-plus:writing:connection');
 
     /* eslint-disable no-unused-vars * /
     const {
@@ -1198,7 +1205,83 @@ module.exports = function generatorWriting (generator, what) {
   */
 
   // ===== authentication ==========================================================================
-  function authentication (generator, justRegen) {
+  /*
+  function authentication (generator, justRegen, props, specs, context, state) {
+    const makeDebug = require('debug');
+    const { generatorFs } = require('../../lib/generator-fs');
+
+    const debug = makeDebug('generator-feathers-plus:writing:authentication');
+
+    const OAUTH2_STRATEGY_MAPPINGS = {
+      auth0: 'passport-auth0',
+      google: 'passport-google-oauth20',
+      facebook: 'passport-facebook',
+      github: 'passport-github'
+    };
+
+    const AUTH_TYPES = {
+      local: '@types/feathersjs__authentication-local',
+      auth0: '@types/feathersjs__authentication-oauth2',
+      google: '@types/feathersjs__authentication-oauth2',
+      facebook: ['@types/passport-facebook', '@types/feathersjs__authentication-oauth2'],
+      github: '@types/passport-github',
+    };
+
+    /* eslint-disable no-unused-vars * /
+    const {
+      // File writing functions
+      tmpl,
+      copy,
+      json,
+      source,
+      stripSlashes,
+      // Paths to various folders
+      tpl,
+      configPath,
+      src,
+      srcPath,
+      mwPath,
+      serPath,
+      namePath,
+      qlPath,
+      testPath,
+      // Abbreviations using in building 'todos'.
+      libDir,
+      testDir,
+      // Utilities
+      generatorsInclude,
+      // Constants
+      WRITE_IF_NEW,
+      WRITE_ALWAYS,
+    } = state;
+
+    const {
+      // Paths to various folders
+      appConfigPath,
+      // If JS or TS
+      js,
+      isJs,
+      // Abstract .js and .ts statements.
+      tplJsOrTs,
+      tplJsOnly,
+      tplTsOnly,
+      tplImports,
+      tplModuleExports,
+      tplExport,
+      // Expanded Feathers service specs
+      mapping,
+      feathersSpecs,
+      // Utilities.
+      camelCase,
+      kebabCase,
+      snakeCase,
+      upperFirst,
+      merge,
+      EOL,
+      stringifyPlus
+    } = context;
+    /* eslint-enable no-unused-vars * /
+
     if (!specs.authentication) return;
     debug('authentication()');
 
@@ -1256,7 +1339,7 @@ module.exports = function generatorWriting (generator, what) {
       generator.composeWith(require.resolve('../service'), { props: { name: entity } });
     }
 
-    todos = [
+    const todos = [
       tmpl([srcPath, 'authentication.ejs'], [libDir, `authentication.${js}`]),
       tmpl([srcPath, 'app.ejs'], [src, `app.${js}`]),
       // todo tmpl([tpl, 'test', 'auth-local.test.ejs'], [testDir, `auth-local.test.${js}`]),
@@ -1270,13 +1353,14 @@ module.exports = function generatorWriting (generator, what) {
     generator._packagerInstall(dependencies, { save: true });
     generator._packagerInstall(devDependencies, { saveDev: true });
   }
+  */
 
   // ===== middleware ==============================================================================
-  function middleware (generator) {
+  function middleware (generator, props, specs, context, state) {
     if (!specs.middlewares) return;
     debug('middleware()');
 
-    todos = [
+    const todos = [
       tmpl([mwPath, 'index.ejs'], [src, 'middleware', `index.${js}`])
     ];
 
@@ -1664,6 +1748,7 @@ module.exports = function generatorWriting (generator, what) {
   }
 };
 
+/*
 function writeAuthenticationConfiguration (generator, context) {
   const config = Object.assign({}, generator._specs._defaultJson);
   const path = context.servicePath;
@@ -1739,6 +1824,7 @@ function writeAuthenticationConfiguration (generator, context) {
     config
   );
 }
+*/
 
 function writeDefaultJsonClient (generator) {
   const config = merge({}, generator._specs._defaultJson, {

@@ -329,3 +329,9 @@ function app (generator, props, specs, context, state) {
 
   debug('app() ended');
 }
+
+// eslint-disable-next-line no-unused-vars
+function inspector(desc, obj, depth = 6) {
+  console.log(desc);
+  console.log(inspect(obj, { colors: true, depth }));
+}

@@ -403,3 +403,9 @@ function service (generator, name, props, specs, context, state, inject) {
     };
   }
 }
+
+// eslint-disable-next-line no-unused-vars
+function inspector(desc, obj, depth = 6) {
+  console.log(desc);
+  console.log(inspect(obj, { colors: true, depth }));
+}
