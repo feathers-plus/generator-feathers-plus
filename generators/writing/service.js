@@ -1,15 +1,50 @@
 
+const makeDebug = require('debug');
+const mongoose = require('mongoose');
+const Sequelize = require('sequelize');
+const traverse = require('traverse');
+const { existsSync } = require('fs');
+const { join } = require('path');
+
+const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
+const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
+const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
+const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript');
+const validateJsonSchema = require('../../lib/validate-json-schema');
+
+const { generatorFs } = require('../../lib/generator-fs');
+
+const debug = makeDebug('generator-feathers-plus:writing:service');
+
+const OAUTH2_STRATEGY_MAPPINGS = {
+  auth0: 'passport-auth0',
+  google: 'passport-google-oauth20',
+  facebook: 'passport-facebook',
+  github: 'passport-github'
+};
+
+const mongooseNativeFuncs = {
+  [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
+  [mongoose.Schema.Types.ObjectId]: 'mongoose.Schema.Types.ObjectId'
+};
+
+let sequelizeNativeFuncs = {
+  [Sequelize.BOOLEAN]: 'DataTypes.BOOLEAN',
+  [Sequelize.ENUM]: 'DataTypes.ENUM',
+  [Sequelize.INTEGER]: 'DataTypes.INTEGER',
+  [Sequelize.JSONB]: 'DataTypes.JSONB',
+  [Sequelize.REAL]: 'DataTypes.REAL',
+  [Sequelize.STRING]: 'DataTypes.STRING',
+  [Sequelize.TEXT]: 'DataTypes.TEXT',
+  [Sequelize.DATE]: 'DataTypes.DATE',
+  [Sequelize.DATEONLY]: 'DataTypes.DATEONLY',
+};
+
 module.exports = {
   service,
 };
 
 function service (generator, name, props, specs, context, state, inject) {
-  const makeDebug = require('debug');
-  const { existsSync } = require('fs');
-  const { join } = require('path');
-
-  const debug = makeDebug('generator-feathers-plus:writing:service');
-
   /* eslint-disable no-unused-vars */
   const {
     tmpl,
@@ -227,7 +262,7 @@ function service (generator, name, props, specs, context, state, inject) {
   const fn = fileName;
   const sfa = context.subFolderArray;
 
-  todos = [
+  const todos = [
     tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services',         `${fn}.test.${js}`],           WRITE_IF_NEW                         ),
     tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`], WRITE_ALWAYS, !context.modelName    ),
     tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, fn, `${fn}.service.${js}`],    ),

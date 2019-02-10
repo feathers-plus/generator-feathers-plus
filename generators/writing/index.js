@@ -16,6 +16,7 @@ const { join } = require('path');
 const kebabCase = kebabCase1; //name => name === 'users1' ? name : kebabCase1(name);
 
 const { app } = require('./app');
+const { service } = require('./service');
 
 const doesFileExist = require('../../lib/does-file-exist');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
@@ -231,7 +232,6 @@ module.exports = function generatorWriting (generator, what) {
     stringifyPlus
   });
 
-// *****************************************************************
   const state = {
     // File writing functions
     tmpl,
@@ -252,10 +252,14 @@ module.exports = function generatorWriting (generator, what) {
     // Abbreviations using in building 'todos'.
     libDir,
     testDir,
+    // Utilities
+    generatorsInclude,
     // Constants
     WRITE_IF_NEW,
     WRITE_ALWAYS,
   };
+
+  const inject = { connection };
 
   // Generate what is needed.
   switch (what) {
@@ -268,7 +272,7 @@ module.exports = function generatorWriting (generator, what) {
       app(generator, props, specs, context, state);
 
       Object.keys(specs.services || {}).forEach(name => {
-        service(generator, name);
+        service(generator, name, props, specs, context, state, inject);
       });
 
       Object.keys(specs.hooks || {}).forEach(name => {
@@ -302,7 +306,7 @@ module.exports = function generatorWriting (generator, what) {
       app(generator, props, specs, context, state);
       break;
     case 'service':
-      service(generator, props.name);
+      service(generator, props.name, props, specs, context, state, inject);
 
       // `generate authentication` from the prompt will generate the wrong path for
       // the user-entity because of a chicken-and-egg problem. This fixes it.
@@ -319,7 +323,7 @@ module.exports = function generatorWriting (generator, what) {
       test(generator);
 
       Object.keys(specs.services || {}).forEach(name => {
-        service(generator, name);
+        service(generator, name, props, specs, context, state, inject);
       });
       break;
     case 'connection':
@@ -681,7 +685,101 @@ module.exports = function generatorWriting (generator, what) {
   */
 
   // ===== service =================================================================================
-  function service (generator, name) {
+  /*
+  function service (generator, name, props, specs, context, state, inject) {
+    const makeDebug = require('debug');
+    const mongoose = require('mongoose');
+    const Sequelize = require('sequelize');
+    const traverse = require('traverse');
+    const { existsSync } = require('fs');
+    const { join } = require('path');
+
+    const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
+    const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
+    const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
+    const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript');
+    const validateJsonSchema = require('../../lib/validate-json-schema');
+
+    const { generatorFs } = require('../../lib/generator-fs');
+
+    const debug = makeDebug('generator-feathers-plus:writing:service');
+
+    const OAUTH2_STRATEGY_MAPPINGS = {
+      auth0: 'passport-auth0',
+      google: 'passport-google-oauth20',
+      facebook: 'passport-facebook',
+      github: 'passport-github'
+    };
+
+    const mongooseNativeFuncs = {
+      [mongoose.Schema.Types.Mixed]: 'mongoose.Schema.Types.Mixed',
+      [mongoose.Schema.Types.ObjectId]: 'mongoose.Schema.Types.ObjectId'
+    };
+
+    let sequelizeNativeFuncs = {
+      [Sequelize.BOOLEAN]: 'DataTypes.BOOLEAN',
+      [Sequelize.ENUM]: 'DataTypes.ENUM',
+      [Sequelize.INTEGER]: 'DataTypes.INTEGER',
+      [Sequelize.JSONB]: 'DataTypes.JSONB',
+      [Sequelize.REAL]: 'DataTypes.REAL',
+      [Sequelize.STRING]: 'DataTypes.STRING',
+      [Sequelize.TEXT]: 'DataTypes.TEXT',
+      [Sequelize.DATE]: 'DataTypes.DATE',
+      [Sequelize.DATEONLY]: 'DataTypes.DATEONLY',
+    };
+
+    /* eslint-disable no-unused-vars * /
+    const {
+      tmpl,
+      copy,
+      json,
+      source,
+      stripSlashes,
+      tpl,
+      configPath,
+      src,
+      srcPath,
+      mwPath,
+      serPath,
+      namePath,
+      qlPath,
+      testPath,
+      libDir,
+      testDir,
+      generatorsInclude,
+      WRITE_IF_NEW,
+      WRITE_ALWAYS,
+    } = state;
+
+    const {
+      // Paths to various folders
+      appConfigPath,
+      // If JS or TS
+      js,
+      isJs,
+      // Abstract .js and .ts statements.
+      tplJsOrTs,
+      tplJsOnly,
+      tplTsOnly,
+      tplImports,
+      tplModuleExports,
+      tplExport,
+      // Expanded Feathers service specs
+      mapping,
+      feathersSpecs,
+      // Utilities.
+      camelCase,
+      kebabCase,
+      snakeCase,
+      upperFirst,
+      merge,
+      EOL,
+      stringifyPlus
+    } = context;
+
+    const { connection } = inject;
+    /* eslint-enable no-unused-vars * /
+
     debug('service()');
     const specsService = specs.services[name];
     const fileName = specsService.fileName;
@@ -713,9 +811,9 @@ module.exports = function generatorWriting (generator, what) {
         // Do not `generate connection` on `generate service` if adapter already exists.
         if (!specs.connections || !specs.connections[adapter]) {
           generator.composeWith(require.resolve('../connection'), { props: {
-            adapter,
-            service: name
-          } });
+              adapter,
+              service: name
+            } });
         } else {
           connection(generator);
         }
@@ -847,7 +945,7 @@ module.exports = function generatorWriting (generator, what) {
     const fn = fileName;
     const sfa = context.subFolderArray;
 
-    todos = [
+    const todos = [
       tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services',         `${fn}.test.${js}`],           WRITE_IF_NEW                         ),
       tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`], WRITE_ALWAYS, !context.modelName    ),
       tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, fn, `${fn}.service.${js}`],    ),
@@ -940,7 +1038,7 @@ module.exports = function generatorWriting (generator, what) {
           code.before.create.push('hashPassword()');
           code.before.update.push('hashPassword()');
           code.before.patch.push('hashPassword()');
-          code.after.all.push('protect(\'password\') /* Must always be the last hook */');
+          code.after.all.push('protect(\'password\') /* Must always be the last hook * /');
         }
 
         code.before.find.push('authenticate(\'jwt\')');
@@ -953,8 +1051,8 @@ module.exports = function generatorWriting (generator, what) {
       if (isMongo) {
         imports.push(
           isJs ?
-          `const { ObjectID } = require('mongodb')${sc}` :
-          `import { ObjectID } from 'mongodb'${sc}`
+            `const { ObjectID } = require('mongodb')${sc}` :
+            `import { ObjectID } from 'mongodb'${sc}`
         );
         hooks.push('mongoKeys');
         code.before.find.push('mongoKeys(ObjectID, foreignKeys)');
@@ -988,6 +1086,7 @@ module.exports = function generatorWriting (generator, what) {
       };
     }
   }
+  */
 
   // ===== connection ==============================================================================
   function connection (generator) {
