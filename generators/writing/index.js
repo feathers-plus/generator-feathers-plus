@@ -15,8 +15,9 @@ const { join } = require('path');
 
 const kebabCase = kebabCase1; //name => name === 'users1' ? name : kebabCase1(name);
 
+const { app } = require('./app');
+
 const doesFileExist = require('../../lib/does-file-exist');
-const makeConfig = require('./templates/_configs');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
@@ -24,7 +25,6 @@ const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
 const serviceSpecsToTypescript = require('../../lib/service-specs-to-typescript');
 const stringifyPlus = require('../../lib/stringify-plus');
-const validationErrorsLog = require('../../lib/validation-errors-log');
 const validateJsonSchema = require('../../lib/validate-json-schema');
 
 const { generatorFs } = require('../../lib/generator-fs');
@@ -231,6 +231,32 @@ module.exports = function generatorWriting (generator, what) {
     stringifyPlus
   });
 
+// *****************************************************************
+  const state = {
+    // File writing functions
+    tmpl,
+    copy,
+    json,
+    source,
+    stripSlashes,
+    // Paths to various folders
+    tpl,
+    configPath,
+    src,
+    srcPath,
+    mwPath,
+    serPath,
+    namePath,
+    qlPath,
+    testPath,
+    // Abbreviations using in building 'todos'.
+    libDir,
+    testDir,
+    // Constants
+    WRITE_IF_NEW,
+    WRITE_ALWAYS,
+  };
+
   // Generate what is needed.
   switch (what) {
     case 'all':
@@ -239,7 +265,7 @@ module.exports = function generatorWriting (generator, what) {
         break;
       }
 
-      app(generator);
+      app(generator, props, specs, context, state);
 
       Object.keys(specs.services || {}).forEach(name => {
         service(generator, name);
@@ -273,7 +299,7 @@ module.exports = function generatorWriting (generator, what) {
 
       break;
     case 'app':
-      app(generator);
+      app(generator, props, specs, context, state);
       break;
     case 'service':
       service(generator, props.name);
@@ -286,7 +312,7 @@ module.exports = function generatorWriting (generator, what) {
       break;
     case 'hook':
       hook(generator, props.name);
-      app(generator);
+      app(generator, props, specs, context, state);
 
       props.testType = 'hookUnit';
       props.hookName = props.name;
@@ -321,7 +347,62 @@ module.exports = function generatorWriting (generator, what) {
   debug('generatorWriting() ended');
 
   // ===== app =====================================================================================
-  function app (generator) {
+  /*
+  function app (generator, props, specs, context, state) {
+    const makeDebug = require('debug');
+    const { join } = require('path');
+    const makeConfig = require('./templates/_configs');
+    const { generatorFs } = require('../../lib/generator-fs');
+
+    const debug = makeDebug('generator-feathers-plus:writing:app');
+
+    /* eslint-disable no-unused-vars * /
+    const {
+      // File writing functions
+      tmpl,
+      copy,
+      json,
+      source,
+      stripSlashes,
+      // Paths to various folders
+      tpl,
+      configPath,
+      src,
+      srcPath,
+      mwPath,
+      serPath,
+      namePath,
+      qlPath,
+      testPath,
+      // Abbreviations using in building 'todos'.
+      libDir,
+      testDir,
+      // Constants
+      WRITE_IF_NEW,
+      WRITE_ALWAYS,
+    } = state;
+
+    const {
+      // Paths to various folders
+      appConfigPath,
+      // If JS or TS
+      js,
+      isJs,
+      // Abstract .js and .ts statements.
+      tplJsOrTs,
+      tplJsOnly,
+      tplTsOnly,
+      tplImports,
+      tplModuleExports,
+      tplExport,
+      // Expanded Feathers service specs
+      mapping,
+      feathersSpecs,
+    } = context;
+    /* eslint-enable no-unused-vars * /
+
+    let todos;
+
     debug('app()');
     const [ packager ] = specs.app.packager.split('@');
     const testAllJsFront = `${packager} run eslint && cross-env NODE_ENV=`;
@@ -597,6 +678,7 @@ module.exports = function generatorWriting (generator, what) {
 
     debug('app() ended');
   }
+  */
 
   // ===== service =================================================================================
   function service (generator, name) {
