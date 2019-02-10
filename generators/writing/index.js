@@ -19,10 +19,11 @@ const { app } = require('./app');
 const { service } = require('./service');
 const { connection } = require('./connection');
 const { authentication } = require('./authentication');
+const { middleware } = require('./middleware');
 
 //const doesFileExist = require('../../lib/does-file-exist');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
-const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
+//const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 //const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
 //const serviceSpecsToMongoose = require('../../lib/service-specs-to-mongoose');
 //const serviceSpecsToSequelize = require('../../lib/service-specs-to-sequelize');
@@ -302,7 +303,7 @@ module.exports = function generatorWriting (generator, what) {
       if (specs.graphql &&
         (Object.keys(mapping.graphqlService).length || Object.keys(mapping.graphqlSql).length)
       ) {
-        graphql(generator);
+        graphql(generator, props, specs, context, state);
       }
 
       if (process.env.fakes) {
@@ -346,7 +347,7 @@ module.exports = function generatorWriting (generator, what) {
       middleware(generator, props, specs, context, state);
       break;
     case 'graphql':
-      graphql(generator);
+      graphql(generator, props, specs, context, state);
       break;
     case 'fakes':
       fakes(generator);
@@ -1356,6 +1357,7 @@ module.exports = function generatorWriting (generator, what) {
   */
 
   // ===== middleware ==============================================================================
+  /*
   function middleware (generator, props, specs, context, state) {
     if (!specs.middlewares) return;
     debug('middleware()');
@@ -1375,9 +1377,69 @@ module.exports = function generatorWriting (generator, what) {
     // Generate modules
     generatorFs(generator, context, todos);
   }
+  */
 
   // ===== graphql =================================================================================
-  function graphql (generator) {
+  function graphql (generator, props, specs, context, state) {
+    const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
+
+    /* eslint-disable no-unused-vars */
+    const {
+      // File writing functions
+      tmpl,
+      copy,
+      json,
+      source,
+      stripSlashes,
+      // Paths to various folders
+      tpl,
+      configPath,
+      src,
+      srcPath,
+      mwPath,
+      serPath,
+      namePath,
+      qlPath,
+      testPath,
+      // Abbreviations using in building 'todos'.
+      libDir,
+      testDir,
+      // Utilities
+      generatorsInclude,
+      // Constants
+      WRITE_IF_NEW,
+      WRITE_ALWAYS,
+      SKIP_WRITE,
+      DONT_SKIP_WRITE,
+    } = state;
+
+    const {
+      // Paths to various folders
+      appConfigPath,
+      // If JS or TS
+      js,
+      isJs,
+      // Abstract .js and .ts statements.
+      tplJsOrTs,
+      tplJsOnly,
+      tplTsOnly,
+      tplImports,
+      tplModuleExports,
+      tplExport,
+      // Expanded Feathers service specs
+      mapping,
+      feathersSpecs,
+      // Utilities.
+      camelCase,
+      kebabCase,
+      snakeCase,
+      upperFirst,
+      merge,
+      EOL,
+      stringifyPlus
+    } = context;
+    /* eslint-enable no-unused-vars */
+
     debug('graphql()');
     // Custom template context
     context = Object.assign({}, context, {
