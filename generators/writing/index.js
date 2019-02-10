@@ -23,6 +23,8 @@ const { middleware } = require('./middleware');
 const { graphql } = require('./graphql');
 const { hook } = require('./hook');
 const { fakes } = require('./fakes');
+const { test } = require('./test-1');
+const { resources } = require('./resources');
 
 //const doesFileExist = require('../../lib/does-file-exist');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
@@ -35,7 +37,7 @@ const stringifyPlus = require('../../lib/stringify-plus');
 //const validateJsonSchema = require('../../lib/validate-json-schema');
 
 const { generatorFs } = require('../../lib/generator-fs');
-const { getFragment } = require('../../lib/code-fragments');
+//hqconst { getFragment } = require('../../lib/code-fragments');
 const { updateSpecs } = require('../../lib/specs');
 
 const debug = makeDebug('generator-feathers-plus:main');
@@ -186,7 +188,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // Other abbreviations using in building 'todos'.
   const libDir = specs.app.src;
-  let todos;
+  //let todos;
 
   let testDir = generator.testDirectory;
   if (testDir.charAt(testDir.length - 1) === '/') {
@@ -294,7 +296,7 @@ module.exports = function generatorWriting (generator, what) {
 
         props.testType = 'hookUnit';
         props.hookName = name;
-        test(generator);
+        test(generator, props, specs, context, state);
       });
 
       authentication(generator, true, props, specs, context, state);
@@ -313,7 +315,7 @@ module.exports = function generatorWriting (generator, what) {
         fakes(generator, props, specs, context, state);
       }
 
-      resources(generator);
+      resources(generator, props, specs, context, state);
 
       break;
     case 'app':
@@ -334,7 +336,7 @@ module.exports = function generatorWriting (generator, what) {
 
       props.testType = 'hookUnit';
       props.hookName = props.name;
-      test(generator);
+      test(generator, props, specs, context, state);
 
       Object.keys(specs.services || {}).forEach(name => {
         service(generator, name, props, specs, context, state, inject);
@@ -356,7 +358,7 @@ module.exports = function generatorWriting (generator, what) {
       fakes(generator, props, specs, context, state);
       break;
     case 'test':
-      test(generator);
+      test(generator, props, specs, context, state);
       break;
     default:
       throw new Error(`Unexpected generate ${what}. (writing`);
@@ -1767,7 +1769,65 @@ module.exports = function generatorWriting (generator, what) {
   */
 
   // ===== test ====================================================================================
-  function test (generator) {
+  /*
+  function test (generator, props, specs, context, state) {
+    /* eslint-disable no-unused-vars * hq/
+    const {
+      // File writing functions
+      tmpl,
+      copy,
+      json,
+      source,
+      stripSlashes,
+      // Paths to various folders
+      tpl,
+      configPath,
+      src,
+      srcPath,
+      mwPath,
+      serPath,
+      namePath,
+      qlPath,
+      testPath,
+      // Abbreviations using in building 'todos'.
+      libDir,
+      testDir,
+      // Utilities
+      generatorsInclude,
+      // Constants
+      WRITE_IF_NEW,
+      WRITE_ALWAYS,
+      SKIP_WRITE,
+      DONT_SKIP_WRITE,
+    } = state;
+
+    const {
+      // Paths to various folders
+      appConfigPath,
+      // If JS or TS
+      js,
+      isJs,
+      // Abstract .js and .ts statements.
+      tplJsOrTs,
+      tplJsOnly,
+      tplTsOnly,
+      tplImports,
+      tplModuleExports,
+      tplExport,
+      // Expanded Feathers service specs
+      mapping,
+      feathersSpecs,
+      // Utilities.
+      camelCase,
+      kebabCase,
+      snakeCase,
+      upperFirst,
+      merge,
+      EOL,
+      stringifyPlus
+    } = context;
+    /* eslint-enable no-unused-vars * /
+
     debug('test()');
     // props = {
     //   testType = ['hookUnit', 'hookInteg', 'serviceUnit', 'serviceInteg', 'authBase', 'authServices'],
@@ -1907,9 +1967,68 @@ module.exports = function generatorWriting (generator, what) {
     // Generate modules
     generatorFs(generator, context, todos);
   }
+  */
 
   // ===== resources ===============================================================================
-  function resources (generator) {
+  /*
+  function resources (generator, props, specs, context, state) {
+    /* eslint-disable no-unused-vars * hq/
+    const {
+      // File writing functions
+      tmpl,
+      copy,
+      json,
+      source,
+      stripSlashes,
+      // Paths to various folders
+      tpl,
+      configPath,
+      src,
+      srcPath,
+      mwPath,
+      serPath,
+      namePath,
+      qlPath,
+      testPath,
+      // Abbreviations using in building 'todos'.
+      libDir,
+      testDir,
+      // Utilities
+      generatorsInclude,
+      // Constants
+      WRITE_IF_NEW,
+      WRITE_ALWAYS,
+      SKIP_WRITE,
+      DONT_SKIP_WRITE,
+    } = state;
+
+    const {
+      // Paths to various folders
+      appConfigPath,
+      // If JS or TS
+      js,
+      isJs,
+      // Abstract .js and .ts statements.
+      tplJsOrTs,
+      tplJsOnly,
+      tplTsOnly,
+      tplImports,
+      tplModuleExports,
+      tplExport,
+      // Expanded Feathers service specs
+      mapping,
+      feathersSpecs,
+      // Utilities.
+      camelCase,
+      kebabCase,
+      snakeCase,
+      upperFirst,
+      merge,
+      EOL,
+      stringifyPlus
+    } = context;
+    /* eslint-enable no-unused-vars * /
+
     debug('resources()');
 
     if (!specs.requiredCustomResources || !specs.requiredCustomResources.files
@@ -1931,6 +2050,7 @@ module.exports = function generatorWriting (generator, what) {
     // Generate modules
     generatorFs(generator, context, todos);
   }
+  */
 };
 
 /*
@@ -2011,6 +2131,7 @@ function writeAuthenticationConfiguration (generator, context) {
 }
 */
 
+/*
 function writeDefaultJsonClient (generator) {
   const config = merge({}, generator._specs._defaultJson, {
     tests: {
@@ -2041,6 +2162,7 @@ function writeDefaultJsonClient (generator) {
     config
   );
 }
+*/
 
 // eslint-disable-next-line no-unused-vars
 function inspector(desc, obj, depth = 6) {

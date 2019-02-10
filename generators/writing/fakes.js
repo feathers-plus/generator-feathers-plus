@@ -1,7 +1,7 @@
 
 const makeDebug = require('debug');
 const jsonSchemaSeeder = require('json-schema-seeder');
-const { inspect } = require('util');
+6
 const { join } = require('path');
 const doesFileExist = require('../../lib/does-file-exist');
 const { generatorFs } = require('../../lib/generator-fs');
