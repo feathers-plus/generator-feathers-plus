@@ -1,6 +1,7 @@
 
 const crypto = require('crypto');
 const makeDebug = require('debug');
+const { inspect } = require('util');
 const { generatorFs } = require('../../lib/generator-fs');
 
 const debug = makeDebug('generator-feathers-plus:writing:authentication');
@@ -229,7 +230,6 @@ function writeAuthenticationConfiguration (generator, context) {
 }
 
 // eslint-disable-next-line no-unused-vars
-const { inspect } = require('util');
 function inspector(desc, obj, depth = 6) {
   console.log(desc);
   console.log(inspect(obj, { colors: true, depth }));

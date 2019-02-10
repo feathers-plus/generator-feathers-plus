@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Sequelize = require('sequelize');
 const traverse = require('traverse');
 const { existsSync } = require('fs');
+const { inspect } = require('util');
 const { join } = require('path');
 
 const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
@@ -405,7 +406,6 @@ function service (generator, name, props, specs, context, state, inject) {
 }
 
 // eslint-disable-next-line no-unused-vars
-const { inspect } = require('util');
 function inspector(desc, obj, depth = 6) {
   console.log(desc);
   console.log(inspect(obj, { colors: true, depth }));

@@ -1,5 +1,6 @@
 
 const makeDebug = require('debug');
+const { inspect } = require('util');
 const { generatorFs } = require('../../lib/generator-fs');
 
 const debug = makeDebug('generator-feathers-plus:writing:connection');
@@ -107,7 +108,6 @@ function connection (generator, props, specs, context, state) {
 }
 
 // eslint-disable-next-line no-unused-vars
-const { inspect } = require('util');
 function inspector(desc, obj, depth = 6) {
   console.log(desc);
   console.log(inspect(obj, { colors: true, depth }));

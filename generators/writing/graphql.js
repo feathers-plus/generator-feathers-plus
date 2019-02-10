@@ -1,5 +1,6 @@
 
 const makeDebug = require('debug');
+const { inspect } = require('util');
 const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 const { generatorFs } = require('../../lib/generator-fs');
 
@@ -202,7 +203,6 @@ function graphql (generator, props, specs, context, state) {
 }
 
 // eslint-disable-next-line no-unused-vars
-const { inspect } = require('util');
 function inspector(desc, obj, depth = 6) {
   console.log(desc);
   console.log(inspect(obj, { colors: true, depth }));

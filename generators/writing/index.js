@@ -20,8 +20,9 @@ const { service } = require('./service');
 const { connection } = require('./connection');
 const { authentication } = require('./authentication');
 const { middleware } = require('./middleware');
+const { graphql } = require('./graphql');
 
-//const doesFileExist = require('../../lib/does-file-exist');
+const doesFileExist = require('../../lib/does-file-exist');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 //const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 //const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
@@ -1380,10 +1381,11 @@ module.exports = function generatorWriting (generator, what) {
   */
 
   // ===== graphql =================================================================================
+  /*
   function graphql (generator, props, specs, context, state) {
     const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 
-    /* eslint-disable no-unused-vars */
+    /* eslint-disable no-unused-vars * /
     const {
       // File writing functions
       tmpl,
@@ -1438,7 +1440,7 @@ module.exports = function generatorWriting (generator, what) {
       EOL,
       stringifyPlus
     } = context;
-    /* eslint-enable no-unused-vars */
+    /* eslint-enable no-unused-vars * /
 
     debug('graphql()');
     // Custom template context
@@ -1573,6 +1575,7 @@ module.exports = function generatorWriting (generator, what) {
       };
     }
   }
+  */
 
   // ===== hook ====================================================================================
   function hook(generator, name) {
