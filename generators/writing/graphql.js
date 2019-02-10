@@ -94,7 +94,7 @@ function graphql (generator, props, specs, context, state) {
     libDirectory: generator.libDirectory
   });
 
-  todos = [
+  const todos = [
     tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services', `graphql.test.${js}`], WRITE_IF_NEW),
     tmpl([qlPath, 'graphql.interfaces.ejs'], [libDir, 'services', 'graphql', 'graphql.interfaces.ts'], WRITE_ALWAYS, isJs),
 

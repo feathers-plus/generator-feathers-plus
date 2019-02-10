@@ -1,7 +1,7 @@
 
 /* eslint-disable no-console */
 //const crypto = require('crypto');
-const jsonSchemaSeeder = require('json-schema-seeder');
+//const jsonSchemaSeeder = require('json-schema-seeder');
 const makeDebug = require('debug');
 const merge = require('lodash.merge');
 //const mongoose = require('mongoose');
@@ -21,8 +21,10 @@ const { connection } = require('./connection');
 const { authentication } = require('./authentication');
 const { middleware } = require('./middleware');
 const { graphql } = require('./graphql');
+const { hook } = require('./hook');
+const { fakes } = require('./fakes');
 
-const doesFileExist = require('../../lib/does-file-exist');
+//const doesFileExist = require('../../lib/does-file-exist');
 const serviceSpecsExpand = require('../../lib/service-specs-expand');
 //const serviceSpecsToGraphql = require('../../lib/service-specs-to-graphql');
 //const serviceSpecsToMongoJsonSchema = require('../../lib/service-specs-to-mongo-json-schema');
@@ -288,7 +290,7 @@ module.exports = function generatorWriting (generator, what) {
       });
 
       Object.keys(specs.hooks || {}).forEach(name => {
-        hook(generator, name);
+        hook(generator, name, props, specs, context, state);
 
         props.testType = 'hookUnit';
         props.hookName = name;
@@ -308,7 +310,7 @@ module.exports = function generatorWriting (generator, what) {
       }
 
       if (process.env.fakes) {
-        fakes(generator);
+        fakes(generator, props, specs, context, state);
       }
 
       resources(generator);
@@ -327,7 +329,7 @@ module.exports = function generatorWriting (generator, what) {
       }
       break;
     case 'hook':
-      hook(generator, props.name);
+      hook(generator, props.name, props, specs, context, state);
       app(generator, props, specs, context, state);
 
       props.testType = 'hookUnit';
@@ -351,7 +353,7 @@ module.exports = function generatorWriting (generator, what) {
       graphql(generator, props, specs, context, state);
       break;
     case 'fakes':
-      fakes(generator);
+      fakes(generator, props, specs, context, state);
       break;
     case 'test':
       test(generator);
@@ -1578,7 +1580,65 @@ module.exports = function generatorWriting (generator, what) {
   */
 
   // ===== hook ====================================================================================
-  function hook(generator, name) {
+  /*
+  function hook (generator, name, props, specs, context, state) {
+    /* eslint-disable no-unused-vars * /
+    const {
+      // File writing functions
+      tmpl,
+      copy,
+      json,
+      source,
+      stripSlashes,
+      // Paths to various folders
+      tpl,
+      configPath,
+      src,
+      srcPath,
+      mwPath,
+      serPath,
+      namePath,
+      qlPath,
+      testPath,
+      // Abbreviations using in building 'todos'.
+      libDir,
+      testDir,
+      // Utilities
+      generatorsInclude,
+      // Constants
+      WRITE_IF_NEW,
+      WRITE_ALWAYS,
+      SKIP_WRITE,
+      DONT_SKIP_WRITE,
+    } = state;
+
+    const {
+      // Paths to various folders
+      appConfigPath,
+      // If JS or TS
+      js,
+      isJs,
+      // Abstract .js and .ts statements.
+      tplJsOrTs,
+      tplJsOnly,
+      tplTsOnly,
+      tplImports,
+      tplModuleExports,
+      tplExport,
+      // Expanded Feathers service specs
+      mapping,
+      feathersSpecs,
+      // Utilities.
+      camelCase,
+      kebabCase,
+      snakeCase,
+      upperFirst,
+      merge,
+      EOL,
+      stringifyPlus
+    } = context;
+    /* eslint-enable no-unused-vars * /
+
     debug('hook()');
     const hookSpec = specs.hooks[name];
     const hookFile = hookSpec.fileName;
@@ -1601,9 +1661,68 @@ module.exports = function generatorWriting (generator, what) {
     // Generate modules
     generatorFs(generator, context, todos);
   }
+  */
 
   // ===== fakes ===================================================================================
-  function fakes (generator) {
+  /*
+  function fakes (generator, props, specs, context, state) {
+    /* eslint-disable no-unused-vars * /
+    const {
+      // File writing functions
+      tmpl,
+      copy,
+      json,
+      source,
+      stripSlashes,
+      // Paths to various folders
+      tpl,
+      configPath,
+      src,
+      srcPath,
+      mwPath,
+      serPath,
+      namePath,
+      qlPath,
+      testPath,
+      // Abbreviations using in building 'todos'.
+      libDir,
+      testDir,
+      // Utilities
+      generatorsInclude,
+      // Constants
+      WRITE_IF_NEW,
+      WRITE_ALWAYS,
+      SKIP_WRITE,
+      DONT_SKIP_WRITE,
+    } = state;
+
+    const {
+      // Paths to various folders
+      appConfigPath,
+      // If JS or TS
+      js,
+      isJs,
+      // Abstract .js and .ts statements.
+      tplJsOrTs,
+      tplJsOnly,
+      tplTsOnly,
+      tplImports,
+      tplModuleExports,
+      tplExport,
+      // Expanded Feathers service specs
+      mapping,
+      feathersSpecs,
+      // Utilities.
+      camelCase,
+      kebabCase,
+      snakeCase,
+      upperFirst,
+      merge,
+      EOL,
+      stringifyPlus
+    } = context;
+    /* eslint-enable no-unused-vars * /
+
     debug('fakes()');
     const schemas = {};
     const adapters = {};
@@ -1645,6 +1764,7 @@ module.exports = function generatorWriting (generator, what) {
     // Generate modules
     generatorFs(generator, context, todos);
   }
+  */
 
   // ===== test ====================================================================================
   function test (generator) {
