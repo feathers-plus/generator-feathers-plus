@@ -10,38 +10,10 @@ module.exports = {
 };
 
 function test (generator, props, specs, context, state) {
-  /* eslint-disable no-unused-vars */
-  const {
-    // File writing functions
-    tmpl,
-    copy,
-    json,
-    source,
-    stripSlashes,
-    // Paths to various folders
-    tpl,
-    configPath,
-    src,
-    srcPath,
-    mwPath,
-    serPath,
-    namePath,
-    qlPath,
-    testPath,
-    // Abbreviations using in building 'todos'.
-    libDir,
-    testDir,
-    // Utilities
-    generatorsInclude,
-    // Constants
-    WRITE_IF_NEW,
-    WRITE_ALWAYS,
-    SKIP_WRITE,
-    DONT_SKIP_WRITE,
-  } = state;
+  debug('test()');
 
   const {
-    // Paths to various folders
+    // Paths.
     appConfigPath,
     // TypeScript & semicolon helpers.
     js,
@@ -52,22 +24,27 @@ function test (generator, props, specs, context, state) {
     tplTsOnly,
     tplImports,
     tplModuleExports,
-    tplExport,
-    // Expanded Feathers service specs
-    mapping,
-    feathersSpecs,
-    // Utilities.
+    // lodash utilities.
     camelCase,
     kebabCase,
     snakeCase,
     upperFirst,
+    // Utilities.
     merge,
     EOL,
     stringifyPlus
   } = context;
-  /* eslint-enable no-unused-vars */
 
-  debug('test()');
+  const {
+    // File writing functions.
+    tmpl,
+    // Abbreviations for paths to templates used in building 'todos'.
+    src,
+    testPath,
+    // Constants.
+    WRITE_IF_NEW,
+  } = state;
+
   // props = {
   //   testType = ['hookUnit', 'hookInteg', 'serviceUnit', 'serviceInteg', 'authBase', 'authServices'],
   //   hookName!, serviceName!

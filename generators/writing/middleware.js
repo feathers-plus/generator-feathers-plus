@@ -10,40 +10,16 @@ module.exports = {
 };
 
 function middleware (generator, props, specs, context, state) {
-  /* eslint-disable no-unused-vars */
-  const {
-    // File writing functions
-    tmpl,
-    copy,
-    json,
-    source,
-    stripSlashes,
-    // Paths to various folders
-    tpl,
-    configPath,
-    src,
-    srcPath,
-    mwPath,
-    serPath,
-    namePath,
-    qlPath,
-    testPath,
-    // Abbreviations using in building 'todos'.
-    libDir,
-    testDir,
-    // Utilities
-    generatorsInclude,
-    // Constants
-    WRITE_IF_NEW,
-    WRITE_ALWAYS,
-    SKIP_WRITE,
-    DONT_SKIP_WRITE,
-  } = state;
+  if (!specs.middlewares) return;
+  debug('middleware()');
 
   const {
-    // Paths to various folders
+    // Expanded definitions.
+    mapping,
+    feathersSpecs,
+    // Paths.
     appConfigPath,
-    // If JS or TS
+    // TypeScript & semicolon helpers.
     js,
     isJs,
     // Abstract .js and .ts statements.
@@ -53,22 +29,31 @@ function middleware (generator, props, specs, context, state) {
     tplImports,
     tplModuleExports,
     tplExport,
-    // Expanded Feathers service specs
-    mapping,
-    feathersSpecs,
-    // Utilities.
+    // lodash utilities.
     camelCase,
     kebabCase,
     snakeCase,
     upperFirst,
+    // Utilities.
     merge,
     EOL,
     stringifyPlus
   } = context;
-  /* eslint-enable no-unused-vars */
 
-  if (!specs.middlewares) return;
-  debug('middleware()');
+  const {
+    // File writing functions.
+    tmpl,
+    // Abbreviations for paths to templates used in building 'todos'.
+    tpl,
+    src,
+    mwPath,
+    // Other abbreviations using in building 'todos'.
+    libDir,
+    // Constants.
+    WRITE_IF_NEW,
+    WRITE_ALWAYS,
+    DONT_SKIP_WRITE,
+  } = state;
 
   const todos = [
     tmpl([mwPath, 'index.ejs'], [src, 'middleware', `index.${js}`])

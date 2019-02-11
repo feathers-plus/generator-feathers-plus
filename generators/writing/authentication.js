@@ -13,6 +13,14 @@ const OAUTH2_STRATEGY_MAPPINGS = {
   github: 'passport-github'
 };
 
+const AUTH_TYPES = {
+  local: '@types/feathersjs__authentication-local',
+  auth0: '@types/feathersjs__authentication-oauth2',
+  google: '@types/feathersjs__authentication-oauth2',
+  facebook: ['@types/passport-facebook', '@types/feathersjs__authentication-oauth2'],
+  github: '@types/passport-github',
+};
+
 module.exports = {
   authentication,
 };
@@ -20,14 +28,6 @@ module.exports = {
 function authentication (generator, justRegen, props, specs, context, state) {
   if (!specs.authentication) return;
   debug('authentication()');
-
-  const AUTH_TYPES = {
-    local: '@types/feathersjs__authentication-local',
-    auth0: '@types/feathersjs__authentication-oauth2',
-    google: '@types/feathersjs__authentication-oauth2',
-    facebook: ['@types/passport-facebook', '@types/feathersjs__authentication-oauth2'],
-    github: '@types/passport-github',
-  };
 
   const {
     // TypeScript & semicolon helpers.

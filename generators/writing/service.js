@@ -46,31 +46,13 @@ module.exports = {
 };
 
 function service (generator, name, props, specs, context, state, inject) {
-  /* eslint-disable no-unused-vars */
-  const {
-    tmpl,
-    copy,
-    json,
-    source,
-    stripSlashes,
-    tpl,
-    configPath,
-    src,
-    srcPath,
-    mwPath,
-    serPath,
-    namePath,
-    qlPath,
-    testPath,
-    libDir,
-    testDir,
-    generatorsInclude,
-    WRITE_IF_NEW,
-    WRITE_ALWAYS,
-  } = state;
+  debug('service()');
 
   const {
-    // Paths to various folders
+    // Expanded definitions.
+    mapping,
+    feathersSpecs,
+    // Paths.
     appConfigPath,
     // TypeScript & semicolon helpers.
     js,
@@ -82,23 +64,40 @@ function service (generator, name, props, specs, context, state, inject) {
     tplImports,
     tplModuleExports,
     tplExport,
-    // Expanded Feathers service specs
-    mapping,
-    feathersSpecs,
-    // Utilities.
+    // lodash utilities.
     camelCase,
     kebabCase,
     snakeCase,
     upperFirst,
+    // Utilities.
     merge,
     EOL,
     stringifyPlus
   } = context;
 
-  const { connection } = inject;
-  /* eslint-enable no-unused-vars */
+  const {
+    // File writing functions.
+    tmpl,
+    stripSlashes,
+    // Abbreviations for paths to templates used in building 'todos'.
+    tpl,
+    src,
+    srcPath,
+    serPath,
+    namePath,
+    testPath,
+    // Other abbreviations using in building 'todos'.
+    libDir,
+    testDir,
+    // Utilities.
+    generatorsInclude,
+    // Constants.
+    WRITE_IF_NEW,
+    WRITE_ALWAYS,
+  } = state;
 
-  debug('service()');
+  const { connection } = inject;
+
   const specsService = specs.services[name];
   const fileName = specsService.fileName;
   const camelName = camelCase(name);

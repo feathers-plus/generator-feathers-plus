@@ -1,7 +1,6 @@
 
 const makeDebug = require('debug');
 const jsonSchemaSeeder = require('json-schema-seeder');
-6
 const { join } = require('path');
 const doesFileExist = require('../../lib/does-file-exist');
 const { generatorFs } = require('../../lib/generator-fs');
@@ -13,15 +12,41 @@ module.exports = {
 };
 
 function fakes (generator, props, specs, context, state) {
-  /* eslint-disable no-unused-vars */
+  debug('fakes()');
+
   const {
-    // File writing functions
+    // Expanded definitions.
+    feathersSpecs,
+    // Paths.
+    appConfigPath,
+    // TypeScript & semicolon helpers.
+    js,
+    // Abstract .js and .ts statements.
+    tplJsOrTs,
+    tplJsOnly,
+    tplTsOnly,
+    tplImports,
+    tplModuleExports,
+    tplExport,
+    // lodash utilities.
+    camelCase,
+    kebabCase,
+    snakeCase,
+    upperFirst,
+    // Utilities.
+    merge,
+    EOL,
+    stringifyPlus
+  } = context;
+
+  const {
+    // File writing functions.
     tmpl,
     copy,
     json,
     source,
     stripSlashes,
-    // Paths to various folders
+    // Abbreviations for paths to templates used in building 'todos'.
     tpl,
     configPath,
     src,
@@ -31,46 +56,18 @@ function fakes (generator, props, specs, context, state) {
     namePath,
     qlPath,
     testPath,
-    // Abbreviations using in building 'todos'.
+    // Other abbreviations using in building 'todos'.
     libDir,
     testDir,
-    // Utilities
+    // Utilities.
     generatorsInclude,
-    // Constants
+    // Constants.
     WRITE_IF_NEW,
     WRITE_ALWAYS,
     SKIP_WRITE,
     DONT_SKIP_WRITE,
   } = state;
 
-  const {
-    // Paths to various folders
-    appConfigPath,
-    // If JS or TS
-    js,
-    isJs,
-    // Abstract .js and .ts statements.
-    tplJsOrTs,
-    tplJsOnly,
-    tplTsOnly,
-    tplImports,
-    tplModuleExports,
-    tplExport,
-    // Expanded Feathers service specs
-    mapping,
-    feathersSpecs,
-    // Utilities.
-    camelCase,
-    kebabCase,
-    snakeCase,
-    upperFirst,
-    merge,
-    EOL,
-    stringifyPlus
-  } = context;
-  /* eslint-enable no-unused-vars */
-
-  debug('fakes()');
   const schemas = {};
   const adapters = {};
 
