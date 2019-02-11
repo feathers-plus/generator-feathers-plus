@@ -259,7 +259,6 @@ function app (generator, props, specs, context, state) {
       '@types/lodash.merge',
       '@types/mocha',
       '@types/request-promise',
-      '@types/winston',
       'ts-mocha',
       'ts-node',
       'tslint',
