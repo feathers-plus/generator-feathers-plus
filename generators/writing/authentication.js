@@ -18,6 +18,9 @@ module.exports = {
 };
 
 function authentication (generator, justRegen, props, specs, context, state) {
+  if (!specs.authentication) return;
+  debug('authentication()');
+
   const AUTH_TYPES = {
     local: '@types/feathersjs__authentication-local',
     auth0: '@types/feathersjs__authentication-oauth2',
@@ -26,63 +29,24 @@ function authentication (generator, justRegen, props, specs, context, state) {
     github: '@types/passport-github',
   };
 
-  /* eslint-disable no-unused-vars */
   const {
-    // File writing functions
-    tmpl,
-    copy,
-    json,
-    source,
-    stripSlashes,
-    // Paths to various folders
-    tpl,
-    configPath,
-    src,
-    srcPath,
-    mwPath,
-    serPath,
-    namePath,
-    qlPath,
-    testPath,
-    // Abbreviations using in building 'todos'.
-    libDir,
-    testDir,
-    // Utilities
-    generatorsInclude,
-    // Constants
-    WRITE_IF_NEW,
-    WRITE_ALWAYS,
-  } = state;
-
-  const {
-    // Paths to various folders
-    appConfigPath,
-    // If JS or TS
+    // TypeScript & semicolon helpers.
     js,
     isJs,
-    // Abstract .js and .ts statements.
-    tplJsOrTs,
-    tplJsOnly,
-    tplTsOnly,
-    tplImports,
-    tplModuleExports,
-    tplExport,
-    // Expanded Feathers service specs
-    mapping,
-    feathersSpecs,
-    // Utilities.
+    // lodash utilities.
     camelCase,
-    kebabCase,
-    snakeCase,
     upperFirst,
-    merge,
-    EOL,
-    stringifyPlus
   } = context;
-  /* eslint-enable no-unused-vars */
 
-  if (!specs.authentication) return;
-  debug('authentication()');
+  const {
+    // File writing functions.
+    tmpl,
+    // Abbreviations for paths to templates used in building 'todos'.
+    src,
+    srcPath,
+    // Other abbreviations using in building 'todos'.
+    libDir,
+  } = state;
 
   const entity = specs.authentication.entity;
   const strategies = specs.authentication.strategies;

@@ -12,50 +12,36 @@ module.exports = {
 };
 
 function app (generator, props, specs, context, state) {
-  /* eslint-disable no-unused-vars */
+  debug('app()');
+
   const {
+    // Paths.
+    appConfigPath,
+    // TypeScript & semicolon helpers.
+    js,
+    isJs,
+  } = context;
+
+  const {
+    // File writing functions
     tmpl,
     copy,
     json,
-    source,
-    stripSlashes,
+    // Abbreviations for paths to templates used in building 'todos'.
     tpl,
-    configPath,
     src,
     srcPath,
     mwPath,
     serPath,
-    namePath,
-    qlPath,
-    testPath,
-    libDir,
+    // Other abbreviations using in building 'todos'.
     testDir,
+    // Constants.
     WRITE_IF_NEW,
     WRITE_ALWAYS,
   } = state;
 
-  const {
-    // Paths to various folders
-    appConfigPath,
-    // If JS or TS
-    js,
-    isJs,
-    // Abstract .js and .ts statements.
-    tplJsOrTs,
-    tplJsOnly,
-    tplTsOnly,
-    tplImports,
-    tplModuleExports,
-    tplExport,
-    // Expanded Feathers service specs
-    mapping,
-    feathersSpecs,
-  } = context;
-  /* eslint-enable no-unused-vars */
-
   let todos;
 
-  debug('app()');
   const [ packager ] = specs.app.packager.split('@');
   const testAllJsFront = `${packager} run eslint && cross-env NODE_ENV=`;
   const testAllJsBack = ' npm run mocha';

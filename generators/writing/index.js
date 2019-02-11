@@ -86,7 +86,7 @@ module.exports = function generatorWriting (generator, what) {
     this.hasProvider = name => specs.app.providers.indexOf(name) !== -1;
     this.getNameSpace = str => generator.getNameSpace(str);
 
-    // Paths
+    // Paths.
     this.appConfigPath = specs.app.config || 'config';
 
     // TypeScript & semicolon helpers.
@@ -120,7 +120,7 @@ module.exports = function generatorWriting (generator, what) {
     this.snakeCase = snakeCase;
     this.upperFirst = upperFirst;
 
-    // Utilities
+    // Utilities.
     this.merge = merge;
     this.EOL = EOL;
     this.stringifyPlus = stringifyPlus;
@@ -128,7 +128,7 @@ module.exports = function generatorWriting (generator, what) {
 
   // Variables used by individual "generate" modules.
   const state = new function () {
-    // File writing functions
+    // File writing functions.
     // type:   'tpl' - expand template, 'copy' - copy file, 'json' - write JSON as file.
     // src:    path & file of template or source file. Array of folder names or str.
     // obj:    Object to write as JSON.
@@ -171,10 +171,12 @@ module.exports = function generatorWriting (generator, what) {
       this.testDir = this.testDir.substring(0, this.testDir.length - 1);
     }
 
-    // Utilities
+    // Utilities.
     this.generatorsInclude = function generatorsInclude (name) {
       return generators.indexOf(name) !== -1;
     };
+
+    // Constants.
     this.WRITE_IF_NEW = true;
     this.WRITE_ALWAYS = false;
     this.SKIP_WRITE = true;

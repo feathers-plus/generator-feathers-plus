@@ -43,7 +43,7 @@ function test (generator, props, specs, context, state) {
   const {
     // Paths to various folders
     appConfigPath,
-    // If JS or TS
+    // TypeScript & semicolon helpers.
     js,
     isJs,
     // Abstract .js and .ts statements.

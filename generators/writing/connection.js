@@ -10,63 +10,32 @@ module.exports = {
 };
 
 function connection (generator, props, specs, context, state) {
-  /* eslint-disable no-unused-vars */
-  const {
-    // File writing functions
-    tmpl,
-    copy,
-    json,
-    source,
-    stripSlashes,
-    // Paths to various folders
-    tpl,
-    configPath,
-    src,
-    srcPath,
-    mwPath,
-    serPath,
-    namePath,
-    qlPath,
-    testPath,
-    // Abbreviations using in building 'todos'.
-    libDir,
-    testDir,
-    // Utilities
-    generatorsInclude,
-    // Constants
-    WRITE_IF_NEW,
-    WRITE_ALWAYS,
-  } = state;
-
-  const {
-    // Paths to various folders
-    appConfigPath,
-    // If JS or TS
-    js,
-    isJs,
-    // Abstract .js and .ts statements.
-    tplJsOrTs,
-    tplJsOnly,
-    tplTsOnly,
-    tplImports,
-    tplModuleExports,
-    tplExport,
-    // Expanded Feathers service specs
-    mapping,
-    feathersSpecs,
-    // Utilities.
-    camelCase,
-    kebabCase,
-    snakeCase,
-    upperFirst,
-    merge,
-    EOL,
-    stringifyPlus
-  } = context;
-  /* eslint-enable no-unused-vars */
-
   if (!specs.connections) return;
   debug('connection()');
+
+  const {
+    // Paths.
+    appConfigPath,
+    // TypeScript & semicolon helpers.
+    js,
+    isJs,
+  } = context;
+
+  const {
+    // File writing functions.
+    tmpl,
+    json,
+    // Paths to various folders
+    tpl,
+    src,
+    srcPath,
+    // Abbreviations using in building 'todos'.
+    libDir,
+    // Utilities.
+    generatorsInclude,
+    // Constants
+    WRITE_ALWAYS,
+  } = state;
 
   // Common abbreviations for building 'todos'.
   const newConfig = specs._defaultJson = Object.assign({}, specs._defaultJson, specs._dbConfigs);

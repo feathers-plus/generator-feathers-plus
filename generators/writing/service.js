@@ -72,7 +72,7 @@ function service (generator, name, props, specs, context, state, inject) {
   const {
     // Paths to various folders
     appConfigPath,
-    // If JS or TS
+    // TypeScript & semicolon helpers.
     js,
     isJs,
     // Abstract .js and .ts statements.
