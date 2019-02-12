@@ -60,7 +60,7 @@ function graphql (generator, props, specs, context, state) {
   } = state;
 
   // Custom template context
-  context = Object.assign({}, context, {
+  const context1 = Object.assign({}, context, {
     name: 'graphql',
     serviceName: 'graphql',
     kebabName: 'graphql',
@@ -76,7 +76,7 @@ function graphql (generator, props, specs, context, state) {
     authentication: false,
     isAuthEntityWithAuthentication: false,
     requiresAuth: specs.graphql.requiresAuth,
-    hooks: getHookInfo('graphql'),
+    hooks: getHookInfo('graphql', context.sc),
     _hooks: specs._hooks['graphql'] || [],
 
     strategy: specs.graphql.strategy,
@@ -104,7 +104,7 @@ function graphql (generator, props, specs, context, state) {
   ];
 
   // Generate modules
-  generatorFs(generator, context, todos);
+  generatorFs(generator, context1, todos);
 
   // Update dependencies
   generator._packagerInstall([
@@ -120,8 +120,7 @@ function graphql (generator, props, specs, context, state) {
   }
 
   // Determine which hooks are needed
-  function getHookInfo() {
-    const sc = context.sc;
+  function getHookInfo(name, sc) {
     const requiresAuth = specs.graphql.requiresAuth;
 
     const hooks = [ 'iff' ];

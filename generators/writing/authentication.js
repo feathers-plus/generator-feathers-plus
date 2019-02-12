@@ -52,7 +52,7 @@ function authentication (generator, justRegen, props, specs, context, state) {
   const strategies = specs.authentication.strategies;
 
   // Custom template context
-  context = Object.assign({}, context, {
+  const context1 = Object.assign({}, context, {
     // PATCH $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     // The authentication generation needs to know the path used by then user-entity service,
     // but that service is not configured at that point. So the code guesses the path will be
@@ -82,7 +82,7 @@ function authentication (generator, justRegen, props, specs, context, state) {
     if (oauthProvider) {
       dependencies.push('@feathersjs/authentication-oauth2');
       dependencies.push(oauthProvider);
-      context.oauthProviders.push({
+      context1.oauthProviders.push({
         name: strategy,
         strategyName: `${upperFirst(strategy)}Strategy`,
         module: oauthProvider
@@ -109,17 +109,17 @@ function authentication (generator, justRegen, props, specs, context, state) {
   ];
 
   // Generate modules
-  generatorFs(generator, context, todos);
+  generatorFs(generator, context1, todos);
 
   // Update dependencies
-  writeAuthenticationConfiguration(generator, context);
+  writeAuthenticationConfiguration(generator, context1);
   generator._packagerInstall(dependencies, { save: true });
   generator._packagerInstall(devDependencies, { saveDev: true });
 }
 
-function writeAuthenticationConfiguration (generator, context) {
+function writeAuthenticationConfiguration (generator, context1) {
   const config = Object.assign({}, generator._specs._defaultJson);
-  const path = context.servicePath;
+  const path = context1.servicePath;
 
   const configAuth = config.authentication = config.authentication || {};
   configAuth.secret = generator._specs._isRunningTests
@@ -127,7 +127,7 @@ function writeAuthenticationConfiguration (generator, context) {
     : (configAuth.secret || crypto.randomBytes(256).toString('hex'));
   configAuth.strategies = [ 'jwt' ];
   configAuth.path = '/authentication';
-  configAuth.service = path.substring(0,1) !== '/' ? path : context.servicePath.substring(1);
+  configAuth.service = path.substring(0,1) !== '/' ? path : context1.servicePath.substring(1);
 
   configAuth.jwt = configAuth.jwt || {
     header: { typ: 'access' },
@@ -138,7 +138,7 @@ function writeAuthenticationConfiguration (generator, context) {
     expiresIn: '1d'
   };
 
-  if (context.strategies.indexOf('local') !== -1) {
+  if (context1.strategies.indexOf('local') !== -1) {
     configAuth.strategies.push('local');
     configAuth.local = configAuth.local || {
       entity: 'user',
@@ -149,7 +149,7 @@ function writeAuthenticationConfiguration (generator, context) {
 
   let includesOAuth = false;
 
-  context.strategies.forEach(strategy => {
+  context1.strategies.forEach(strategy => {
     if (OAUTH2_STRATEGY_MAPPINGS[strategy]) {
       const strategyConfig = {
         clientID: `your ${strategy} client id`,
@@ -188,7 +188,7 @@ function writeAuthenticationConfiguration (generator, context) {
   generator._specs._defaultJson = config;
 
   generator.fs.writeJSON(
-    generator.destinationPath(context.appConfigPath, 'default.json'),
+    generator.destinationPath(context1.appConfigPath, 'default.json'),
     config
   );
 }
