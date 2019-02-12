@@ -154,7 +154,7 @@ function service (generator, name, props, specs, context, state, inject) {
       || (specsService.nameSingular.charAt(0).toUpperCase() + specsService.nameSingular.slice(1));
   }
 
-  context = Object.assign({}, context, {
+  const context1 = Object.assign({}, context, {
     serviceName: name,
     serviceNameSingular: specsService.nameSingular,
     subFolder: generator.getNameSpace(specsService.subFolder)[0],
@@ -171,7 +171,7 @@ function service (generator, name, props, specs, context, state, inject) {
     isAuthEntityWithAuthentication,
     requiresAuth: specsService.requiresAuth,
     oauthProviders: [],
-    hooks: getHookInfo(name),
+    hooks: getHookInfo(name, context.sc),
     _hooks: specs._hooks[name] || [],
 
     libDirectory: specs.app.src,
@@ -180,10 +180,10 @@ function service (generator, name, props, specs, context, state, inject) {
     mongoJsonSchema: serviceSpecsToMongoJsonSchema(feathersSpecs[name], feathersSpecs[name]._extensions),
     mongooseSchema: serviceSpecsToMongoose(feathersSpecs[name], feathersSpecs[name]._extensions),
   });
-  context.mongoJsonSchemaStr = stringifyPlus(context.mongoJsonSchema);
-  context.mongooseSchemaStr = stringifyPlus(context.mongooseSchema, { nativeFuncs: mongooseNativeFuncs });
-  context.typescriptTypesStr = typescriptTypes.map(str => `  ${str}${context.sc}`).join(`${EOL}`);
-  context.typescriptExtendsStr = typescriptExtends.map(str => `  ${str}${context.sc} // change if needed`).join(`${EOL}`);
+  context1.mongoJsonSchemaStr = stringifyPlus(context1.mongoJsonSchema);
+  context1.mongooseSchemaStr = stringifyPlus(context1.mongooseSchema, { nativeFuncs: mongooseNativeFuncs });
+  context1.typescriptTypesStr = typescriptTypes.map(str => `  ${str}${context1.sc}`).join(`${EOL}`);
+  context1.typescriptExtendsStr = typescriptExtends.map(str => `  ${str}${context1.sc} // change if needed`).join(`${EOL}`);
 
   const { seqModel, seqFks } = serviceSpecsToSequelize(feathersSpecs[name], feathersSpecs[name]._extensions);
 
@@ -200,22 +200,22 @@ function service (generator, name, props, specs, context, state, inject) {
     }
   });
 
-  context.sequelizeSchema = seqModel;
-  context.sequelizeFks = seqFks;
-  context.sequelizeSchemaStr = stringifyPlus(context.sequelizeSchema, { nativeFuncs: sequelizeNativeFuncs });
+  context1.sequelizeSchema = seqModel;
+  context1.sequelizeFks = seqFks;
+  context1.sequelizeSchemaStr = stringifyPlus(context1.sequelizeSchema, { nativeFuncs: sequelizeNativeFuncs });
 
-  // inspector(`\n... mongoJsonSchema ${name} (generator ${what})`, context.mongooseSchema);
-  // inspector(`\n... mongoJsonSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr.split('\n'));
-  // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context.mongooseSchema);
-  // inspector(`\n... mongooseSchemaStr ${name} (generator ${what})`, context.mongooseSchemaStr.split('\n'));
-  // inspector(`\n... sequelizeSchema ${name} (generator ${what})`, context.sequelizeSchema);
-  // inspector(`\n... sequelizeSchemaStr ${name} (generator ${what})`, context.sequelizeSchemaStr.split('\n'));
-  // inspector(`\n... sequelizeFks ${name} (generator ${what})`, context.sequelizeFks);
-  // inspector(`\n... typescriptTypes ${name} (generator ${what})`, context.typescriptTypes);
-  // inspector(`\n... typescriptTypesStr ${name} (generator ${what})`, context.typescriptTypesStr.split('\n'));
-  // inspector(`\n... typescriptExtends${name} (generator ${what})`, context.typescriptExtends);
-  // inspector(`\n... typescriptExtendsStr ${name} (generator ${what})`, context.typescriptExtendsStr.split('\n'));
-  // inspector(`\n... context (generator ${what})`, context);
+  // inspector(`\n... mongoJsonSchema ${name} (generator ${what})`, context1.mongooseSchema);
+  // inspector(`\n... mongoJsonSchemaStr ${name} (generator ${what})`, context1.mongooseSchemaStr.split('\n'));
+  // inspector(`\n... mongooseSchema ${name} (generator ${what})`, context1.mongooseSchema);
+  // inspector(`\n... mongooseSchemaStr ${name} (generator ${what})`, context1.mongooseSchemaStr.split('\n'));
+  // inspector(`\n... sequelizeSchema ${name} (generator ${what})`, context1.sequelizeSchema);
+  // inspector(`\n... sequelizeSchemaStr ${name} (generator ${what})`, context1.sequelizeSchemaStr.split('\n'));
+  // inspector(`\n... sequelizeFks ${name} (generator ${what})`, context1.sequelizeFks);
+  // inspector(`\n... typescriptTypes ${name} (generator ${what})`, context1.typescriptTypes);
+  // inspector(`\n... typescriptTypesStr ${name} (generator ${what})`, context1.typescriptTypesStr.split('\n'));
+  // inspector(`\n... typescriptExtends${name} (generator ${what})`, context1.typescriptExtends);
+  // inspector(`\n... typescriptExtendsStr ${name} (generator ${what})`, context1.typescriptExtendsStr.split('\n'));
+  // inspector(`\n... context1 (generator ${what})`, context1);
 
   const dependencies = ['ajv'];
   const devDependencies = [];
@@ -245,7 +245,7 @@ function service (generator, name, props, specs, context, state, inject) {
     if (oauthProvider) {
       dependencies.push('@feathersjs/authentication-oauth2');
       dependencies.push(oauthProvider);
-      context.oauthProviders.push({
+      context1.oauthProviders.push({
         name: strategy,
         strategyName: `${upperFirst(strategy)}Strategy`,
         module: oauthProvider
@@ -260,11 +260,11 @@ function service (generator, name, props, specs, context, state, inject) {
   const serviceTpl = existsSync(join(serPath, '_service', `name.service-${adapter}.ejs`))
     ? `name.service-${adapter}.ejs` : 'name.service.ejs';
   const fn = fileName;
-  const sfa = context.subFolderArray;
+  const sfa = context1.subFolderArray;
 
   const todos = [
     tmpl([testPath, 'services', 'name.test.ejs'], [testDir, 'services',         `${fn}.test.${js}`],           WRITE_IF_NEW                         ),
-    tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context.modelName}.${js}`], WRITE_ALWAYS, !context.modelName    ),
+    tmpl([srcPath,  '_model',   modelTpl],        [libDir,  'models',   ...sfa, `${context1.modelName}.${js}`], WRITE_ALWAYS, !context1.modelName    ),
     tmpl([serPath,  '_service', serviceTpl],      [libDir,  'services', ...sfa, fn, `${fn}.service.${js}`],    ),
     tmpl([namePath, 'name.class.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.class.${js}`],      WRITE_ALWAYS, adapter !== 'generic' ),
     tmpl([namePath, 'name.interface.ejs'],        [libDir,  'services', ...sfa, fn, `${fn}.interface.${js}`],  WRITE_ALWAYS, isJs ),
@@ -283,7 +283,7 @@ function service (generator, name, props, specs, context, state, inject) {
   ];
 
   // Generate modules
-  generatorFs(generator, context, todos);
+  generatorFs(generator, context1, todos);
 
   // Update dependencies
   if (serviceModule.charAt(0) !== '.') {
@@ -294,8 +294,7 @@ function service (generator, name, props, specs, context, state, inject) {
   generator._packagerInstall(devDependencies, { saveDev: true });
 
   // Determine which hooks are needed
-  function getHookInfo(name) {
-    const sc = context.sc;
+  function getHookInfo(name, sc) {
     //const isMongo = (mapping.feathers[name] || {}).adapter === 'mongodb';
     const isMongo = specs.services[name].adapter === 'mongodb';
     const requiresAuth = specsService.requiresAuth;
