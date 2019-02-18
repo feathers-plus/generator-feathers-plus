@@ -3021,7 +3021,7 @@ const expectedSeqModel = {
     },
     isGlobal: {
       type: sequelizeTypeEquivalences.boolean,
-      default: false
+      defaultValue: false
     }
   },
   clients: {
@@ -3093,7 +3093,7 @@ const expectedSeqModel = {
     },
     isPublic: {
       type: sequelizeTypeEquivalences.boolean,
-      default: false
+      defaultValue: false
     }
   },
   hotspotIcons: {
@@ -3298,7 +3298,7 @@ const expectedSeqModel = {
     },
     isSubscribedToNewsletter: {
       type: sequelizeTypeEquivalences.boolean,
-      default: false
+      defaultValue: false
     },
     remoteIp: {
       type: sequelizeTypeEquivalences.text
