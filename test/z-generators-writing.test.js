@@ -57,6 +57,9 @@ const tests = [
   // Test using feathers-gen-code.js for code
     { testName: 'app-code-blocks.test' },
 
+  // Test module freeze
+    { testName: 'app-freeze.test' },
+
   // t02, z02 (z01 ->) Test service creation without authentication scaffolding.
   // Also test any missing specs.options props are created.
   //* generate app            # z-1, Project z-1, npm, src1, socketio (only)

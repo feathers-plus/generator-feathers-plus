@@ -1,0 +1,34 @@
+{
+  "name": "z-1",
+  "description": "Project z-1",
+  "version": "0.0.0",
+  "homepage": "",
+  "main": "src1",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "John Szwaronek",
+    "email": "johnsz9999@gmail.com"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src1",
+    "test": "test/"
+  },
+  "engines": {
+    "node": "^8.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run eslint && npm run mocha",
+    "test:all": "npm run eslint && cross-env NODE_ENV=test npm run mocha",
+    "eslint": "eslint src1/. test/. --config .eslintrc.json",
+    "dev": "nodemon src1/",
+    "dev:seed": "nodemon src1/ --seed",
+    "start": "node src1/",
+    "start:seed": "cross-env NODE_ENV=test node src/ --seed",
+    "mocha": "mocha test/ --recursive --exit --timeout 10000"
+  }
+}
