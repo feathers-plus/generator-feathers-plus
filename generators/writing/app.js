@@ -166,15 +166,15 @@ function app (generator, props, specs, context, state) {
     copy([tpl, 'LICENSE'],       'LICENSE', WRITE_IF_NEW),
     tmpl([tpl, 'README.md.ejs'], 'README.md', WRITE_IF_NEW),
 
-    copy([tpl, 'public', 'favicon.ico'], ['public', 'favicon.ico'], WRITE_IF_NEW),
-    copy([tpl, 'public', 'index.html'],  ['public', 'index.html'], WRITE_IF_NEW),
+    copy([tpl, 'public', 'favicon.ico'],      ['public', 'favicon.ico'],    WRITE_IF_NEW),
+    copy([tpl, 'public', 'index.html'],       ['public', 'index.html'],     WRITE_IF_NEW),
 
-    tmpl([tpl, 'test', 'app.test.ejs'],  [testDir, `app.test.${js}`], WRITE_IF_NEW),
+    tmpl([tpl, 'test', 'app.test.ejs'],       [testDir, `app.test.${js}`],  WRITE_IF_NEW),
 
     tmpl([tpl, 'src', 'hooks', 'log.ejs'],    [src, 'hooks', `log.${js}`]),
     copy([tpl, 'src', 'refs', 'common.json'], [src, 'refs', 'common.json'], WRITE_IF_NEW),
-    tmpl([tpl, 'src', 'channels.ejs'],        [src, `channels.${js}`]),
-    tmpl([tpl, 'src', 'seed-data.ejs'],        [src, `seed-data.${js}`], WRITE_ALWAYS, !specs.app.seedData),
+    tmpl([tpl, 'src', 'channels.ejs'],        [src, `channels.${js}`],      WRITE_IF_NEW),
+    tmpl([tpl, 'src', 'seed-data.ejs'],       [src, `seed-data.${js}`],     WRITE_ALWAYS, !specs.app.seedData),
 
     json(pkg,           'package.json'),
     json(configNodemon, 'nodemon.json'),
