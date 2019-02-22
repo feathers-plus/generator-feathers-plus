@@ -44,7 +44,7 @@ const operatorsAliases = {
   $col: Op.col
 }<%- sc %>
 
-<%- tplExport('function (app) {', 'function app: App) {') %>
+<%- tplExport('function (app) {', 'function (app: App) {') %>
   let connectionString = app.get('mssql')<%- sc %>
   let connection = url.parse(connectionString)<%- sc %>
   let database = connection.path<%- tplTsOnly(['!']) %>.substring(1, connection.path.length)<%- sc %>
