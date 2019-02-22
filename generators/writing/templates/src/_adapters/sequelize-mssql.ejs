@@ -69,7 +69,7 @@ const operatorsAliases = {
 
   app.set('sequelizeClient', sequelize)<%- sc %>
 
-  app.setup = function (...args<%- tplTsOnly(': any[]') -%>) {{
+  app.setup = function (...args<%- tplTsOnly(': any[]') -%>) {
     let result = oldSetup.apply(this, args)<%- sc %>
     <%- insertFragment('func_init') %>
 
