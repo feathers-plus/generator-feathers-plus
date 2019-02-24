@@ -7,7 +7,6 @@
 <%- insertFragment('imports', [
   `// ${tplImports('$jsonSchema', `./${kebabName}.mongo`, 'req', 'let')}`
 ]) %>
-<%- insertFragment('imports') %>
 <%- insertFragment('init') %>
 
 <%- tplModuleExports(null, 'function (app) {', 'function (app: App) {') %>
