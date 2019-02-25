@@ -28,5 +28,12 @@
   app.set('mongoClient', promise)<%- sc %>
   <%- insertFragment('more') %>
 }<%- tplJsOnly([sc]) %>
+
+module.exports.registerServicePromise = function (app, promise) {
+  const promises = app.get('servicePromises') || []
+  promises.push(promise)
+  app.set('servicePromises', promises)
+}
+
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
