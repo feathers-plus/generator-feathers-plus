@@ -22,7 +22,7 @@
   const service = app.service('<%= path %>')<%- sc %>
 
   // eslint-disable-next-line no-unused-vars
-  const promise = mongoClient.then(db => {
+  let promise = mongoClient.then(db => {
     return db.createCollection('<%= kebabName %>', {
       <%- insertFragment('create_collection', [
         '      // validator: { $jsonSchema: $jsonSchema },',
