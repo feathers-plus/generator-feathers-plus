@@ -60,6 +60,11 @@ function abstractTs(specs) {
 
       return `export default ${valueTs || value}`;
     },
+    tplNamedExport: (name, value, valueTs) => {
+      if (!ifTs) return `module.exports.${name} = ${value}`;
+
+      return `export const ${name} = ${valueTs || value}`;
+    },
   };
 }
 
