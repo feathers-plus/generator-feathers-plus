@@ -29,11 +29,11 @@
   <%- insertFragment('more') %>
 }<%- tplJsOnly([sc]) %>
 
-module.exports.registerServicePromise = function (app, promise) {
-  const promises = app.get('servicePromises') || []
-  promises.push(promise)
-  app.set('servicePromises', promises)
-}
+<%- tplExport('registerServicePromise', 'function (app, promise) {', 'function (app: App, promise: Promise) {') %>
+  const promises = app.get('servicePromises') || []<%- sc %>
+  promises.push(promise)<%- sc %>
+  app.set('servicePromises', promises)<%- sc %>
+}<%- tplJsOnly([sc]) %>
 
 <%- insertFragment('funcs') %>
 <%- insertFragment('end') %>
