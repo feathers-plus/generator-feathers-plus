@@ -8,7 +8,6 @@ import { Db, MongoClient } from 'mongodb';
 // !<DEFAULT> code: imports
 // import $jsonSchema from './nedb-1.mongo';
 // !end
-// !code: imports // !end
 // !code: init // !end
 
 let moduleExports = function (app: App) {
@@ -23,7 +22,8 @@ let moduleExports = function (app: App) {
   // Get our initialized service so that we can register hooks
   const service = app.service('nedb-1');
 
-  mongoClient.then(db => {
+  // eslint-disable-next-line no-unused-vars
+  let promise = mongoClient.then(db => {
     return db.createCollection('nedb-1', {
       // !<DEFAULT> code: create_collection
       // validator: { $jsonSchema: $jsonSchema },
