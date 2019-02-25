@@ -29,7 +29,7 @@
   <%- insertFragment('more') %>
 }<%- tplJsOnly([sc]) %>
 
-<%- tplNamedExport('registerServicePromise', 'function (app, promise) {', 'function (app: App, promise: Promise) {') %>
+<%- tplNamedExport('registerServicePromise', 'function (app, promise) {', 'function (app: App, promise: Promise<void>): void {') %>
   const promises = app.get('servicePromises') || []<%- sc %>
   promises.push(promise)<%- sc %>
   app.set('servicePromises', promises)<%- sc %>
