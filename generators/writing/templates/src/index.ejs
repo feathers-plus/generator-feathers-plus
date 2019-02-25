@@ -31,7 +31,7 @@ server.on('listening', async () => {
   <%- insertFragment('listening') %>
 <%# -%>
 <%# --- if-2 starts below. -%>
-<% if (Object.keys(specs.services).map(n => specs.service[n]).find(s => s.adapter === 'mongodb')) { -%>
+<% if (Object.keys(specs.services).map(n => specs.services[n]).find(s => s.adapter === 'mongodb')) { -%>
   await Promise.all(app.get('servicePromises'))
 <% } -%>
 <% if (specs.app.seedData) { -%>
