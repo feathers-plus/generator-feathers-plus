@@ -68,7 +68,7 @@ module.exports = function (app) {
 
   app.set('sequelizeClient', sequelize);
 
-  app.setup = function (...args) {{
+  app.setup = function (...args) {
     let result = oldSetup.apply(this, args);
     // !code: func_init // !end
 

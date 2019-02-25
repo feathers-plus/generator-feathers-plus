@@ -5,7 +5,6 @@ const hooks = require('./users-1.hooks');
 // !<DEFAULT> code: imports
 // let $jsonSchema = require('./users-1.mongo');
 // !end
-// !code: imports // !end
 // !code: init // !end
 
 let moduleExports = function (app) {
@@ -20,7 +19,8 @@ let moduleExports = function (app) {
   // Get our initialized service so that we can register hooks
   const service = app.service('users-1');
 
-  mongoClient.then(db => {
+  // eslint-disable-next-line no-unused-vars
+  let promise = mongoClient.then(db => {
     return db.createCollection('users-1', {
       // !<DEFAULT> code: create_collection
       // validator: { $jsonSchema: $jsonSchema },
