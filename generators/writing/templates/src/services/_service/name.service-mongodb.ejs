@@ -3,7 +3,7 @@
 <%- tplTsOnly([`import { App } from '../../${subFolderReverse}app.interface'${sc}`, '', '']) -%>
 <%- tplImports('createService', 'feathers-mongodb', 'req') %>
 <%- tplImports('hooks', `./${kebabName}.hooks`) %>
-<%- tplImports('registerServicePromise', `../../utils/register-service-promise`) %>
+<%- tplImports('{ registerServicePromise }', `../../mongodb`) %>
 <%- tplTsOnly([`import { Db, MongoClient } from 'mongodb'${sc}`, '']) -%>
 <%- insertFragment('imports', [
   `// ${tplImports('$jsonSchema', `./${kebabName}.mongo`, 'req', 'let')}`
