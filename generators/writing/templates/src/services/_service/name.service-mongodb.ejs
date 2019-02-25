@@ -21,7 +21,8 @@
   // Get our initialized service so that we can register hooks
   const service = app.service('<%= path %>')<%- sc %>
 
-  mongoClient.then(db => {
+  // eslint-disable-next-line no-unused-vars
+  let promise = mongoClient.then(db => {
     return db.createCollection('<%= kebabName %>', {
       <%- insertFragment('create_collection', [
         '      // validator: { $jsonSchema: $jsonSchema },',
