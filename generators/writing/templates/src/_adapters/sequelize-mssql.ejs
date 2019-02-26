@@ -47,7 +47,7 @@ const operatorsAliases = {
 <%- tplExport('function (app) {', 'function (app: App) {') %>
   let connectionString = app.get('mssql')<%- sc %>
   let connection = url.parse(connectionString)<%- sc %>
-  let database = connection.path<%- tplTsOnly(['!']) %>.substring(1, connection.path.length)<%- sc %>
+  let database = connection.path<%- tplTsOnly(['!']) %>.substring(1, connection.path<%- tplTsOnly(['!']) %>.length)<%- sc %>
   let { port, hostname } = connection<%- sc %>
   let [ username, password ] = (connection.auth || ':').split(':')<%- sc %>
   let sequelize = new Sequelize(database, username, password, {
@@ -70,7 +70,7 @@ const operatorsAliases = {
   app.set('sequelizeClient', sequelize)<%- sc %>
 
   app.setup = function (...args<%- tplTsOnly(': any[]') -%>) {
-    let result = oldSetup.apply(this, args)<%- sc %>
+    let result = oldSetup.call(this, ...args)<%- sc %>
     <%- insertFragment('func_init') %>
 
     // Set up data relationships
