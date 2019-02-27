@@ -14,7 +14,7 @@ module.exports = class AllGenerator extends Generator {
   async prompting () {
     await Generator.asyncInit(this);
     initSpecs('all');
-    const { props, _specs: specs } = this;
+    const { _specs: specs } = this;
 
     this.log();
     this.log([
