@@ -27,7 +27,7 @@
   <%- insertFragment('options_change') %>
 
   // Initialize our service with any options it requires
-  app.use('/<%= path %>', createService(options))<%- sc %>
+  <%- insertFragment('extend', `  app.use('/${path}', createService(options))${sc}`) %>
 
   // Get our initialized service so that we can register hooks
   const service = app.service('<%= path %>')<%- sc %>

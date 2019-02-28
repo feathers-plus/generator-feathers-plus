@@ -19,7 +19,9 @@ let moduleExports = function (app: App) {
   // !code: options_change // !end
 
   // Initialize our service with any options it requires
+  // !<DEFAULT> code: extend
   app.use('/users-1', createService(options));
+  // !end
 
   // Get our initialized service so that we can register hooks
   const service = app.service('users-1');
