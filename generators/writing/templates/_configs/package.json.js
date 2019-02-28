@@ -40,7 +40,7 @@ module.exports = function(generator) {
     dev: `nodemon ${specs.app.src}/index.ts`,
     'dev:seed': `nodemon ${specs.app.src}/index.ts --seed`,
     start: `ts-node --files ${specs.app.src}/`,
-    'start:seed': 'cross-env NODE_ENV= ts-node --seed --files src/',
+    'start:seed': 'cross-env NODE_ENV= ts-node --files src/ --seed',
     mocha: 'ts-mocha -p tsconfig.test.json "test/**/*.test.ts" --timeout 10000 --exit',
     compile: 'tsc -p tsconfig.json',
   } : {

@@ -50,7 +50,7 @@ function app (generator, props, specs, context, state) {
 
   const startSeedFront = 'cross-env NODE_ENV=';
   const startSeedJsBack = ' node src/ --seed';
-  const startSeedTsBack = ' ts-node --seed --files src/';
+  const startSeedTsBack = ' ts-node --files src/ --seed';
 
   let back;
 
