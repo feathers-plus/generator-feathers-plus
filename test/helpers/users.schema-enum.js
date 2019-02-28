@@ -48,11 +48,16 @@ let schema = {
       type: 'array',
       items: {
         type: 'object',
-        properties: {}
+        properties: {
+          name: { },
+          code: { type: 'number', default: '1' }
+        }
       }
     },
 
-    dept: { enum: [ 'acct' ] }
+    dept: { enum: [ 'acct' ] },
+
+    parentId: { type: 'ID', ref: 'User', nullable: true }
     // !end
   },
   // !code: schema_more // !end
