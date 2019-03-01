@@ -28,13 +28,21 @@ server.on('listening', async () => {
   <%- insertFragment('listening_log', [
     `  logger.info(\'Feathers application started on http://%s:%d\', app.get(\'host\'), port)${sc}`,
   ]) %>
-  <%- insertFragment('listening') %>
-<%# -%>
 <%# --- if-2 starts below. -%>
-<% if (specs.app.seedData) { -%>
-  await seedData(app);
+<% if (Object.keys(specs.services || []).map(n => specs.services[n]).find(s => s.adapter === 'mongodb')) { -%>
+  await app.get('mongoClient')<%- sc %>
+<% } -%>
+<% if (Object.keys(specs.services || []).map(n => specs.services[n]).find(s => s.adapter === 'sequelize')) { -%>
+  await app.get('sequelizeClient')<%- sc %>
 <% } -%>
 <%# --- if-2 ends above. -%>
+  <%- insertFragment('listening') %>
+<%# -%>
+<%# --- if-3 starts below. -%>
+<% if (specs.app.seedData) { -%>
+  await seedData(app)<%- sc %>
+<% } -%>
+<%# --- if-3 ends above. -%>
   <%- insertFragment('listening1') %>
 })<%- sc %>
 

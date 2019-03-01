@@ -277,6 +277,7 @@ function service (generator, name, props, specs, context, state, inject) {
     tmpl([namePath, 'name.hooks.ejs'],            [libDir,  'services', ...sfa, fn, `${fn}.hooks.${js}`]       ),
     tmpl([namePath, 'name.populate.ejs'],         [libDir,  'services', ...sfa, fn, `${fn}.populate.${js}`],   WRITE_ALWAYS, !graphqlTypeName        ),
     tmpl([serPath,  'index.ejs'],                 [libDir,  'services', `index.${js}`]                         ),
+    tmpl([tpl, 'src', 'index.ejs'],               [src, `index.${js}`]                                         ),
 
     tmpl([tpl, 'src', 'app.interface.ejs'], [src, 'app.interface.ts'],         WRITE_ALWAYS, isJs),
     tmpl([tpl, 'src', 'typings.d.ejs'],     [src, 'typings.d.ts'],             WRITE_ALWAYS, isJs),
