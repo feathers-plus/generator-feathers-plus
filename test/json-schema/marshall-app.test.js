@@ -2619,8 +2619,14 @@ const expectedMongooseSchema = {
       type: String,
       required: true
     },
-    phones: [],
-    emails: [],
+    phones: [{
+      number: String,
+      type: String
+    }],
+    emails: [{
+      email: String,
+      type: String
+    }],
     primaryContact: String,
     notes: String
   },
@@ -2638,7 +2644,10 @@ const expectedMongooseSchema = {
     environmentIds: [
       mongoose.Schema.Types.ObjectId
     ],
-    isGlobal: Boolean
+    isGlobal: {
+      type: Boolean,
+      default: false
+    }
   },
   clients: {
     name: {
@@ -2695,7 +2704,10 @@ const expectedMongooseSchema = {
       type: String,
       required: true
     },
-    isPublic: Boolean
+    isPublic: {
+      type: Boolean,
+      default: false
+    }
   },
   hotspotIcons: {
     name: String,
@@ -2786,7 +2798,10 @@ const expectedMongooseSchema = {
     primaryPhotoUrl: String,
     primaryPhotoCoordinates: String,
     primaryPhotoUploadInfo: String,
-    categories: [],
+    categories: [{
+      name: String,
+      path: String
+    }],
     location: {
       type: {
         type: String,
@@ -2827,6 +2842,7 @@ const expectedMongooseSchema = {
       url: String,
       target: {
         type: String,
+        default: "",
         enum: [
           "",
           "current",
@@ -2865,9 +2881,11 @@ const expectedMongooseSchema = {
         type: String,
         default: "Point"
       },
-      coordinates: [
-        Number
-      ]
+      coordinates:  [{
+        max: 180,
+        min: -180,
+        type: Number
+      }]
     },
     tags: [
       String
@@ -2888,9 +2906,12 @@ const expectedMongooseSchema = {
     phone: String,
     companyName: String,
     businessId: mongoose.Schema.Types.ObjectId,
-    isSubscribedToNewsletter: Boolean,
+    isSubscribedToNewsletter: {
+      type: Boolean,
+      default: false
+    },
     remoteIp: String,
-    callbackDateTime: String
+    callbackDateTime: Date
   },
   salesNotes: {
     salesLeadId: {
