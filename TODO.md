@@ -454,3 +454,7 @@ FINAL CHECKS
 Patches to track
 https://github.com/feathersjs/feathers/pull/1008     
 https://mail.google.com/mail/u/0/#inbox/FMfcgxvzKbPwqJQgBFpCGpPfrhtdjxfk
+
+
+==== 2019 ============================================================================
+- // @ts-check

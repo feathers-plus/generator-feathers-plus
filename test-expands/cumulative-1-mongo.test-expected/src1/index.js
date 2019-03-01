@@ -22,6 +22,7 @@ server.on('listening', async () => {
   // !<DEFAULT> code: listening_log
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
   // !end
+  await app.get('mongoClient');
   // !code: listening // !end
   // !code: listening1 // !end
 });
