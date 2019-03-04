@@ -249,6 +249,7 @@ module.exports = function generatorWriting (generator, what) {
       props.hookName = props.name;
       test(generator, props, specs, context, state);
 
+      // We need to import the hook into services which use it.
       Object.keys(specs.services || {}).forEach(name => {
         service(generator, name, props, specs, context, state, inject);
       });
