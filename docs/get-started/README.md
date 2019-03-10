@@ -1748,7 +1748,7 @@ You can use it in any valid JavaScript expression.
 - Other conveniences are also passed to the expression in the `ctx` object.
     - **ctx.data** (Array< Object >) - All the generated records for all the services.
     Values for foreign keys and expressions have been calculated up to the current record.
-    - **ctx.dataCurrIndex** (Number) - Index of the current record.
+    - **ctx.dataCurrIndex** (Number) - Offset of the current record in ctx.data[serviceName].
     - **ctx.hashPassword** (Function(password)) - Calculates a password hash
     compatible with Feathers' `hashPassword` hook.
     This password will work correctly with Feathers local authentication.
