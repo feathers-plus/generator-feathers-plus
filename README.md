@@ -1,5 +1,7 @@
 # @feathers-plus/generator-feathers-plus
 
+> __This project is no longer maintained__
+
 This Yeoman generator is used with [@feathers-plus/cli](https://generator.feathers-plus.com).
 
 This project started as a heavily refactored version of @feathersjs/cl by David Luecke.
